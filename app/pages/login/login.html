@@ -1,0 +1,37 @@
+<ion-content class="login-page">
+
+
+    <form #loginForm="ngForm" novalidate class="login-form">
+      <h1 class="title" text-center>虹梅南路运维系统</h1>
+      
+      <ion-card (tap)="tapEvent($event)">
+        <ion-item>
+          <ion-icon item-left="" name="ios-mail-outline" primary="" role="img" class="item-icon" aria-label="wifi" ng-reflect-name="wifi"></ion-icon>
+          <ion-input [(ngModel)]="credentials.userName" placeholder="用户名" ngModel name="username" type="text" #username="ngModel" spellcheck="false" autocapitalize="off" required></ion-input>
+          <p [hidden]="username.valid || submitted == false" danger padding-left>
+            Username is required
+          </p>
+        </ion-item>
+        <ion-item>
+          <ion-icon item-left="" name="ios-lock-outline" primary="" role="img" class="item-icon" aria-label="wifi" ng-reflect-name="wifi"></ion-icon>
+          <ion-input [(ngModel)]="credentials.password" ngModel placeholder="密码" name="password" type="password" #password="ngModel" required></ion-input>
+          <p [hidden]="password.valid || submitted == false" danger padding-left>
+            Password is required
+          </p>
+        </ion-item>
+      </ion-card>
+
+      <button 
+          (click)="onLogin(loginForm)"
+          type="submit"
+          large
+          outline="" round="" secondary="" 
+          class="disable-hover button button-outline button-round button-outline-secondary btn-login" 
+          ng-reflect-outline="" 
+          ng-reflect-round="" >
+        <span class="button-inner">登录 </span>
+        <ion-button-effect></ion-button-effect>
+      </button>
+    </form>
+
+</ion-content>
