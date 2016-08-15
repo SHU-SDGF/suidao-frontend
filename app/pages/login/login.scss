@@ -1,28 +1,27 @@
 .login-page{
   &{
-    background-image: url("/build/imgs/bg.png");
+    background-image: url("../imgs/bg.png");
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: cover;
     background-position: center;
   }
 
   & > scroll-content{
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  .title{
-    color: #fff;
-    font-size: 3.3rem;
+    display: table !important;
+    width: 100%;
+    height: 100%;
   }
   form.login-form{
-    display: block;
+    display: table-cell;
+    vertical-align: middle;
     width: 100%;
     h1.title{
       margin-bottom: 50px; 
+      color: #fff;
+      font-size: 3.3rem;
     }
     ion-card{
+      box-shadow: none;
       padding: 20px;
       background: transparent;
       

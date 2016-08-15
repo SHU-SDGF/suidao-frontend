@@ -1,0 +1,65 @@
+<ion-header no-shadow>
+  <ion-navbar no-border-bottom>
+    <ion-buttons>
+      <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    
+    <ion-buttons end>
+      <button (click)="startApp()" primary>
+        <ion-icon name="star"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="ground-page">
+   <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts" [offline]="offlineOpts" (onMapLoaded)="loadMap($event)" (onMarkerClicked)="clickMarker($event)"></baidu-map>
+</ion-content>
+  <!--
+  <ion-grid>
+    <ion-row>
+      <ion-col width-17>
+        <ion-button>
+          <button clear class="button-icon-only">
+            <ion-icon name="ios-bicycle-outline"></ion-icon>
+            <ion-text></ion-text>
+          </button>
+        </ion-button>
+      </ion-col>
+      <ion-col width-17>
+        <ion-button>
+          <button clear class="button-icon-only">
+            <ion-icon name="ios-construct-outline"></ion-icon>
+            <ion-text></ion-text>
+          </button>
+        </ion-button>
+      </ion-col>
+      <ion-col width-32>
+        <ion-button primary>
+          <button clear class="button-icon-only">
+            <ion-icon name="ios-compass-outline"></ion-icon>
+            <ion-text></ion-text>
+          </button>
+        </ion-button>
+      </ion-col>
+      <ion-col width-17>
+        <ion-button>
+          <button clear class="button-icon-only">
+            <ion-icon name="ios-flask-outline"></ion-icon>
+            <ion-text></ion-text>
+          </button>
+        </ion-button>
+      </ion-col>
+      <ion-col width-17>
+        <ion-button>
+          <button clear class="button-icon-only">
+            <ion-icon name="ios-stats-outline"></ion-icon>
+            <ion-text></ion-text>
+          </button>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  -->
