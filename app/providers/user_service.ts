@@ -22,7 +22,7 @@ export class UserService {
       _that.storage.set(_that.HAS_LOGGED_IN, true);
       _that.events.publish('user:login');
       var request = _that.http.post(
-        AppConfig.apiBase + '/oauth2/login',
+        AppConfig.apiBase + '/login',
         credentials
       );
 
