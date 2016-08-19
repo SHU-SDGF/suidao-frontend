@@ -1,0 +1,20 @@
+{
+  "name": "ionic2",
+  "description": "ionic2: An Ionic project",
+  "main": "",
+  "authors": [
+    "ytyszxf <ljz135790@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/SHU-SDGF/suidao-frontend",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}

@@ -3,6 +3,8 @@ import {Platform, ionicBootstrap, Nav, MenuController } from 'ionic-angular';
 import { Splashscreen, StatusBar } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
+import { UserService } from './providers/user_service';
+import {MainPage} from './pages/main/main';
 
 
 @Component({
@@ -15,20 +17,33 @@ export class MyApp {
 
   constructor(
     private platform: Platform,
-    public menu: MenuController
+    public menu: MenuController,
+    private userService: UserService
   ) {
 
     platform.ready().then(() => {
       StatusBar.styleDefault();
       Splashscreen.hide();
-      this.nav.setRoot(LoginPage);
+      let _self = this;
       this.menu.enable(true, 'user-menu');
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
+      
+      userService.hasLoggedIn().then(function(loggedIn: boolean){
+        if(loggedIn){
+          _self.nav.setRoot(MainPage);
+        }else{
+          _self.nav.setRoot(LoginPage);
+        }
+      })
     });
-    
+  }
+
+  logout(){
+    this.userService.logout();
+    this.nav.setRoot(LoginPage);
   }
 }
+
+// load providers
 var providersAr = [];
 for(let p in _providers ){
   providersAr.push(_providers[p]);

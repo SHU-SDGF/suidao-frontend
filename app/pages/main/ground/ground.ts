@@ -1,56 +1,89 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, DynamicComponentLoader} from '@angular/core';
+import {MenuController, Events, Backdrop} from 'ionic-angular';
 import {BaiduMap, OfflineOptions, ControlAnchor, NavigationControlType} from 'angular2-baidu-map';
+import {MenuTip} from '../../../shared/components/menu_tip';
 
 @Component({
-    selector: 'map-presentation',
-    templateUrl: './build/pages/main/ground/ground.html',
-    directives: [BaiduMap]
+  selector: 'map-presentation',
+  templateUrl: './build/pages/main/ground/ground.html',
+  directives: [BaiduMap, MenuTip]
 })
 export class GroundPage implements OnInit {
 
-    opts: any;
-    offlineOpts: OfflineOptions;
+  opts: any;
+  offlineOpts: OfflineOptions;
+  public menuTipOptions: any = [
+      {
+        icon: 'fa-plus',
+        action: function () {
+          console.log('123');
+        },
+        tip: ''
+      },
+      {
+        icon: 'fa-plus',
+        action: function () {
+          console.log('123');
+        },
+        tip: ''
+      },
+      {
+        icon: 'fa-plus',
+        action: function () {
+          console.log('123');
+        },
+        tip: ''
+      }
+    ];
 
-    ngOnInit() {
-        this.opts = {
-            center: {
-                longitude: 121.506191,
-                latitude: 31.245554
-            },
-            zoom: 17,
-            markers: [{
-                longitude: 121.506191,
-                latitude: 31.245554,
-                title: 'Where',
-                content: 'Put description here',
-                autoDisplayInfoWindow: true
-            }],
-            geolocationCtrl: {
-                anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
-            },
-            scaleCtrl: {
-                anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
-            },
-            overviewCtrl: {
-                isOpen: true
-            },
-            navCtrl: {
-                type: NavigationControlType.BMAP_NAVIGATION_CONTROL_LARGE
-            }
-        };
+  constructor(public menuCtrl: MenuController, private dcl:DynamicComponentLoader) {
+    let _self = this;
+  }
 
-        this.offlineOpts = {
-            retryInterval: 5000,
-            txt: 'NO-NETWORK'
-        };
-    }
+  showAddBg() {
+    console.log('123');
+  }
 
-    loadMap(e: any) {
-        console.log(e);//e here is the instance of BMap.Map
-    }
+  ngOnInit() {
+    this.opts = {
+      center: {
+        longitude: 121.506191,
+        latitude: 31.245554
+      },
+      zoom: 17,
+      markers: [{
+        longitude: 121.506191,
+        latitude: 31.245554,
+        title: 'Where',
+        content: 'Put description here',
+        autoDisplayInfoWindow: true
+      }],
+      geolocationCtrl: {
+        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
+      },
+      scaleCtrl: {
+        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
+      },
+      overviewCtrl: {
+        isOpen: true
+      },
+      navCtrl: {
+        type: NavigationControlType.BMAP_NAVIGATION_CONTROL_LARGE
+      }
+    };
 
-    clickMarker(marker: any){
-        console.log('The clicked marker is', marker);
-    }
+    this.offlineOpts = {
+      retryInterval: 5000,
+      txt: 'NO-NETWORK'
+    };
+  }
+
+  loadMap(e: any) {
+    console.log(e);//e here is the instance of BMap.Map
+  }
+
+  clickMarker(marker: any) {
+    console.log('The clicked marker is', marker);
+  }
 
 }

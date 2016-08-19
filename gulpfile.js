@@ -2,7 +2,9 @@ var gulp = require('gulp'),
     gulpWatch = require('gulp-watch'),
     del = require('del'),
     runSequence = require('run-sequence'),
-    argv = process.argv;
+    argv = process.argv,
+    mainBowerFiles = require('main-bower-files')
+    concat = require('gulp-concat');
 
 
 /**
@@ -43,19 +45,21 @@ gulp.task('asset', function(){
 
 gulp.task('watch', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts', 'asset'],
+    ['sass', 'html', 'fonts', 'scripts', 'asset', 'vendor'],
     function(){
       gulpWatch('app/assets/**/*', function(){ gulp.start('asset'); });
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
-      gulpWatch('app/**/*.html', function(){ gulp.start('html'); });
+      gulpWatch('app/**/*.html', function () { gulp.start('html'); });
+      gulpWatch('bower_components/**/*', function () { gulp.start('vendor'); });
       buildBrowserify({ watch: true }).on('end', done);
     }
   );
 });
 
+
 gulp.task('build', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts', 'asset'],
+    ['sass', 'html', 'fonts', 'scripts', 'asset', 'vendor'],
     function(){
       buildBrowserify({
         minify: isRelease,
@@ -69,6 +73,12 @@ gulp.task('build', ['clean'], function(done){
     }
   );
 });
+
+gulp.task('vendor', function () {
+  gulp.src(mainBowerFiles())
+    .pipe(concat('vendor.js'))
+    .pipe(gulp.dest('www/build/js/'));
+})
 
 gulp.task('sass', buildSass);
 gulp.task('html', copyHTML);
