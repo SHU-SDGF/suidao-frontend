@@ -18,6 +18,7 @@
     "zone.js": "^0.6.12"
   },
   "devDependencies": {
+    "angular2-baidu-map": "^2.4.1",
     "del": "2.2.0",
     "gulp": "3.9.1",
     "gulp-concat": "^2.6.0",
