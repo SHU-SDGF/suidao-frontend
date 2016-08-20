@@ -1,4 +1,6 @@
-import {Component, OnInit, DynamicComponentLoader} from '@angular/core';
+/// <reference path="../../../../typings/main/ambient/jquery/index.d.ts" />
+
+import {Component, OnInit, DynamicComponentLoader, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import {MenuController, Events, Backdrop} from 'ionic-angular';
 import {BaiduMap, OfflineOptions, ControlAnchor, NavigationControlType} from 'angular2-baidu-map';
 import {MenuTip} from '../../../shared/components/menu_tip';
@@ -8,33 +10,39 @@ import {MenuTip} from '../../../shared/components/menu_tip';
   templateUrl: './build/pages/main/ground/ground.html',
   directives: [BaiduMap, MenuTip]
 })
-export class GroundPage implements OnInit {
+export class GroundPage implements OnInit, AfterViewInit {
+  @ViewChild(MenuTip) _mentTip: MenuTip;
 
   opts: any;
   offlineOpts: OfflineOptions;
   public menuTipOptions: any = [
-      {
-        icon: 'fa-plus',
-        action: function () {
-          console.log('123');
-        },
-        tip: ''
+    {
+      icon: 'fa-plus',
+      action: function () {
+        console.log('123');
       },
-      {
-        icon: 'fa-plus',
-        action: function () {
-          console.log('123');
-        },
-        tip: ''
+      tip: ''
+    },
+    {
+      icon: 'fa-plus',
+      action: function () {
+        console.log('123');
       },
-      {
-        icon: 'fa-plus',
-        action: function () {
-          console.log('123');
-        },
-        tip: ''
-      }
-    ];
+      tip: ''
+    },
+    {
+      icon: 'fa-plus',
+      action: function () {
+        console.log('123');
+      },
+      tip: ''
+    }
+  ];
+
+  ngAfterViewInit(){
+    let _self = this;
+    
+  }
 
   constructor(public menuCtrl: MenuController, private dcl:DynamicComponentLoader) {
     let _self = this;
@@ -83,7 +91,10 @@ export class GroundPage implements OnInit {
   }
 
   clickMarker(marker: any) {
-    console.log('The clicked marker is', marker);
+    let _self = this;
+    setTimeout(function() {
+      _self._mentTip.showOnElement($(marker.V), _self.menuTipOptions);
+    });
   }
 
 }

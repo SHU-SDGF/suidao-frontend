@@ -17,9 +17,7 @@
 <ion-content class="ground-page">
 
   <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts" [offline]="offlineOpts" (onMapLoaded)="loadMap($event)" (onMarkerClicked)="clickMarker($event)"></baidu-map>
-  <ion-button class="add-button" [menu-top] [actionMenuItems]="menuTipOptions">
-    <button><ion-icon name="ios-add-circle"></ion-icon></button>
-  </ion-button>
+  <menu-top></menu-top>
 </ion-content>
   <!--
   <ion-grid>

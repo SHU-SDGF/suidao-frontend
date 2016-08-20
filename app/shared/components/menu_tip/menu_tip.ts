@@ -32,28 +32,37 @@ const ANGLE: number = 35;
 const RADIUS: number = 80;
 
 @Directive({
-  selector: '[menu-top]'
+  selector: 'menu-top'
 })
 export class MenuTip implements OnInit{
   @Input() actionMenuItems: Array<ActionMenuControl>;
   private _show: boolean = false;
   private _element: JQuery;
-  private _eleClickHandler: Function = ((_self: MenuTip) => {
-    return function (event: JQueryEventObject) {
-      _self.toggle();
-      event.stopPropagation();
-    };
-  })(this);
+
+  private clickHandler: ($event: JQueryEventObject) => void = ((_self: MenuTip)=> ($event: JQueryEventObject) => {
+    if(!_self._element) return;
+    if(!_self._element.is($event.target)
+        && !_self._element.has($event.target).length){
+        _self.hide();
+        return;
+    }
+    if(_self._show){
+      _self.hide();
+    }else{
+      _self.show();
+    }
+  })(this)
   
   constructor(public renderer: Renderer) {
     
   }
 
-  showOnElement($ele: JQuery, options: Array<ActionMenuControl>) {
+  public showOnElement($ele: JQuery, options: Array<ActionMenuControl>) {
+    if($ele.is(this._element))return;
     this.hide();
     this._element = $ele;
+    this._element.addClass('menu-tip-handler');
     this.actionMenuItems = options;
-    this.initialize();
     this.show();
   }
 
@@ -61,14 +70,15 @@ export class MenuTip implements OnInit{
    * init data, bind events  
    */
   ngOnInit() {
-    $(this._element).click(this._eleClickHandler);
+    //$(this._element).click(this._eleClickHandler);
+    $(document).mouseup(this.clickHandler);
+    
     this.initialize();
   }
 
   initialize(): void {
     if (!this.actionMenuItems) return;
     let $parent = $(this._element).parent();
-    //$('body').on('click', this.clickHandler);
 
     // add items to parent
     this.actionMenuItems.forEach((menuControl, i) => {
@@ -81,7 +91,6 @@ export class MenuTip implements OnInit{
       menuControl.$ele = $menuTipItem;
 
       $menuTipItem.click(function (e: Event) {
-        if (!_self._show) return;
         menuControl.action.apply(menuControl.action, _self);
         e.stopPropagation();
       });
@@ -97,26 +106,18 @@ export class MenuTip implements OnInit{
     };
   }
 
-  /*  
-  clickHandler(event: Event) {
-    let $target = $(event.target);
-    if ($target.hasClass('menu-tip-item')) return;
+  
 
-    $target = $target.parent('.menu-tip-item');
-    if ($target.length) return;
-    this.hide();
-  }
-  */
   
   /**
    * collect gabage, remove event handler
    */
   ngOnDestroy() {
-    $(this._element).unbind(this._eleClickHandler);
-    //$('body').unbind('click', this.clickHandler);
+    //$(this._element).unbind(this._eleClickHandler);
+    $('body').unbind('click', this.clickHandler);
   }
 
-  refreshPosition() {
+  private _refreshPosition() {
     let $ele = $(this._element);
     let $parent = $(this._element).parent();
     
@@ -130,20 +131,13 @@ export class MenuTip implements OnInit{
     });
   }
 
-  toggle(): void{
-    if (this._show) {
-      this.hide();
-    } else {
-      this.show();
-    }
-    this._show = !this._show;
-  }
-
   /**
    * show all elements
    */
-  show(): void {
-    this.refreshPosition();
+  public show(): void {
+    this.initialize();
+    this._show = true;
+    this._refreshPosition();
     this.actionMenuItems.forEach((menuControl: ActionMenuControl, i) => {
       // show element on page
       menuControl.$ele.css({
@@ -170,8 +164,12 @@ export class MenuTip implements OnInit{
   /**
    *  animate tips and hide after animation.
    * */
-  hide(): void {
+  public hide(): void {
+    this._show = false;
+    if(!this._element)return;
     this.actionMenuItems.forEach((menuControl: ActionMenuControl, i) => {
+
+      if(!menuControl.$ele || !menuControl.$ele.length) return;
       // show element on page
       menuControl.$ele.css({
         display: 'block',
@@ -180,9 +178,11 @@ export class MenuTip implements OnInit{
         transform: ''
       });
 
+      let $ele = menuControl.$ele;
+
       // move to correct possition   
       setTimeout(() => {
-        menuControl.$ele.remove();
+        $ele.remove();
       }, ANIMATION_DURATION);
 
     });
