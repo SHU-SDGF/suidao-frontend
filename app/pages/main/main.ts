@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {UserService} from '../../providers/user_service';
-import {Nav, MenuController, Events} from 'ionic-angular';
+import {Nav, Events} from 'ionic-angular';
 import {HomePage} from '../home/home';
 import {ContactPage} from '../contact/contact';
 import {AboutPage} from '../about/about';
@@ -22,5 +22,9 @@ export class MainPage{
     userService.getUsername().then((username)=>{
       _that.username = username;
     });
+  }
+
+  onTabSelected(){
+    console.log(arguments);
   }
 }

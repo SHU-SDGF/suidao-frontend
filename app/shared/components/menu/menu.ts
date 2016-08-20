@@ -10,7 +10,10 @@ class UserMenu{
   constructor(private userService: UserService){
     let _that = this;
     
+<<<<<<< HEAD
 
+=======
+>>>>>>> 22144d6f90b556be6485dc025149d3c288bb7db2
     userService.getUsername().then((username)=>{
       _that.username = username;
     });

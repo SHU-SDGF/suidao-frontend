@@ -15,7 +15,9 @@
 </ion-header>
 
 <ion-content class="ground-page">
-   <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts" [offline]="offlineOpts" (onMapLoaded)="loadMap($event)" (onMarkerClicked)="clickMarker($event)"></baidu-map>
+
+  <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts" [offline]="offlineOpts" (onMapLoaded)="loadMap($event)" (onMarkerClicked)="clickMarker($event)"></baidu-map>
+  <menu-top></menu-top>
 </ion-content>
   <!--
   <ion-grid>

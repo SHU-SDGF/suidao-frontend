@@ -22,7 +22,7 @@ export class UserService {
       _that.storage.set(_that.HAS_LOGGED_IN, true);
       _that.events.publish('user:login');
       var request = _that.http.post(
-        AppConfig.apiBase + '/oauth2/login',
+        AppConfig.apiBase + '/login',
         credentials
       );
 
@@ -68,8 +68,10 @@ export class UserService {
     this.storage.get('user_token');
   }
 
-  // return a promise
-  hasLoggedIn() {
+  /**
+   * 
+   */
+  hasLoggedIn(): Promise<boolean> {
     return this.storage.get(this.HAS_LOGGED_IN).then((value) => {
       return value;
     });
