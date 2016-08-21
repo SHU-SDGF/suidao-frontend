@@ -1,4 +1,4 @@
-/// <reference path="../../../../typings/main/ambient/jquery/index.d.ts" />
+/// <reference path="../../../../typings/index.d.ts" />
 
 import {Component, OnInit, DynamicComponentLoader, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import {MenuController, Events, Backdrop} from 'ionic-angular';

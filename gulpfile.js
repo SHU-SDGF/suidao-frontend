@@ -45,21 +45,21 @@ gulp.task('asset', function(){
 
 gulp.task('watch', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts', 'asset', 'vendor'],
+    ['sass', 'html', 'fonts', 'scripts', 'asset', 'vendor', 'bin'],
     function(){
       gulpWatch('app/assets/**/*', function(){ gulp.start('asset'); });
       gulpWatch('app/**/*.scss', function(){ gulp.start('sass'); });
       gulpWatch('app/**/*.html', function () { gulp.start('html'); });
       gulpWatch('bower_components/**/*', function () { gulp.start('vendor'); });
+      gulpWatch('app/shared/libs/**/*.{js,css}', function(){ gulp.start('bin')});
       buildBrowserify({ watch: true }).on('end', done);
     }
   );
 });
 
-
 gulp.task('build', ['clean'], function(done){
   runSequence(
-    ['sass', 'html', 'fonts', 'scripts', 'asset', 'vendor'],
+    ['sass', 'html', 'fonts', 'scripts', 'asset', 'vendor', 'bin'],
     function(){
       buildBrowserify({
         minify: isRelease,
@@ -76,14 +76,27 @@ gulp.task('build', ['clean'], function(done){
 
 gulp.task('vendor', function () {
   gulp.src(mainBowerFiles())
-    .pipe(concat('vendor.js'))
+    .pipe(concat('vendor.bundle.js'))
     .pipe(gulp.dest('www/build/js/'));
-})
+});
+
+gulp.task('copyBinScript', function(){
+  gulp.src('app/shared/libs/**/*.js')
+    .pipe(concat('bin.bundle.js'))
+    .pipe(gulp.dest('www/build/js/'));
+});
+
+gulp.task('copyBinCss', function(){
+  gulp.src('app/shared/libs/**/*.css')
+    .pipe(concat('bin.bundle.css'))
+    .pipe(gulp.dest('www/build/css/'));
+});
 
 gulp.task('sass', buildSass);
 gulp.task('html', copyHTML);
 gulp.task('fonts', copyFonts);
 gulp.task('scripts', copyScripts);
+gulp.task('bin', ['copyBinScript', 'copyBinCss']);
 gulp.task('clean', function(){
   return del('www/build');
 });
