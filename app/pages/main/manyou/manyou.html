@@ -1,3 +1,18 @@
-<div class="mainyou-page">
-  <iframe src="build/pages/main/manyou/index.html"></iframe>
-</div>
+<ion-header no-shadow>
+  <ion-navbar no-border-bottom>
+    <ion-buttons>
+      <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+    
+    <ion-buttons end>
+      <button (click)="startApp()" primary>
+        <ion-icon name="star"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content class="mainyou-page">
+  <iframe width="100%" height="100%" style="border:none;" src="build/pages/main/manyou/index.html"></iframe>
+</ion-content>
