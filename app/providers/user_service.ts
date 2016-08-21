@@ -19,7 +19,6 @@ export class UserService {
   login(credentials: Credentials) {
     let _that = this;
     return new Promise((resolve, reject) =>{
-      _that.storage.set(_that.HAS_LOGGED_IN, true);
       _that.events.publish('user:login');
       var request = _that.http.post(
         AppConfig.apiBase + '/login',
@@ -27,8 +26,8 @@ export class UserService {
       );
 
       request.subscribe((response)=>{
+        _that.storage.set(_that.HAS_LOGGED_IN, true);
         if(response.status < 400){
-          console.log(response);
           var result = response.json();
           _that.setUsername(credentials.userName);
           _that.setUserToken(result.accessToken);

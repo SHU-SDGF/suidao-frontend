@@ -92,9 +92,6 @@ export class GroundPage implements OnInit, AfterViewInit {
 
   clickMarker(marker: any) {
     let _self = this;
-    setTimeout(function() {
-      _self._mentTip.showOnElement($(marker.V), _self.menuTipOptions);
-    });
   }
 
 }

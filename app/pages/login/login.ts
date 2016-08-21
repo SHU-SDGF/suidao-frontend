@@ -38,9 +38,9 @@ export class LoginPage {
         },
         error=>{
           let alert = _that.alertController.create({
-            title: '登录中',
-            subTitle: '请稍后...',
-            buttons: ['OK']
+            title: '登录失败',
+            subTitle: '请检查用户名与密码是否正确',
+            buttons: ['确定']
           });
           alert.present();
         }

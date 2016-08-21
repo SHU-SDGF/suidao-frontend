@@ -32,7 +32,7 @@ const ANGLE: number = 35;
 const RADIUS: number = 80;
 
 @Directive({
-  selector: 'menu-top'
+  selector: 'menu-tip'
 })
 export class MenuTip implements OnInit{
   @Input() actionMenuItems: Array<ActionMenuControl>;
@@ -51,19 +51,18 @@ export class MenuTip implements OnInit{
     }else{
       _self.show();
     }
-  })(this)
+  })(this);
   
   constructor(public renderer: Renderer) {
     
   }
 
-  public showOnElement($ele: JQuery, options: Array<ActionMenuControl>) {
+  public bindElement($ele: JQuery, options: Array<ActionMenuControl>) {
     if($ele.is(this._element))return;
     this.hide();
     this._element = $ele;
     this._element.addClass('menu-tip-handler');
     this.actionMenuItems = options;
-    this.show();
   }
 
   /**
