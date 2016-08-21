@@ -1,9 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {UserService} from '../../providers/user_service';
 import {Nav, Events} from 'ionic-angular';
-import {HomePage} from '../home/home';
-import {ContactPage} from '../contact/contact';
-import {AboutPage} from '../about/about';
 
 import {GroundPage} from './ground/ground';
 
@@ -12,7 +9,7 @@ import {GroundPage} from './ground/ground';
 })
 export class MainPage{
   private username: string = '';
-  private rootPages: Array<any> = [GroundPage, HomePage, ContactPage, AboutPage];
+  private rootPages: Array<any> = [GroundPage, GroundPage, GroundPage, GroundPage];
   //private rootPage: any = GroundPage;
   @ViewChild(Nav) nav: Nav;
 
