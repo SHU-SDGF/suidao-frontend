@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import {UserService} from '../../providers/user_service';
 import {Nav, Events} from 'ionic-angular';
-
 import {GroundPage} from './ground/ground';
 
 @Component({
