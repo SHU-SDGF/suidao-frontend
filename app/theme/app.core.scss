@@ -14,6 +14,15 @@
 ion-app{
   background-image: url("/build/imgs/app-bg.jpg");
 }
+ion-tabbar{
+  background-color: color($colors, deep-blue);
+  .tab-button[aria-selected=true]{
+    color: color($colors, light-blue);
+  }
+  .tab-button[aria-selected=false]{
+    color: color($colors, primary);
+  }
+}
 .clear{
   &:after{
     content: " ";

@@ -38,11 +38,15 @@
         text-rendering: auto;
         line-height: 1;
         -webkit-font-smoothing: antialiased;
+        color: color($colors, dark);
       }
     }
     .searchbar-input-container{
       input.searchbar-input{
         background-color: transparent;
+        &::-webkit-input-placeholder {
+          color: color($colors, dark);
+        }
       }
     }
     .searchbar-ios-cancel{

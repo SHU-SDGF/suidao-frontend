@@ -7,17 +7,22 @@
       <span class="role">巡检员</span>
     </div>
 
-    <button menuClose (click)="logout()" clear>
+    <button clear>
       <ion-icon item-left name="md-qr-scanner"></ion-icon>
       扫描二维码
     </button>
-    <button menuClose (click)="syncDownload()" clear>
+    <button (click)="syncDownload()" clear>
       <ion-icon item-left name="md-cloud-download"></ion-icon>
       同步下载
     </button>
-    <button menuClose (click)="syncUpload()" clear>
+    <button (click)="syncUpload()" clear>
       <ion-icon item-left name="md-cloud-upload"></ion-icon>
       同步上传
+    </button>
+
+    <button class="logout-button" (click)="logout()" clear>
+      <ion-icon item-left name="md-log-out"></ion-icon>
+      退出
     </button>
   </ion-content>
 
