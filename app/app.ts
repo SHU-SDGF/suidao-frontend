@@ -7,8 +7,6 @@ import { UserService } from './providers/user_service';
 import { LookupService } from './providers/lookup_service';
 import {MainPage} from './pages/main/main';
 
-let PouchDB = require("pouchdb");
-
 @Component({
   templateUrl: 'build/app.html'
 })
