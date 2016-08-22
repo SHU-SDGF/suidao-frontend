@@ -4,6 +4,7 @@ import { Splashscreen, StatusBar } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
 import { UserService } from './providers/user_service';
+import { LookupService } from './providers/lookup_service';
 import {MainPage} from './pages/main/main';
 
 let PouchDB = require("pouchdb");
@@ -16,16 +17,15 @@ export class MyApp {
   
   private rootPage: any;
 
-
   constructor(
     private platform: Platform,
     public menu: MenuController,
-    private userService: UserService
+    private userService: UserService,
+    private lookupService: LookupService
   ) {
 
     platform.ready().then(() => {
-
-      var db = new PouchDB('birthday2', { adapter: 'websql'});
+      lookupService.initDB();
       StatusBar.styleDefault();
       Splashscreen.hide();
       let _self = this;
