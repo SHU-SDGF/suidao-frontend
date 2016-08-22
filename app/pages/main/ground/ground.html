@@ -1,20 +1,28 @@
 <ion-header no-shadow>
   <ion-navbar no-border-bottom>
     <ion-buttons>
-      <button menuToggle>
+      <button (click)="toggleMenu()">
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
     
     <ion-buttons end>
       <button (click)="startApp()" primary>
-        <ion-icon name="star"></ion-icon>
+        <ion-icon name="md-swap"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content class="ground-page">
+  <div class="searchbar-container">
+    <ion-searchbar
+      placeholder="搜索巡检活动"
+      [(ngModel)]="searchQuery"
+      [showCancelButton]="false"
+      (ionInput)="onInput($event)"
+      (ionCancel)="onCancel($event)">
+    </ion-searchbar>
+  </div>
   <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts" [offline]="offlineOpts" (onMapLoaded)="loadMap($event)" (onMarkerClicked)="clickMarker($event)"></baidu-map>
-  <menu-tip></menu-tip>
 </ion-content>

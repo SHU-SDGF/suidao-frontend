@@ -3,15 +3,13 @@
 import {Component, OnInit, DynamicComponentLoader, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import {MenuController, Events, Backdrop} from 'ionic-angular';
 import {BaiduMap, OfflineOptions, ControlAnchor, NavigationControlType} from 'angular2-baidu-map';
-import {MenuTip} from '../../../shared/components/menu_tip';
 
 @Component({
   selector: 'map-presentation',
   templateUrl: './build/pages/main/ground/ground.html',
-  directives: [BaiduMap, MenuTip]
+  directives: [BaiduMap]
 })
 export class GroundPage implements OnInit, AfterViewInit {
-  @ViewChild(MenuTip) _mentTip: MenuTip;
 
   opts: any;
   offlineOpts: OfflineOptions;
@@ -44,7 +42,16 @@ export class GroundPage implements OnInit, AfterViewInit {
     
   }
 
-  constructor(public menuCtrl: MenuController, private dcl:DynamicComponentLoader) {
+  toggleMenu() {
+    this.menuCtrl.toggle();
+    if (!this.menuCtrl.getMenus()[0].isOpen) {
+      $('.menu-content-push').addClass('menu-content-open');
+    } else {
+      $('.menu-content-push').removeClass('menu-content-open');
+    }
+  }
+
+  constructor(private menuCtrl: MenuController, private dcl:DynamicComponentLoader) {
     let _self = this;
   }
 
@@ -84,6 +91,8 @@ export class GroundPage implements OnInit, AfterViewInit {
       retryInterval: 5000,
       txt: 'NO-NETWORK'
     };
+
+    
   }
 
   loadMap(e: any) {

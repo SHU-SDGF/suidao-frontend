@@ -25,8 +25,6 @@ export class MyApp {
 
     platform.ready().then(() => {
 
-      debugger;
-
       var db = new PouchDB('birthday2', { adapter: 'websql'});
       StatusBar.styleDefault();
       Splashscreen.hide();

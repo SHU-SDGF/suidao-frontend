@@ -10,3 +10,45 @@
   top: 100px;
   left: 100px;
 }
+.searchbar-container{
+  position: absolute;
+  background: transparent;
+  z-index: 1000;
+  width: 90%;
+  left: 5%;
+
+  ion-searchbar{
+    background: rgba(255,255,255,0.4);
+    border-radius: 5px;
+    margin-top: 20px;
+    border: none;
+    .searchbar-search-icon{
+      background-image: none;
+      &:before{
+        font-size: 2rem;
+        margin-top: -0.1rem;
+        content: "\f375";
+        display: inline-block;
+        font-family: "Ionicons";
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        text-rendering: auto;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+      }
+    }
+    .searchbar-input-container{
+      input.searchbar-input{
+        background-color: transparent;
+      }
+    }
+    .searchbar-ios-cancel{
+      background-color: color($colors, deep-blue);
+      padding: 8px;
+      margin-left: 10px;
+    }
+  }
+}

@@ -6,7 +6,31 @@
 // These are the imports which make up the design of this app.
 // By default each design mode includes these shared imports.
 // App Shared Sass variables belong in app.variables.scss.
-
+@import "../app";
 @import "../pages/login/login";
 @import '../pages/main/main';
 @import "../shared/components/components";
+
+ion-app{
+  background-image: url("/build/imgs/app-bg.jpg");
+}
+.clear{
+  &:after{
+    content: " ";
+    clear: both;
+  }
+}
+
+.menu-content-push{
+  transition: all 0.2s;
+  &.menu-content-open{
+    top: 10rem;
+  }
+}
+
+.toolbar{
+  padding: 10px;
+  .toolbar-background{
+    background-color: color($colors, deep-blue);
+  }
+}

@@ -1,13 +1,23 @@
-<ion-menu id="user-menu" [content]="mainContent" persistent="true">
-
-  <ion-toolbar>
-    <ion-title>Menu</ion-title>
-  </ion-toolbar>
+<ion-menu type="push" id="user-menu" #userMenu [content]="mainContent" persistent="true">
 
   <ion-content class="outer-content">
-    <button ion-item menuClose (click)="logout()">
-        <ion-icon item-left [name]="ios-logout-outline"></ion-icon>
-      登出
+    <div class="clear user-badge">
+      <img class="portrait" src="build/imgs/portrait.jpeg"/>
+      <span class="username">林欣欣</span>
+      <span class="role">巡检员</span>
+    </div>
+
+    <button menuClose (click)="logout()" clear>
+      <ion-icon item-left name="md-qr-scanner"></ion-icon>
+      扫描二维码
+    </button>
+    <button menuClose (click)="syncDownload()" clear>
+      <ion-icon item-left name="md-cloud-download"></ion-icon>
+      同步下载
+    </button>
+    <button menuClose (click)="syncUpload()" clear>
+      <ion-icon item-left name="md-cloud-upload"></ion-icon>
+      同步上传
     </button>
   </ion-content>
 

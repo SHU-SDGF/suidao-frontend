@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 import { NavController, AlertController, LoadingController, LoadingOptions } from 'ionic-angular';
 
 import { MainPage } from '../main/main';
-import { UserService, Credentials } from '../../providers/user_service';
+import { UserService, Credentials} from '../../providers/user_service';
+
 
 @Component({
   templateUrl: 'build/pages/login/login.html'
