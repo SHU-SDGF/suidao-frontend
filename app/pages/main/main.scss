@@ -29,4 +29,9 @@
       -webkit-font-smoothing: antialiased;
     }
   }
+  &:active, &.active{
+    & > ion-icon:before{
+      color: color($colors, light-blue);
+    }
+  }
 }

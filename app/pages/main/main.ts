@@ -13,12 +13,16 @@ export class MainPage{
   //private rootPage: any = GroundPage;
   @ViewChild(Nav) nav: Nav;
 
-  constructor(private userService: UserService){
+  constructor(private userService: UserService, private event: Events){
     let _that = this;
 
     userService.getUsername().then((username)=>{
       _that.username = username;
     });
+  }
+
+  changeTab(component: any) {
+    this.event.publish('change-tab', component);
   }
 
   onTabSelected(){
