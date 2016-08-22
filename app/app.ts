@@ -6,6 +6,7 @@ import * as _providers from './providers';
 import { UserService } from './providers/user_service';
 import {MainPage} from './pages/main/main';
 
+let PouchDB = require("pouchdb");
 
 @Component({
   templateUrl: 'build/app.html'
@@ -15,6 +16,7 @@ export class MyApp {
   
   private rootPage: any;
 
+
   constructor(
     private platform: Platform,
     public menu: MenuController,
@@ -22,6 +24,10 @@ export class MyApp {
   ) {
 
     platform.ready().then(() => {
+
+      debugger;
+
+      var db = new PouchDB('birthday2', { adapter: 'websql'});
       StatusBar.styleDefault();
       Splashscreen.hide();
       let _self = this;
