@@ -3,7 +3,7 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController} from 'ionic-angular';
-import { EnvironmentActivity } from '../../../../../providers';
+import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../providers';
 
 
 @Component({
@@ -15,9 +15,7 @@ export class ActivityDetailPage{
   private activityDetailObj: any = {};
 
   constructor(public viewCtrl: ViewController,
-    private activityDetail: EnvironmentActivity) { }
-  
-
+    private activityDetail: EnvironmentActivityService) { }
 
   dismiss() {
     this.viewCtrl.dismiss();

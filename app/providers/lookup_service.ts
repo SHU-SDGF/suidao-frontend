@@ -5,6 +5,11 @@ import 'rxjs/add/operator/map';
 
 let PouchDB = require('pouchdb');
 
+const MONOMERS = 'monomers';
+const ACT_TYPES = 'act_types';
+const ACTION_STATUS_DATA = 'act_status_data';
+const AUTHORITY_DATA = 'authority_data';
+
 /*
   Generated class for the LookupService provider.
 
@@ -16,7 +21,7 @@ export class LookupService {
 
   constructor(private http: Http) {}
 
-  private localStorage;
+  private localStorage: Storage;
   // 单体枚举表
   private _db_monomers;
   // 
@@ -173,15 +178,39 @@ export class LookupService {
 		]
 
 		this.localStorage = new Storage(LocalStorage);
-		this.localStorage.set('monomers', JSON.stringify(monomers_data));
-		this.localStorage.set('act_types', JSON.stringify(act_types_data));
-		this.localStorage.set('act_status_data', JSON.stringify(act_status_data));
-		this.localStorage.set('authority_data', JSON.stringify(authority_data));
+		this.localStorage.set(MONOMERS, JSON.stringify(monomers_data));
+		this.localStorage.set(ACT_TYPES, JSON.stringify(act_types_data));
+		this.localStorage.set(ACTION_STATUS_DATA, JSON.stringify(act_status_data));
+		this.localStorage.set(AUTHORITY_DATA, JSON.stringify(authority_data));
 
 		// this._db_monomers = new PouchDB('monomers', { adapter: 'websql'});
 		// this._db_facilitiy_types = new PouchDB('facility_types', { adapter: 'websql'});
 		// this._db_position_descriptions = new PouchDB('position_descriptions', { adapter: 'websql' });
 		// this._db_act_types = new PouchDB('act_types', { adapter: 'websql'});
+	}
+
+	getMenomers(): Promise<Array<any>> {
+		return this.localStorage.get(MONOMERS).then((_monomers) => {
+			return JSON.parse(_monomers);
+		});
+	}
+
+	getActTypes(): Promise<Array<any>>{
+		return this.localStorage.get(ACT_TYPES).then((_actTypes) => {
+			return JSON.parse(_actTypes);
+		});
+	}	
+
+	getActionStatus(): Promise<Array<any>>{
+		return this.localStorage.get(ACTION_STATUS_DATA).then((_actStatusData) => {
+			return JSON.parse(_actStatusData);
+		});
+	}
+
+	getAuthorityData(): Promise<Array<any>>{
+		return this.localStorage.get(AUTHORITY_DATA).then((data) => {
+			return JSON.parse(data);
+		});
 	}
 
 	// loadData() {

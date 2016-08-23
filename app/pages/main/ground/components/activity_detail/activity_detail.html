@@ -24,7 +24,11 @@
       <ion-input type="text" placeholder="巡检时间"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input type="text" placeholder="活动状态"></ion-input>
+      <ion-label>活动状态</ion-label>
+      <ion-select [(ngModel)]="activityDetailObj.activityType">
+        <ion-option value="f" selected="true">Female</ion-option>
+        <ion-option value="m">Male</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-input type="text" placeholder="记录人"></ion-input>
