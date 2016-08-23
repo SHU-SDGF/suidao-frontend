@@ -24,5 +24,12 @@
       (ionCancel)="onCancel($event)">
     </ion-searchbar>
   </div>
-  <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts" [offline]="offlineOpts" (onMapLoaded)="loadMap($event)" (onMarkerClicked)="clickMarker($event)"></baidu-map>
+  <suidao-map 
+    ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" 
+    (onMapClick)="mapClick($event)" 
+    [options]="opts" 
+    [offline]="offlineOpts" 
+    [changeOptions]="mapOptionEmitter"
+    (onMarkerClicked)="clickMarker($event)"
+  ></suidao-map>
 </ion-content>

@@ -14,6 +14,7 @@
 ion-app{
   background-image: url("/build/imgs/app-bg.jpg");
 }
+/* tab bar*/
 ion-tabbar{
   background-color: color($colors, deep-blue);
   .tab-button[aria-selected=true]{
@@ -30,6 +31,7 @@ ion-tabbar{
   }
 }
 
+/* menu content */
 .menu-content-push{
   transition: all 0.2s;
   &.menu-content-open{
@@ -37,9 +39,25 @@ ion-tabbar{
   }
 }
 
+/* toolbar */
 .toolbar{
   padding: 10px;
   .toolbar-background{
     background-color: color($colors, deep-blue);
   }
+}
+
+/* ion-alert */
+ion-alert{
+  .alert-wrapper{
+    .alert-button-group{
+      .alert-button{
+        color: color($colors, dark);
+      }
+    }
+  }
+}
+
+.toast-message {
+  background: rgba(0,0,0,0.4);
 }

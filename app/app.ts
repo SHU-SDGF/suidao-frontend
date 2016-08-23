@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, ionicBootstrap, Nav, MenuController } from 'ionic-angular';
+import {Platform, ionicBootstrap, Nav, MenuController, AlertController} from 'ionic-angular';
 import { Splashscreen, StatusBar } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
@@ -15,11 +15,14 @@ export class MyApp {
   
   private rootPage: any;
 
+  /**
+   * app init */
   constructor(
     private platform: Platform,
     public menu: MenuController,
     private userService: UserService,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    private alertController: AlertController
   ) {
 
     platform.ready().then(() => {
@@ -39,9 +42,27 @@ export class MyApp {
     });
   }
 
-  logout(){
-    this.userService.logout();
-    this.nav.setRoot(LoginPage);
+  /**
+   * user logout */
+  logout() {
+    let confirm = this.alertController.create({
+      title: '确认要登出吗？',
+      message: '用户登出后本地数据将会被清空！',
+      buttons: [
+        {
+          text: '取消'
+        },
+        {
+          text: '同意',
+          handler: () => {
+            this.userService.logout();
+            this.nav.setRoot(LoginPage);
+          }
+        }
+      ]
+    });
+
+    confirm.present();
   }
 }
 

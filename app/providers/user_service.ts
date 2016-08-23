@@ -14,9 +14,13 @@ export class UserService {
   HAS_LOGGED_IN = 'hasLoggedIn';
   storage = new Storage(LocalStorage);
   
-  constructor(public http: Http, public events: Events) {}
-
-  login(credentials: Credentials) {
+  constructor(public http: Http, public events: Events) { }
+  
+  /**
+   * user login
+   * @param  {Credentials} credentials
+   */
+  public login(credentials: Credentials) {
     let _that = this;
     return new Promise((resolve, reject) =>{
       _that.events.publish('user:login');
@@ -42,35 +46,44 @@ export class UserService {
     });
   }
 
-  logout() {
+  /**
+   * user logout */
+  public logout() {
     this.storage.remove(this.HAS_LOGGED_IN);
     this.storage.remove('user_token');
     this.storage.remove('username');
     this.events.publish('user:logout');
   }
 
-  setUsername(username: string) {
+  /**
+   * set username */
+  private setUsername(username: string) {
     this.storage.set('username', username);
   }
 
-  getUsername() {
-    return this.storage.get('username').then((value) => {
-      return value;
-    });
+  
+  /**
+   * @returns Promise<string>
+   */
+  public getUsername(): Promise<string> {
+    return this.storage.get('username')
   }
 
-  setUserToken(token) {
+  private setUserToken(token: string) {
     this.storage.set('user_token', token);
   }
 
-  getUserToken(token) {
-    this.storage.get('user_token');
-  }
-
   /**
-   * 
+   * @returns Promise<string>
    */
-  hasLoggedIn(): Promise<boolean> {
+  public getUserToken(): Promise<string> {
+    return this.storage.get('user_token');
+  }
+  
+  /**
+   * @returns Promise<boolean>
+   */
+  public hasLoggedIn(): Promise<boolean> {
     return this.storage.get(this.HAS_LOGGED_IN).then((value) => {
       return value;
     });

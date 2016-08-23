@@ -3,13 +3,14 @@ import {UserService} from '../../providers/user_service';
 import {Nav, Events} from 'ionic-angular';
 import {GroundPage} from './ground/ground';
 import {ManyouPage} from './manyou/manyou';
+import {TestPage} from './test/test';
 
 @Component({
   templateUrl: './build/pages/main/main.html'
 })
 export class MainPage{
   private username: string = '';
-  private rootPages: Array<any> = [GroundPage, ManyouPage, GroundPage, GroundPage];
+  private rootPages: Array<any> = [GroundPage, ManyouPage, TestPage, GroundPage];
   //private rootPage: any = GroundPage;
   @ViewChild(Nav) nav: Nav;
 
