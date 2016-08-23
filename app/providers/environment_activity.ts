@@ -9,7 +9,6 @@ PouchDB.plugin(require('pouchdb-find'));
 export class EnvironmentActivity {
 	private _db;
 	constructor() {
-
 	}
 
 	initDB() {

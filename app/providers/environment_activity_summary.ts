@@ -16,21 +16,42 @@ export class EnvironmentActivitySummary {
 		this._db = new PouchDB('environment_activity_summary', { adapter: 'websql'})
 	}
 
-	addNewEnvironmentActivitySummary(environmentActivitySummary) {
+
+	//新增环境活动汇总表
+	create(environmentActivitySummary) {
 		return this._db.post(environmentActivitySummary);
 	}
 
-	updateEnvironmentActivitySummary(environmentActivitySummary) {
+	//更新环境活动汇总表
+	update(environmentActivitySummary) {
 		return this._db.put(environmentActivitySummary);
 	}
 
 	getEnvironmentActivitySummariesByActName(act_name) {
+		debugger;
+		var that = this;
+		this._db.find({
+				selector: {"act_name": act_name}
+			}).then(function(result) {
+				debugger;
+				return result;
+			}, function(error){
+				return error;
+			});
 		this._db.createIndex({
 			index: { fields: ["act_name"]}
-		}).then(function() {
-			return this._db.find({
-				selector: {act_name: act_name}
+		}).then(function(result) {
+			debugger;
+			this._db.find({
+				selector: {"act_name": act_name}
+			}).then(function(result) {
+				debugger;
+				return result;
+			}, function(error){
+				return error;
 			});
-		})
+		}, function(error) {
+			return 'error';
+		});
 	}
 }
