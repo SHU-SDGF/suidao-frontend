@@ -26,10 +26,14 @@
       background: transparent;
       
       ion-item{
-        &{
+        &.item{
           padding: 5px 16px;
           border-radius: 5px;
           margin-bottom: 15px;
+          background-color: color($colors, light);
+          .text-input{
+            color: color($colors, dark);
+          }
         }
         ion-icon{
           color: #b3b3b3;

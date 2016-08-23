@@ -36,7 +36,8 @@ export class MyApp {
         if(loggedIn){
           _self.nav.setRoot(MainPage);
         }else{
-          _self.nav.setRoot(LoginPage);
+          //_self.nav.setRoot(LoginPage);
+          _self.nav.setRoot(MainPage);
         }
       })
     });
@@ -57,6 +58,7 @@ export class MyApp {
           handler: () => {
             this.userService.logout();
             this.nav.setRoot(LoginPage);
+            this.menu.close();
           }
         }
       ]

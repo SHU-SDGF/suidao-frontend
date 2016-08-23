@@ -55,9 +55,44 @@ ion-alert{
         color: color($colors, dark);
       }
     }
+    .alert-radio-group{
+      button.alert-radio[aria-checked=true]{
+        alert-radio-label{
+          color: color($colors, deep-blue);
+        }
+      }
+    }
   }
+  &.alert-bottom{
+    .alert-wrapper{
+      position: absolute;
+      bottom: 70px;
+    }
+  }
+}
+
+.toolbar-title{
+  color: color($colors, light);
 }
 
 .toast-message {
   background: rgba(0,0,0,0.4);
+}
+
+ion-content{
+  background-color: transparent;
+}
+
+ion-modal{
+  .modal-wrapper{
+    background-image: url('/build/imgs/modal-bg.jpg');
+  }
+}
+
+ion-item.item{
+   background-color: transparent;
+}
+
+.text-input{
+  color: color($colors, light);
 }

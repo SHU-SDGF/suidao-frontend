@@ -3,7 +3,7 @@ interface config{
 };
 const AppConfigs = {
 	'development': {
-		apiBase: 'http://114.55.55.37:3001//api'
+		apiBase: 'http://114.55.55.37:3001/api'
 	},
     'production': {
         apiBase: 'http://114.215.196.178:8080/beehive-portal/api'

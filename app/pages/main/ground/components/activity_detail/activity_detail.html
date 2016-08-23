@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons>
+      <button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title>创建环境活动</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="activity_detail">
+  <ion-list>
+    <ion-item>
+      <ion-input type="text" placeholder="活动名称"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>活动类别</ion-label>
+      <ion-select [(ngModel)]="activityDetailObj.activityType">
+        <ion-option value="f" selected="true">Female</ion-option>
+        <ion-option value="m">Male</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" placeholder="巡检时间"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" placeholder="活动状态"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" placeholder="记录人"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" placeholder="描述"></ion-input>
+    </ion-item>
+  </ion-list>
+</ion-content>
