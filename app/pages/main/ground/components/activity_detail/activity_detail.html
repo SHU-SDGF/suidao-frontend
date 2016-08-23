@@ -11,13 +11,13 @@
 <ion-content class="activity_detail">
   <ion-list>
     <ion-item>
-      <ion-input type="text" placeholder="活动名称"></ion-input>
+      <ion-label>活动名称</ion-label>
+      <ion-input type="text"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>活动类别</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.activityType">
-        <ion-option value="f" selected="true">Female</ion-option>
-        <ion-option value="m">Male</ion-option>
+      <ion-select [(ngModel)]="activityDetailObj.activityType" okText="确认" cancelText="取消">
+        <ion-option *ngFor="let actType of actTypes" [value]="actType.value">{{actType.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -25,9 +25,8 @@
     </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.activityType">
-        <ion-option value="f" selected="true">Female</ion-option>
-        <ion-option value="m">Male</ion-option>
+      <ion-select [(ngModel)]="activityDetailObj.activityStatus" okText="确认" cancelText="取消">
+        <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.value">{{actStatus.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>

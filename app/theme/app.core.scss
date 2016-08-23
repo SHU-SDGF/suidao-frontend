@@ -93,6 +93,12 @@ ion-item.item{
    background-color: transparent;
 }
 
+ion-select{
+  .select-text{
+    color: color($colors, light);
+  }
+}
+
 .text-input{
   color: color($colors, light);
 }

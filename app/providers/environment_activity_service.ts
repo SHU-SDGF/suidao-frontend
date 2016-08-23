@@ -116,7 +116,7 @@ export class EnvironmentActivityService {
 
 		return new Promise((resolve, reject) =>{
       var request = _that.http.post(
-        AppConfig.apiBase + '/createEnvironmentActivity',
+        AppConfig.apiBase + '/createEnvironmentActivity', {}
       );
 
       request.subscribe((response)=>{
@@ -134,6 +134,8 @@ export class EnvironmentActivityService {
 
 	//更新已有环境活动
 	updateNewEnvionrmentActivity(paramsObj: any) {
+		let _that = this;
+
 		let environmentActivityObj = {
 			id: paramsObj["id"],
 			act_no: paramsObj["act_no"],
@@ -155,7 +157,7 @@ export class EnvironmentActivityService {
 
 		return new Promise((resolve, reject) =>{
       var request = _that.http.post(
-        AppConfig.apiBase + '/updateEnvironmentActivity',
+        AppConfig.apiBase + '/updateEnvironmentActivity',{}
       );
 
       request.subscribe((response)=>{
