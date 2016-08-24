@@ -16,6 +16,7 @@ ion-app{
 }
 /* tab bar*/
 ion-tabbar{
+  height: 5rem;
   background-color: color($colors, deep-blue);
   .tab-button[aria-selected=true]{
     color: color($colors, light-blue);
@@ -65,8 +66,8 @@ ion-alert{
   }
   &.alert-bottom{
     .alert-wrapper{
-      position: absolute;
-      bottom: 70px;
+      position: relative;
+      margin-bottom: -20rem;
     }
   }
 }
@@ -100,5 +101,9 @@ ion-select{
 }
 
 .text-input{
+  color: color($colors, light);
+}
+
+.bar-button-default{
   color: color($colors, light);
 }

@@ -1,13 +1,19 @@
 <ion-header>
-  <ion-navbar>
-    <ion-buttons>
+  <ion-toolbar>
+    <ion-buttons start>
       <button (click)="dismiss()">
         取消
       </button>
     </ion-buttons>
     <ion-title>创建环境活动</ion-title>
-  </ion-navbar>
+    <ion-buttons round end>
+      <button (click)="dismiss()">
+        创建
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
+
 <ion-content class="activity_detail">
   <ion-list>
     <ion-item>
@@ -21,7 +27,8 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input type="text" placeholder="巡检时间"></ion-input>
+      <ion-label>巡检时间</ion-label>
+      <ion-input type="text"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>
@@ -30,10 +37,12 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input type="text" placeholder="记录人"></ion-input>
+      <ion-label>记录人</ion-label>
+      <ion-input type="text"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-input type="text" placeholder="描述"></ion-input>
+      <ion-label>描述</ion-label>
+      <ion-input type="text"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>

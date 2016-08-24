@@ -145,6 +145,13 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
       return new BMap.Marker(pt);
     };
   }
+
+  _draw() {
+    let self = this;
+    setTimeout(() => {
+      BaiduMap.prototype._draw.bind(self).apply(self);
+    }, 1000);
+  }
 }
 
 export * from 'angular2-baidu-map';

@@ -83,7 +83,7 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
 
   private showToast() {
     this._toast = this._toastController.create({
-      message: '请点击地图添加新的环境活动.',
+      message: '请双击地图位置添加新的环境活动.',
       position: 'top',
       dismissOnPageChange: true
     });

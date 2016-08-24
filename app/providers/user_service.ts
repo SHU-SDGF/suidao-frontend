@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Events, LocalStorage, Storage} from 'ionic-angular';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import {AppConfig} from './config';
 
 export interface Credentials{
   userName: string, 
   password: string
 }
+
 
 @Injectable()
 export class UserService {
@@ -22,11 +23,16 @@ export class UserService {
    */
   public login(credentials: Credentials) {
     let _that = this;
+    let options = {
+      headers: new Headers({ 'Authorization': makeBaseAuth(credentials) })
+    };
+
     return new Promise((resolve, reject) =>{
       _that.events.publish('user:login');
       var request = _that.http.post(
         AppConfig.apiBase + '/login',
-        credentials
+        {},
+        options
       );
 
       request.subscribe((response)=>{
@@ -42,8 +48,13 @@ export class UserService {
       }, (error)=>{
         reject();
       });
-
     });
+
+    function makeBaseAuth(credentials: Credentials) {
+			var tok = credentials.userName + ':' + credentials.password;
+			var hash = btoa(tok);
+			return "Basic " + hash;
+		}
   }
 
   /**

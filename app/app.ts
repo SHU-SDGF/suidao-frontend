@@ -36,8 +36,8 @@ export class MyApp {
         if(loggedIn){
           _self.nav.setRoot(MainPage);
         }else{
-          //_self.nav.setRoot(LoginPage);
-          _self.nav.setRoot(MainPage);
+          _self.nav.setRoot(LoginPage);
+          //_self.nav.setRoot(MainPage);
         }
       })
     });
