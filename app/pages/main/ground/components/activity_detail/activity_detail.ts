@@ -17,12 +17,12 @@ export class ActivityDetailPage implements OnInit{
 
   private actStatusList: [{
     name: string,
-    id: number
+    order: number
   }];
 
   private actTypes: [{
     name: string,
-    id: number
+    order: number
   }];
 
   constructor(public viewCtrl: ViewController,
@@ -38,24 +38,42 @@ export class ActivityDetailPage implements OnInit{
     let point: MapPoint = this.params.get('point');
     this.activityDetailObj = {
       act_name: '', //活动名称
-      start_date: '', //起始日期
-      end_date: '', //结束日期
       description: '', //活动描述
       longitude: point.lng, //经度
-      latitude: point.lat //纬度
+      latitude: point.lat, //纬度
+      act_status: '',
+      act_type: '',
+      recorder: ''
     };
 
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, id: number}]) => {
+    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
       _self.actStatusList = actStatusList;
     });
 
-    this._lookupService.getActTypes().then((actTypes:[{name: string, id: number}]) => {
+    this._lookupService.getActTypes().then((actTypes:[{name: string, order: number}]) => {
       _self.actTypes = actTypes;
     });
   }
 
   createActivity() {
-    this._actService.addNewEnvironmentActivity(this.activityDetailObj).then(() => {
+    let activityObj = {
+      environmentActitivitySummary: {
+        act_name: this.activityDetailObj.act_name,
+        description: this.activityDetailObj.description,
+        longtitude: this.activityDetailObj.longitude,
+        latitude: this.activityDetailObj.latitude,
+        start_date: this.activityDetailObj.start_date,
+        end_date: this.activityDetailObj.end_date
+      },
+      environmentActivity: {
+        act_type: this.activityDetailObj.act_type,
+        act_status: this.activityDetailObj.act_status,
+        description: this.activityDetailObj.description,
+        recorder: this.activityDetailObj.recorder
+      }
+    }
+
+    this._actService.addNewEnvironmentActivity(activityObj).then(() => {
       this.viewCtrl.dismiss(this.activityDetailObj);
     }, (error) => {
       let alert = this._alertCtrl.create({

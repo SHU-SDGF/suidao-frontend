@@ -35,6 +35,7 @@ export class UserService {
         _that.storage.set(_that.HAS_LOGGED_IN, true);
         if(response.status < 400){
           var result = response.json();
+          generateAuthToken(result);
           _that.setUsername(credentials.userName);
           _that.setUserToken(result.accessToken);
           resolve();
@@ -46,11 +47,12 @@ export class UserService {
       });
     });
 
-    function makeBaseAuth(credentials: Credentials) {
-			var tok = credentials.userName + ':' + credentials.password;
-			var hash = btoa(tok);
-			return "Basic " + hash;
-		}
+    function generateAuthToken(result) {
+      var tok = result.name + ':' + result["token"];
+      var hash = btoa(tok);
+      let authToken = "Basic " + hash;
+      _that.storage.set("authToken", authToken);
+    }
   }
 
   /**
@@ -59,6 +61,7 @@ export class UserService {
     this.storage.remove(this.HAS_LOGGED_IN);
     this.storage.remove('user_token');
     this.storage.remove('username');
+    this.storage.remove('authToken');
     this.events.publish('user:logout');
   }
 
