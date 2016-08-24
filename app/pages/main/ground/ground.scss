@@ -6,6 +6,13 @@
     width: 100%;
     height: 100%;
     display: block;
+    .BMap_shadow{
+      display: none;
+    }
+    .BMapLabel{
+      border-radius: 8px;
+      color: color($colors, light);
+    }
   }
 
   .searchbar-container{

@@ -26,10 +26,11 @@
   </div>
   <suidao-map 
     ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" 
-    (onMapClick)="mapClick($event)" 
+    (onMapLongClick)="mapLongClick($event)" 
     [options]="opts" 
     [offline]="offlineOpts" 
     [changeOptions]="mapOptionEmitter"
     (onMarkerClicked)="clickMarker($event)"
+    (onMarkerLoaded)="mapLoaded()"
   ></suidao-map>
 </ion-content>

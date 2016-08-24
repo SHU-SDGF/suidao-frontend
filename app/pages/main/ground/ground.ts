@@ -5,11 +5,11 @@ import {Component, OnInit, OnDestroy,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
 import {MenuController, Events, Backdrop, ToastController, AlertController, ModalController} from 'ionic-angular';
 import {toggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
-import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapClickEvent, MarkerOptions} from '../../../shared/components/suidao-map/suidao-map';
+import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
+import {ActivityInfoPage} from './components/activity_info/activity_info';
 
 @Component({
-  selector: 'map-presentation',
   templateUrl: './build/pages/main/ground/ground.html',
   directives: [SuidaoMap]
 })
@@ -34,6 +34,7 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     // bind add button event
     $('ion-tabbar a.tab-button').eq(2).on('click', ((_self) => {
       return function () {
@@ -47,7 +48,23 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
         latitude: 31.245554
       },
       zoom: 17,
-      markers: [],
+      markers: [{
+        longitude: 121.487181,
+        latitude: 31.241721,
+        title: '环境活动001',
+        icon: 'build/imgs/map-marker.png',
+        width: 30,
+        height: 30,
+        content: ``
+      },{
+        longitude: 121.450184,
+        latitude: 31.254985,
+        title: '环境活动002',
+        icon: 'build/imgs/map-marker.png',
+        width: 30,
+        height: 30,
+        content: ``
+      }],
       geolocationCtrl: {
         anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
       },
@@ -102,7 +119,7 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
     $('#tab-t0-2').removeClass('active');
   }
 
-  private mapClick($event: MapClickEvent) {
+  private mapLongClick($event: MapEvent) {
     //this.opts.markers.push();
     let _self = this;
     if (!this.isEditing) return;
@@ -112,12 +129,12 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
     this._unsavedMarker = this._suidaoMap.addMarker({
       longitude: $event.point.lng,
       latitude: $event.point.lat,
-      title: 'test',
+      title: '新建标签',
       icon: 'build/imgs/map-marker.png',
       width: 30,
       height: 30
     });
-    this._suidaoMap.changeCenter($event.point);
+    //this._suidaoMap.changeCenter($event.point);
     
     this.hideToast().then(() => {
       let alert = this._alertCtrl.create({
@@ -154,13 +171,17 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
     });
   }
 
+  private mapLoaded(){
+    
+  }
+
   private removeUnsavedMarker() {
     this._suidaoMap.removeMarker(this._unsavedMarker);
     this._unsavedMarker = null;
   }
 
-  private clickMarker($event) {
-    event.stopPropagation();
+  private clickMarker($event: {obj: MarkerOptions, marker: any}) {
+    let modal = this._modalCtrl.create(ActivityDetailPage);
+    modal.present();
   }
-
 }
