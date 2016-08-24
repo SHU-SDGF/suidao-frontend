@@ -16,23 +16,23 @@ export interface EnvironmentActivity {
 	photo: any // 图片
 	audio: any // 音频
 	video: any // 视频
-	recorder: string //记录人
+	recorder?: string //记录人
 	create_date?: any //作成日时
 	update_date?: any //更新日时
 }
 
 export interface EnvironmentActivitySummary {
-	act_no: string //活动编码
+	act_no?: string //活动编码
 	act_name: string //活动名称
 	start_date: any //起始日期
 	end_date: any //结束日期
 	description: string //活动描述
 	longitude: number //经度
 	latitude: number //纬度
-	create_user: string //作成者
-	update_user: string //更新者
-	create_date: any //作成日时
-	update_date: any //更新日时
+	create_user?: string //作成者
+	update_user?: string //更新者
+	create_date?: any //作成日时
+	update_date?: any //更新日时
 }
 
 @Injectable()

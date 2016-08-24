@@ -137,7 +137,7 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
             text: '确认',
             handler: () => {
               alert.dismiss().then(() => {
-                let modal = _self._modalCtrl.create(ActivityDetailPage, {});
+                let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
                   _self.toggleEditing();
