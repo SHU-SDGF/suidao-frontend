@@ -12,7 +12,8 @@
 @import "../shared/components/components";
 
 ion-app{
-  background-image: url("/build/imgs/app-bg.jpg");
+  background: url("../imgs/app-bg.jpg") no-repeat center center fixed;
+  background-size: auto 100%;
 }
 /* tab bar*/
 ion-tabbar{
@@ -89,7 +90,8 @@ ion-content{
 
 ion-modal{
   .modal-wrapper{
-    background-image: url('/build/imgs/modal-bg.jpg');
+    background: url('../imgs/modal-bg.jpg') no-repeat center center fixed; 
+    background-size: 100% 100%;
   }
 }
 
