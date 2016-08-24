@@ -48,7 +48,7 @@ export class UserService {
     });
 
     function generateAuthToken(result) {
-      var tok = credentials.userName + ':' + credentials.password;
+      var tok = result.name + ':' + result["token"];
       var hash = btoa(tok);
       let authToken = "Basic " + hash;
       _that.storage.set("authToken", authToken);
@@ -61,6 +61,7 @@ export class UserService {
     this.storage.remove(this.HAS_LOGGED_IN);
     this.storage.remove('user_token');
     this.storage.remove('username');
+    this.storage.remove('authToken');
     this.events.publish('user:logout');
   }
 

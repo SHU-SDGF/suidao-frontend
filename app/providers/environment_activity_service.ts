@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { Storage, LocalStorage } from 'ionic-angular';
 import { AppConfig } from './config';
 import {URLSearchParams} from '@angular/http';
+import {HttpService} from './http_service';
 
 export interface EnvironmentActivity {
   act_no?: string //活动编码
@@ -24,8 +25,8 @@ export interface EnvironmentActivity {
 export interface EnvironmentActivitySummary {
 	act_no?: string //活动编码
 	act_name: string //活动名称
-	start_date: any //起始日期
-	end_date: any //结束日期
+	start_date?: any //起始日期
+	end_date?: any //结束日期
 	description: string //活动描述
 	longitude: number //经度
 	latitude: number //纬度
@@ -33,11 +34,14 @@ export interface EnvironmentActivitySummary {
 	update_user?: string //更新者
 	create_date?: any //作成日时
 	update_date?: any //更新日时
+	recorder: string
+	act_status: any
+	act_type: any
 }
 
 @Injectable()
 export class EnvironmentActivityService {
-	constructor(public http: Http) {}
+	constructor(public httpService: HttpService, public http: Http) {}
 
 	storage = new Storage(LocalStorage);
 
@@ -94,42 +98,31 @@ export class EnvironmentActivityService {
 	}
 
 	//添加新的环境活动
-	addNewEnvironmentActivity(paramsObj: any) {
-		let _that = this;
-		let environmentActivityObj = {
-			act_no: paramsObj["act_no"],
-			act_name: paramsObj["act_name"],
-			start_date: paramsObj["start_date"],
-			end_date: paramsObj["end_date"],
-			description: paramsObj["description"],
-			act_level: paramsObj["act_level"],
-			longtitude: paramsObj["longtitude"],
-			latitude: paramsObj["latitude"],
-			create_user: paramsObj["create_user"],
-			update_user: paramsObj["update_user"],
-			insp_date: paramsObj["insp_date"],
-			photo: paramsObj["photo"],
-			audio: paramsObj["audio"],
-			video: paramsObj["video"],
-			recorder: paramsObj["recorder"]
-		};
+	addNewEnvironmentActivity(activityObj: any) {
 
-		return new Promise((resolve, reject) =>{
-      var request = _that.http.post(
-        AppConfig.apiBase + '/createEnvironmentActivity', {}
-      );
+		return this.httpService.post(activityObj, 'createEnvironmentActivity');
+		// let _that = this;
 
-      request.subscribe((response)=>{
-        if(response.status < 400){
-          var result = response.json();
-          resolve();
-        }else{
-          reject();
-        }
-      }, (error)=>{
-        reject();
-      });
-    });
+		// var headers = new Headers();
+		// headers.append('Authorization',localStorage.getItem("authToken"));
+		// return new Promise((resolve, reject) =>{
+  //     var request = _that.http.post(
+  //       AppConfig.apiBase + '/createEnvironmentActivity',
+  //       activityObj,{
+  //       	headers: headers
+  //       }
+  //     );
+  //     request.subscribe((response)=>{
+  //       if(response.status < 400){
+  //         var result = response.json();
+  //         resolve();
+  //       }else{
+  //         reject();
+  //       }
+  //     }, (error)=>{
+  //       reject();
+  //     });
+  //   });
 	}
 
 	//更新已有环境活动
@@ -172,85 +165,4 @@ export class EnvironmentActivityService {
       });
     });
 	}
-
-	// //添加环境活动表
-	// addNewEnvironmentActivitySummary(params: any){
-	// 	//环境活动表
-	// 	var environmentActivitySummaryObj = {
-	// 		id: 0,
-	// 		act_no: params["act_no"],
-	// 		act_name: params["act_name"],
-	// 		start_date: params["start_date"],
-	// 		end_date: params["end_date"],
-	// 		description: params["description"],
-	// 		act_level: params["act_level"],
-	// 		longtitude: params["longtitude"],
-	// 		latitude: params["latitude"],
-	// 		update_cnt: 0,
-	// 		create_user: params["create_user"],
-	// 		update_user: params["update_user"]
-	// 	};
-	// 	//环境活动历史表
-	// 	var environmentActivityObj = {
-	// 		id: 0,
-	// 		act_no: params["act_no"],
-	// 		insp_date: params["insp_date"],
-	// 		description: params["description"],
-	// 		photo: params["photo"],
-	// 		audio: params["audio"],
-	// 		video: params["video"],
-	// 		recorder: params["recorder"],
-	// 		update_user: params["update_user"],
-	// 		create_user: params["create_user"]
-	// 	}
-
-	// 	//call api
-	// 	this.environmentActivitySummary.create(environmentActivitySummaryObj).then(function (result) {
-	// 		this.environmentActiviy.create(environmentActivityObj).then(function (result) {
-	// 		}, function(err) {
-
-	// 		});
-	// 	}, function (err) {
-	// 		// body...
-	// 	});
-	// }
-
-	// //更新环境活动表
-	// updateEnvironmentActivitySummary(params: any) {
-	// 	//环境活动表
-	// 	var environmentActivitySummaryObj = {
-	// 		id: params["id"],
-	// 		act_no: params["act_no"],
-	// 		act_name: params["act_name"],
-	// 		start_date: params["start_date"],
-	// 		end_date: params["end_date"],
-	// 		description: params["description"],
-	// 		act_level: params["act_level"],
-	// 		longtitude: params["longtitude"],
-	// 		latitude: params["latitude"],
-	// 		create_user: params["create_user"],
-	// 		update_user: params["update_user"]
-	// 	};
-	// 	//环境活动历史表
-	// 	var environmentActivityObj = {
-	// 		id: params["id"],
-	// 		act_no: params["act_no"],
-	// 		insp_date: params["insp_date"],
-	// 		description: params["description"],
-	// 		photo: params["photo"],
-	// 		audio: params["audio"],
-	// 		video: params["video"],
-	// 		recorder: params["recorder"],
-	// 		update_user: params["update_user"],
-	// 		create_user: params["create_user"]
-	// 	}
-	// 	this.environmentActivitySummary.update(environmentActivitySummaryObj).then(function (result) {
-	// 		this.environmentActiviy.create(environmentActivityObj).then(function (result) {
-	// 		}, function(err) {
-
-	// 		});
-	// 	}, function (err) {
-	// 		// body...
-	// 	});
-	// }
 }
