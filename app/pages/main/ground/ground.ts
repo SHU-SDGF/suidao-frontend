@@ -182,6 +182,9 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
 
   private clickMarker($event: {obj: MarkerOptions, marker: any}) {
     let modal = this._modalCtrl.create(ActivityDetailPage);
+    modal.present().then(function(){
+      console.log('show');
+    });
     modal.present();
   }
 }

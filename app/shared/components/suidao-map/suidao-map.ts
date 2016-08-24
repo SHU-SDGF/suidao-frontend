@@ -20,9 +20,13 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
   @Output() onMapClick = new EventEmitter;
   @Output() onMapLongClick = new EventEmitter;
   @Output() onDblClick = new EventEmitter;
+  @Output() onTouchStart = new EventEmitter;
+  @Output() onTouchEnd = new EventEmitter;
+  @Output() onTouchMove = new EventEmitter;
 
+  private _previousPoint: {x: number, y: number};
   private _previousLabels = [];
-
+  private _longClickEnabled: boolean = false;
   constructor(private _el: ElementRef) {
     super(_el);
   }
@@ -40,11 +44,32 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
       });
       // bind longpress event
       _self.map.addEventListener('longpress', ($event: MapEvent) => {
+        if(!this._longClickEnabled)return;
         _self.onMapLongClick.emit($event);
       });
-      //bind double click event
+      // bind double click event
       _self.map.addEventListener('dblclick', ($event: MapEvent) => {
         _self.onDblClick.emit($event);
+      });
+      // bind touch start
+      _self.map.addEventListener('touchstart', ($event: MapEvent) => {
+        this._enableLongClick();
+        _self._previousPoint = $event.pixel;
+        _self.onTouchStart.emit($event);
+      });
+      // bind touch end
+      _self.map.addEventListener('touchend', ($event: MapEvent) => {
+        _self.onTouchEnd.emit($event);
+      });
+      // bind touch move
+      _self.map.addEventListener('touchmove', ($event: MapEvent) => {
+        let dist = Math.pow($event.pixel.x - _self._previousPoint.x, 2) 
+          + Math.pow($event.pixel.y - _self._previousPoint.y, 2);
+        dist = Math.sqrt(dist);
+        if(dist > 10){
+          this._preventLongClick();
+        }
+        _self.onTouchMove.emit($event);
       });
 
       setTimeout(() => { $('.BMap_geolocationIcon').click(); });
@@ -54,6 +79,14 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
         _self.changeOptions.subscribe(this.onOptionsChange);
       }
     });
+  }
+
+  private _preventLongClick(){
+    this._longClickEnabled = false;
+  }
+
+  private _enableLongClick(){
+    this._longClickEnabled = true;
   }
 
   // on options change
