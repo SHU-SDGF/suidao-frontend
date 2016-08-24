@@ -56,6 +56,10 @@ export class ActivityDetailPage implements OnInit{
     });
   }
 
+  createActivity() {
+    
+  }
+
   dismiss() {
     this.viewCtrl.dismiss();
   }

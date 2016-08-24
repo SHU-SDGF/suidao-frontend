@@ -35,6 +35,8 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
         _self.onMapClick.emit($event);
       });
 
+      setTimeout(() => { $('.BMap_geolocationIcon').click(); });
+
       // bind options change
       if (_self.changeOptions) {
         _self.changeOptions.subscribe((options: MapOptions) => {

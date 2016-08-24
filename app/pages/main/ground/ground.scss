@@ -1,6 +1,7 @@
 @import './components/activity_detail/activity_detail';
 
 .ground-page{
+  background-color: color($colors, light);
   suidao-map{
     width: 100%;
     height: 100%;

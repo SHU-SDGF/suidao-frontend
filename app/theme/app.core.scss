@@ -58,6 +58,9 @@ ion-alert{
     }
     .alert-radio-group{
       button.alert-radio[aria-checked=true]{
+        .alert-radio-icon{
+          border-color: color($colors, light-blue);
+        }
         .alert-radio-label{
           color: color($colors, light-blue);
         }
@@ -92,6 +95,13 @@ ion-modal{
 
 ion-item.item{
    background-color: transparent;
+   &.item-input{
+     ion-input{
+       input.text-input{
+         text-align: right;
+       }
+     }
+   }
 }
 
 ion-select{

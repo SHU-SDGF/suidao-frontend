@@ -23,16 +23,12 @@ export class UserService {
    */
   public login(credentials: Credentials) {
     let _that = this;
-    let options = {
-      headers: new Headers({ 'Authorization': makeBaseAuth(credentials) })
-    };
 
     return new Promise((resolve, reject) =>{
       _that.events.publish('user:login');
       var request = _that.http.post(
         AppConfig.apiBase + '/login',
-        {},
-        options
+        credentials
       );
 
       request.subscribe((response)=>{

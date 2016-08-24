@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>创建环境活动</ion-title>
     <ion-buttons round end>
-      <button (click)="dismiss()">
+      <button (click)="createActivity(activityDetailObj)">
         创建
       </button>
     </ion-buttons>
@@ -41,8 +41,8 @@
       <ion-input type="text"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>描述</ion-label>
-      <ion-input type="text"></ion-input>
+      <ion-label stacked>描述</ion-label>
+      <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
     </ion-item>
   </ion-list>
 </ion-content>

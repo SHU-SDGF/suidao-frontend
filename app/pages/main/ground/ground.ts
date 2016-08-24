@@ -35,7 +35,7 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
 
   ngOnInit() {
     // bind add button event
-    $('#tab-t0-2').on('click', ((_self) => {
+    $('ion-tabbar a.tab-button').eq(2).on('click', ((_self) => {
       return function () {
         _self.toggleEditing.apply(_self);
       }
@@ -68,7 +68,7 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
   /**
    * toggle editing */
   toggleEditing() {
-    $('#tab-t0-2').toggleClass('active');
+    $('ion-tabbar a.tab-button').toggleClass('active');
     this.isEditing = !this.isEditing;
     if (this._unsavedMarker) {
       this._suidaoMap.removeMarker(this._unsavedMarker);
