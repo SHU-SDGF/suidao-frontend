@@ -71,7 +71,8 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
 
     this.opts = {
       center: {
-        
+        longitude: 121.506191,
+        latitude: 31.245554
       },
       zoom: 17,
       markers: [{
