@@ -2,7 +2,7 @@
 
 import {Component, OnInit, DynamicComponentLoader, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import {MenuController, Events, Backdrop} from 'ionic-angular';
-import {MenuTip} from '../../../shared/components/menu_tip';
+import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
 
 interface Autodest{
   
@@ -12,7 +12,7 @@ interface Autodest{
   selector: 'mainyou-page',
   templateUrl: './build/pages/main/manyou/manyou.html'
 })
-export class ManyouPage implements AfterViewInit {
+export class ManyouPage extends ToggleMenu implements AfterViewInit {
 
   ngAfterViewInit() {
     

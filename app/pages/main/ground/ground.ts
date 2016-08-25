@@ -3,8 +3,8 @@
 import {Component, OnInit, OnDestroy,
   DynamicComponentLoader, ViewChild,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
-import {MenuController, Events, Backdrop, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
-import {toggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
+import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
+import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
 import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
@@ -13,8 +13,8 @@ import {ActivityInfoPage} from './components/activity_info/activity_info';
   templateUrl: './build/pages/main/ground/ground.html',
   directives: [SuidaoMap]
 })
-export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
-
+export class GroundPage extends ToggleMenu implements OnInit, OnDestroy {
+  private onGround: boolean = true;
   private isEditing = false; // editing status  
   private opts: MapOptions;
   private offlineOpts: any;
@@ -194,5 +194,9 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
       let modal = this._modalCtrl.create(ActivityInfoPage);
       modal.present();
     });
+  }
+
+  private switchView(){
+    this.onGround = !this.onGround;
   }
 }

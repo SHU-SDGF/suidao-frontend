@@ -1,6 +1,6 @@
 import {MenuController, Events, Backdrop} from 'ionic-angular';
 
-export class toggleMenu{
+export class ToggleMenu{
   constructor(private menuCtrl: MenuController) {
     
   }
