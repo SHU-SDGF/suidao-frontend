@@ -3,7 +3,7 @@
 import {Component, OnInit, OnDestroy,
   DynamicComponentLoader, ViewChild,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
-import {MenuController, Events, Backdrop, ToastController, AlertController, ModalController} from 'ionic-angular';
+import {MenuController, Events, Backdrop, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
 import {toggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
 import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
@@ -28,7 +28,8 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
     private dcl: DynamicComponentLoader,
     private _toastController: ToastController,
     private _alertCtrl: AlertController,
-    private _modalCtrl: ModalController
+    private _modalCtrl: ModalController,
+    private _navCtrl: NavController
   ) {
     super(_menuCtrl);
   }
@@ -49,6 +50,14 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
       },
       zoom: 17,
       markers: [{
+        longitude: 121.405679,
+        latitude: 31.170997,
+        title: '环境活动000',
+        icon: 'build/imgs/map-marker.png',
+        width: 30,
+        height: 30,
+        content: ``
+      },{
         longitude: 121.487181,
         latitude: 31.241721,
         title: '环境活动001',
@@ -180,11 +189,11 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
     this._unsavedMarker = null;
   }
 
-  private clickMarker($event: {obj: MarkerOptions, marker: any}) {
-    let modal = this._modalCtrl.create(ActivityDetailPage);
-    modal.present().then(function(){
-      console.log('show');
+  private clickMarker($event: { obj: MarkerOptions, marker: any }) {
+    setTimeout(() => {
+      let modal = this._modalCtrl.create(ActivityInfoPage);
+      modal.present();
+      
     });
-    modal.present();
   }
 }

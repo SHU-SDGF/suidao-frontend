@@ -7,7 +7,7 @@
     </ion-buttons>
     
     <ion-buttons end>
-      <button (click)="startApp()" primary>
+      <button (click)="clickMarker()" primary>
         <ion-icon name="md-swap"></ion-icon>
       </button>
     </ion-buttons>
@@ -28,9 +28,9 @@
     ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" 
     (onMapLongClick)="mapLongClick($event)" 
     [options]="opts" 
-    [offline]="offlineOpts" 
+    [offline]="offlineOpts"
     [changeOptions]="mapOptionEmitter"
     (onMarkerClicked)="clickMarker($event)"
-    (onMarkerLoaded)="mapLoaded()"
+    (onMapLoaded)="mapLoaded()"
   ></suidao-map>
 </ion-content>
