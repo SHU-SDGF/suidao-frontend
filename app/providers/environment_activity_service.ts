@@ -71,6 +71,11 @@ export class EnvironmentActivityService {
 		})
 	}
 
+	//显示活动列表
+	getEnvironmentActivitiesSummaryList() {
+		return this.httpService.get({}, 'environment-activities-summary/list')
+	}
+
 	//根据ACT_NO来寻找活动历史记录
 	searchEnvironmentActivitiesByActNo(act_no: string) {
 		let _that = this;
@@ -99,30 +104,7 @@ export class EnvironmentActivityService {
 
 	//添加新的环境活动
 	addNewEnvironmentActivity(activityObj: any) {
-
 		return this.httpService.post(activityObj, 'createEnvironmentActivity');
-		// let _that = this;
-
-		// var headers = new Headers();
-		// headers.append('Authorization',localStorage.getItem("authToken"));
-		// return new Promise((resolve, reject) =>{
-  //     var request = _that.http.post(
-  //       AppConfig.apiBase + '/createEnvironmentActivity',
-  //       activityObj,{
-  //       	headers: headers
-  //       }
-  //     );
-  //     request.subscribe((response)=>{
-  //       if(response.status < 400){
-  //         var result = response.json();
-  //         resolve();
-  //       }else{
-  //         reject();
-  //       }
-  //     }, (error)=>{
-  //       reject();
-  //     });
-  //   });
 	}
 
 	//更新已有环境活动

@@ -59,16 +59,16 @@ export class ActivityDetailPage implements OnInit{
   createActivity() {
     let activityObj = {
       environmentActitivitySummary: {
-        act_name: this.activityDetailObj.act_name,
+        actName: this.activityDetailObj.act_name,
         description: this.activityDetailObj.description,
         longtitude: this.activityDetailObj.longitude,
         latitude: this.activityDetailObj.latitude,
-        start_date: this.activityDetailObj.start_date,
-        end_date: this.activityDetailObj.end_date
+        startDate: new Date(this.activityDetailObj.start_date).getTime(),
+        endDate: new Date(this.activityDetailObj.end_date).getTime()
       },
       environmentActivity: {
-        act_type: this.activityDetailObj.act_type,
-        act_status: this.activityDetailObj.act_status,
+        actType: this.activityDetailObj.act_type,
+        actStatus: this.activityDetailObj.act_status,
         description: this.activityDetailObj.description,
         recorder: this.activityDetailObj.recorder
       }

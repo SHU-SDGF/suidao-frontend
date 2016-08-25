@@ -8,6 +8,7 @@ import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
 import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
+import { EnvironmentActivityService } from '../../../providers';
 
 @Component({
   templateUrl: './build/pages/main/ground/ground.html',
@@ -29,13 +30,13 @@ export class GroundPage extends ToggleMenu implements OnInit, OnDestroy {
     private _toastController: ToastController,
     private _alertCtrl: AlertController,
     private _modalCtrl: ModalController,
-    private _navCtrl: NavController
+    private _navCtrl: NavController,
+    private environmentActivityService: EnvironmentActivityService
   ) {
     super(_menuCtrl);
   }
 
   ngOnInit() {
-
     // bind add button event
     $('ion-tabbar a.tab-button').eq(2).on('click', ((_self) => {
       return function () {
@@ -43,10 +44,34 @@ export class GroundPage extends ToggleMenu implements OnInit, OnDestroy {
       }
     })(this));
 
+    this.environmentActivityService.getEnvironmentActivitiesSummaryList().then((result) => {
+      // let markers = [];
+      // for(var obj in result.content) {
+      //   markers.push = {
+      //     longitude: 121.405679,
+      //     latitude: 31.170997,
+      //     title: '环境活动000',
+      //     icon: 'build/imgs/map-marker.png',
+      //     width: 30,
+      //     height: 30,
+      //     content: ``
+      //   }
+      // } 
+      // this.opts = {
+      //   center: {
+      //     longitude: 121.506191,
+      //     latitude: 31.245554
+      //   },
+      //   zoom: 17
+      // }
+      // debugger;
+    }, (error) => {
+    });
+
+
     this.opts = {
       center: {
-        longitude: 121.506191,
-        latitude: 31.245554
+        
       },
       zoom: 17,
       markers: [{
