@@ -5,27 +5,12 @@
         取消
       </button>
     </ion-buttons>
-    <ion-title center>活动详情</ion-title>
-    <ion-buttons end>
-      <button (click)="dismiss()">
-        编辑
-      </button>
-    </ion-buttons>
+    <ion-title>环境巡检记录</ion-title>
   </ion-toolbar>
-  <div padding>
-    <ion-segment [(ngModel)]="selectedPage">
-      <ion-segment-button value="detail">
-        活动详情
-      </ion-segment-button>
-      <ion-segment-button value="history">
-        历史列表
-      </ion-segment-button>
-    </ion-segment>
-  </div>
 </ion-header>
 
-<ion-content>
-  <ion-list [hidden]="selectedPage !== 'detail'">
+<ion-content class="activity_history_detail">
+  <ion-list>
     <ion-item>
       <ion-label>活动名称</ion-label>
       <ion-input type="text" [(ngModel)]="activityDetailObj.act_name"></ion-input>
@@ -60,27 +45,5 @@
       <ion-label stacked>描述</ion-label>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
     </ion-item>
-  </ion-list>
-
-  <ion-list [hidden]="selectedPage !== 'history'">
-    <ion-item-group>
-      <div>
-        <ion-item>
-          <ion-label>活动编号:1231231</ion-label>
-        </ion-item>
-      </div>
-      <div>
-        <button ion-item (click)="showHistory()">
-          <ion-icon item-left name="md-pin"></ion-icon>
-          <div item-inner>
-            <h3>东线巡检活动</h3>
-            <p>
-              加载 &mdash;
-              2016-06-10
-            </p>
-          </div>
-        </button>
-      </div>
-    </ion-item-group>
   </ion-list>
 </ion-content>

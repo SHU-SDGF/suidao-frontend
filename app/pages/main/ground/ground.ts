@@ -193,7 +193,6 @@ export class GroundPage extends toggleMenu implements OnInit, OnDestroy {
     setTimeout(() => {
       let modal = this._modalCtrl.create(ActivityInfoPage);
       modal.present();
-      
     });
   }
 }

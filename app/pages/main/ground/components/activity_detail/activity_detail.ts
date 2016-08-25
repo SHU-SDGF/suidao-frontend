@@ -9,6 +9,7 @@ import {LookupService} from '../../../../../providers';
 
 
 @Component({
+  selector: 'activity-detail',
   templateUrl: './build/pages/main/ground/components/activity_detail/activity_detail.html'
 })
 export class ActivityDetailPage implements OnInit{
