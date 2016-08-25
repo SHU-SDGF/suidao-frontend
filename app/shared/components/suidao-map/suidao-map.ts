@@ -1,4 +1,4 @@
-import {Input, Output, EventEmitter, ElementRef, OnInit, Component, ChangeDetectionStrategy, SimpleChange, OnChanges} from '@angular/core';
+import {Input, Output, EventEmitter, ElementRef, OnInit, Component, ChangeDetectionStrategy, SimpleChange, OnChanges, NgZone} from '@angular/core';
 import {BaiduMap, OfflineOptions, ControlAnchor, MapOptions, MapStatus} from 'angular2-baidu-map';
 
 declare const BMap: any;
@@ -27,7 +27,7 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
   private _previousPoint: {x: number, y: number};
   private _previousLabels = [];
   private _longClickEnabled: boolean = false;
-  constructor(private _el: ElementRef) {
+  constructor(private _el: ElementRef, private zoom: NgZone) {
     super(_el);
   }
 
@@ -40,36 +40,48 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
       // bind click event    
       window['map'] = _self.map;
       _self.map.addEventListener('click', ($event: MapEvent) => {
-        _self.onMapClick.emit($event);
+        _self.zoom.run(() => {
+          _self.onMapClick.emit($event);
+        });
       });
       // bind longpress event
       _self.map.addEventListener('longpress', ($event: MapEvent) => {
-        if(!this._longClickEnabled)return;
-        _self.onMapLongClick.emit($event);
+        if (!this._longClickEnabled) return;
+        _self.zoom.run(() => {
+           _self.onMapLongClick.emit($event);
+        });
       });
       // bind double click event
       _self.map.addEventListener('dblclick', ($event: MapEvent) => {
-        _self.onDblClick.emit($event);
+        _self.zoom.run(() => {
+          _self.onDblClick.emit($event);
+        });
       });
       // bind touch start
       _self.map.addEventListener('touchstart', ($event: MapEvent) => {
         this._enableLongClick();
-        _self._previousPoint = $event.pixel;
-        _self.onTouchStart.emit($event);
+        _self.zoom.run(() => {
+          _self._previousPoint = $event.pixel;
+          _self.onTouchStart.emit($event);
+        });
       });
       // bind touch end
       _self.map.addEventListener('touchend', ($event: MapEvent) => {
-        _self.onTouchEnd.emit($event);
+        _self.zoom.run(() => {
+          _self.onTouchEnd.emit($event);
+        });  
       });
       // bind touch move
       _self.map.addEventListener('touchmove', ($event: MapEvent) => {
-        let dist = Math.pow($event.pixel.x - _self._previousPoint.x, 2) 
-          + Math.pow($event.pixel.y - _self._previousPoint.y, 2);
-        dist = Math.sqrt(dist);
-        if(dist > 10){
-          this._preventLongClick();
-        }
-        _self.onTouchMove.emit($event);
+        _self.zoom.run(() => {
+          let dist = Math.pow($event.pixel.x - _self._previousPoint.x, 2)
+            + Math.pow($event.pixel.y - _self._previousPoint.y, 2);
+          dist = Math.sqrt(dist);
+          if (dist > 10) {
+            this._preventLongClick();
+          }
+          _self.onTouchMove.emit($event);
+        });
       });
 
       setTimeout(() => { $('.BMap_geolocationIcon').click(); });
@@ -161,8 +173,9 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
       this.previousMarkers.push(previousMarker);
 
       let onMarkerClickedListener = ($event: Event) => {
-        _self.onMarkerClicked.emit({obj: marker, marker: marker2});
-        event.stopPropagation();
+        _self.zoom.run(() => {
+          _self.onMarkerClicked.emit({obj: marker, marker: marker2});
+        });
       };
       marker2.addEventListener('click', onMarkerClickedListener);
       previousMarker.listeners.push(onMarkerClickedListener);
