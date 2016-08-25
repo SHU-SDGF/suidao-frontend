@@ -32,4 +32,35 @@ export class HttpService {
       });
     });
 	}
+
+  public get(paramsObj: any, url: string) {
+    let _that = this;
+    var headers = new Headers();
+    headers.append('Authorization',localStorage.getItem("authToken"));
+    let queryObj = {
+      headers: headers
+    }
+
+    if(Object.keys(paramsObj).length !== 0) {
+      let params: URLSearchParams = new URLSearchParams();
+      params = paramsObj;
+      queryObj["search"] = params;
+    }
+
+    return new Promise((resolve, reject) =>{
+      var request = _that.http.get(
+        AppConfig.apiBase + '/' + url, queryObj
+      );
+      request.subscribe((response)=>{
+        if(response.status < 400){
+          var result = response.json();
+          resolve(result);
+        }else{
+          reject();
+        }
+      }, (error)=>{
+        reject();
+      });
+    });
+  }
 }
