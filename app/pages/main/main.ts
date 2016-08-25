@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import {UserService} from '../../providers/user_service';
 import {Nav, Events} from 'ionic-angular';
-import {GroundPage} from './ground/ground';
+import {XunjianPage} from './xunjian/xunjian';
 import {ManyouPage} from './manyou/manyou';
 import {TestPage} from './test/test';
 
@@ -10,7 +10,7 @@ import {TestPage} from './test/test';
 })
 export class MainPage{
   private username: string = '';
-  private rootPages: Array<any> = [GroundPage, ManyouPage, TestPage, GroundPage];
+  private rootPages: Array<any> = [XunjianPage, ManyouPage, TestPage, XunjianPage];
   //private rootPage: any = GroundPage;
   @ViewChild(Nav) nav: Nav;
 

@@ -1,7 +1,7 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, ModalController} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../providers';
+import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 
 @Component({

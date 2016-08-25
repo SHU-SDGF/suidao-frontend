@@ -1,16 +1,16 @@
-/// <reference path="../../../../../../typings/index.d.ts" />
+/// <reference path="../../../../../../../typings/index.d.ts" />
 
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../providers';
-import {MapPoint} from '../../../../../shared/components/suidao-map/suidao-map';
-import {LookupService} from '../../../../../providers';
+import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
+import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
+import {LookupService} from '../../../../../../providers';
 
 
 @Component({
   selector: 'activity-detail',
-  templateUrl: './build/pages/main/ground/components/activity_detail/activity_detail.html'
+  templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html'
 })
 export class ActivityDetailPage implements OnInit{
   

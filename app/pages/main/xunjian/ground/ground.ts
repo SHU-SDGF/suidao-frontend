@@ -1,21 +1,20 @@
-/// <reference path="../../../../typings/index.d.ts" />
+/// <reference path="../../../../../typings/index.d.ts" />
 
 import {Component, OnInit, OnDestroy,
   DynamicComponentLoader, ViewChild,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
 import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
-import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
-import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../shared/components/suidao-map/suidao-map';
+import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
-import { EnvironmentActivityService } from '../../../providers';
+import { EnvironmentActivityService } from '../../../../providers';
 
 @Component({
-  templateUrl: './build/pages/main/ground/ground.html',
+  selector: 'ground-page',
+  templateUrl: './build/pages/main/xunjian/ground/ground.html',
   directives: [SuidaoMap]
 })
-export class GroundPage extends ToggleMenu implements OnInit, OnDestroy {
-  private onGround: boolean = true;
+export class GroundPage implements OnInit, OnDestroy {
   private isEditing = false; // editing status  
   private opts: MapOptions;
   private offlineOpts: any;
@@ -32,9 +31,7 @@ export class GroundPage extends ToggleMenu implements OnInit, OnDestroy {
     private _modalCtrl: ModalController,
     private _navCtrl: NavController,
     private environmentActivityService: EnvironmentActivityService
-  ) {
-    super(_menuCtrl);
-  }
+  ) {}
 
   ngOnInit() {
     // bind add button event
@@ -220,9 +217,5 @@ export class GroundPage extends ToggleMenu implements OnInit, OnDestroy {
       let modal = this._modalCtrl.create(ActivityInfoPage);
       modal.present();
     });
-  }
-
-  private switchView(){
-    this.onGround = !this.onGround;
   }
 }

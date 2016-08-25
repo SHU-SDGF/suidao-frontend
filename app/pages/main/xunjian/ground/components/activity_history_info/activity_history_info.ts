@@ -1,10 +1,10 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../providers';
+import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 
 @Component({
-  templateUrl: './build/pages/main/ground/components/activity_history_info/activity_history_info.html'
+  templateUrl: './build/pages/main/xunjian/ground/components/activity_history_info/activity_history_info.html'
 })
 export class ActivityHistoryInfoPage implements OnInit{
   

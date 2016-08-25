@@ -1,0 +1,28 @@
+<ion-header no-shadow>
+  <ion-navbar no-border-bottom>
+    <ion-buttons>
+      <button (click)="toggleMenu()">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title center>
+      环境巡检
+    </ion-title>
+    
+    <ion-buttons end>
+      <button (click)="switchView()" primary>
+        <ion-icon name="md-swap"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="xunjian-page">
+  <div class="page-content" [hidden]="!onGround">
+    <ground-page></ground-page>
+  </div>
+  <div class="page-content" [hidden]="onGround">
+    <underground-page></underground-page>
+  </div>
+</ion-content>
