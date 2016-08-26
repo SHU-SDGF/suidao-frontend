@@ -159,20 +159,8 @@ export class GroundPage implements OnInit, OnDestroy {
         }
       }
 
-      that.opts = {
-        center: centerCord,
-        zoom: 17,
-        markers: markers,
-        geolocationCtrl: {
-          anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
-        },
-        scaleCtrl: {
-          anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
-        },
-        overviewCtrl: {
-          isOpen: false
-        }
-      };
+      this.opts.markers = this.opts.markers.concat(markers);
+
       this.mapOptionEmitter.emit(this.opts);
       console.log(this.opts);
 
