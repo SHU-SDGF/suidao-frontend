@@ -17,8 +17,9 @@ ion-app{
 }
 /* tab bar*/
 ion-tabbar{
-  height: 5rem;
+  height: 5.8rem;
   background-color: color($colors, deep-blue);
+  border-top: color($colors, dark);
   .tab-button[aria-selected=true]{
     color: color($colors, light-blue);
   }
@@ -31,6 +32,10 @@ ion-tabbar{
     content: " ";
     clear: both;
   }
+}
+/* ion-page */
+ion-page{
+  background: url('../imgs/modal-bg.jpg') no-repeat center center fixed;
 }
 
 /* menu content */

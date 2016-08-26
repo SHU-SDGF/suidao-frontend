@@ -47,9 +47,15 @@ ground-page{
         }
       }
       .searchbar-input-container{
+        .searchbar-search-icon{
+          margin-left: 0px !important;
+        }
         input.searchbar-input{
           box-shadow: none;
           background-color: transparent;
+          padding-left: 50% !important;
+          margin-left: -42px;
+
           &::-webkit-input-placeholder {
             color: color($colors, dark);
           }

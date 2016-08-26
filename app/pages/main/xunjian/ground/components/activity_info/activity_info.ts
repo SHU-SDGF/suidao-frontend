@@ -5,7 +5,7 @@ import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySum
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 
 @Component({
-  templateUrl: './build/pages/main/ground/components/activity_info/activity_info.html'
+  templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html'
 })
 export class ActivityInfoPage implements OnInit{
   
