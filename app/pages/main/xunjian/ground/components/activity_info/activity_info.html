@@ -24,7 +24,7 @@
   </div>
 </ion-header>
 
-<ion-content>
+<ion-content class="activity_info">
   <ion-list [hidden]="selectedPage !== 'detail'">
     <ion-item>
       <ion-label>活动名称</ion-label>
@@ -66,13 +66,13 @@
     <ion-item-group>
       <div>
         <ion-item>
-          <ion-label>活动编号:1231231</ion-label>
+          <ion-label class="act-no">活动编号：1231231</ion-label>
         </ion-item>
       </div>
       <div>
-        <button ion-item (click)="showHistory()">
+        <button ion-item (click)="showHistory()" class="act-card">
           <ion-icon item-left name="md-pin"></ion-icon>
-          <div item-inner>
+          <div item-inner class="act-detail">
             <h3>东线巡检活动</h3>
             <p>
               加载 &mdash;

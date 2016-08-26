@@ -14,15 +14,19 @@ import {SelectPopover} from '../../../../../../shared/components/select-popover/
 })
 export class SearchPage implements OnInit, OnDestroy {
 
-  private searchArg: string = '';
+  private searchArg: string = ''; // 搜索参数
+  private searchedResult: Array<any>; // 搜索结果列表
   private itemList = [
     { name: '环境巡检', value: 1 },
     { name: '周围环境', value: 1 }
   ];
-  private selectedType = this.itemList[0];
+  private selectedType = this.itemList[0]; //选择的种类
   
   constructor(private _viewCtrl: ViewController) {
-    
+    this.searchedResult = [
+      {id: 12311, name: '环境活动002', date: '', lng: 0, lat: 0},
+      {id: 12312, name: '环境活动001', date: '', lng: 0, lat: 0}
+    ];
   }
   
   ngOnInit() {
