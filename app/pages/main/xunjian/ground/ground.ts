@@ -245,7 +245,6 @@ export class GroundPage implements OnInit, OnDestroy {
             text: '确认',
             handler: () => {
               alert.dismiss().then(() => {
-                debugger;
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
