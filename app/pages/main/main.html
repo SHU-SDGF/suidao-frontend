@@ -1,7 +1,7 @@
 <ion-tabs>
-  <ion-tab tabIcon="ios-bicycle" (select)="changeTab(rootPages[0])" tabTitle="巡检" [root]="rootPages[0]"></ion-tab>
-  <ion-tab tabIcon="ios-construct" (select)="changeTab(rootPages[1])" tabTitle="漫游" [root]="rootPages[1]"></ion-tab>
-  <ion-tab on-select="onTabSelected()" class="tabs-icon-top tabs-positive" tabIcon="md-pin"></ion-tab>
-  <ion-tab tabIcon="ios-flask" (select)="changeTab(rootPages[2])" tabTitle="维修" [root]="rootPages[2]"></ion-tab>
-  <ion-tab tabIcon="ios-stats" (select)="changeTab(rootPages[3])" tabTitle="分析" [root]="rootPages[3]"></ion-tab>
+  <ion-tab tabIcon="ios-bicycle" (ionSelect)="changeTab(rootPages[0])" tabTitle="巡检" [root]="rootPages[0]"></ion-tab>
+  <ion-tab tabIcon="ios-construct" (ionSelect)="changeTab(rootPages[1])" tabTitle="漫游" [root]="rootPages[1]"></ion-tab>
+  <ion-tab class="tabs-icon-top tabs-positive" tabIcon="md-pin"></ion-tab>
+  <ion-tab tabIcon="ios-flask" (ionSelect)="changeTab(rootPages[2])" tabTitle="维修" [root]="rootPages[2]"></ion-tab>
+  <ion-tab tabIcon="ios-stats" (ionSelect)="changeTab(rootPages[3])" tabTitle="分析" [root]="rootPages[3]"></ion-tab>
 </ion-tabs>

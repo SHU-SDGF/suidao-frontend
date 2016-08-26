@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-item center class="search-container">
+      <ion-icon class="dropdown-addon" item-left [SelectPopover] [itemList]="itemList" [itemDisplayName]="'name'" (selectChanged)="typeChange($event)">
+        {{selectedType.name}}
+      </ion-icon>
+      <ion-searchbar
+        [(ngModel)]="searchArg"
+        [showCancelButton]="false"
+        placeholder="搜索巡检活动"
+      >
+      </ion-searchbar>
+    </ion-item>
+  </ion-navbar>
+</ion-header>
+
+<ion-content class="search-page">
+
+</ion-content>
