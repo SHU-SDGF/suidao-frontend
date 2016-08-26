@@ -3,7 +3,7 @@
     placeholder="搜索巡检活动"
     [(ngModel)]="searchQuery"
     [showCancelButton]="false"
-    (ionInput)="onInput($event)"
+    (ionFocus)="searchBarOnFocus($event)"
     (ionCancel)="onCancel($event)">
   </ion-searchbar>
 </div>

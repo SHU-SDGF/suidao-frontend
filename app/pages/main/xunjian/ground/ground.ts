@@ -9,6 +9,8 @@ import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
 import { EnvironmentActivityService } from '../../../../providers';
 import {Geolocation} from 'ionic-native';
+import {XunjianPage} from '../xunjian';
+import {SearchPage} from './components/search/search';
 
 @Component({
   selector: 'ground-page',
@@ -22,6 +24,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private mapOptionEmitter: EventEmitter<MapOptions> = new EventEmitter<MapOptions>();
   private _unsavedMarker: MarkerOptions = null;
   private _toast: any;
+  private _searchPoped: boolean = false;
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
   constructor(
@@ -31,64 +34,97 @@ export class GroundPage implements OnInit, OnDestroy {
     private _alertCtrl: AlertController,
     private _modalCtrl: ModalController,
     private _navCtrl: NavController,
-    private environmentActivityService: EnvironmentActivityService
-  ) {}
-
+    private environmentActivityService: EnvironmentActivityService,
+    private _event: Events
+  ) { }
 
   initial() {
     console.log('hi');
   }
 
-  ngOnInit() {
-    let that = this;
-    // bind add button event
-    $('ion-tabbar a.tab-button').eq(2).on('click', ((_self) => {
+  // this.opts = {
+  //   center: {
+  //     longitude: 121.506191,
+  //     latitude: 31.245554
+  //   },
+  //   zoom: 17,
+  //   markers: [{
+  //     longitude: 121.405679,
+  //     latitude: 31.170997,
+  //     title: '环境活动000',
+  //     icon: 'build/imgs/map-marker.png',
+  //     width: 30,
+  //     height: 30,
+  //     content: ``
+  //   },{
+  //     longitude: 121.487181,
+  //     latitude: 31.241721,
+  //     title: '环境活动001',
+  //     icon: 'build/imgs/map-marker.png',
+  //     width: 30,
+  //     height: 30,
+  //     content: ``
+  //   },{
+  //     longitude: 121.450184,
+  //     latitude: 31.254985,
+  //     title: '环境活动002',
+  //     icon: 'build/imgs/map-marker.png',
+  //     width: 30,
+  //     height: 30,
+  //     content: ``
+  //   }],
+  //   geolocationCtrl: {
+  //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
+  //   },
+  //   scaleCtrl: {
+  //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
+  //   },
+  //   overviewCtrl: {
+  //     isOpen: false
+  //   }
+  // };
+  
+  bindEdit = ((_self) => {
       return function () {
         _self.toggleEditing.apply(_self);
-      }
-    })(this));
-    // this.opts = {
-    //   center: {
-    //     longitude: 121.506191,
-    //     latitude: 31.245554
-    //   },
-    //   zoom: 17,
-    //   markers: [{
-    //     longitude: 121.405679,
-    //     latitude: 31.170997,
-    //     title: '环境活动000',
-    //     icon: 'build/imgs/map-marker.png',
-    //     width: 30,
-    //     height: 30,
-    //     content: ``
-    //   },{
-    //     longitude: 121.487181,
-    //     latitude: 31.241721,
-    //     title: '环境活动001',
-    //     icon: 'build/imgs/map-marker.png',
-    //     width: 30,
-    //     height: 30,
-    //     content: ``
-    //   },{
-    //     longitude: 121.450184,
-    //     latitude: 31.254985,
-    //     title: '环境活动002',
-    //     icon: 'build/imgs/map-marker.png',
-    //     width: 30,
-    //     height: 30,
-    //     content: ``
-    //   }],
-    //   geolocationCtrl: {
-    //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
-    //   },
-    //   scaleCtrl: {
-    //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
-    //   },
-    //   overviewCtrl: {
-    //     isOpen: false
-    //   }
-    // };
+      };
+  })(this);
+  
+  pageEnter() {
+    // bind add button event
+    $('ion-tabbar a.tab-button').eq(2).on('click', this.bindEdit);
+    $('ion-tabbar a.tab-button').eq(2).show();
+    if (this.isEditing) {
+      this.toggleEditing();
+    }
+  }
 
+  pageLeave() {
+    // unbind button event
+    $('ion-tabbar a.tab-button').eq(2).unbind('click', this.bindEdit);
+    $('ion-tabbar a.tab-button').eq(2).hide();
+  }
+
+  searchBarOnFocus() {
+    if (this._searchPoped) return;
+    let modal = this._modalCtrl.create(SearchPage);
+    modal.present();
+    modal.onDidDismiss(() => {
+      this._searchPoped = false;
+    });
+    this._searchPoped = true;
+  }
+
+  ngOnInit() {
+    let that = this;
+    this._event.subscribe('change-tab', (components) => {
+      if (components[0] === XunjianPage) {
+        this.pageEnter();
+      } else {
+        this.pageLeave();
+      }
+    });
+    
     this.environmentActivityService.getEnvironmentActivitiesSummaryList().then((result) => {
       let markers = [];
       let centerCord = {

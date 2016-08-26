@@ -1,73 +1,66 @@
 import {Component, OnInit} from '@angular/core';
-import {BaiduMap, ControlAnchor, NavigationControlType} from 'angular2-baidu-map';
+
+declare const navigator;
 
 @Component({
-    selector: 'map-presentation',
-    styles: [
-        `
-        baidu-map{
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        `,
-        `
-        button{
-            position: absolute;
-            top: 0px;
-            left: 0px;
-        }
-        `
-    ],
     template: `
-        <baidu-map ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" [options]="opts"></baidu-map>
-        <button (click)="updateCoordinate($event)">Update Coordinate<button>
-    `,
-    directives: [BaiduMap]
+        <button id="take">Take a photo</button><br />
+        <video id="v"></video>
+        <canvas id="canvas" style="display:none;"></canvas>
+        <img src="http://placehold.it/300&text=Your%20image%20here%20..." id="photo" alt="photo">
+    `
 })
 export class TestPage implements OnInit {
 
     opts: any;
 
     ngOnInit() {
-        this.opts = {
-            center: {
-                longitude: 121.506191,
-                latitude: 31.245554
-            },
-            zoom: 17,
-            markers: [{
-                longitude: 121.506191,
-                latitude: 31.245554,
-                title: 'Where',
-                content: 'Put description here'
-            }],
-            geolocationCtrl: {
-                anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
-            },
-            scaleCtrl: {
-                anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
-            },
-            overviewCtrl: {
-                isOpen: true
-            },
-            navCtrl: {
-                type: NavigationControlType.BMAP_NAVIGATION_CONTROL_LARGE
-            }
-        };
-    }
+        function userMedia() {
+            return navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia ||
+            navigator.msGetUserMedia || null;
+        }
 
-    /**
-     * the map will be pointed to
-     * new coordinate once click
-     * the button
-     */
-    updateCoordinate(e: MouseEvent){
-        this.opts = {
-            center: {
-                longitude: 121.500885,
-                latitude: 31.190032
-            }
-        };
+        // Now we can use it
+        if( userMedia() ){
+            var videoPlaying = false;
+            var constraints = {
+                video: true,
+                audio:false
+            };
+            var video = document.getElementById('v');
+
+            var media = navigator.getUserMedia(constraints, function(stream){
+
+                // URL Object is different in WebKit
+                var url = window.URL || window['webkitURL'];
+
+                // create the url and set the source of the video element
+                video['src'] = url ? url.createObjectURL(stream) : stream;
+
+                // Start the video
+                video['play']();
+                videoPlaying  = true;
+            }, function(error){
+                console.log("ERROR");
+                console.log(error);
+            });
+
+            // Listen for user click on the "take a photo" button
+            document.getElementById('take').addEventListener('click', function(){
+                if (videoPlaying){
+                    var canvas = document.getElementById('canvas');
+                    canvas['width'] = video['videoWidth'];
+                    canvas['height'] = video['videoHeight'];
+                    canvas['getContext']('2d').drawImage(video, 0, 0);
+                    var data = canvas['toDataURL']('image/webp');
+                    document.getElementById('photo').setAttribute('src', data);
+                }
+            }, false);
+
+        } else {
+            console.log("KO");
+        }
     }
 }

@@ -1,0 +1,7 @@
+
+ion-list.select-popover{
+  margin-bottom: 0px;
+  & > .item:last-child{
+    border-bottom: none;
+  }
+}
