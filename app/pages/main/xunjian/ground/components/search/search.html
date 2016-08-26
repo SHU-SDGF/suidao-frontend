@@ -20,7 +20,25 @@
 </ion-header>
 
 <ion-content class="search-page">
-  <ion-list>
-    <ion-item *ngFor="let result of searchedResult"></ion-item>
+   <ion-list>
+    <ion-item-group>
+      <div>
+        <ion-item>
+          <ion-label class="act-no">活动编号：1231231</ion-label>
+        </ion-item>
+      </div>
+      <div>
+        <button ion-item (click)="showHistory()" class="act-card">
+          <ion-icon item-left name="md-pin"></ion-icon>
+          <div item-inner class="act-detail">
+            <h3>东线巡检活动</h3>
+            <p>
+              加载 &mdash;
+              2016-06-10
+            </p>
+          </div>
+        </button>
+      </div>
+    </ion-item-group>
   </ion-list>
 </ion-content>

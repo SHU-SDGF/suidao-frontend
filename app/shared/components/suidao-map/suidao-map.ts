@@ -268,8 +268,7 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
     }
   }
 
-  ngOnChanges() {
-  }
+  ngOnChanges() {}
 
   // draw map
   _draw() {

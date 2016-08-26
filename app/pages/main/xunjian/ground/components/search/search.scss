@@ -67,4 +67,25 @@
       }
     }
   }
+  ion-item-group{
+    .act-no{
+      color: color($colors, light);
+      font-size: 1.4rem;
+      margin: 0px;
+      margin-top: 10px;
+    }
+    .act-card{
+      color: color($colors, light);
+      background-color: rgba(0,0,0, 0.3);
+      .act-detail{
+        color: color($colors, light);
+        h3{
+
+        }
+        p{
+          color: color($colors, light); 
+        }
+      }
+    }
+  }
 }

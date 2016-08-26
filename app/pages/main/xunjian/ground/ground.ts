@@ -87,8 +87,8 @@ export class GroundPage implements OnInit, OnDestroy {
 
     this.opts = {
       center: {
-        longitude: 121.506191,
-        latitude: 31.245554
+        longitude: 121.487181,
+        latitude: 31.241721,
       },
       zoom: 17,
       markers: [{
@@ -147,7 +147,7 @@ export class GroundPage implements OnInit, OnDestroy {
 
         for(var index in result["content"]) {
           markers.push({
-            longitude: result["content"][index]["longitude"],
+            longitude: result["content"][index]["longtitude"],
             latitude: result["content"][index]["latitude"],
             title: result["content"][index]["actName"],
             icon: 'build/imgs/map-marker.png',
