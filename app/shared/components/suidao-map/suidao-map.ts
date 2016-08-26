@@ -1,4 +1,4 @@
-import {Input, Output, EventEmitter, ElementRef, OnInit, Component, ChangeDetectionStrategy, SimpleChange, OnChanges, NgZone} from '@angular/core';
+import {Input, Output, EventEmitter, ElementRef, OnInit, Component, OnChanges, NgZone} from '@angular/core';
 import {BaiduMap, OfflineOptions, ControlAnchor, MapOptions, MapStatus} from 'angular2-baidu-map';
 
 declare const BMap: any;
@@ -266,6 +266,9 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
       var metrics = context.measureText(text);
       return metrics.width;
     }
+  }
+
+  ngOnChanges() {
   }
 
   // draw map
