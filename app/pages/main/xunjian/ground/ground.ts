@@ -124,6 +124,13 @@ export class GroundPage implements OnInit, OnDestroy {
         this.pageLeave();
       }
     });
+
+    that.opts = {
+      center: {
+        longitude: 121.506191,
+        latitude: 31.245554
+      }
+    };
     
     this.environmentActivityService.getEnvironmentActivitiesSummaryList().then((result) => {
       let markers = [];
@@ -170,13 +177,16 @@ export class GroundPage implements OnInit, OnDestroy {
         overviewCtrl: {
           isOpen: false
         }
-      }
+      };
+      this.mapOptionEmitter.emit(this.opts);
+      console.log(this.opts);
 
       that.offlineOpts = {
         retryInterval: 5000,
         txt: 'NO-NETWORK'
       };
     }, (error) => {
+      console.log('error');
     });
   }
 
