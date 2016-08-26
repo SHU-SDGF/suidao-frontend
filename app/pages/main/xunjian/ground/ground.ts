@@ -275,9 +275,9 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private clickMarker($event: { obj: MarkerOptions, marker: any }) {
-    setTimeout(() => {
-      let modal = this._modalCtrl.create(ActivityInfoPage);
-      modal.present();
-    });
+    setTimeout(($event) => {
+      let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
+      modal.present(modal);
+    },0, $event);
   }
 }
