@@ -42,47 +42,7 @@ export class GroundPage implements OnInit, OnDestroy {
     console.log('hi');
   }
 
-  // this.opts = {
-  //   center: {
-  //     longitude: 121.506191,
-  //     latitude: 31.245554
-  //   },
-  //   zoom: 17,
-  //   markers: [{
-  //     longitude: 121.405679,
-  //     latitude: 31.170997,
-  //     title: '环境活动000',
-  //     icon: 'build/imgs/map-marker.png',
-  //     width: 30,
-  //     height: 30,
-  //     content: ``
-  //   },{
-  //     longitude: 121.487181,
-  //     latitude: 31.241721,
-  //     title: '环境活动001',
-  //     icon: 'build/imgs/map-marker.png',
-  //     width: 30,
-  //     height: 30,
-  //     content: ``
-  //   },{
-  //     longitude: 121.450184,
-  //     latitude: 31.254985,
-  //     title: '环境活动002',
-  //     icon: 'build/imgs/map-marker.png',
-  //     width: 30,
-  //     height: 30,
-  //     content: ``
-  //   }],
-  //   geolocationCtrl: {
-  //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
-  //   },
-  //   scaleCtrl: {
-  //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
-  //   },
-  //   overviewCtrl: {
-  //     isOpen: false
-  //   }
-  // };
+  
   
   bindEdit = ((_self) => {
       return function () {
@@ -125,10 +85,45 @@ export class GroundPage implements OnInit, OnDestroy {
       }
     });
 
-    that.opts = {
+    this.opts = {
       center: {
         longitude: 121.506191,
         latitude: 31.245554
+      },
+      zoom: 17,
+      markers: [{
+        longitude: 121.405679,
+        latitude: 31.170997,
+        title: '环境活动000',
+        icon: 'build/imgs/map-marker.png',
+        width: 30,
+        height: 30,
+        content: ``
+      },{
+        longitude: 121.487181,
+        latitude: 31.241721,
+        title: '环境活动001',
+        icon: 'build/imgs/map-marker.png',
+        width: 30,
+        height: 30,
+        content: ``
+      },{
+        longitude: 121.450184,
+        latitude: 31.254985,
+        title: '环境活动002',
+        icon: 'build/imgs/map-marker.png',
+        width: 30,
+        height: 30,
+        content: ``
+      }],
+      geolocationCtrl: {
+        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
+      },
+      scaleCtrl: {
+        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
+      },
+      overviewCtrl: {
+        isOpen: false
       }
     };
     
