@@ -245,7 +245,6 @@ export class GroundPage implements OnInit, OnDestroy {
             text: '确认',
             handler: () => {
               alert.dismiss().then(() => {
-                debugger;
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
@@ -275,9 +274,9 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private clickMarker($event: { obj: MarkerOptions, marker: any }) {
-    setTimeout(() => {
-      let modal = this._modalCtrl.create(ActivityInfoPage);
-      modal.present();
-    });
+    setTimeout(($event) => {
+      let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
+      modal.present(modal);
+    },0, $event);
   }
 }
