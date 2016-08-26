@@ -34,6 +34,7 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
   ngOnInit() {
     super.ngOnInit();
     let _self = this;
+    this.onOptionsChange.bind(this);
 
     _self.onMapLoaded.subscribe(event => {
 
