@@ -45,106 +45,30 @@ export class EnvironmentActivityService {
 
 	storage = new Storage(LocalStorage);
 
+	//添加活动环境活动
+	addNewEnvironmentActivitySummary(activitySummaryObj: any) {
+		return this.httpService.post(activitySummaryObj, 'environment-activities-summary/create');
+	}
+
 	//根据活动名称来寻找环境活动
 	searchEnvironmentActivitySummaryByActName(act_name: string) {
-		let _that = this;
-		let params: URLSearchParams = new URLSearchParams();
-		params.set('act_name', act_name);
-
-		return new Promise((resolve, reject) => {
-			var request = _that.http.get(
-        AppConfig.apiBase + '/environmentActivitySummary/',{
-        	search: params
-        }
-      );
-
-      request.subscribe((response)=>{
-        if(response.status < 400){
-          var result = response.json();
-          resolve();
-        }else{
-          reject();
-        }
-      }, (error)=>{
-        reject();
-      });
-		})
 	}
 
 	//显示活动列表
 	getEnvironmentActivitiesSummaryList() {
-		return this.httpService.get({}, 'environment-activities-summary/list')
+		return this.httpService.get({}, 'environment-activities-summary/list');
 	}
 
 	//根据ACT_NO来寻找活动历史记录
 	searchEnvironmentActivitiesByActNo(act_no: string) {
-		let _that = this;
-		let params: URLSearchParams = new URLSearchParams();
-		params.set('act_no', act_no);
-
-		return new Promise((resolve, reject) => {
-			var request = _that.http.get(
-				AppConfig.apiBase + '/environmentActivities/', {
-					search: params
-				}
-			);
-
-			request.subscribe((response) => {
-				if(response.status < 400){
-          var result = response.json();
-          resolve();
-        }else{
-          reject();
-        }
-			}, (error) => {
-				reject();
-			})
-		})
+		return this.httpService.get({'act_no': act_no}, 'environment-activities/listByActNo')
 	}
-
-	//添加新的环境活动
+	//添加新的环境历史活动
 	addNewEnvironmentActivity(activityObj: any) {
-		return this.httpService.post(activityObj, 'createEnvironmentActivity');
+		return this.httpService.post(activityObj, 'environment-activities/create');
 	}
 
 	//更新已有环境活动
 	updateNewEnvionrmentActivity(paramsObj: any) {
-		let _that = this;
-
-		let environmentActivityObj = {
-			id: paramsObj["id"],
-			act_no: paramsObj["act_no"],
-			act_name: paramsObj["act_name"],
-			start_date: paramsObj["start_date"],
-			end_date: paramsObj["end_date"],
-			description: paramsObj["description"],
-			act_level: paramsObj["act_level"],
-			longtitude: paramsObj["longtitude"],
-			latitude: paramsObj["latitude"],
-			create_user: paramsObj["create_user"],
-			update_user: paramsObj["update_user"],
-			insp_date: paramsObj["insp_date"],
-			photo: paramsObj["photo"],
-			audio: paramsObj["audio"],
-			video: paramsObj["video"],
-			recorder: paramsObj["recorder"]
-		}
-
-		return new Promise((resolve, reject) =>{
-      var request = _that.http.post(
-        AppConfig.apiBase + '/updateEnvironmentActivity',{}
-      );
-
-      request.subscribe((response)=>{
-        if(response.status < 400){
-          var result = response.json();
-          resolve();
-        }else{
-          reject();
-        }
-      }, (error)=>{
-        reject();
-      });
-    });
 	}
 }

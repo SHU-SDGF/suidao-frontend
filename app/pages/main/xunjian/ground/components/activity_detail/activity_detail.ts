@@ -74,7 +74,7 @@ export class ActivityDetailPage implements OnInit{
       }
     }
 
-    this._actService.addNewEnvironmentActivity(activityObj).then(() => {
+    this._actService.addNewEnvironmentActivitySummary(activityObj).then(() => {
       this.viewCtrl.dismiss(this.activityDetailObj);
     }, (error) => {
       let alert = this._alertCtrl.create({

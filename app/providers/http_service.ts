@@ -23,12 +23,12 @@ export class HttpService {
       request.subscribe((response)=>{
         if(response.status < 400){
           var result = response.json();
-          resolve();
+          resolve(result);
         }else{
           reject();
         }
       }, (error)=>{
-        reject();
+        reject(error);
       });
     });
 	}

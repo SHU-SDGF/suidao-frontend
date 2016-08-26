@@ -48,7 +48,7 @@ export class UserService {
     });
 
     function generateAuthToken(result) {
-      var tok = result.name + ':' + result["token"];
+      var tok = result.loginId + ':' + result["token"];
       var hash = btoa(tok);
       let authToken = "Basic " + hash;
       _that.storage.set("authToken", authToken);

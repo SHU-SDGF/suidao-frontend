@@ -34,85 +34,114 @@ export class GroundPage implements OnInit, OnDestroy {
     private environmentActivityService: EnvironmentActivityService
   ) {}
 
+
+  initial() {
+    console.log('hi');
+  }
+
   ngOnInit() {
+    let that = this;
     // bind add button event
     $('ion-tabbar a.tab-button').eq(2).on('click', ((_self) => {
       return function () {
         _self.toggleEditing.apply(_self);
       }
     })(this));
+    // this.opts = {
+    //   center: {
+    //     longitude: 121.506191,
+    //     latitude: 31.245554
+    //   },
+    //   zoom: 17,
+    //   markers: [{
+    //     longitude: 121.405679,
+    //     latitude: 31.170997,
+    //     title: '环境活动000',
+    //     icon: 'build/imgs/map-marker.png',
+    //     width: 30,
+    //     height: 30,
+    //     content: ``
+    //   },{
+    //     longitude: 121.487181,
+    //     latitude: 31.241721,
+    //     title: '环境活动001',
+    //     icon: 'build/imgs/map-marker.png',
+    //     width: 30,
+    //     height: 30,
+    //     content: ``
+    //   },{
+    //     longitude: 121.450184,
+    //     latitude: 31.254985,
+    //     title: '环境活动002',
+    //     icon: 'build/imgs/map-marker.png',
+    //     width: 30,
+    //     height: 30,
+    //     content: ``
+    //   }],
+    //   geolocationCtrl: {
+    //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
+    //   },
+    //   scaleCtrl: {
+    //     anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
+    //   },
+    //   overviewCtrl: {
+    //     isOpen: false
+    //   }
+    // };
 
     this.environmentActivityService.getEnvironmentActivitiesSummaryList().then((result) => {
-      // let markers = [];
-      // for(var obj in result.content) {
-      //   markers.push = {
-      //     longitude: 121.405679,
-      //     latitude: 31.170997,
-      //     title: '环境活动000',
-      //     icon: 'build/imgs/map-marker.png',
-      //     width: 30,
-      //     height: 30,
-      //     content: ``
-      //   }
-      // } 
-      // this.opts = {
-      //   center: {
-      //     longitude: 121.506191,
-      //     latitude: 31.245554
-      //   },
-      //   zoom: 17
-      // }
-      // debugger;
-    }, (error) => {
-    });
+      let markers = [];
+      let centerCord = {
+        longitude: 0,
+        latitude: 0
+      };
 
+      if(result["content"].length == 0) {
+        centerCord = {
+          longitude: 121.506191,
+          latitude: 31.245554
+        };
+      } else {
+        centerCord = {
+          longitude: result["content"][0]["longitude"],
+          latitude: result["content"][0]["latitude"]
+        }
 
-    this.opts = {
-      center: {
-        longitude: 121.506191,
-        latitude: 31.245554
-      },
-      zoom: 17,
-      markers: [{
-        longitude: 121.405679,
-        latitude: 31.170997,
-        title: '环境活动000',
-        icon: 'build/imgs/map-marker.png',
-        width: 30,
-        height: 30,
-        content: ``
-      },{
-        longitude: 121.487181,
-        latitude: 31.241721,
-        title: '环境活动001',
-        icon: 'build/imgs/map-marker.png',
-        width: 30,
-        height: 30,
-        content: ``
-      },{
-        longitude: 121.450184,
-        latitude: 31.254985,
-        title: '环境活动002',
-        icon: 'build/imgs/map-marker.png',
-        width: 30,
-        height: 30,
-        content: ``
-      }],
-      geolocationCtrl: {
-        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
-      },
-      scaleCtrl: {
-        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
-      },
-      overviewCtrl: {
-        isOpen: false
+        for(var index in result["content"]) {
+          markers.push({
+            longitude: result["content"][index]["longitude"],
+            latitude: result["content"][index]["latitude"],
+            title: result["content"][index]["actName"],
+            icon: 'build/imgs/map-marker.png',
+            width: 30,
+            height: 30,
+            content: '',
+            actNo: result["content"][index]["actNo"]
+          });
+        }
       }
-    };
 
-    this.offlineOpts = {
+      that.opts = {
+        center: centerCord,
+        zoom: 17,
+        markers: markers,
+        geolocationCtrl: {
+          anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
+        },
+        scaleCtrl: {
+          anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
+        },
+        overviewCtrl: {
+          isOpen: false
+        }
+      }
+
+      that.offlineOpts = {
         retryInterval: 5000,
         txt: 'NO-NETWORK'
-    };
+      };
+    }, (error) => {
+    });
   }
 
   /**
@@ -187,6 +216,7 @@ export class GroundPage implements OnInit, OnDestroy {
             text: '确认',
             handler: () => {
               alert.dismiss().then(() => {
+                debugger;
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
