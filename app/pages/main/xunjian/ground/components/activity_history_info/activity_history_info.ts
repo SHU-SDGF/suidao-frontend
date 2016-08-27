@@ -29,27 +29,27 @@ export class ActivityHistoryInfoPage implements OnInit{
     let _self = this;
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
       _self.actStatusList = actStatusList;
-      _self.activityDetailObj["act_status"] = _self._getLookUpValue(this.actStatusList, activityParams["actStatus"]);
+      _self.activityDetailObj["actStatus"] = _self._getLookUpValue(this.actStatusList, activityParams["actStatus"]);
     });
 
     this._lookupService.getActTypes().then((actTypesList:[{name: string, order: number}]) => {
       _self.actTypesList = actTypesList;
-      _self.activityDetailObj["act_type"] = _self._getLookUpValue(this.actTypesList, activityParams["actType"]);
+      _self.activityDetailObj["actType"] = _self._getLookUpValue(this.actTypesList, activityParams["actType"]);
     });
 
     let activityName = this.params.get('activityName');
     let activityParams = this.params.get('activityDetail');
     this.activityDetailObj = {
-      act_name: activityName,
-      insp_date: activityParams["inspDate"],
-      end_date: activityParams["inspDate"],
+      actName: activityName,
+      inspDate: activityParams["inspDate"],
+      endDate: activityParams["inspDate"],
       description: activityParams["description"], //活动描述
-      act_status: activityParams["actStatus"],
+      actStatus: activityParams["actStatus"],
       recorder: activityParams["recorder"],
       photo: activityParams["photo"],
       audio: activityParams["audio"],
       video: activityParams["video"],
-      act_no: activityParams["actNo"]
+      actNo: activityParams["actNo"]
     };
   }
 

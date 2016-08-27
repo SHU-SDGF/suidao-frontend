@@ -38,12 +38,12 @@ export class ActivityDetailPage implements OnInit{
     let _self = this;
     let point: MapPoint = this.params.get('point');
     this.activityDetailObj = {
-      act_name: '', //活动名称
+      actName: '', //活动名称
       description: '', //活动描述
       longitude: point.lng, //经度
       latitude: point.lat, //纬度
-      act_status: '',
-      act_type: '',
+      actStatus: '',
+      actType: '',
       recorder: ''
     };
 
@@ -59,16 +59,16 @@ export class ActivityDetailPage implements OnInit{
   createActivity() {
     let activityObj = {
       environmentActitivitySummary: {
-        actName: this.activityDetailObj.act_name,
+        actName: this.activityDetailObj.actName,
         description: this.activityDetailObj.description,
         longtitude: this.activityDetailObj.longitude,
         latitude: this.activityDetailObj.latitude,
-        startDate: new Date(this.activityDetailObj.start_date).getTime(),
-        endDate: new Date(this.activityDetailObj.end_date).getTime()
+        startDate: new Date(this.activityDetailObj.startDate).getTime(),
+        endDate: new Date(this.activityDetailObj.endDate).getTime()
       },
       environmentActivity: {
-        actType: this.activityDetailObj.act_type,
-        actStatus: this.activityDetailObj.act_status,
+        actType: this.activityDetailObj.actType,
+        actStatus: this.activityDetailObj.actStatus,
         description: this.activityDetailObj.description,
         recorder: this.activityDetailObj.recorder,
         inspDate: new Date().getTime()
@@ -77,7 +77,7 @@ export class ActivityDetailPage implements OnInit{
 
     this._actService.addNewEnvironmentActivitySummary(activityObj).then(() => {
       this.viewCtrl.dismiss(this.activityDetailObj).then((result) => {
-        
+
       });
     }, (error) => {
       let alert = this._alertCtrl.create({

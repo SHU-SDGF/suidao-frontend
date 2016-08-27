@@ -27,12 +27,12 @@
 <ion-content class="activity_info">
   <ion-grid [hidden]="selectedPage !== 'detail'">
     <ion-row class="parent-content">活动编号及其名称</ion-row>
-    <ion-row class="sub-content"><ion-icon item-left name="md-pin"></ion-icon><span class="act-info">{{activityDetailObj.act_no}}   {{activityDetailObj.act_name}}</span></ion-row>
+    <ion-row class="sub-content"><ion-icon item-left name="md-pin"></ion-icon><span class="act-info">{{activityDetailObj.actNo}}   {{activityDetailObj.actName}}</span></ion-row>
   </ion-grid>
   <ion-list [hidden]="selectedPage !== 'detail'">
     <ion-item>
       <ion-label>活动状态</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.act_status" okText="确认" cancelText="取消">
+      <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
         <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -42,7 +42,7 @@
     </ion-item>
     <ion-item>
       <ion-label>巡检时间</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.insp_date"></ion-datetime>
+      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
       <ion-input type="text"></ion-input>
     </ion-item>
   </ion-list>
@@ -51,7 +51,7 @@
     <ion-item-group>
       <div>
         <ion-item>
-          <ion-label class="act-no">活动编号：{{activityDetailObj.act_no}}</ion-label>
+          <ion-label class="act-no">活动编号：{{activityDetailObj.actNo}}</ion-label>
         </ion-item>
       </div>
       <div>

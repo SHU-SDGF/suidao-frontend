@@ -154,9 +154,9 @@ export class GroundPage implements OnInit, OnDestroy {
             description: result["content"][index]["description"],
             width: 30,
             height: 30,
-            actStatus: 0,
-            actType: 0,
-            recorder: '',
+            actStatus: result["content"][index]["actStatus"],
+            actType: result["content"][index]["actType"],
+            recorder: result["content"][index]["recorder"],
             content: '',
             inspDate: result["content"][index]["inspDate"],
             actNo: result["content"][index]["actNo"]
