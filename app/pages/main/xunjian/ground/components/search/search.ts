@@ -8,6 +8,7 @@ import {MenuController, Events,
 } from 'ionic-angular';
 import {SelectPopover} from '../../../../../../shared/components/select-popover/select-popover';
 import {LookupService} from '../../../../../../providers';
+import {ActivityInfoPage} from '../../components/activity_info/activity_info';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/search/search.html',
@@ -32,11 +33,8 @@ export class SearchPage implements OnInit, OnDestroy {
     { name: '周围环境', value: 1 }
   ];
   private selectedType = this.itemList[0]; //选择的种类
-  
-  constructor(
-    private _viewCtrl: ViewController,
-    private params: NavParams,
-    private _lookupService: LookupService) {
+
+  constructor(private _viewCtrl: ViewController, private params: NavParams, private _lookupService: LookupService,private  _modalCtrl: ModalController) {
   }
   
   ngOnInit() {
@@ -53,11 +51,19 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   typeChange(item: {name: string, value: number}) {
+    debugger;
     this.selectedType = item;
   }
 
   dismiss() {
     this._viewCtrl.dismiss();
+  }
+
+  showHistory(activityDetailObj) {
+    let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': activityDetailObj });
+    modal.present(modal);
+    modal.onDidDismiss(() => {
+    });
   }
 
   private _convertDate(datetime) {
