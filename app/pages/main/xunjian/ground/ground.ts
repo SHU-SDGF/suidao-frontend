@@ -25,6 +25,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private _unsavedMarker: MarkerOptions = null;
   private _toast: any;
   private _searchPoped: boolean = false;
+  private markers: any;
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
   constructor(
@@ -42,8 +43,6 @@ export class GroundPage implements OnInit, OnDestroy {
     console.log('hi');
   }
 
-  
-  
   bindEdit = ((_self) => {
       return function () {
         _self.toggleEditing.apply(_self);
@@ -157,11 +156,11 @@ export class GroundPage implements OnInit, OnDestroy {
             actType: 0,
             recorder: '',
             content: '',
+            inspDate: result["content"][index]["inspDate"],
             actNo: result["content"][index]["actNo"]
           });
         }
       }
-
       this.opts.markers = this.opts.markers.concat(markers);
 
       this.mapOptionEmitter.emit(this.opts);
@@ -277,6 +276,7 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private clickMarker($event: { obj: MarkerOptions, marker: any }) {
+    let that = this;
     setTimeout(($event) => {
       let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
       modal.present(modal);

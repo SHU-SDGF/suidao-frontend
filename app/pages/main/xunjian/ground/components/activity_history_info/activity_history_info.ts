@@ -45,11 +45,11 @@ export class ActivityHistoryInfoPage implements OnInit{
       end_date: activityParams["inspDate"],
       description: activityParams["description"], //活动描述
       act_status: activityParams["actStatus"],
-      act_type: activityParams["actType"],
       recorder: activityParams["recorder"],
       photo: activityParams["photo"],
       audio: activityParams["audio"],
-      video: activityParams["video"]
+      video: activityParams["video"],
+      act_no: activityParams["actNo"]
     };
   }
 

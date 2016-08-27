@@ -71,12 +71,14 @@ export class ActivityDetailPage implements OnInit{
         actStatus: this.activityDetailObj.act_status,
         description: this.activityDetailObj.description,
         recorder: this.activityDetailObj.recorder,
-        inspDate: new Date()
+        inspDate: new Date().getTime()
       }
     }
 
     this._actService.addNewEnvironmentActivitySummary(activityObj).then(() => {
-      this.viewCtrl.dismiss(this.activityDetailObj);
+      this.viewCtrl.dismiss(this.activityDetailObj).then((result) => {
+        
+      });
     }, (error) => {
       let alert = this._alertCtrl.create({
         title: '出错啦！',

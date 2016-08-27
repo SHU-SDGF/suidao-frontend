@@ -29,6 +29,7 @@ export class ActivityInfoPage implements OnInit{
     private viewCtrl: ViewController,
     private _modelCtrl: ModalController,
     private _lookupService: LookupService,
+    private _alertController: AlertController,
     private _environmentActivityService: EnvironmentActivityService,
     private params: NavParams) { }
 
@@ -39,11 +40,9 @@ export class ActivityInfoPage implements OnInit{
       act_no: paramsObj.actNo,
       act_name: paramsObj.title, //活动名称
       description: paramsObj.description, //活动描述
-      longitude: paramsObj.longitude, //经度
-      latitude: paramsObj.latitude, //纬度
       act_status: paramsObj.actStatus,
       act_type: paramsObj.actType,
-      recorder: paramsObj.recorder
+      insp_date: this._convertDate(paramsObj.inspDate)
     };
 
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
@@ -57,8 +56,45 @@ export class ActivityInfoPage implements OnInit{
     });
   }
 
+  private _convertDate(datetime) {
+    let date = new Date(datetime)
+    return date.getFullYear() + '-0' + (date.getMonth() + 1) + '-0' + (date.getDay() + 1)
+  }
+
   dismiss() {
     this.viewCtrl.dismiss();
+  }
+
+  edit() {
+    let _that = this;
+    let paramsObj = {
+      actNo: this.activityDetailObj.act_no,
+      actName: this.activityDetailObj.act_name,
+      description: this.activityDetailObj.description,
+      actStatus: this.activityDetailObj.act_status,
+      actType: this.activityDetailObj.act_type,
+      recorder: this.activityDetailObj.recorder,
+      inspDate: new Date(this.activityDetailObj.insp_date).getTime()
+    }
+    this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
+      this.viewCtrl.dismiss();
+    }, (error) => {
+      let alert = this._alertController.create({
+        title: '出错啦！',
+        message: '创建活动未能成功！请重新尝试！'
+      });
+      alert.present();
+    });
+  }
+
+  private _getLookUpValue(list, order){
+    let value = '';
+    for(let el in list){
+      if(list[el]["order"]  == order){
+        value = list[el]["name"];
+      }
+    }
+    return value;
   }
 
   showHistory(index) {

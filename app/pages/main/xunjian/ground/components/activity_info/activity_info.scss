@@ -1,10 +1,19 @@
 .activity-info-page {}
 
-.ion-label {
+ion-label {
     color: white;
 }
 
 .activity_info {
+    .item-select ion-label {
+        color: white;
+    }
+    .item-input ion-label {
+        color: white;
+    }
+    .item-datetime ion-label {
+        color: white;
+    }
     .parent-content {
         color: white !important;
     }

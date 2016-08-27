@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title center>活动详情</ion-title>
     <ion-buttons end>
-      <button (click)="dismiss()">
+      <button (click)="edit()">
         编辑
       </button>
     </ion-buttons>
@@ -42,7 +42,7 @@
     </ion-item>
     <ion-item>
       <ion-label>巡检时间</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.end_date"></ion-datetime>
+      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.insp_date"></ion-datetime>
       <ion-input type="text"></ion-input>
     </ion-item>
   </ion-list>
@@ -60,10 +60,9 @@
           <div item-inner class="act-detail">
             <h3>{{environmentActivityList[idx].recorder}}</h3>
             <p>
-              {{environmentActivityList[idx].actStatus}}
-              加载 &mdash;
-
-              2016-06-10
+              {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
+              &mdash;
+              {{_convertDate(environmentActivityList[idx].inspDate)}}
             </p>
           </div>
         </button>
