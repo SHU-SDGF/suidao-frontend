@@ -51,7 +51,6 @@ export class SearchPage implements OnInit, OnDestroy {
   }
 
   typeChange(item: {name: string, value: number}) {
-    debugger;
     this.selectedType = item;
   }
 
