@@ -28,13 +28,11 @@
     </ion-item>
     <ion-item>
       <ion-label>起始日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.startDate"></ion-datetime>
-      <ion-input type="text"></ion-input>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.startDate"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>结束日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.endDate"></ion-datetime>
-      <ion-input type="text"></ion-input>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.endDate"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>

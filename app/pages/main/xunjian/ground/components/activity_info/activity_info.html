@@ -42,8 +42,7 @@
     </ion-item>
     <ion-item>
       <ion-label>巡检时间</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
-      <ion-input type="text"></ion-input>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
     </ion-item>
   </ion-list>
 
