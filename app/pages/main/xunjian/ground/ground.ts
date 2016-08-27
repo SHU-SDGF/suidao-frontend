@@ -270,14 +270,11 @@ export class GroundPage implements OnInit, OnDestroy {
                     actNo: activity["environmentActivity"]["actNo"]
                   };
 
-                  _self.opts.markers.push(newMarker);
-
-                  _self.opts.center = {
-                    longitude: activity["environmentActitivitySummary"]["longtitude"],
-                    latitude: activity["environmentActitivitySummary"]["latitude"]
-                  };
-
-                  _self.mapOptionEmitter.emit(_self.opts);
+                  _self._suidaoMap.addMarker(newMarker);
+                  _self._suidaoMap.changeCenter({
+                    lat: activity["environmentActitivitySummary"]["latitude"],
+                    lng: activity["environmentActitivitySummary"]["longtitude"]
+                  })
 
                   console.log("dismiss");
                   
