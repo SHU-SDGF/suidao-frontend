@@ -4,7 +4,7 @@ import {Component, OnInit, OnDestroy,
 import {MenuController, Events,
   ToastController, AlertController,
   ModalController, NavController,
-  ViewController
+  ViewController, NavParams
 } from 'ionic-angular';
 import {SelectPopover} from '../../../../../../shared/components/select-popover/select-popover';
 
@@ -22,7 +22,9 @@ export class SearchPage implements OnInit, OnDestroy {
   ];
   private selectedType = this.itemList[0]; //选择的种类
   
-  constructor(private _viewCtrl: ViewController) {
+  constructor(private _viewCtrl: ViewController, private params: NavParams) {
+    debugger;
+    this.searchedResult = this.params.get('environmentActivityList');
     this.searchedResult = [
       {id: 12311, name: '环境活动002', date: '', lng: 0, lat: 0},
       {id: 12312, name: '环境活动001', date: '', lng: 0, lat: 0}

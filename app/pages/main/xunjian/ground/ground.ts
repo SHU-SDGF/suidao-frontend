@@ -26,6 +26,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private _toast: any;
   private _searchPoped: boolean = false;
   private markers: any;
+  private environmentActivityList: any;
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
   constructor(
@@ -66,7 +67,7 @@ export class GroundPage implements OnInit, OnDestroy {
 
   searchBarOnFocus() {
     if (this._searchPoped) return;
-    let modal = this._modalCtrl.create(SearchPage);
+    let modal = this._modalCtrl.create(SearchPage, {'environmentActivityList': this.environmentActivityList});
     modal.present();
     modal.onDidDismiss(() => {
       this._searchPoped = false;
@@ -132,6 +133,7 @@ export class GroundPage implements OnInit, OnDestroy {
         longitude: 0,
         latitude: 0
       };
+      that.environmentActivityList = result["content"];
 
       if(result["content"].length == 0) {
         centerCord = {
@@ -161,10 +163,10 @@ export class GroundPage implements OnInit, OnDestroy {
           });
         }
       }
-      this.opts.markers = this.opts.markers.concat(markers);
+      that.opts.markers = that.opts.markers.concat(markers);
 
-      this.mapOptionEmitter.emit(this.opts);
-      console.log(this.opts);
+      that.mapOptionEmitter.emit(that.opts);
+      console.log(that.opts);
 
       that.offlineOpts = {
         retryInterval: 5000,
