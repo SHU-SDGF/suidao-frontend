@@ -6,6 +6,7 @@ import {URLSearchParams} from '@angular/http';
 import {HttpService} from './http_service';
 
 export interface EnvironmentActivity {
+	act_name?: string //活动名称
   act_no?: string //活动编码
 	insp_date: any //巡检日期
 	end_date: any //更新日时
@@ -61,7 +62,7 @@ export class EnvironmentActivityService {
 
 	//根据ACT_NO来寻找活动历史记录
 	searchEnvironmentActivitiesByActNo(act_no: string) {
-		return this.httpService.get({'act_no': act_no}, 'environment-activities/listByActNo')
+		return this.httpService.get({}, 'environment-activities/listByActNo/' + act_no)
 	}
 	//添加新的环境历史活动
 	addNewEnvironmentActivity(activityObj: any) {

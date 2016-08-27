@@ -1,27 +1,41 @@
-.activity-info-page{
-  
-}
-.activity_info{
-  ion-item-group{
-    .act-no{
-      color: color($colors, light);
-      font-size: 1.4rem;
-      margin: 0px;
-      margin-top: 10px;
-    }
-    .act-card{
-      color: color($colors, light);
-      background-color: rgba(0,0,0, 0.3);
-      box-shadow: 0px 4px 5px 1px rgba(0,0,0,0.2);
-      .act-detail{
-        color: color($colors, light);
-        h3{
+.activity-info-page {}
 
-        }
-        p{
-          color: color($colors, light); 
-        }
-      }
+.ion-label {
+    color: white;
+}
+
+.activity_info {
+    .parent-content {
+        color: white !important;
     }
-  }
+    .sub-content {
+        color: white !important;
+        margin: 10px 0 10px 0;
+    }
+    .act-info {
+        line-height: 35px;
+    }
+    ion-item-group {
+        .act-no {
+            color: white;
+            // color: color($colors, primary);
+            font-size: 1.4rem;
+            margin: 0px;
+            margin-top: 10px;
+        }
+        .act-card {
+            color: white;
+            // color: color($colors, primary);
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.2);
+            .act-detail {
+                color: white // color: color($colors, primary);
+                h3 {}
+                p {
+                    color: white;
+                    // color: color($colors, primary); 
+                }
+            }
+        }
+    }
 }

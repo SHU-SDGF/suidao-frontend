@@ -25,27 +25,11 @@
 </ion-header>
 
 <ion-content class="activity_info">
+  <ion-grid [hidden]="selectedPage !== 'detail'">
+    <ion-row class="parent-content">活动编号及其名称</ion-row>
+    <ion-row class="sub-content"><ion-icon item-left name="md-pin"></ion-icon><span class="act-info">{{activityDetailObj.act_no}}   {{activityDetailObj.act_name}}</span></ion-row>
+  </ion-grid>
   <ion-list [hidden]="selectedPage !== 'detail'">
-    <ion-item>
-      <ion-label>活动名称</ion-label>
-      <ion-input type="text" [(ngModel)]="activityDetailObj.act_name"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>活动类别</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.act_type" okText="确认" cancelText="取消">
-        <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>起始日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.start_date"></ion-datetime>
-      <ion-input type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>结束日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.end_date"></ion-datetime>
-      <ion-input type="text"></ion-input>
-    </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>
       <ion-select [(ngModel)]="activityDetailObj.act_status" okText="确认" cancelText="取消">
@@ -53,12 +37,13 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>记录人</ion-label>
-      <ion-input type="text" [(ngModel)]="activityDetailObj.recorder"></ion-input>
-    </ion-item>
-    <ion-item>
       <ion-label stacked>描述</ion-label>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>巡检时间</ion-label>
+      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.end_date"></ion-datetime>
+      <ion-input type="text"></ion-input>
     </ion-item>
   </ion-list>
 
@@ -66,16 +51,18 @@
     <ion-item-group>
       <div>
         <ion-item>
-          <ion-label class="act-no">活动编号：1231231</ion-label>
+          <ion-label class="act-no">活动编号：{{activityDetailObj.act_no}}</ion-label>
         </ion-item>
       </div>
       <div>
-        <button ion-item (click)="showHistory()" class="act-card">
+        <button ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
           <ion-icon item-left name="md-pin"></ion-icon>
           <div item-inner class="act-detail">
-            <h3>东线巡检活动</h3>
+            <h3>{{environmentActivityList[idx].recorder}}</h3>
             <p>
+              {{environmentActivityList[idx].actStatus}}
               加载 &mdash;
+
               2016-06-10
             </p>
           </div>

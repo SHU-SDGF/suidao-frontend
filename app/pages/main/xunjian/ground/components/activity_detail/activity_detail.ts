@@ -70,7 +70,8 @@ export class ActivityDetailPage implements OnInit{
         actType: this.activityDetailObj.act_type,
         actStatus: this.activityDetailObj.act_status,
         description: this.activityDetailObj.description,
-        recorder: this.activityDetailObj.recorder
+        recorder: this.activityDetailObj.recorder,
+        inspDate: new Date()
       }
     }
 

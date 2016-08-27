@@ -42,9 +42,11 @@ export class HttpService {
     }
 
     if(Object.keys(paramsObj).length !== 0) {
-      let params: URLSearchParams = new URLSearchParams();
-      params = paramsObj;
-      queryObj["search"] = params;
+      let searchParams: URLSearchParams = new URLSearchParams();
+      for (let param in paramsObj) {
+        searchParams.set(param, paramsObj[param]);
+      }
+      queryObj["search"] = searchParams;
     }
 
     return new Promise((resolve, reject) =>{

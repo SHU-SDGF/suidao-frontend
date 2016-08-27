@@ -144,15 +144,18 @@ export class GroundPage implements OnInit, OnDestroy {
           longitude: result["content"][0]["longitude"],
           latitude: result["content"][0]["latitude"]
         }
-
         for(var index in result["content"]) {
           markers.push({
             longitude: result["content"][index]["longtitude"],
             latitude: result["content"][index]["latitude"],
             title: result["content"][index]["actName"],
             icon: 'build/imgs/map-marker.png',
+            description: result["content"][index]["description"],
             width: 30,
             height: 30,
+            actStatus: 0,
+            actType: 0,
+            recorder: '',
             content: '',
             actNo: result["content"][index]["actNo"]
           });
