@@ -18,27 +18,27 @@
   <ion-list>
     <ion-item>
       <ion-label>活动名称</ion-label>
-      <ion-input type="text" [(ngModel)]="activityDetailObj.act_name"></ion-input>
+      <ion-input type="text" [(ngModel)]="activityDetailObj.actName"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>活动类别</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.act_type" okText="确认" cancelText="取消">
+      <ion-select [(ngModel)]="activityDetailObj.actType" okText="确认" cancelText="取消">
         <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>起始日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.start_date"></ion-datetime>
+      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.startDate"></ion-datetime>
       <ion-input type="text"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>结束日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.end_date"></ion-datetime>
+      <ion-datetime displayFormat="YYYY.MM.DD" [(ngModel)]="activityDetailObj.endDate"></ion-datetime>
       <ion-input type="text"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.act_status" okText="确认" cancelText="取消">
+      <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
         <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
       </ion-select>
     </ion-item>

@@ -6,39 +6,39 @@ import {URLSearchParams} from '@angular/http';
 import {HttpService} from './http_service';
 
 export interface EnvironmentActivity {
-	act_name?: string //活动名称
-  act_no?: string //活动编码
-	insp_date: any //巡检日期
-	end_date: any //更新日时
-	act_status: any //活动状态 
-	act_type?: any //活动类型
+	actName?: string //活动名称
+  actNo?: string //活动编码
+	inspDate: any //巡检日期
+	endDate: any //更新日时
+	actStatus: any //活动状态 
+	actType?: any //活动类型
 	description: string // 描述
-	create_user?: string //作成者
-	update_user?: string // 更新者
+	createUser?: string //作成者
+	updateUser?: string // 更新者
 	photo: any // 图片
 	audio: any // 音频
 	video: any // 视频
 	recorder?: string //记录人
-	create_date?: any //作成日时
-	update_date?: any //更新日时
+	createDate?: any //作成日时
+	updateDate?: any //更新日时
 }
 
 export interface EnvironmentActivitySummary {
-	act_no?: string //活动编码
-	act_name: string //活动名称
-	start_date?: any //起始日期
-	end_date?: any //结束日期
+	actNo?: string //活动编码
+	actName: string //活动名称
+	startDate?: any //起始日期
+	endDate?: any //结束日期
 	description: string //活动描述
 	longitude?: number //经度
 	latitude?: number //纬度
-	create_user?: string //作成者
-	update_user?: string //更新者
-	create_date?: any //作成日时
-	update_date?: any //更新日时,
-	insp_date?: any //巡检日期
+	createUser?: string //作成者
+	updateUser?: string //更新者
+	createDate?: any //作成日时
+	updateDate?: any //更新日时,
+	inspDate?: any //巡检日期
 	recorder?: string
-	act_status: any
-	act_type?: any
+	actStatus: any
+	actType?: any
 }
 
 @Injectable()
@@ -62,8 +62,8 @@ export class EnvironmentActivityService {
 	}
 
 	//根据ACT_NO来寻找活动历史记录
-	searchEnvironmentActivitiesByActNo(act_no: string) {
-		return this.httpService.get({}, 'environment-activities/listByActNo/' + act_no)
+	searchEnvironmentActivitiesByActNo(actNo: string) {
+		return this.httpService.get({}, 'environment-activities/listByActNo/' + actNo)
 	}
 	//添加新的环境历史活动
 	addNewEnvironmentActivity(activityObj: any) {

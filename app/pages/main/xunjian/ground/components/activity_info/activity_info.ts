@@ -37,12 +37,12 @@ export class ActivityInfoPage implements OnInit{
     let _self = this;
     let paramsObj = this.params.get('activityDetail');
     this.activityDetailObj = {
-      act_no: paramsObj.actNo,
-      act_name: paramsObj.title, //活动名称
+      actNo: paramsObj.actNo,
+      actName: paramsObj.title, //活动名称
       description: paramsObj.description, //活动描述
-      act_status: paramsObj.actStatus,
-      act_type: paramsObj.actType,
-      insp_date: this._convertDate(paramsObj.inspDate)
+      actStatus: paramsObj.actStatus,
+      actType: paramsObj.actType,
+      inspDate: this._convertDate(paramsObj.inspDate)
     };
 
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
@@ -50,7 +50,7 @@ export class ActivityInfoPage implements OnInit{
     });
 
     // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.act_no).then((result) => {
+    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).then((result) => {
       this.environmentActivityList = result["content"];
     }, (error) => {
     });
@@ -68,13 +68,13 @@ export class ActivityInfoPage implements OnInit{
   edit() {
     let _that = this;
     let paramsObj = {
-      actNo: this.activityDetailObj.act_no,
-      actName: this.activityDetailObj.act_name,
+      actNo: this.activityDetailObj.actNo,
+      actName: this.activityDetailObj.actName,
       description: this.activityDetailObj.description,
-      actStatus: this.activityDetailObj.act_status,
-      actType: this.activityDetailObj.act_type,
+      actStatus: this.activityDetailObj.actStatus,
+      actType: this.activityDetailObj.actType,
       recorder: this.activityDetailObj.recorder,
-      inspDate: new Date(this.activityDetailObj.insp_date).getTime()
+      inspDate: new Date(this.activityDetailObj.inspDate).getTime()
     }
     this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
       this.viewCtrl.dismiss();
@@ -98,7 +98,7 @@ export class ActivityInfoPage implements OnInit{
   }
 
   showHistory(index) {
-    let modal = this._modelCtrl.create(ActivityHistoryInfoPage, {'activityDetail': this.environmentActivityList[index], 'activityName': this.activityDetailObj["act_name"]});
+    let modal = this._modelCtrl.create(ActivityHistoryInfoPage, {'activityDetail': this.environmentActivityList[index], 'activityName': this.activityDetailObj["actName"]});
     modal.present();
   }
 }
