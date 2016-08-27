@@ -76,4 +76,6 @@ for(let p in _providers ){
   providersAr.push(_providers[p]);
 }
 
-ionicBootstrap(MyApp, providersAr);
+ionicBootstrap(MyApp, providersAr, {
+  mode : 'ios'
+});
