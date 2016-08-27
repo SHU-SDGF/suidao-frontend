@@ -25,6 +25,8 @@ export class GroundPage implements OnInit, OnDestroy {
   private _unsavedMarker: MarkerOptions = null;
   private _toast: any;
   private _searchPoped: boolean = false;
+  private markers: any;
+  private environmentActivityList: any;
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
   constructor(
@@ -42,8 +44,6 @@ export class GroundPage implements OnInit, OnDestroy {
     console.log('hi');
   }
 
-  
-  
   bindEdit = ((_self) => {
       return function () {
         _self.toggleEditing.apply(_self);
@@ -67,7 +67,7 @@ export class GroundPage implements OnInit, OnDestroy {
 
   searchBarOnFocus() {
     if (this._searchPoped) return;
-    let modal = this._modalCtrl.create(SearchPage);
+    let modal = this._modalCtrl.create(SearchPage, {'environmentActivityList': this.environmentActivityList});
     modal.present();
     modal.onDidDismiss(() => {
       this._searchPoped = false;
@@ -133,6 +133,7 @@ export class GroundPage implements OnInit, OnDestroy {
         longitude: 0,
         latitude: 0
       };
+      that.environmentActivityList = result["content"];
 
       if(result["content"].length == 0) {
         centerCord = {
@@ -144,25 +145,28 @@ export class GroundPage implements OnInit, OnDestroy {
           longitude: result["content"][0]["longitude"],
           latitude: result["content"][0]["latitude"]
         }
-
         for(var index in result["content"]) {
           markers.push({
             longitude: result["content"][index]["longtitude"],
             latitude: result["content"][index]["latitude"],
             title: result["content"][index]["actName"],
             icon: 'build/imgs/map-marker.png',
+            description: result["content"][index]["description"],
             width: 30,
             height: 30,
+            actStatus: 0,
+            actType: 0,
+            recorder: '',
             content: '',
+            inspDate: result["content"][index]["inspDate"],
             actNo: result["content"][index]["actNo"]
           });
         }
       }
+      that.opts.markers = that.opts.markers.concat(markers);
 
-      this.opts.markers = this.opts.markers.concat(markers);
-
-      this.mapOptionEmitter.emit(this.opts);
-      console.log(this.opts);
+      that.mapOptionEmitter.emit(that.opts);
+      console.log(that.opts);
 
       that.offlineOpts = {
         retryInterval: 5000,
@@ -274,6 +278,7 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private clickMarker($event: { obj: MarkerOptions, marker: any }) {
+    let that = this;
     setTimeout(($event) => {
       let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
       modal.present(modal);
