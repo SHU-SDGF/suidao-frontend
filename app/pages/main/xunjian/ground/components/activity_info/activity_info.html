@@ -50,19 +50,14 @@
   <ion-list [hidden]="selectedPage !== 'history'">
     <ion-item-group>
       <div>
-        <ion-item>
-          <ion-label class="act-no">活动编号：{{activityDetailObj.actNo}}</ion-label>
-        </ion-item>
-      </div>
-      <div>
         <button ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
-          <ion-icon item-left name="md-pin"></ion-icon>
+          <ion-icon item-left name="ios-pin-outline"></ion-icon>
           <div item-inner class="act-detail">
             <h3>{{environmentActivityList[idx].recorder}}</h3>
             <p>
               {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
               &mdash;
-              {{_convertDate(environmentActivityList[idx].inspDate)}}
+              {{environmentActivityList[idx].inspDate | DatePipe}}
             </p>
           </div>
         </button>

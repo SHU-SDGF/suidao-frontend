@@ -4,14 +4,15 @@ import {ViewController, AlertController, NavParams, ModalController} from 'ionic
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService} from '../../../../../../providers';
+import {AppUtils} from '../../../../../../shared/utils';
 
 @Component({
-  templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html'
+  templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
+  pipes: [AppUtils.DatePipe]
 })
 export class ActivityInfoPage implements OnInit{
   
   selectedPage: string = 'detail';
-
   activityDetailObj: EnvironmentActivitySummary;
 
   private actStatusList: [{
@@ -31,7 +32,8 @@ export class ActivityInfoPage implements OnInit{
     private _lookupService: LookupService,
     private _alertController: AlertController,
     private _environmentActivityService: EnvironmentActivityService,
-    private params: NavParams) { }
+    private params: NavParams
+  ) { }
 
   ngOnInit() {
     let _self = this;

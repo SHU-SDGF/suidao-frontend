@@ -1,5 +1,5 @@
-import {Component, ViewChild} from '@angular/core';
-import {Platform, ionicBootstrap, Nav, MenuController, AlertController} from 'ionic-angular';
+import {Component, ViewChild, OnInit} from '@angular/core';
+import {Platform, ionicBootstrap, Nav, MenuController, AlertController, Events} from 'ionic-angular';
 import { Splashscreen, StatusBar } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
@@ -8,14 +8,16 @@ import { LookupService } from './providers/lookup_service';
 import {MainPage} from './pages/main/main';
 
 declare const $: any;
+const ANOM_USER = '未登录';
 
 @Component({
   templateUrl: 'build/app.html'
 })
-export class MyApp {
+export class MyApp implements OnInit{
   @ViewChild(Nav) nav: Nav;
   
   private rootPage: any;
+  private userDisplayName: string = ANOM_USER;
 
   /**
    * app init */
@@ -24,7 +26,8 @@ export class MyApp {
     public menu: MenuController,
     private userService: UserService,
     private lookupService: LookupService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private events: Events
   ) {
 
     platform.ready().then(() => {
@@ -43,6 +46,31 @@ export class MyApp {
         }
       })
     });
+  }
+
+  ngOnInit() {
+
+    this.userService.hasLoggedIn().then((flag) => {
+      if (flag) {
+        this.userService.getUserInfo().then((userInfo) => {
+          this.userDisplayName = userInfo.userName;
+        });
+      } else {
+        this.userDisplayName = ANOM_USER;
+      }
+      
+    });
+    
+    this.events.subscribe(this.userService.LOGIN_EVENT, () => {
+      this.userService.getUserInfo().then((userInfo) => {
+        this.userDisplayName = userInfo.userName;
+      });
+    });
+
+    this.events.subscribe(this.userService.LOGOUT_EVENT, () => {
+      this.userDisplayName = ANOM_USER;
+    });
+
   }
 
   /**
