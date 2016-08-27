@@ -77,7 +77,7 @@ export class ActivityInfoPage implements OnInit{
       inspDate: new Date(this.activityDetailObj.inspDate).getTime()
     }
     this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
-      this.viewCtrl.dismiss();
+      this.viewCtrl.dismiss(result);
     }, (error) => {
       let alert = this._alertController.create({
         title: '出错啦！',

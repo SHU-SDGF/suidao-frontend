@@ -75,10 +75,8 @@ export class ActivityDetailPage implements OnInit{
       }
     }
 
-    this._actService.addNewEnvironmentActivitySummary(activityObj).then(() => {
-      this.viewCtrl.dismiss(this.activityDetailObj).then((result) => {
-
-      });
+    this._actService.addNewEnvironmentActivitySummary(activityObj).then((result) => {
+      this.viewCtrl.dismiss(result);
     }, (error) => {
       let alert = this._alertCtrl.create({
         title: '出错啦！',
