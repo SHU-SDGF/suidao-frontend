@@ -310,6 +310,7 @@ export interface MarkerOptions {
   title?: string,
   content?: string,
   enableMessage?: boolean,
+  description?: string,
   autoDisplayInfoWindow?: boolean
 }
 

@@ -9,19 +9,34 @@
       <ion-icon class="dropdown-addon" item-left [SelectPopover] [itemList]="itemList" [itemDisplayName]="'name'" (selectChanged)="typeChange($event)">
         {{selectedType.name}}
       </ion-icon>
-      <ion-searchbar
-        [(ngModel)]="searchArg"
-        [showCancelButton]="false"
-        placeholder="搜索巡检活动"
-      >
+      <ion-searchbar [(ngModel)]="searchArg" [showCancelButton]="false" placeholder="搜索巡检活动">
       </ion-searchbar>
     </ion-item>
   </ion-navbar>
 </ion-header>
-
 <ion-content>
-   <ion-list>
-    <ion-item-group>
+  <ion-list>
+    <ion-item-group *ngFor = "let result of searchedResults; let idx=index">
+      <div>
+        <ion-item>
+          <ion-label class="act-no">活动编号：{{result.actNo}}</ion-label>
+        </ion-item>
+      </div>
+      <div>
+        <button ion-item (click)="showHistory(result)" class="act-card">
+          <ion-icon item-left name="md-pin"></ion-icon>
+          <div item-inner class="act-detail">
+            <h3>{{result.actName}}</h3>
+            <p>
+              {{_getLookUpValue(actStatusList, result.actStatus)}}
+              &mdash;
+              {{_convertDate(result.inspDate)}}
+            </p>
+          </div>
+        </button>
+      </div>
+    </ion-item-group>
+<!--     <ion-item-group>
       <div>
         <ion-item>
           <ion-label class="act-no">活动编号：1231231</ion-label>
@@ -33,12 +48,11 @@
           <div item-inner class="act-detail">
             <h3>东线巡检活动</h3>
             <p>
-              加载 &mdash;
-              2016-06-10
+              加载 &mdash; 2016-06-10
             </p>
           </div>
         </button>
       </div>
-    </ion-item-group>
+    </ion-item-group> -->
   </ion-list>
 </ion-content>

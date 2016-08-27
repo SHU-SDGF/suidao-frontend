@@ -166,8 +166,6 @@ export class GroundPage implements OnInit, OnDestroy {
       that.opts.markers = that.opts.markers.concat(markers);
 
       that.mapOptionEmitter.emit(that.opts);
-      console.log(that.opts);
-
       that.offlineOpts = {
         retryInterval: 5000,
         txt: 'NO-NETWORK'
@@ -253,9 +251,36 @@ export class GroundPage implements OnInit, OnDestroy {
                 modal.present();
                 modal.onDidDismiss((activity) => {
                   _self.toggleEditing();
-                  if (!activity) {
-                    _self.removeUnsavedMarker();
-                  }
+                  _self.removeUnsavedMarker();
+
+                  // refresh markers
+                  let newMarker = {
+                    longitude: activity["environmentActitivitySummary"]["longtitude"],
+                    latitude: activity["environmentActitivitySummary"]["latitude"],
+                    title: activity["environmentActitivitySummary"]["actName"],
+                    icon: 'build/imgs/map-marker.png',
+                    description: activity["environmentActitivitySummary"]["description"],
+                    width: 30,
+                    height: 30,
+                    actStatus: activity["environmentActivity"]["actStatus"],
+                    actType: activity["environmentActivity"]["actType"],
+                    recorder: activity["environmentActivity"]["recorder"],
+                    content: '',
+                    inspDate: activity["environmentActivity"]["inspDate"],
+                    actNo: activity["environmentActivity"]["actNo"]
+                  };
+
+                  _self.opts.markers.push(newMarker);
+
+                  _self.opts.center = {
+                    longitude: activity["environmentActitivitySummary"]["longtitude"],
+                    latitude: activity["environmentActitivitySummary"]["latitude"]
+                  };
+
+                  _self.mapOptionEmitter.emit(_self.opts);
+
+                  console.log("dismiss");
+                  
                 });
               });
             }
@@ -282,6 +307,9 @@ export class GroundPage implements OnInit, OnDestroy {
     setTimeout(($event) => {
       let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
       modal.present(modal);
+      modal.onDidDismiss(() => {
+        debugger;
+      });
     },0, $event);
   }
 }
