@@ -1,7 +1,22 @@
-
+.select-popover-modal{
+  .popover-content{
+    width: auto;
+    max-height: 300px;
+  }
+}
 ion-list.select-popover{
   margin-bottom: 0px;
   & > .item:last-child{
     border-bottom: none;
+  }
+  & > .item{
+    .item-inner{
+      padding-right: 0px;
+      margin-right: 16px;
+    }
+    ion-label{
+      color: color($colors, dark);
+      margin-right: 0px;
+    }
   }
 }

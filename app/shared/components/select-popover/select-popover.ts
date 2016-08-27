@@ -51,11 +51,11 @@ export class SelectPopover implements OnInit, OnChanges{
   // toggle select list
   toggleSelectList($event) {
     if (this.hidden) {
-      let view = {};
 
       this._popover = this._popoverCtrl.create(SelectPopoverList,
-        { itemList: this.itemList, itemDisplayName: this.itemDisplayName, view: view });
-      view['popover'] = this._popover;
+        { itemList: this.itemList, itemDisplayName: this.itemDisplayName }, {
+          cssClass: 'select-popover-modal'
+        });
 
       this._popover.present({ev: $event});
       this._popover.onDidDismiss((item: any) => {
@@ -81,7 +81,6 @@ export class SelectPopover implements OnInit, OnChanges{
 class SelectPopoverList implements OnInit{
   itemList: Array<any>
   itemDisplayName: string = 'name';
-  _view: {};
 
   constructor(
     private _viewCtrl: ViewController,
@@ -93,11 +92,10 @@ class SelectPopoverList implements OnInit{
   ngOnInit() {
     this.itemList = this.params.get('itemList') || [];
     this.itemDisplayName = this.params.get('itemDisplayName') || this.itemDisplayName;
-    this._view = this.params.get('view');
   }
 
   // when selected  
   selectItem(item) {
-    this._view['popover'].dismiss(item);
+    this._viewCtrl.dismiss(item);
   }
 }

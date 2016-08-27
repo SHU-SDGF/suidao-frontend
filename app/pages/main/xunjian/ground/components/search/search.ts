@@ -23,7 +23,6 @@ export class SearchPage implements OnInit, OnDestroy {
   private selectedType = this.itemList[0]; //选择的种类
   
   constructor(private _viewCtrl: ViewController, private params: NavParams) {
-    debugger;
     this.searchedResult = this.params.get('environmentActivityList');
     this.searchedResult = [
       {id: 12311, name: '环境活动002', date: '', lng: 0, lat: 0},
