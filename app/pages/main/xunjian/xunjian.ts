@@ -1,10 +1,11 @@
 import {Component, OnInit, OnDestroy,
-  DynamicComponentLoader, ViewChild,
+  ViewChild,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
-import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
+import {MenuController, Events, ModalController, PopoverController, PopoverOptions} from 'ionic-angular';
 import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
 import {GroundPage} from './ground/ground';
-import {UndergroundPage} from './underground/underground';
+import {UndergroundPage, TunnelOption} from './underground/underground';
+import {TunnelPicker} from './underground/components/tunnel-picker/tunnel-picker';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/xunjian.html',
@@ -12,16 +13,31 @@ import {UndergroundPage} from './underground/underground';
 })
 export class XunjianPage extends ToggleMenu{
   private onGround: boolean = true;
-  private _pageTitles: Array<string> = ['环境巡检', '隧道巡检'];
-  private _pageTitle: string;
+  private tunnelName: string = '安全通道-东线';
+  private selectedTunnelOption: TunnelOption;
 
-  constructor(private _menuCtrl: MenuController){
+  constructor(
+    private _menuCtrl: MenuController,
+    private _modalCtrl: ModalController,
+    private _popoverCtrl: PopoverController) {
     super(_menuCtrl);
-    this._pageTitle = this._pageTitles[0];
   }
 
   private switchView(){
-    this._pageTitle = this._pageTitles[<any>this['onGround'] | 0];
     this.onGround = !this.onGround;
+  }
+
+  private pickTunnel($event) {
+    let data = { selectedTunnelOption: this.selectedTunnelOption };
+    let popoverOpts: PopoverOptions = {
+      cssClass: 'tunnel-picker-popover'
+    };
+    let popover = this._popoverCtrl.create(TunnelPicker, data, popoverOpts);
+    popover.present({ev: $event});
+    popover.onDidDismiss(this.tunnelOnchange);
+  }
+
+  private tunnelOnchange(tunnelOption: TunnelOption) {
+    this.selectedTunnelOption = tunnelOption;
   }
 }
