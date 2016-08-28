@@ -58,6 +58,10 @@ export class SearchPage implements OnInit, OnDestroy {
     this._viewCtrl.dismiss();
   }
 
+  searchBarOnFocus($event) {
+    if (this.searchArg) return;
+  }
+
   showHistory(activityDetailObj) {
     let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': activityDetailObj });
     modal.present(modal);

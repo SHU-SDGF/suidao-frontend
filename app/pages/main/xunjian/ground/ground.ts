@@ -65,7 +65,7 @@ export class GroundPage implements OnInit, OnDestroy {
     $('ion-tabbar a.tab-button').eq(2).hide();
   }
 
-  searchBarOnFocus() {
+  searchActivity() {
     if (this._searchPoped) return;
     let modal = this._modalCtrl.create(SearchPage, {'environmentActivityList': this.environmentActivityList});
     modal.present();
@@ -74,6 +74,15 @@ export class GroundPage implements OnInit, OnDestroy {
     });
     this._searchPoped = true;
   }
+  // searchBarOnFocus() {
+  //   if (this._searchPoped) return;
+  //   let modal = this._modalCtrl.create(SearchPage, {'environmentActivityList': this.environmentActivityList});
+  //   modal.present();
+  //   modal.onDidDismiss(() => {
+  //     this._searchPoped = false;
+  //   });
+  //   this._searchPoped = true;
+  // }
 
   ngOnInit() {
     let that = this;

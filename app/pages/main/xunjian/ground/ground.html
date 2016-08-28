@@ -1,11 +1,13 @@
 <div class="searchbar-container">
-  <ion-searchbar
+  <button full (click)="searchActivity($event)"><ion-icon name="search"></ion-icon>
+搜索巡检活动</button>
+<!--   <ion-searchbar
     placeholder="搜索巡检活动"
     [(ngModel)]="searchQuery"
     [showCancelButton]="false"
     (ionFocus)="searchBarOnFocus($event)"
     (ionCancel)="onCancel($event)">
-  </ion-searchbar>
+  </ion-searchbar> -->
 </div>
 <suidao-map 
   ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" 
