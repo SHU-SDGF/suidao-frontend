@@ -1,6 +1,6 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
-import {ViewController, AlertController, NavParams, ModalController} from 'ionic-angular';
+import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService} from '../../../../../../providers';
@@ -32,7 +32,8 @@ export class ActivityInfoPage implements OnInit{
     private _lookupService: LookupService,
     private _alertController: AlertController,
     private _environmentActivityService: EnvironmentActivityService,
-    private params: NavParams
+    private params: NavParams,
+    private loadingCtrl: LoadingController
   ) { }
 
   ngOnInit() {
@@ -78,6 +79,14 @@ export class ActivityInfoPage implements OnInit{
       recorder: this.activityDetailObj.recorder,
       inspDate: new Date(this.activityDetailObj.inspDate).getTime()
     }
+
+    let loading = this.loadingCtrl.create({
+      dismissOnPageChange: true,
+      duration: 2000
+    });
+
+    loading.present();
+
     this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
       this.viewCtrl.dismiss(result);
     }, (error) => {

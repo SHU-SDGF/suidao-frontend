@@ -74,15 +74,6 @@ export class GroundPage implements OnInit, OnDestroy {
     });
     this._searchPoped = true;
   }
-  // searchBarOnFocus() {
-  //   if (this._searchPoped) return;
-  //   let modal = this._modalCtrl.create(SearchPage, {'environmentActivityList': this.environmentActivityList});
-  //   modal.present();
-  //   modal.onDidDismiss(() => {
-  //     this._searchPoped = false;
-  //   });
-  //   this._searchPoped = true;
-  // }
 
   ngOnInit() {
     let that = this;
@@ -259,11 +250,25 @@ export class GroundPage implements OnInit, OnDestroy {
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
+                  _self.environmentActivityList.unshift({
+                    actName: activity["environmentActitivitySummary"]["actName"],
+                    actNo: activity["environmentActitivitySummary"]["actNo"],
+                    actStatus: activity["environmentActivity"]["actStatus"],
+                    createUser: activity["environmentActitivitySummary"]["createUser"],
+                    description: activity["environmentActitivitySummary"]["description"],
+                    endDate: activity["environmentActitivitySummary"]["endDate"],
+                    id: activity["environmentActitivitySummary"]["id"],
+                    inspDate: activity["environmentActivity"]["inspDate"],
+                    latitude: activity["environmentActitivitySummary"]["latitude"],
+                    longtitude: activity["environmentActitivitySummary"]["longtitude"],
+                    startDate: activity["environmentActitivitySummary"]["startDate"],
+                  });
                   _self.toggleEditing();
                   _self.removeUnsavedMarker();
 
                   // refresh markers
                   let newMarker = {
+                    id: activity["environmentActitivitySummary"]["id"],
                     longitude: activity["environmentActitivitySummary"]["longtitude"],
                     latitude: activity["environmentActitivitySummary"]["latitude"],
                     title: activity["environmentActitivitySummary"]["actName"],
@@ -314,7 +319,6 @@ export class GroundPage implements OnInit, OnDestroy {
       let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
       modal.present(modal);
       modal.onDidDismiss(() => {
-        debugger;
       });
     },0, $event);
   }

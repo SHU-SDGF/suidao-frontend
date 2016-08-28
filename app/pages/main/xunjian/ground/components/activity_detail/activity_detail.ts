@@ -2,7 +2,7 @@
 
 import {Component, OnInit,
   ViewChild} from '@angular/core';
-import {ViewController, AlertController, NavParams} from 'ionic-angular';
+import {ViewController, AlertController, NavParams, LoadingController} from 'ionic-angular';
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
 import {LookupService} from '../../../../../../providers';
@@ -31,7 +31,8 @@ export class ActivityDetailPage implements OnInit{
     private _lookupService: LookupService,
     private _actService: EnvironmentActivityService,
     private _alertCtrl: AlertController,
-    private params: NavParams
+    private params: NavParams,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit() {
@@ -44,7 +45,9 @@ export class ActivityDetailPage implements OnInit{
       latitude: point.lat, //纬度
       actStatus: '',
       actType: '',
-      recorder: ''
+      recorder: '',
+      startDate: new Date().toISOString().slice(0,10),
+      endDate: new Date().toISOString().slice(0,10)
     };
 
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
@@ -75,6 +78,12 @@ export class ActivityDetailPage implements OnInit{
       }
     }
 
+    let loading = this.loadingCtrl.create({
+      dismissOnPageChange: true
+    });
+
+    loading.present();
+    
     this._actService.addNewEnvironmentActivitySummary(activityObj).then((result) => {
       this.viewCtrl.dismiss(result);
     }, (error) => {
