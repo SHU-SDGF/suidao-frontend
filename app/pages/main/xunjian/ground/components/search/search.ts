@@ -9,6 +9,7 @@ import {MenuController, Events,
 import {SelectPopover} from '../../../../../../shared/components/select-popover/select-popover';
 import {LookupService} from '../../../../../../providers';
 import {ActivityInfoPage} from '../../components/activity_info/activity_info';
+import * as  _ from 'lodash';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/search/search.html',
@@ -28,6 +29,7 @@ export class SearchPage implements OnInit, OnDestroy {
 
   private searchArg: string = ''; // 搜索参数
   private searchedResults: Array<any>; // 搜索结果列表
+  private shadowSearchedResults: Array<any>;
   private itemList = [
     { name: '环境巡检', value: 1 },
     { name: '周围环境', value: 1 }
@@ -44,6 +46,7 @@ export class SearchPage implements OnInit, OnDestroy {
     });
 
     this.searchedResults = this.params.get('environmentActivityList');
+    this.shadowSearchedResults = _.cloneDeep(this.searchedResults);
   }
 
   ngOnDestroy() {
@@ -58,8 +61,11 @@ export class SearchPage implements OnInit, OnDestroy {
     this._viewCtrl.dismiss();
   }
 
-  searchBarOnFocus($event) {
-    if (this.searchArg) return;
+  searchBarOnInput($event) {
+    this.searchedResults = _.cloneDeep(this.shadowSearchedResults);
+    this.searchedResults = _.filter(this.searchedResults, ((result) => {
+      return result.actName.includes(this.searchArg)
+    }));
   }
 
   showHistory(activityDetailObj) {
