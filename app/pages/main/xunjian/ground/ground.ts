@@ -27,6 +27,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private _searchPoped: boolean = false;
   private markers: any;
   private environmentActivityList: any;
+
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
   constructor(
@@ -40,19 +41,18 @@ export class GroundPage implements OnInit, OnDestroy {
     private _event: Events
   ) { }
 
-  initial() {
-    console.log('hi');
-  }
 
-  bindEdit = ((_self) => {
-      return function () {
-        _self.toggleEditing.apply(_self);
-      };
-  })(this);
+  tabChangeEventSubscriber = function(components) {
+      if (components[0] === XunjianPage) {
+        this.pageEnter();
+      } else {
+        this.pageLeave();
+      }
+  }.bind(this);
   
   pageEnter() {
     // bind add button event
-    $('ion-tabbar a.tab-button').eq(2).on('click', this.bindEdit);
+    $('ion-tabbar a.tab-button').eq(2).on('click', this.toggleEditing.bind(this));
     $('ion-tabbar a.tab-button').eq(2).show();
     if (this.isEditing) {
       this.toggleEditing();
@@ -61,8 +61,11 @@ export class GroundPage implements OnInit, OnDestroy {
 
   pageLeave() {
     // unbind button event
-    $('ion-tabbar a.tab-button').eq(2).unbind('click', this.bindEdit);
+    $('ion-tabbar a.tab-button').eq(2).unbind('click', this.toggleEditing.bind(this));
     $('ion-tabbar a.tab-button').eq(2).hide();
+    if (this.isEditing) {
+      this.toggleEditing();
+    }
   }
 
   searchActivity() {
@@ -77,13 +80,8 @@ export class GroundPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     let that = this;
-    this._event.subscribe('change-tab', (components) => {
-      if (components[0] === XunjianPage) {
-        this.pageEnter();
-      } else {
-        this.pageLeave();
-      }
-    });
+    this._event.subscribe('change-tab', this.tabChangeEventSubscriber);
+    this._navCtrl.viewDidLeave.subscribe(this.pageLeave);
 
     this.opts = {
       center: {
@@ -91,31 +89,7 @@ export class GroundPage implements OnInit, OnDestroy {
         latitude: 31.241721,
       },
       zoom: 17,
-      markers: [{
-        longitude: 121.405679,
-        latitude: 31.170997,
-        title: '环境活动000',
-        icon: 'build/imgs/map-marker.png',
-        width: 30,
-        height: 30,
-        content: ``
-      },{
-        longitude: 121.487181,
-        latitude: 31.241721,
-        title: '环境活动001',
-        icon: 'build/imgs/map-marker.png',
-        width: 30,
-        height: 30,
-        content: ``
-      },{
-        longitude: 121.450184,
-        latitude: 31.254985,
-        title: '环境活动002',
-        icon: 'build/imgs/map-marker.png',
-        width: 30,
-        height: 30,
-        content: ``
-      }],
+      markers: [],
       geolocationCtrl: {
         anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
       },
@@ -208,8 +182,8 @@ export class GroundPage implements OnInit, OnDestroy {
   /**
    * collect when destroyed */
   ngOnDestroy() {
-    $('#tab-t0-2').unbind('click', this.toggleEditing);
-    $('#tab-t0-2').removeClass('active');
+    this.pageLeave();
+    this._event.unsubscribe('change-tab', this.tabChangeEventSubscriber);
   }
 
   private mapLongClick($event: MapEvent) {
