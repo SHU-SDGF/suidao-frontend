@@ -1,5 +1,3 @@
-/// <reference path="../../../../../../../typings/index.d.ts" />
-
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, LoadingController} from 'ionic-angular';
