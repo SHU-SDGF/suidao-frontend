@@ -1,7 +1,7 @@
 /// <reference path="../../../../../typings/index.d.ts" />
 
 import {Component, OnInit, OnDestroy,
-  DynamicComponentLoader, ViewChild,
+  DynamicComponentLoader, ViewChild, NgZone,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
 import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
 import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../../shared/components/suidao-map/suidao-map';
@@ -27,7 +27,9 @@ export class GroundPage implements OnInit, OnDestroy {
   private _searchPoped: boolean = false;
   private markers: any;
   private environmentActivityList: any;
-
+  private _pageEntered = false;
+  private _isCurrent = true;
+  
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
   constructor(
@@ -38,34 +40,75 @@ export class GroundPage implements OnInit, OnDestroy {
     private _modalCtrl: ModalController,
     private _navCtrl: NavController,
     private environmentActivityService: EnvironmentActivityService,
-    private _event: Events
+    private _event: Events,
+    private _zoon: NgZone
   ) { }
 
+  private viewSwtichSubscriber = function (onGround) {
+    if (onGround[0]) {
+      this.pageEnter();
+      this._isCurrent = true;
+    } else {
+      this.pageLeave();
+      this._isCurrent = false;
+    }
+  }.bind(this);
 
   tabChangeEventSubscriber = function(components) {
-      if (components[0] === XunjianPage) {
-        this.pageEnter();
-      } else {
-        this.pageLeave();
+    if (components[0] === XunjianPage && this._isCurrent) {
+      this.pageEnter();
+    } else {
+      this.pageLeave();
+    }
+  }.bind(this);
+  /**
+   * toggle editing */
+  toggleEditing = function () {
+    this._zoon.run(() => {
+      $('ion-tabbar a.tab-button').toggleClass('active');
+      this.isEditing = !this.isEditing;
+      if (this._unsavedMarker) {
+        this._suidaoMap.removeMarker(this._unsavedMarker);
+        this._unsavedMarker = null;
       }
+      
+      if (this.isEditing) {
+        this.showToast();
+      } else {
+        this.hideToast();
+      }
+    });
   }.bind(this);
   
   pageEnter() {
+    if (this._pageEntered) return;
     // bind add button event
-    $('ion-tabbar a.tab-button').eq(2).on('click', this.toggleEditing.bind(this));
-    $('ion-tabbar a.tab-button').eq(2).show();
+    let $ele = $(`
+      <a class="tab-button has-icon icon-only disable-hover map-pin-button">
+        <ion-icon class="tab-button-icon ion-md-pin-outline"></ion-icon>
+      </a>
+    `);
+    let $secBtn = $('ion-tabbar a.tab-button').eq(1);
+    $ele.insertAfter($secBtn);
+    $ele.on('click', this.toggleEditing);
+    
     if (this.isEditing) {
       this.toggleEditing();
     }
+    this._pageEntered = true;
   }
 
   pageLeave() {
     // unbind button event
-    $('ion-tabbar a.tab-button').eq(2).unbind('click', this.toggleEditing.bind(this));
-    $('ion-tabbar a.tab-button').eq(2).hide();
+    let $pinBtn = $('.map-pin-button');
+
+    $pinBtn.unbind('click', this.toggleEditing);
+    $pinBtn.remove();
+
     if (this.isEditing) {
       this.toggleEditing();
     }
+    this._pageEntered = false;
   }
 
   searchActivity() {
@@ -81,8 +124,8 @@ export class GroundPage implements OnInit, OnDestroy {
   ngOnInit() {
     let that = this;
     this._event.subscribe('change-tab', this.tabChangeEventSubscriber);
-    this._navCtrl.viewDidLeave.subscribe(this.pageLeave);
-
+    this._event.subscribe('xunjian-view-switch', this.viewSwtichSubscriber);
+    
     this.opts = {
       center: {
         longitude: 121.487181,
@@ -149,29 +192,13 @@ export class GroundPage implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * toggle editing */
-  toggleEditing() {
-    $('ion-tabbar a.tab-button').toggleClass('active');
-    this.isEditing = !this.isEditing;
-    if (this._unsavedMarker) {
-      this._suidaoMap.removeMarker(this._unsavedMarker);
-    }
-    
-    if (this.isEditing) {
-      this.showToast();
-    } else {
-      this.hideToast();
-    }
-  }
-
   private showToast() {
     this._toast = this._toastController.create({
-      message: '请双击地图位置添加新的环境活动.',
+      message: '长按地图位置添加新的环境活动。',
       position: 'top',
       dismissOnPageChange: true
     });
-    return this._toast.present();
+    this._toast.present();
   }
 
   private hideToast() {
@@ -182,8 +209,8 @@ export class GroundPage implements OnInit, OnDestroy {
   /**
    * collect when destroyed */
   ngOnDestroy() {
-    this.pageLeave();
     this._event.unsubscribe('change-tab', this.tabChangeEventSubscriber);
+    this.pageLeave();
   }
 
   private mapLongClick($event: MapEvent) {
@@ -224,6 +251,8 @@ export class GroundPage implements OnInit, OnDestroy {
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
+                  _self.removeUnsavedMarker();
+                  if (!activity) return;
                   _self.environmentActivityList.unshift({
                     actName: activity["environmentActitivitySummary"]["actName"],
                     actNo: activity["environmentActitivitySummary"]["actNo"],
@@ -238,8 +267,7 @@ export class GroundPage implements OnInit, OnDestroy {
                     startDate: activity["environmentActitivitySummary"]["startDate"],
                   });
                   _self.toggleEditing();
-                  _self.removeUnsavedMarker();
-
+                  
                   // refresh markers
                   let newMarker = {
                     id: activity["environmentActitivitySummary"]["id"],
@@ -262,10 +290,7 @@ export class GroundPage implements OnInit, OnDestroy {
                   _self._suidaoMap.changeCenter({
                     lat: activity["environmentActitivitySummary"]["latitude"],
                     lng: activity["environmentActitivitySummary"]["longtitude"]
-                  })
-
-                  console.log("dismiss");
-                  
+                  });
                 });
               });
             }

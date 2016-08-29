@@ -35,7 +35,7 @@ export class LoginPage {
 
       this.userService.login(this.credentials).then(
         res=>{
-          _that.navCtrl.push(MainPage);
+          _that.navCtrl.setRoot(MainPage);
         },
         error=>{
           let alert = _that.alertController.create({

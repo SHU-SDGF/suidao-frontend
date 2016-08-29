@@ -26,6 +26,10 @@ export class MainPage{
     this.event.publish('change-tab', component);
   }
 
+  midBtnClick() {
+    this.event.publish('md-btn-click');
+  }
+
   onTabSelected(){
     console.log(arguments);
   }

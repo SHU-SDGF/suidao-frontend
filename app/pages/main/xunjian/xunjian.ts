@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy,
-  ViewChild,
+  ViewChild, NgZone,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
 import {MenuController, Events, ModalController, PopoverController, PopoverOptions} from 'ionic-angular';
 import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
@@ -42,12 +42,16 @@ export class XunjianPage extends ToggleMenu{
   constructor(
     private _menuCtrl: MenuController,
     private _modalCtrl: ModalController,
-    private _popoverCtrl: PopoverController) {
+    private _popoverCtrl: PopoverController,
+    private _zoon: NgZone,
+    private _event: Events
+  ) {
     super(_menuCtrl);
   }
 
-  private switchView(){
+  private switchView() {
     this.onGround = !this.onGround;
+    this._event.publish('xunjian-view-switch', this.onGround);
   }
 
   private tunnelOnchange(tunnelOption: TunnelOption) {

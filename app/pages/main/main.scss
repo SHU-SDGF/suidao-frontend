@@ -1,7 +1,7 @@
 @import './xunjian/xunjian.scss';
 
 ion-tabbar{
-  a.tab-button:nth-child(3n){
+  > a.map-pin-button{
     overflow: visible;
     flex: 1.4;
     text-align: center;
@@ -40,6 +40,7 @@ ion-tabbar{
         text-transform: none;
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
+        color: color($colors, light);
       }
     }
     &:active, &.active{
