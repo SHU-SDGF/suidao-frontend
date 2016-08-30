@@ -302,6 +302,7 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private mapLoaded(){
+    debugger;
     Geolocation.getCurrentPosition().then(pos => {
       console.log('lat: ' + pos.coords.latitude + ', lon: ' + pos.coords.longitude);
     });
