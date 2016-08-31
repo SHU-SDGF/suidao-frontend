@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title>添加病害</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <image-editor [imagePath]="'build/imgs/underground.png'" ></image-editor>
+  <button class="md-control-btn">
+    <ion-icon name="md-add-circle" [menu-tip] [actionMenuItems]="actionMenuItems"></ion-icon>
+  </button>
+</ion-content>

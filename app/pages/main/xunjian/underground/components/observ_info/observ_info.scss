@@ -1,0 +1,15 @@
+.observ-info-page{
+  $btn-width: 4rem;
+  button.md-control-btn{
+    width: $btn-width;
+    height: $btn-width;
+    border-radius: 100%;
+    background-color: color($colors, deep-blue);
+    color: color($colors, light);
+    position: absolute;
+    left: 50%;
+    margin-left: -($btn-width/2);
+    bottom: 10px;
+    box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.4);
+  }
+}

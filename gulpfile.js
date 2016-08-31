@@ -3,8 +3,9 @@ var gulp = require('gulp'),
     del = require('del'),
     runSequence = require('run-sequence'),
     argv = process.argv,
-    mainBowerFiles = require('main-bower-files')
-    concat = require('gulp-concat');
+    mainBowerFiles = require('main-bower-files'),
+    concat = require('gulp-concat'),
+    gulpFilter = require('gulp-filter');
 
 
 /**
@@ -75,9 +76,16 @@ gulp.task('build', ['clean'], function(done){
 });
 
 gulp.task('vendor', function () {
+  var filterJS = gulpFilter('**/*.js', { restore: true });
+  var filterCss = gulpFilter('**/*.css', {restore: true });
   gulp.src(mainBowerFiles())
+    .pipe(filterJS)
     .pipe(concat('vendor.bundle.js'))
-    .pipe(gulp.dest('www/build/js/'));
+    .pipe(gulp.dest('www/build/js/'))
+    .pipe(filterJS.restore)
+    .pipe(filterCss)
+    .pipe(concat('vendor.bundle.css'))
+    .pipe(gulp.dest('www/build/css/'));
 });
 
 gulp.task('copyBinScript', function(){

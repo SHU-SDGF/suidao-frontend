@@ -1,0 +1,21 @@
+$menu-tip-item-radius: 2rem;
+.menu-tip-item{
+  transition: all 0.2s;
+  position: absolute;
+  display: none;
+  width: $menu-tip-item-radius;
+  height: $menu-tip-item-radius;
+  width: $btn-width;
+  height: $btn-width;
+  border-radius: 100%;
+  background-color: color($colors, deep-blue);
+  color: color($colors, light);
+  box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.4);
+
+  img{
+    max-width: $menu-tip-item-radius * 0.85;
+    min-width: $menu-tip-item-radius * 0.5;
+    max-height: $menu-tip-item-radius * 0.85;
+    min-height: $menu-tip-item-radius * 0.5;
+  }
+}

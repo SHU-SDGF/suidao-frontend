@@ -4,16 +4,20 @@ import {Component, OnInit, OnDestroy,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
 import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
 import {Camera} from 'ionic-native';
+import {ObservInfoPage} from './components/observ_info/observ_info';
 
 declare const cordova;
 
 @Component({
   selector: 'underground-page',
-  templateUrl: './build/pages/main/xunjian/underground/underground.html'
+  templateUrl: './build/pages/main/xunjian/underground/underground.html',
 })
 export class UndergroundPage implements OnInit, OnDestroy {
 
-  constructor(private _alertCtrl: AlertController){}
+  constructor(
+    private _alertCtrl: AlertController, 
+    private _modalCtrl: ModalController
+  ){}
 
   ngOnInit(){
 
@@ -21,6 +25,11 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   ngOnDestroy(){
 
+  }
+
+  showObservInfo(){
+    let modal = this._modalCtrl.create(ObservInfoPage);
+    modal.present();
   }
 
   scanCode(){

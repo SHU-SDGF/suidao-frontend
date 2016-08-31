@@ -18,10 +18,9 @@ interface IconPosition{
   x: number, y: number
 }
 
-interface ActionMenuControl{
+export interface ActionMenuControl{
   icon: string,
   action: Function,
-  tip: string,
   rotation?: number,
   originPos?: IconPosition
   $ele?: JQuery
@@ -32,28 +31,22 @@ const ANGLE: number = 35;
 const RADIUS: number = 80;
 
 @Directive({
-  selector: 'menu-tip'
+  selector: '[menu-tip]'
 })
 export class MenuTip implements OnInit{
   @Input() actionMenuItems: Array<ActionMenuControl>;
   private _show: boolean = false;
   private _element: JQuery;
 
-  private clickHandler: ($event: JQueryEventObject) => void = ((_self: MenuTip)=> ($event: JQueryEventObject) => {
-    if(!_self._element) return;
-    if(!_self._element.is($event.target)
-        && !_self._element.has($event.target).length){
-        _self.hide();
-        return;
-    }
-    if(_self._show){
-      _self.hide();
+  private clickHandler = function($event: JQueryEventObject) {
+    if(this._show){
+      this.hide();
     }else{
-      _self.show();
+      this.show();
     }
-  })(this);
+  }.bind(this);
   
-  constructor(public renderer: Renderer) {
+  constructor(public renderer: Renderer, private _ele: ElementRef) {
     
   }
 
@@ -69,9 +62,8 @@ export class MenuTip implements OnInit{
    * init data, bind events  
    */
   ngOnInit() {
-    //$(this._element).click(this._eleClickHandler);
-    $(document).mouseup(this.clickHandler);
-    
+    this.bindElement($(this._ele.nativeElement), this.actionMenuItems);
+    $(this._element).click(this.clickHandler);
     this.initialize();
   }
 
@@ -82,10 +74,10 @@ export class MenuTip implements OnInit{
     // add items to parent
     this.actionMenuItems.forEach((menuControl, i) => {
       let _self = this;
-      let $menuTipItem = $('<menu-tip-item class="fa menu-tip-item"></menu-tip-item>').appendTo($parent);
+      let $menuTipItem = $('<menu-tip-item class="menu-tip-item"><img/></menu-tip-item>').appendTo($parent);
 
       // init properties
-      $menuTipItem.addClass(menuControl.icon);
+      $menuTipItem.find('img').attr({"src": menuControl.icon});
       menuControl.rotation = getIconRotation(i, this.actionMenuItems.length);
       menuControl.$ele = $menuTipItem;
 
@@ -104,9 +96,6 @@ export class MenuTip implements OnInit{
       return itemAngle;
     };
   }
-
-  
-
   
   /**
    * collect gabage, remove event handler
@@ -134,7 +123,6 @@ export class MenuTip implements OnInit{
    * show all elements
    */
   public show(): void {
-    this.initialize();
     this._show = true;
     this._refreshPosition();
     this.actionMenuItems.forEach((menuControl: ActionMenuControl, i) => {
@@ -181,7 +169,7 @@ export class MenuTip implements OnInit{
 
       // move to correct possition   
       setTimeout(() => {
-        $ele.remove();
+        $ele.css({display: 'none'});
       }, ANIMATION_DURATION);
 
     });

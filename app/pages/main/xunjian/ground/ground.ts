@@ -8,7 +8,6 @@ import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlT
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
 import { EnvironmentActivityService } from '../../../../providers';
-import {Geolocation} from 'ionic-native';
 import {XunjianPage} from '../xunjian';
 import {SearchPage} from './components/search/search';
 
@@ -302,10 +301,6 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private mapLoaded(){
-    debugger;
-    Geolocation.getCurrentPosition().then(pos => {
-      console.log('lat: ' + pos.coords.latitude + ', lon: ' + pos.coords.longitude);
-    });
   }
 
   private removeUnsavedMarker() {
