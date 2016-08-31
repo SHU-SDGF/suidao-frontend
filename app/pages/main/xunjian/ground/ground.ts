@@ -150,6 +150,7 @@ export class GroundPage implements OnInit, OnDestroy {
         longitude: 0,
         latitude: 0
       };
+      debugger;
       that.environmentActivityList = result["content"];
 
       if(result["content"].length == 0) {
@@ -302,7 +303,6 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private mapLoaded(){
-    debugger;
     Geolocation.getCurrentPosition().then(pos => {
       console.log('lat: ' + pos.coords.latitude + ', lon: ' + pos.coords.longitude);
     });
@@ -314,12 +314,27 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private clickMarker($event: { obj: MarkerOptions, marker: any }) {
-    let that = this;
-    setTimeout(($event) => {
-      let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
-      modal.present(modal);
-      modal.onDidDismiss(() => {
-      });
-    },0, $event);
+    let _self = this;
+    let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
+    modal.present(modal);
+    modal.onDidDismiss((result) => {
+      for(let index in _self.environmentActivityList) {
+        if(_self.environmentActivityList[index]["id"] == result["id"]) {
+          _self.environmentActivityList[index]["actType"] = result["actType"];
+          _self.environmentActivityList[index]["description"] = result["description"];
+          _self.environmentActivityList[index]["inspDate"] = result["inspDate"];
+        }
+      }
+      console.log(_self);
+    });
+    // setTimeout((($event) => {
+    //   let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
+    //   debugger;
+    //   modal.present(modal);
+    //   let _self = self;
+    //   modal.onDidDismiss((result) => {
+    //     debugger;
+    //   });
+    // }).bind(self),0, $event);
   }
 }
