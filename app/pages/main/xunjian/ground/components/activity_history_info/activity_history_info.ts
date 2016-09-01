@@ -41,8 +41,8 @@ export class ActivityHistoryInfoPage implements OnInit{
     let activityParams = this.params.get('activityDetail');
     this.activityDetailObj = {
       actName: activityName,
-      inspDate: activityParams["inspDate"],
-      endDate: activityParams["inspDate"],
+      inspDate: this._convertDate(activityParams["inspDate"]),
+      endDate: activityParams["endDate"],
       description: activityParams["description"], //活动描述
       actStatus: activityParams["actStatus"],
       recorder: activityParams["recorder"],
@@ -51,6 +51,13 @@ export class ActivityHistoryInfoPage implements OnInit{
       video: activityParams["video"],
       actNo: activityParams["actNo"]
     };
+  }
+
+  private _convertDate(datetime) {
+    let date = new Date(datetime)
+    var month = (date.getMonth() + 1) > 9 ? '-' + (date.getMonth() + 1) : '-0' + (date.getMonth() + 1); 
+    var day = (date.getDate() + 1) > 9 ? '-' + (date.getDate()) : '-0' + (date.getDate()); 
+    return date.getFullYear() + month + day;
   }
 
   private _getLookUpValue(list, order){

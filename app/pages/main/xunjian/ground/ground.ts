@@ -175,7 +175,9 @@ export class GroundPage implements OnInit, OnDestroy {
             recorder: result["content"][index]["recorder"],
             content: '',
             inspDate: result["content"][index]["inspDate"],
-            actNo: result["content"][index]["actNo"]
+            actNo: result["content"][index]["actNo"],
+            id: result["content"][index]["id"]
+
           });
         }
       }
@@ -313,14 +315,25 @@ export class GroundPage implements OnInit, OnDestroy {
     let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
     modal.present(modal);
     modal.onDidDismiss((result) => {
-      for(let index in _self.environmentActivityList) {
-        if(_self.environmentActivityList[index]["id"] == result["id"]) {
-          _self.environmentActivityList[index]["actType"] = result["actType"];
-          _self.environmentActivityList[index]["description"] = result["description"];
-          _self.environmentActivityList[index]["inspDate"] = result["inspDate"];
+      if(result) {
+        for(let index in _self.environmentActivityList) {
+          if(_self.environmentActivityList[index]["id"] == result["actSumId"]) {
+            _self.environmentActivityList[index]["actStatus"] = result["actStatus"];
+            _self.environmentActivityList[index]["description"] = result["description"];
+            _self.environmentActivityList[index]["inspDate"] = result["inspDate"];
+          }
         }
+
+        for(let index in _self.opts.markers) {
+          if(_self.opts.markers[index]["id"] == result["actSumId"]) {
+            _self.opts.markers[index]["actStatus"] = result["actStatus"];
+            _self.opts.markers[index]["description"] = result["description"];
+            _self.opts.markers[index]["inspDate"] = result["inspDate"];
+          }
+        }
+        console.log(_self);
       }
-      console.log(_self);
+      
     });
     // setTimeout((($event) => {
     //   let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
