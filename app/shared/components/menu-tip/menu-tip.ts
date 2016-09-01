@@ -27,8 +27,8 @@ export interface ActionMenuControl{
 }
 
 const ANIMATION_DURATION: number = 200;
-const ANGLE: number = 35;
-const RADIUS: number = 75;
+const ANGLE: number = 30;
+const RADIUS: number = 95;
 const MENU_TIP_ITEM_WIDTH = 40;
 
 @Directive({

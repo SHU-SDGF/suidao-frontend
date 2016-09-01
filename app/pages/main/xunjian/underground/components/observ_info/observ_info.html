@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <image-editor [imagePath]="'build/imgs/underground.png'" ></image-editor>
+  <image-editor [changeOptions]="changeOptions" (onTap)="mapTap($event)" ></image-editor>
   <button class="md-control-btn" [ngClass]="{'active': _onEdit}" menu-tip [actionMenuItems]="actionMenuItems" (click)="menuBtnClick($event)">
     <ion-icon name="md-add-circle"></ion-icon>
   </button>

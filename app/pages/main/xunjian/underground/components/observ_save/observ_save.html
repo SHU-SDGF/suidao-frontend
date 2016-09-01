@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title>添加病害</ion-title>
+    <ion-buttons round end>
+      <button (click)="createDisease(diseaseDetailObj)">
+        创建
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="activity_detail">
+  <ion-list>
+    <ion-item>
+      <ion-label>活动名称</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.actName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>起始日期</ion-label>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="diseaseDetailObj.startDate"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>结束日期</ion-label>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="diseaseDetailObj.endDate"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label>记录人</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.recorder"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>描述</ion-label>
+      <ion-textarea rows="6" [(ngModel)]="diseaseDetailObj.description"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>
