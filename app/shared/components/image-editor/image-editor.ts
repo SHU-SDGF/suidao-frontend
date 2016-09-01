@@ -15,6 +15,8 @@ interface ImageSize{
 export class ImageEditor implements OnInit{
   @Input() imagePath: string;
   @Input() diseases: Array<any>;
+  @Output() onTap = new EventEmitter();
+  private map: any;
 
   constructor(private $ele: ElementRef){
   }
@@ -39,12 +41,17 @@ export class ImageEditor implements OnInit{
   }
 
   imageLoaded(size: ImageSize){
+    let self = this;
+
     this.$ele.nativeElement.innerHTML = '';
-    var map = L.map(this.$ele.nativeElement, {
+    this.map = L.map(this.$ele.nativeElement, {
       crs: L.CRS.Simple
     });
     var bounds = [[0,0], [size.height, size.width]];
-    var image = L.imageOverlay(this.imagePath, bounds).addTo(map);
-    map.fitBounds(bounds);
+    L.imageOverlay(this.imagePath, bounds).addTo(this.map);
+    
+
+    this.map.fitBounds(bounds);
+
   }
 }

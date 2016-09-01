@@ -149,7 +149,6 @@ export class GroundPage implements OnInit, OnDestroy {
         longitude: 0,
         latitude: 0
       };
-      debugger;
       that.environmentActivityList = result["content"];
 
       if(result["content"].length == 0) {

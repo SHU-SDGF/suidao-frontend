@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content>
   <image-editor [imagePath]="'build/imgs/underground.png'" ></image-editor>
-  <button class="md-control-btn">
-    <ion-icon name="md-add-circle" [menu-tip] [actionMenuItems]="actionMenuItems"></ion-icon>
+  <button class="md-control-btn" [ngClass]="{'active': _onEdit}" menu-tip [actionMenuItems]="actionMenuItems" (click)="menuBtnClick($event)">
+    <ion-icon name="md-add-circle"></ion-icon>
   </button>
 </ion-content>

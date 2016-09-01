@@ -28,13 +28,15 @@ export interface ActionMenuControl{
 
 const ANIMATION_DURATION: number = 200;
 const ANGLE: number = 35;
-const RADIUS: number = 80;
+const RADIUS: number = 75;
+const MENU_TIP_ITEM_WIDTH = 40;
 
 @Directive({
   selector: '[menu-tip]'
 })
 export class MenuTip implements OnInit{
   @Input() actionMenuItems: Array<ActionMenuControl>;
+
   private _show: boolean = false;
   private _element: JQuery;
 
@@ -63,7 +65,7 @@ export class MenuTip implements OnInit{
    */
   ngOnInit() {
     this.bindElement($(this._ele.nativeElement), this.actionMenuItems);
-    $(this._element).click(this.clickHandler);
+    //$(this._element).click(this.clickHandler);
     this.initialize();
   }
 
@@ -110,8 +112,8 @@ export class MenuTip implements OnInit{
     let $parent = $(this._element).parent();
     
     let elePosition: IconPosition = {
-      x: $ele.offset().left - $parent.offset().left + $ele.width()/2 - 20,
-      y: $ele.offset().top - $parent.offset().top + $ele.height()/2 - 20
+      x: $ele.offset().left - $parent.offset().left + $ele.width()/2 - MENU_TIP_ITEM_WIDTH/2,
+      y: $ele.offset().top - $parent.offset().top + $ele.height()/2 - MENU_TIP_ITEM_WIDTH/2
     };
 
     this.actionMenuItems.forEach((menuControl: ActionMenuControl, i) => {
@@ -130,7 +132,8 @@ export class MenuTip implements OnInit{
       menuControl.$ele.css({
         display: 'block',
         left: menuControl.originPos.x,
-        top: menuControl.originPos.y
+        top: menuControl.originPos.y,
+        tranform: ''
       });
 
       // move to correct possition   
@@ -159,7 +162,7 @@ export class MenuTip implements OnInit{
       if(!menuControl.$ele || !menuControl.$ele.length) return;
       // show element on page
       menuControl.$ele.css({
-        display: 'block',
+        //display: 'block',
         left: menuControl.originPos.x,
         top: menuControl.originPos.y,
         transform: ''
@@ -169,9 +172,18 @@ export class MenuTip implements OnInit{
 
       // move to correct possition   
       setTimeout(() => {
-        $ele.css({display: 'none'});
+        if(this._show) return;
+        //$ele.css({display: 'none'});
       }, ANIMATION_DURATION);
 
     });
+  }
+
+  public toggle(){
+    if(this._show){
+      this.hide();
+    }else{
+      this.show();
+    }
   }
 }
