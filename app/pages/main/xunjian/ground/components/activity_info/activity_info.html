@@ -56,7 +56,7 @@
             <p>
               {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
               &mdash;
-              {{environmentActivityList[idx].inspDate | DatePipe}}
+              {{_convertDate(environmentActivityList[idx].inspDate)}}
             </p>
           </div>
         </button>
