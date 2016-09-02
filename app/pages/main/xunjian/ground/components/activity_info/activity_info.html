@@ -8,11 +8,6 @@
     <ion-title center>
       <ion-icon item-left name="md-pin"></ion-icon>{{activityDetailObj.actName}}
     </ion-title>
-    <ion-buttons end>
-      <button (click)="edit()">
-        编辑
-      </button>
-    </ion-buttons>
   </ion-toolbar>
   <div padding>
     <ion-segment [(ngModel)]="selectedPage">
@@ -26,43 +21,59 @@
   </div>
 </ion-header>
 
-<ion-content class="activity_info">
-  <ion-list [hidden]="selectedPage !== 'detail'">
-    <ion-item>
-      <ion-label>活动编号</ion-label>
-      <ion-input [(ngModel)]="activityDetailObj.actNo" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>巡检时间</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
-    </ion-item>
-    <ion-item>
-      <ion-label>活动状态</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
-        <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>描述</ion-label>
-      <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
-    </ion-item>
-  </ion-list>
+<ion-content class="activity_info" padding>
+  <div [hidden]="selectedPage !== 'detail'">
+    <ion-list>
+      <ion-item>
+        <ion-label>活动编号</ion-label>
+        <ion-input [(ngModel)]="activityDetailObj.actNo" disabled="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>巡检时间</ion-label>
+        <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>活动类别</ion-label>
+        <ion-select [(ngModel)]="activityDetailObj.actType" okText="确认" cancelText="取消">
+          <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>活动状态</ion-label>
+        <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
+          <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>记录人</ion-label>
+        <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>描述</ion-label>
+        <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
+      </ion-item>
+    </ion-list>
 
-  <ion-list [hidden]="selectedPage !== 'history'">
-    <ion-item-group>
-      <div>
-        <button ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
-          <ion-icon item-left name="ios-pin-outline"></ion-icon>
-          <div item-inner class="act-detail">
-            <h3>{{environmentActivityList[idx].recorder}}</h3>
-            <p>
-              {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
-              &mdash;
-              {{_convertDate(environmentActivityList[idx].inspDate)}}
-            </p>
-          </div>
-        </button>
-      </div>
-    </ion-item-group>
-  </ion-list>
+    <button block (click)="edit()" secondary>编辑</button>
+  </div>
+
+  <div [hidden]="selectedPage !== 'history'">
+    <ion-list>
+      <ion-item-group>
+        <div>
+          <button ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
+            <ion-icon item-left name="ios-pin-outline"></ion-icon>
+            <div item-inner class="act-detail">
+              <h3>{{environmentActivityList[idx].recorder}}</h3>
+              <p>
+                {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
+                &mdash;
+                {{_convertDate(environmentActivityList[idx].inspDate)}}
+              </p>
+            </div>
+          </button>
+        </div>
+      </ion-item-group>
+    </ion-list>
+  </div>
 </ion-content>

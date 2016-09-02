@@ -84,6 +84,7 @@ export class GroundPage implements OnInit, OnDestroy {
   pageEnter() {
     if (this._pageEntered) return;
     // bind add button event
+    $('.map-pin-button').remove();
     let $ele = $(`
       <a class="tab-button has-icon icon-only disable-hover map-pin-button">
         <ion-icon class="tab-button-icon ion-md-pin-outline"></ion-icon>

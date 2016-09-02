@@ -139,3 +139,13 @@ ion-header{
   }
 }
 
+
+.item-select,.item-input,.item-datetime {
+  ion-label{
+    color: color($colors, light);
+  }
+}
+
+.button-secondary{
+  background-color: color($colors, light-blue);
+}

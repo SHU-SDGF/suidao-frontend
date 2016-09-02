@@ -1,29 +1,4 @@
-.activity-info-page {}
-
-ion-label {
-    color: white;
-}
-
-.activity_info {
-    .item-select ion-label {
-        color: white;
-    }
-    .item-input ion-label {
-        color: white;
-    }
-    .item-datetime ion-label {
-        color: white;
-    }
-    .parent-content {
-        color: white !important;
-    }
-    .sub-content {
-        color: white !important;
-        margin: 10px 0 10px 0;
-    }
-    .act-info {
-        line-height: 35px;
-    }
+.activity-info-page {
     ion-item-group {
         .act-no {
             color: white;
