@@ -21,11 +21,11 @@ export class FacilityInspDetailDB {
   }
 
   addNewFacilityInspDetail(FacilityInspDetailObject: FacilityInspDetail) {
-  	return this._db.post(FacilityInspDetailObject);
+  	return this._db.post(FacilityInspDetailObject.serialize());
   }
 
   updateFacilityInspDetail(FacilityInspDetailObject: FacilityInspDetail) {
-  	return this._db.put(FacilityInspDetailObject);
+  	return this._db.put(FacilityInspDetailObject.serialize());
   }
 
   getAllFacilityInspDetails() {
