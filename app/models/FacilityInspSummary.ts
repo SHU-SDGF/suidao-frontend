@@ -3,6 +3,7 @@ import {_baseClass} from './_baseClass';
 
 @Serializable()
 export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
+	_id: string //pouchdb 主键id,其实就是diseaseNo
 	diseaseNo: string //病害编号
 	delFlg: any //删除标记
 	diseaseDate: any //病害日期
@@ -16,7 +17,6 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	posDespList: any //位置描述
 	tagId: any //标签id
 	updateCnt: any //更新次数
-
 
 	constructor() {
 		super()
