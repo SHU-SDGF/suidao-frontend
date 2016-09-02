@@ -28,7 +28,6 @@ export class LoginPage {
       let options: LoadingOptions = {};
       let loader = this.loadingController.create({
         content: '登录中...',
-        duration: 3000,
         dismissOnPageChange: true
       });
       loader.present();

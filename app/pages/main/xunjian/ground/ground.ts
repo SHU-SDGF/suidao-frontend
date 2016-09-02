@@ -3,7 +3,7 @@
 import {Component, OnInit, OnDestroy,
   DynamicComponentLoader, ViewChild, NgZone,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
-import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
+import {MenuController, Events, ToastController, AlertController, ModalController, NavController, LoadingController, Loading} from 'ionic-angular';
 import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
@@ -28,6 +28,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private environmentActivityList: any;
   private _pageEntered = false;
   private _isCurrent = true;
+  private _mapLoader: Loading;
   
   @ViewChild(SuidaoMap) _suidaoMap: SuidaoMap;
 
@@ -40,7 +41,8 @@ export class GroundPage implements OnInit, OnDestroy {
     private _navCtrl: NavController,
     private environmentActivityService: EnvironmentActivityService,
     private _event: Events,
-    private _zoon: NgZone
+    private _zoon: NgZone,
+    private _loadingCtrl: LoadingController
   ) { }
 
   private viewSwtichSubscriber = function (onGround) {
@@ -122,6 +124,16 @@ export class GroundPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     let that = this;
+
+    setTimeout(() => {
+      that._mapLoader = that._loadingCtrl.create({
+        content: '地图加载中...',
+        dismissOnPageChange: true
+      });
+      that._mapLoader.present();
+    });
+    
+
     this._event.subscribe('change-tab', this.tabChangeEventSubscriber);
     this._event.subscribe('xunjian-view-switch', this.viewSwtichSubscriber);
     
@@ -302,7 +314,8 @@ export class GroundPage implements OnInit, OnDestroy {
     });
   }
 
-  private mapLoaded(){
+  private mapLoaded() {
+    this._mapLoader.dismiss();
   }
 
   private removeUnsavedMarker() {

@@ -116,6 +116,10 @@ ion-select{
   }
 }
 
+.select-disabled, .item-select-disabled ion-label{
+  opacity: 1;
+}
+
 .text-input{
   color: color($colors, light);
 }

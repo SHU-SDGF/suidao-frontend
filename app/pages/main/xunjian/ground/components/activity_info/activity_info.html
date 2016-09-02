@@ -5,7 +5,9 @@
         取消
       </button>
     </ion-buttons>
-    <ion-title center>活动详情</ion-title>
+    <ion-title center>
+      <ion-icon item-left name="md-pin"></ion-icon>{{activityDetailObj.actName}}
+    </ion-title>
     <ion-buttons end>
       <button (click)="edit()">
         编辑
@@ -25,11 +27,15 @@
 </ion-header>
 
 <ion-content class="activity_info">
-  <ion-grid [hidden]="selectedPage !== 'detail'">
-    <ion-row class="parent-content">活动编号及其名称</ion-row>
-    <ion-row class="sub-content"><ion-icon item-left name="md-pin"></ion-icon><span class="act-info">{{activityDetailObj.actNo}}   {{activityDetailObj.actName}}</span></ion-row>
-  </ion-grid>
   <ion-list [hidden]="selectedPage !== 'detail'">
+    <ion-item>
+      <ion-label>活动编号</ion-label>
+      <ion-input [(ngModel)]="activityDetailObj.actNo" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>巡检时间</ion-label>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
+    </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>
       <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
@@ -37,12 +43,8 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label stacked>描述</ion-label>
+      <ion-label>描述</ion-label>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
-    </ion-item>
-    <ion-item>
-      <ion-label>巡检时间</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
     </ion-item>
   </ion-list>
 

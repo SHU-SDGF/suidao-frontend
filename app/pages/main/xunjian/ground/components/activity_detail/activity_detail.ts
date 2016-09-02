@@ -4,6 +4,7 @@ import {ViewController, AlertController, NavParams, LoadingController} from 'ion
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
 import {LookupService} from '../../../../../../providers';
+import {UserService} from '../../../../../../providers';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class ActivityDetailPage implements OnInit{
     private _actService: EnvironmentActivityService,
     private _alertCtrl: AlertController,
     private params: NavParams,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private _userService: UserService
   ) {}
 
   ngOnInit() {
@@ -48,9 +50,17 @@ export class ActivityDetailPage implements OnInit{
       endDate: new Date().toISOString().slice(0,10)
     };
 
+    // username
+    this._userService.getUsername().then((username) => {
+      this.activityDetailObj.recorder = username;
+    });
+
+    // load status    
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
       _self.actStatusList = actStatusList;
+      this.activityDetailObj.actStatus = _self.actStatusList[0].order;
     });
+
 
     this._lookupService.getActTypes().then((actTypes:[{name: string, order: number}]) => {
       _self.actTypes = actTypes;
@@ -74,7 +84,7 @@ export class ActivityDetailPage implements OnInit{
         recorder: this.activityDetailObj.recorder,
         inspDate: new Date().getTime()
       }
-    }
+    };
 
     let loading = this.loadingCtrl.create({
       dismissOnPageChange: true
