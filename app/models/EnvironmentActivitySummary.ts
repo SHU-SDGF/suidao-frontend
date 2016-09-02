@@ -1,6 +1,7 @@
-import {MapUtils, JsonProperty} from '../providers/JsonMapper';
+import {MapUtils, JsonProperty, Serializable} from '../providers/JsonMapper';
 import {_baseClass} from './_baseClass';
 
+@Serializable()
 export class EnvironmentActivitySummary {
   actNo: string //活动编码
 
@@ -8,7 +9,9 @@ export class EnvironmentActivitySummary {
 	actName: string //活动名称
 	startDate: any //起始日期
 	endDate: any //结束日期
-	description: string //活动描述
+  description: string //活动描述
+
+  @JsonProperty('longtitude')
 	longitude: number //经度
 	latitude: number //纬度
 	inspDate: any //巡检日期
@@ -16,15 +19,19 @@ export class EnvironmentActivitySummary {
 	actStatus: any
   actType: any
 
-  
-  static deserialize(obj: any, isAr: boolean = false): any {
-    if (isAr) {
-      let result = [];
-      for (let o of obj) {
-        result.push(this.deserialize(o)); 
-      }
-    } else {
-      return MapUtils.deserialize(this, obj);
-    }
-  } 
+  constructor() {
+    this.actNo = null;
+    this.actName = null;
+    this.startDate = null;
+    this.endDate = null;
+    this.description = null;
+    this.longitude = null;
+    this.latitude = null;
+    this.inspDate = null;
+    this.recorder = null;
+    this.actStatus = null;
+    this.actType = null;
+  }
+
+  static deserialize(obj) {}
 }

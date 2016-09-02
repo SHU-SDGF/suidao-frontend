@@ -10,6 +10,8 @@ import {ActivityInfoPage} from './components/activity_info/activity_info';
 import { EnvironmentActivityService } from '../../../../providers';
 import {XunjianPage} from '../xunjian';
 import {SearchPage} from './components/search/search';
+import {EnvironmentActivitySummary} from '../../../../models/EnvironmentActivitySummary';
+import {EnvironmentActivity} from '../../../../models/EnvironmentActivity';
 
 @Component({
   selector: 'ground-page',
@@ -163,6 +165,9 @@ export class GroundPage implements OnInit, OnDestroy {
         latitude: 0
       };
       that.environmentActivityList = result["content"];
+      console.log(EnvironmentActivitySummary.deserialize(result['content']));
+      let a = EnvironmentActivitySummary.deserialize(result['content'])[0];
+      a.serialize();
 
       if(result["content"].length == 0) {
         centerCord = {

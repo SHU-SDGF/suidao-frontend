@@ -1,6 +1,7 @@
-import {MapUtils, JsonProperty, IDeserialize} from '../providers/JsonMapper';
+import {JsonProperty, Serializable} from '../providers/JsonMapper';
 import {_baseClass} from './_baseClass';
 
+@Serializable()
 export class EnvironmentActivity extends _baseClass{
   @JsonProperty('title')
   actName: string //活动名称
@@ -16,15 +17,21 @@ export class EnvironmentActivity extends _baseClass{
 	video: any // 视频
   recorder: string //记录人
 
-  static deserialize(obj: any, isAr: boolean = false): any {
-    if (isAr) {
-      let result = [];
-      for (let o of obj) {
-        result.push(this.deserialize(o)); 
-      }
-    } else {
-      return MapUtils.deserialize(this, obj);
-    }
+  constructor() {
+    super();
+    this.actName = null;
+    this.actNo = null;
+    this.inspDate = null;
+    this.endDate = null;
+    this.actStatus = null; 
+    this.actType = null;
+    this.description = null;
+    this.photo = null;
+    this.audio = null;
+    this.video = null;
+    this.recorder = null; 
   }
+
+  static deserialize(obj) {}
   
 }
