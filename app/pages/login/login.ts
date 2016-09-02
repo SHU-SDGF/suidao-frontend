@@ -34,16 +34,20 @@ export class LoginPage {
       loader.present();
 
       this.userService.login(this.credentials).then(
-        res=>{
-          _that.navCtrl.setRoot(MainPage);
-        },
-        error=>{
-          let alert = _that.alertController.create({
-            title: '创建',
-            subTitle: '请检查用户名与密码是否正确',
-            buttons: ['确定']
+        res => {
+          loader.dismiss().then(() => {
+            _that.navCtrl.setRoot(MainPage);
           });
-          alert.present();
+        },
+        error => {
+          loader.dismiss().then(() => {
+            let alert = _that.alertController.create({
+              title: '创建',
+              subTitle: '请检查用户名与密码是否正确',
+              buttons: ['确定']
+            });
+            alert.present();
+          });
         }
       );
     }
