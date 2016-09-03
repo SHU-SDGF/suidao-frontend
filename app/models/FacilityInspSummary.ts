@@ -20,7 +20,8 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 
 	constructor() {
 		super()
-		this.id = '';
+		this._id = null;
+		this.id = null;
 		this.diseaseNo = null;
 		this.delFlg = null;
 		this.diseaseDate = null;

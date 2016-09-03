@@ -5,8 +5,7 @@ import { FacilityInspSummary } from '../../models/FacilityInspSummary';
 
 var PouchDB = require('pouchdb');
 PouchDB.plugin(require('pouchdb-find'));
-
-const DB_NAME = 'DB_NAME';
+window["PouchDB"] = PouchDB; 
 
 @Injectable()
 export class FacilityInspSummaryDB {
@@ -20,8 +19,28 @@ export class FacilityInspSummaryDB {
   	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
   }
 
-  addNewFacilityInspSummary(FacilityInspSummaryObject: FacilityInspSummary) {
+  //生成一条巡检活动
+  addNewFacilityInspSummary(FacilityInspSummaryObject: any) {
   	return this._db.post(FacilityInspSummaryObject.serialize());
+  }
+
+  //批量生成巡检活动
+  batchCreateFacilityInspSummaries(FacilityInspSummariesObject: any) {
+    return this._db.buckDocs(FacilityInspSummariesObject);
+  }
+
+  //批量删除巡检活动
+  batchDeleteFacilityInspSummarise() {
+    this._db.allDocs().then(function(result) {
+      // Promise isn't supported by all browsers; you may want to use bluebird
+      return Promise.all(result.rows.map(function (row) {
+        return this._db.remove(row.id, row.value.rev);
+      }));
+    }).then(function () {
+      // done!
+    }).catch(function (err) {
+      // error!
+    });
   }
 
   updateFacilityInspSummary(FacilityInspSummaryObject: FacilityInspSummary) {
