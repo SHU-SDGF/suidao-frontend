@@ -12,7 +12,7 @@
   <div padding>
     <ion-segment [(ngModel)]="selectedPage">
       <ion-segment-button value="detail">
-        活动详情
+        灾害信息
       </ion-segment-button>
       <ion-segment-button value="history">
         历史列表
@@ -21,7 +21,7 @@
   </div>
 </ion-header>
 
-<ion-content class="activity_info" >
+<ion-content padding>
   <div [hidden]="selectedPage !== 'detail'">
     <ion-list>
       <ion-item>
@@ -54,23 +54,21 @@
       </ion-item>
     </ion-list>
 
-    <div padding>
-      <button block (click)="edit()" secondary>编辑</button>
-    </div>
+    <button block (click)="edit()" secondary>编辑</button>
   </div>
 
   <div [hidden]="selectedPage !== 'history'">
     <ion-list>
       <ion-item-group>
         <div>
-          <button ion-item (click)="showHistory(el)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
+          <button ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
             <ion-icon item-left name="ios-pin-outline"></ion-icon>
             <div item-inner class="act-detail">
-              <h3>{{el.recorder}}</h3>
+              <h3>{{environmentActivityList[idx].recorder}}</h3>
               <p>
-                {{_getLookUpValue(actStatusList, el.actStatus)}}
+                {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
                 &mdash;
-                {{el.inspDate | DatePipe}}
+                {{_convertDate(environmentActivityList[idx].inspDate)}}
               </p>
             </div>
           </button>

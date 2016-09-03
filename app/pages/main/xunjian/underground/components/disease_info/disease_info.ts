@@ -2,15 +2,16 @@ import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
-import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
+import {DiseaseHistoryInfoPage} from '../disease_history_info/disease_history_info';
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
+
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
   pipes: [AppUtils.DatePipe]
 })
-export class ActivityInfoPage implements OnInit{
+export class DiseaseInfoPage implements OnInit{
   
   selectedPage: string = 'detail';
   activityDetailObj: EnvironmentActivitySummary;
@@ -110,8 +111,8 @@ export class ActivityInfoPage implements OnInit{
     return value;
   }
 
-  showHistory(el) {
-    let modal = this._modelCtrl.create(ActivityHistoryInfoPage, {'activityDetail': el, 'activityName': this.activityDetailObj["actName"]});
+  showHistory(index) {
+    let modal = this._modelCtrl.create(DiseaseInfoPage, {'activityDetail': this.environmentActivityList[index], 'activityName': this.activityDetailObj["actName"]});
     modal.present();
   }
 }

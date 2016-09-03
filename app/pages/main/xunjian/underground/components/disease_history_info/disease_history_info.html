@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title>灾害记录</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="activity_history_detail">
+  <ion-list>
+    <ion-item>
+      <ion-label>灾害名称</ion-label>
+      <ion-input type="text" [(ngModel)]="activityDetailObj.actName" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>灾害大类</ion-label>
+      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actType" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>灾害小类</ion-label>
+      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actType" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>巡检日期</ion-label>
+      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.inspDate" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>活动状态</ion-label>
+      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actStatus" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>记录人</ion-label>
+      <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label stacked>描述</ion-label>
+      <ion-textarea rows="6" disabled="true" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>

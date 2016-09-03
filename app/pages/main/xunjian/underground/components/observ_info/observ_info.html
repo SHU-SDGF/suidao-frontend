@@ -5,12 +5,40 @@
         取消
       </button>
     </ion-buttons>
-    <ion-title>添加病害</ion-title>
+    <ion-title center>
+      <ion-icon item-left name="md-pin"></ion-icon>{{activityDetailObj.actName}}
+    </ion-title>
   </ion-toolbar>
+  <div padding>
+    <ion-segment [(ngModel)]="selectedPage">
+      <ion-segment-button value="detail">
+        病害列表
+      </ion-segment-button>
+      <ion-segment-button value="history">
+        维修列表
+      </ion-segment-button>
+      <ion-segment-button value="history">
+        评估结果
+      </ion-segment-button>
+    </ion-segment>
+  </div>
 </ion-header>
 <ion-content>
-  <image-editor [changeOptions]="changeOptions" (onTap)="mapTap($event)" ></image-editor>
-  <button class="md-control-btn" [ngClass]="{'active': _onEdit}" menu-tip [actionMenuItems]="actionMenuItems" (click)="menuBtnClick($event)">
-    <ion-icon name="md-add-circle"></ion-icon>
-  </button>
+  <ion-list>
+    <ion-item-group>
+      <div>
+        <button ion-item class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
+          <ion-icon item-left name="ios-pin-outline"></ion-icon>
+          <div item-inner class="act-detail">
+            <h3>{{environmentActivityList[idx].recorder}}</h3>
+            <p>
+              {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
+              &mdash;
+              {{_convertDate(environmentActivityList[idx].inspDate)}}
+            </p>
+          </div>
+        </button>
+      </div>
+    </ion-item-group>
+  </ion-list>
 </ion-content>

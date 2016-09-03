@@ -1,0 +1,27 @@
+.disease-info-page {
+    ion-item-group {
+        .act-no {
+            color: white;
+            // color: color($colors, primary);
+            font-size: 1.4rem;
+            margin: 0px;
+            margin-top: 10px;
+        }
+        .act-card {
+            color: color($colors, light);
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+            .act-detail {
+                color: white // color: color($colors, primary);
+                p {
+                    color: white;
+                    // color: color($colors, primary); 
+                }
+            }
+            .item-inner{
+                border-bottom: none;
+            }
+        }
+    }
+}

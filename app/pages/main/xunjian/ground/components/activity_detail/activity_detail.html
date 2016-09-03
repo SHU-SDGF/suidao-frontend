@@ -9,7 +9,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="activity_detail" padding>
+<ion-content class="activity_detail">
   <ion-list>
     <ion-item>
       <ion-label>活动名称</ion-label>
@@ -45,5 +45,7 @@
     </ion-item>
   </ion-list>
 
-  <button block (click)="createActivity(activityDetailObj)" secondary>创建</button>
+  <div padding>
+    <button block (click)="createActivity(activityDetailObj)" secondary>创建</button>
+  </div>
 </ion-content>

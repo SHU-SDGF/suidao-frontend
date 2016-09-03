@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title>添加病害</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <image-editor [changeOptions]="changeOptions" (onTap)="mapTap($event)" ></image-editor>
+  <button class="md-control-btn" [ngClass]="{'active': _onEdit}" menu-tip [actionMenuItems]="actionMenuItems" (click)="menuBtnClick($event)">
+    <ion-icon name="md-add-circle"></ion-icon>
+  </button>
+</ion-content>
