@@ -5,7 +5,7 @@ import {MenuTip, ActionMenuControl} from '../../../../../../shared/components/me
 import {ObservSavePage} from '../observ_save/observ_save';
 
 @Component({
-  templateUrl: './build/pages/main/xunjian/underground/components/observ_info/observ_info.html',
+  templateUrl: './build/pages/main/xunjian/underground/components/observ_graph/observ_graph.html',
   directives: [ImageEditor, MenuTip]
 })
 export class ObservGraphPage implements OnInit{

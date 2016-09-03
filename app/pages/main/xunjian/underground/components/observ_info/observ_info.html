@@ -6,7 +6,10 @@
       </button>
     </ion-buttons>
     <ion-title center>
-      <ion-icon item-left name="md-pin"></ion-icon>{{activityDetailObj.actName}}
+      <ion-label [SelectPopover] 
+        [itemList]="huanhaoList" 
+        [itemDisplayName]="'name'" 
+        (selectChanged)="huanhao = $event">环号: {{huanhao.name}}</ion-label>
     </ion-title>
   </ion-toolbar>
   <div padding>
@@ -26,19 +29,17 @@
 <ion-content>
   <ion-list>
     <ion-item-group>
-      <div>
-        <button ion-item class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
-          <ion-icon item-left name="ios-pin-outline"></ion-icon>
-          <div item-inner class="act-detail">
-            <h3>{{environmentActivityList[idx].recorder}}</h3>
-            <p>
-              {{_getLookUpValue(actStatusList, environmentActivityList[idx].actStatus)}}
-              &mdash;
-              {{_convertDate(environmentActivityList[idx].inspDate)}}
-            </p>
-          </div>
-        </button>
-      </div>
+      <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
+        <ion-icon item-left><img src="{{disease.icon}}"/></ion-icon>
+        <div item-inner class="act-detail">
+          <h3>病害编号：{{disease.no}}</h3>
+          <p>
+            {{disease.name}}
+            &mdash;
+            {{disease.date | DatePipe}}
+          </p>
+        </div>
+      </button>
     </ion-item-group>
   </ion-list>
 </ion-content>
