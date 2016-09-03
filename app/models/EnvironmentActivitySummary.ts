@@ -33,5 +33,7 @@ export class EnvironmentActivitySummary {
     this.actType = null;
   }
 
-  static deserialize(obj) {}
+  static deserialize(obj): EnvironmentActivitySummary {
+    return null;
+  }
 }

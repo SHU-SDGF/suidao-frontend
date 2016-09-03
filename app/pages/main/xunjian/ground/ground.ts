@@ -27,7 +27,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private _toast: any;
   private _searchPoped: boolean = false;
   private markers: any;
-  private environmentActivityList: any;
+  private environmentActivityList: Array<any>;
   private _pageEntered = false;
   private _isCurrent = true;
   private _mapLoader: Loading;
@@ -165,9 +165,11 @@ export class GroundPage implements OnInit, OnDestroy {
         latitude: 0
       };
       that.environmentActivityList = result["content"];
-      console.log(EnvironmentActivitySummary.deserialize(result['content']));
-      let a = EnvironmentActivitySummary.deserialize(result['content'])[0];
-      a.serialize();
+
+      let list = that.environmentActivityList.map((act)=>{
+        return EnvironmentActivitySummary.deserialize(act);
+      });
+      console.log(list);
 
       if(result["content"].length == 0) {
         centerCord = {

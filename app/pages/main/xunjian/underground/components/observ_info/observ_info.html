@@ -11,35 +11,68 @@
         [itemDisplayName]="'name'" 
         (selectChanged)="huanhao = $event">环号: {{huanhao.name}}</ion-label>
     </ion-title>
+    <ion-buttons end>
+      <button (click)="viewGraph()">
+        <ion-icon name="md-map"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-toolbar>
   <div padding>
     <ion-segment [(ngModel)]="selectedPage">
-      <ion-segment-button value="detail">
+      <ion-segment-button value="disease">
         病害列表
       </ion-segment-button>
-      <ion-segment-button value="history">
+      <ion-segment-button value="maitain">
         维修列表
       </ion-segment-button>
-      <ion-segment-button value="history">
+      <ion-segment-button value="assert">
         评估结果
       </ion-segment-button>
     </ion-segment>
   </div>
 </ion-header>
 <ion-content>
-  <ion-list>
-    <ion-item-group>
-      <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
-        <ion-icon item-left><img src="{{disease.icon}}"/></ion-icon>
-        <div item-inner class="act-detail">
-          <h3>病害编号：{{disease.no}}</h3>
-          <p>
-            {{disease.name}}
-            &mdash;
-            {{disease.date | DatePipe}}
-          </p>
-        </div>
-      </button>
-    </ion-item-group>
-  </ion-list>
+
+  <div [hidden]="selectedPage !== 'disease'">
+    <ion-list>
+      <ion-item-group>
+        <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
+          <ion-icon item-left><img src="{{disease.icon}}"/></ion-icon>
+          <div item-inner class="act-detail">
+            <h3>病害编号：{{disease.no}}</h3>
+            <p>
+              {{disease.name}}
+              &mdash;
+              {{disease.date | DatePipe}}
+            </p>
+          </div>
+        </button>
+      </ion-item-group>
+    </ion-list>
+    <div padding>
+      <button block (click)="viewGraph()" secondary>创建</button>
+    </div>
+  </div>
+
+  <div [hidden]="selectedPage !== 'maitain'">
+    <ion-list>
+      <ion-item-group>
+        <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
+          <ion-icon item-left name="ios-construct"></ion-icon>
+          <div item-inner class="act-detail">
+            <h3>维修编号：{{disease.no}}</h3>
+            <p>
+              {{disease.name}}
+              &mdash;
+              {{disease.date | DatePipe}}
+            </p>
+          </div>
+        </button>
+      </ion-item-group>
+    </ion-list>
+  </div>
+
+  <div [hidden]="selectedPage !== 'assert'">
+   
+  </div>
 </ion-content>

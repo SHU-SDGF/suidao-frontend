@@ -4,13 +4,7 @@ const jsonMetadataKey = "jsonProperty";
 export function Serializable() {
   return function (clazz) { 
     clazz.deserialize = (obj: any): any => {
-      if (MapUtils.isArray(obj)) {
-        return obj.map((item) => {
-          return clazz.deserialize(item);
-        });
-      } else {
-        return MapUtils.deserialize(clazz, obj);
-      }
+      return MapUtils.deserialize(clazz, obj);
     };
 
     clazz.prototype.serialize = function() {

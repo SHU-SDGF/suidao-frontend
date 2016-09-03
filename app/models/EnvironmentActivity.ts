@@ -32,6 +32,8 @@ export class EnvironmentActivity extends _baseClass{
     this.recorder = null; 
   }
 
-  static deserialize(obj) {}
+  static deserialize(obj): EnvironmentActivity {
+    return null;
+  }
   
 }

@@ -140,8 +140,14 @@ export class ObservGraphPage implements OnInit{
 
   showCreateModal(marker: MarkerOptions){
     let modal = this._modalCtrl.create(ObservSavePage, {point: marker});
-    modal.present().then(()=>{
-      this._imageEditor.addMarker(marker);
+    modal.present();
+
+    modal.onDidDismiss((value)=>{
+      if(value){
+        this._imageEditor.addMarker(marker);
+      }else{
+        this.showToast();
+      }
     });
   }
 
@@ -170,6 +176,10 @@ export class ObservGraphPage implements OnInit{
   }
 
   hideToast(){
+    if(!this._toast) return;
+    this._toast.onDidDismiss(()=>{
+      this._toast = null;
+    });
     return this._toast.dismiss();
   }
 

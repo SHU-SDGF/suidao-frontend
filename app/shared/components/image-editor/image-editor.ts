@@ -69,6 +69,9 @@ export class ImageEditor implements OnInit{
     
     this.map.fitBounds(bounds);
     this.map.on('click', ($event)=>{
+      if($event.originalEvent.target.className.indexOf('leaflet-image-layer') < 0){
+        return;
+      }
       self.onTap.emit($event);
       /*
       let marker = L.marker($event.latlng)

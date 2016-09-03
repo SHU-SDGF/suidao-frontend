@@ -23,6 +23,6 @@ export class ObservSavePage implements OnInit{
   }
 
   createDisease(){
-
+    this._viewCtrl.dismiss(this.diseaseDetailObj);
   }
 }
