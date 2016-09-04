@@ -5,7 +5,6 @@ import {Component, OnInit, OnDestroy,
 import {MenuController, Events, ToastController, AlertController, ModalController, NavController} from 'ionic-angular';
 import {Camera} from 'ionic-native';
 import {ObservInfoPage} from './components/observ_info/observ_info';
-import {ObservSavePage} from './components/observ_save/observ_save';
 import {QRCodeService} from '../../../../providers/qrcode_service';
 
 declare const cordova;
@@ -55,7 +54,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
     
     let result = this._codeService.parse(info);
     console.log(info);
-    let modal = this._modalCtrl.create(ObservSavePage, {data: result});
+    let modal = this._modalCtrl.create(ObservInfoPage, {data: result});
     modal.present();
     /*
     cordova.plugins.barcodeScanner.scan((result) => {
