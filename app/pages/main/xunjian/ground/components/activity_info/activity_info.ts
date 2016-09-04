@@ -5,6 +5,7 @@ import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySum
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
+import {UserService} from '../../../../../../providers';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
@@ -33,7 +34,8 @@ export class ActivityInfoPage implements OnInit{
     private _alertController: AlertController,
     private _environmentActivityService: EnvironmentActivityService,
     private params: NavParams,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private _userService: UserService
   ) { }
 
   ngOnInit() {
@@ -45,8 +47,15 @@ export class ActivityInfoPage implements OnInit{
       description: paramsObj.description, //活动描述
       actStatus: paramsObj.actStatus,
       actType: paramsObj.actType,
-      inspDate: AppUtils.convertDate(paramsObj.inspDate)
+      inspDate: AppUtils.convertDate(paramsObj.inspDate),
+      createUser: paramsObj.createUser,
+      recorder: ''
     };
+
+    // username
+    this._userService.getUsername().then((username) => {
+      this.activityDetailObj.recorder = username;
+    });
 
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
       _self.actStatusList = actStatusList;

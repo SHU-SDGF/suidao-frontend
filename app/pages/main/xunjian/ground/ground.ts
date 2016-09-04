@@ -198,6 +198,7 @@ export class GroundPage implements OnInit, OnDestroy {
             content: '',
             inspDate: result["content"][index]["inspDate"],
             actNo: result["content"][index]["actNo"],
+            createUser: result["content"][index]["createUser"],
             id: result["content"][index]["id"]
           });
         }
@@ -269,6 +270,7 @@ export class GroundPage implements OnInit, OnDestroy {
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
+                  debugger;
                   _self.removeUnsavedMarker();
                   if (!activity) return;
                   _self.environmentActivityList.unshift({
@@ -301,7 +303,8 @@ export class GroundPage implements OnInit, OnDestroy {
                     recorder: activity["environmentActivity"]["recorder"],
                     content: '',
                     inspDate: activity["environmentActivity"]["inspDate"],
-                    actNo: activity["environmentActivity"]["actNo"]
+                    actNo: activity["environmentActivity"]["actNo"],
+                    createUser: activity["environmentActitivitySummary"]["createUser"]
                   };
 
                   _self._suidaoMap.addMarker(newMarker);
@@ -351,7 +354,6 @@ export class GroundPage implements OnInit, OnDestroy {
         }
         console.log(_self);
       }
-      
     });
     // setTimeout((($event) => {
     //   let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
