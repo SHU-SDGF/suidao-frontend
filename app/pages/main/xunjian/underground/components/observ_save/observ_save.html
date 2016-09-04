@@ -13,28 +13,83 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-
 <ion-content class="activity_detail">
   <ion-list>
     <ion-item>
-      <ion-label>活动名称</ion-label>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.actName"></ion-input>
+      <ion-label>病害大类</ion-label>
+      <ion-select [(ngModel)]="diseaseDetailObj.diseaseType">
+        <ion-option value="nes">NES</ion-option>
+        <ion-option value="n64">Nintendo64</ion-option>
+        <ion-option value="ps">PlayStation</ion-option>
+        <ion-option value="genesis">Sega Genesis</ion-option>
+        <ion-option value="saturn">Sega Saturn</ion-option>
+        <ion-option value="snes">SNES</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>起始日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="diseaseDetailObj.startDate"></ion-datetime>
+      <ion-label>病害小类</ion-label>
+      <ion-select [(ngModel)]="diseaseDetailObj.detailType">
+        <ion-option value="nes">NES</ion-option>
+        <ion-option value="n64">Nintendo64</ion-option>
+        <ion-option value="ps">PlayStation</ion-option>
+        <ion-option value="genesis">Sega Genesis</ion-option>
+        <ion-option value="saturn">Sega Saturn</ion-option>
+        <ion-option value="snes">SNES</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>结束日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="diseaseDetailObj.endDate"></ion-datetime>
+      <ion-label style="color:white;">病害描述</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>面积</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.area"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>深度</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.depth"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>长度</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.length"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>宽度</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.width"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>张开量</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.jointOpen"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>错开量</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.dislocation"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>是否申请维修</ion-label>
+      <ion-select [(ngModel)]="diseaseDetailObj.needRepair">
+        <ion-option value="1">是</ion-option>
+        <ion-option value="0">否</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>病害编号</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.diseaseNo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>里程</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.mileage"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>隧道内方位</ion-label>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.posDespList"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>记录人</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.recorder"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>描述</ion-label>
-      <ion-textarea rows="6" [(ngModel)]="diseaseDetailObj.description"></ion-textarea>
+      <ion-label>日期</ion-label>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="diseaseDetailObj.diseaseDate"></ion-datetime>
     </ion-item>
   </ion-list>
 </ion-content>
