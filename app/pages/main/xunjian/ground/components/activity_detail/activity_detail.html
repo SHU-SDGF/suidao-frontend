@@ -41,8 +41,15 @@
     </ion-item>
     <ion-item class="img-gallery">
       <ion-scroll scrollX="true">
-        <div class="img-item" *ngFor="let img of images">
-          <img src="{{img}}" />
+        <div class="img-item">
+          <div class="img-layer">
+            <img src="build/imgs/camera.png" (click)="captureMedia()"/>
+          </div>
+        </div>
+        <div class="img-item" *ngFor="let media of medias">
+          <div class="img-layer">
+            <img src="{{media.preview}}" mediaViewer  [mediaContent]="media"/>
+          </div>
         </div>
       </ion-scroll>
     </ion-item>

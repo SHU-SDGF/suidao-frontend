@@ -1,20 +1,22 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
-import {ViewController, AlertController, NavParams, LoadingController} from 'ionic-angular';
+import {ViewController, AlertController, NavParams, LoadingController, ActionSheetController} from 'ionic-angular';
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
 import {LookupService} from '../../../../../../providers';
 import {UserService} from '../../../../../../providers';
-
+import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
+import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
 
 @Component({
   selector: 'activity-detail',
-  templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html'
+  templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
+  directives: [MediaViewer]
 })
 export class ActivityDetailPage implements OnInit{
   
   private activityDetailObj: EnvironmentActivitySummary;
-  images = [];
+  medias: Array<IMediaContent> = [];
 
   private actStatusList: [{
     name: string,
@@ -33,12 +35,17 @@ export class ActivityDetailPage implements OnInit{
     private _alertCtrl: AlertController,
     private params: NavParams,
     private loadingCtrl: LoadingController,
-    private _userService: UserService
+    private _userService: UserService,
+    private _asCtrl: ActionSheetController
   ) {}
 
   ngOnInit() {
     for(let i=0;i< 10;i++){
-      this.images[i] = 'https://unsplash.it/800?image=' + (i + 1);
+      this.medias.push({
+        fileUri: 'https://unsplash.it/800?image=' + (i + 1),
+        mediaType: 'img',
+        preview: 'https://unsplash.it/800?image=' + (i + 1)
+      });
     }
 
     let _self = this;
@@ -105,6 +112,39 @@ export class ActivityDetailPage implements OnInit{
         message: '创建活动未能成功！请重新尝试！'
       });
       alert.present();
+    });
+  }
+
+  captureMedia(){
+    ActionSheet.show({
+      'title': "选择媒体种类",
+      "buttonLabels": ['图片', '视频', '音频']
+    }).then((buttonIndex: number) => {
+      if(buttonIndex == 1){
+        MediaCapture.captureImage().then((medieFiles: Array<MediaFile>) => {
+          this.medias.unshift({
+            fileUri: medieFiles[0].fullPath,
+            mediaType: 'img',
+            preview: medieFiles[0].fullPath
+          });
+        });
+      }else if(buttonIndex == 2){
+        MediaCapture.captureVideo().then((medieFiles: Array<MediaFile>)=>{
+          this.medias.unshift({
+            fileUri: medieFiles[0].fullPath,
+            mediaType: 'video',
+            preview: 'build/imgs/video.png'
+          });
+        });
+      }else if(buttonIndex == 3){
+        MediaCapture.captureAudio().then((medieFiles: Array<MediaFile>)=>{
+          this.medias.unshift({
+            fileUri: medieFiles[0].fullPath,
+            mediaType: 'audio',
+            preview: 'build/imgs/audio.png'
+          });
+        });
+      }
     });
   }
 
