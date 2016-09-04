@@ -33,16 +33,14 @@
         <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
       </ion-item>
       <ion-item>
-        <ion-label>活动类别</ion-label>
-        <ion-select [(ngModel)]="activityDetailObj.actType" okText="确认" cancelText="取消">
-          <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
-        </ion-select>
-      </ion-item>
-      <ion-item>
         <ion-label>活动状态</ion-label>
         <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
           <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>作成者</ion-label>
+        <ion-input type="text" [(ngModel)]="activityDetailObj.createUser" disabled="true"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>记录人</ion-label>
