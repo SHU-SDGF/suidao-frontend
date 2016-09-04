@@ -149,3 +149,31 @@ ion-header{
 .button-secondary{
   background-color: color($colors, light-blue);
 }
+
+ion-item-group {
+    .act-card {
+        color: color($colors, light);
+        background-color: rgba(0, 0, 0, 0.3);
+        box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.2);
+        margin-top: 10px;
+        &:active{
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+        .act-detail {
+            color: color($colors, light); 
+            p {
+                margin-top: 5px;
+                color: color($colors, light); 
+            }
+        }
+        .item-inner{
+            border-bottom: none;
+        }
+        ion-icon.item-icon{
+            min-width: 2.4rem;
+            img{
+                width: 2.4rem;
+            }
+        }
+    }
+}

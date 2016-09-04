@@ -36,14 +36,14 @@
   <div [hidden]="selectedPage !== 'disease'">
     <ion-list>
       <ion-item-group>
-        <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
-          <ion-icon item-left><img src="{{disease.icon}}"/></ion-icon>
+        <button ion-item class="act-card" *ngFor = "let disease of diseaseList" (click)="viewDisease(disease)">
+          <ion-icon item-left><img src="{{diseaseTypes[disease.diseaseNo].icon}}"/></ion-icon>
           <div item-inner class="act-detail">
-            <h3>病害编号：{{disease.no}}</h3>
+            <h3>病害编号：{{disease.id}}</h3>
             <p>
-              {{disease.name}}
+              {{diseaseTypes[disease.diseaseNo].name}}
               &mdash;
-              {{disease.date | DatePipe}}
+              {{disease.diseaseDate | DatePipe}}
             </p>
           </div>
         </button>
@@ -60,11 +60,11 @@
         <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
           <ion-icon item-left name="ios-construct"></ion-icon>
           <div item-inner class="act-detail">
-            <h3>维修编号：{{disease.no}}</h3>
+            <h3>维修编号：{{disease.id}}</h3>
             <p>
-              {{disease.name}}
+              {{diseaseTypes[disease.diseaseNo].name}}
               &mdash;
-              {{disease.date | DatePipe}}
+              {{disease.diseaseDate | DatePipe}}
             </p>
           </div>
         </button>

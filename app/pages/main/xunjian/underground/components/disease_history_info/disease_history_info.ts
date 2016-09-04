@@ -3,6 +3,7 @@ import {Component, OnInit,
 import {ViewController, AlertController, NavParams} from 'ionic-angular';
 import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
 import {LookupService} from '../../../../../../providers';
+import {AppUtils} from '../../../../../../shared/utils';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_history_info/activity_history_info.html'
@@ -41,7 +42,7 @@ export class DiseaseHistoryInfoPage implements OnInit{
     let activityParams = this.params.get('activityDetail');
     this.activityDetailObj = {
       actName: activityName,
-      inspDate: this._convertDate(activityParams["inspDate"]),
+      inspDate: AppUtils.convertDate(activityParams["inspDate"]),
       endDate: activityParams["endDate"],
       description: activityParams["description"], //活动描述
       actStatus: activityParams["actStatus"],
@@ -51,13 +52,6 @@ export class DiseaseHistoryInfoPage implements OnInit{
       video: activityParams["video"],
       actNo: activityParams["actNo"]
     };
-  }
-
-  private _convertDate(datetime) {
-    let date = new Date(datetime)
-    var month = (date.getMonth() + 1) > 9 ? '-' + (date.getMonth() + 1) : '-0' + (date.getMonth() + 1); 
-    var day = (date.getDate() + 1) > 9 ? '-' + (date.getDate()) : '-0' + (date.getDate()); 
-    return date.getFullYear() + month + day;
   }
 
   private _getLookUpValue(list, order){

@@ -1,25 +1,30 @@
 import {Pipe, Injectable} from '@angular/core';
 
 @Pipe({
-  name: 'DatePipe'
+    name: 'DatePipe'
 })
-class DatePipe{
-  transform(datetime, args?) {
+class DatePipe {
+    transform(datetime, args?) {
+        return convertDate(datetime);
+    }
+}
+
+let convertDate = function (datetime, args?) {
     let date = new Date(datetime);
     return [
-      date.getFullYear(),
-      StringUtils.leftPad((date.getMonth() + 1), 2, '0'),
-      StringUtils.leftPad((date.getDate() + 1), 2, '0')
+        date.getFullYear(),
+        StringUtils.leftPad((date.getMonth() + 1), 2, '0'),
+        StringUtils.leftPad((date.getDate() + 1), 2, '0')
     ].join('-');
-  }
-}
+};
+
 
 /**
  * 常用的字符串处理方法
  * @author accountwcx@qq.com
  * @date 2015-08-12
  */
-let StringUtils = (function(){
+let StringUtils = (function () {
     var
         // 字符串去掉两边空白正则表达式
         trimRegex = /^[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+|[\x09\x0a\x0b\x0c\x0d\x20\xa0\u1680\u180e\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u2028\u2029\u202f\u205f\u3000]+$/g,
@@ -53,7 +58,7 @@ let StringUtils = (function(){
          * @param   str  {String}  字符串
          * @return  返回处理后的字符串
          */
-        trim: function(str){
+        trim: function (str) {
             return str.replace(trimRegex, '');
         },
 
@@ -67,13 +72,13 @@ let StringUtils = (function(){
          * @param  params...  {Object}  与字符串中{0}、{1}...匹配的内容
          * @return 返回格式化后的字符串
          */
-        format: function(str) {
+        format: function (str) {
             var i, args = arguments, len = args.length, arr = [];
-            for(i = 1; i < len; i++){
+            for (i = 1; i < len; i++) {
                 arr.push(args[i]);
             }
 
-            return str.replace(formatRegex, function(m, i) {
+            return str.replace(formatRegex, function (m, i) {
                 return arr[i];
             });
         },
@@ -85,10 +90,10 @@ let StringUtils = (function(){
          * @param   character  {String}  填补的字符，如果不填则为空字符' '
          * @return  返回填补后的字符串
          */
-        leftPad: function(str, size, character) {
+        leftPad: function (str, size, character) {
             var result = '' + str;
 
-            if(Object.prototype.toString.call(character) !== '[object String]'){
+            if (Object.prototype.toString.call(character) !== '[object String]') {
                 character = ' ';
             }
 
@@ -106,10 +111,10 @@ let StringUtils = (function(){
          * @param   character  {String}  填补的字符，如果不填则为空字符' '
          * @return  返回填补后的字符串
          */
-        rightPad: function(str, size, character) {
+        rightPad: function (str, size, character) {
             var result = '' + str;
 
-            if(Object.prototype.toString.call(character) !== '[object String]'){
+            if (Object.prototype.toString.call(character) !== '[object String]') {
                 character = ' ';
             }
 
@@ -125,12 +130,12 @@ let StringUtils = (function(){
          * @param   str  {String}
          * @return  返回转义后的字符
          */
-        htmlEncode: function(str) {
-            if(Object.prototype.toString.call(str) === '[object String]'){
-                return str.replace(htmlEncodeRegex, function(match, val){
+        htmlEncode: function (str) {
+            if (Object.prototype.toString.call(str) === '[object String]') {
+                return str.replace(htmlEncodeRegex, function (match, val) {
                     return htmlEncodeMap[val];
                 });
-            }else{
+            } else {
                 return str;
             }
         },
@@ -140,12 +145,12 @@ let StringUtils = (function(){
          * @param   str  {String}
          * @return  返回解码后的字符串
          */
-        htmlDecode: function(str) {
-            if(Object.prototype.toString.call(str) === '[object String]'){
-                return str.replace(htmlDecodeRegex, function(match, val){
+        htmlDecode: function (str) {
+            if (Object.prototype.toString.call(str) === '[object String]') {
+                return str.replace(htmlDecodeRegex, function (match, val) {
                     return htmlDecodeMap[val];
                 });
-            }else{
+            } else {
                 return str;
             }
         }
@@ -153,6 +158,7 @@ let StringUtils = (function(){
 })();
 
 export class AppUtils {
-  static DatePipe = DatePipe;
-  static StringUtils = StringUtils;
+    static DatePipe = DatePipe;
+    static convertDate = convertDate;
+    static StringUtils = StringUtils;
 }

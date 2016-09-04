@@ -64,6 +64,7 @@ export class GroundPage implements OnInit, OnDestroy {
       this.pageLeave();
     }
   }.bind(this);
+  
   /**
    * toggle editing */
   toggleEditing = function () {

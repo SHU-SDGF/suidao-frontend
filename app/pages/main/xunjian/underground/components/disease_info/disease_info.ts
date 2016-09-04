@@ -5,10 +5,11 @@ import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySum
 import {DiseaseHistoryInfoPage} from '../disease_history_info/disease_history_info';
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
+import {FacilityInspSummary} from  '../../../../../../models/FacilityInspSummary';
 
 
 @Component({
-  templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
+  templateUrl: './build/pages/main/xunjian/underground/components/disease_info/disease_info.html',
   pipes: [AppUtils.DatePipe]
 })
 export class DiseaseInfoPage implements OnInit{
@@ -21,10 +22,12 @@ export class DiseaseInfoPage implements OnInit{
     order: number
   }];
 
-   private actTypes: [{
+  private actTypes: [{
     name: string,
     order: number
   }];
+
+  private myDisease: FacilityInspSummary;
 
   private environmentActivityList: any = [];
   constructor(
@@ -39,32 +42,17 @@ export class DiseaseInfoPage implements OnInit{
 
   ngOnInit() {
     let _self = this;
-    let paramsObj = this.params.get('activityDetail');
-    this.activityDetailObj = {
-      actNo: paramsObj.actNo,
-      actName: paramsObj.title, //活动名称
-      description: paramsObj.description, //活动描述
-      actStatus: paramsObj.actStatus,
-      actType: paramsObj.actType,
-      inspDate: this._convertDate(paramsObj.inspDate)
-    };
+    this.myDisease = this.params.get('disease');
 
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
       _self.actStatusList = actStatusList;
     });
 
-    // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).then((result) => {
+    // 获取病害历史列表
+    this._environmentActivityService.searchEnvironmentActivitiesByActNo('12016090112').then((result) => {
       this.environmentActivityList = result["content"];
     }, (error) => {
     });
-  }
-
-  private _convertDate(datetime) {
-    let date = new Date(datetime)
-    var month = (date.getMonth() + 1) > 9 ? '-' + (date.getMonth() + 1) : '-0' + (date.getMonth() + 1); 
-    var day = (date.getDate()) > 9 ? '-' + (date.getDate()) : '-0' + (date.getDate()); 
-    return date.getFullYear() + month + day;
   }
 
   dismiss() {
@@ -72,33 +60,7 @@ export class DiseaseInfoPage implements OnInit{
   }
 
   edit() {
-    let _that = this;
-    let paramsObj = {
-      actNo: this.activityDetailObj.actNo,
-      actName: this.activityDetailObj.actName,
-      description: this.activityDetailObj.description,
-      actStatus: this.activityDetailObj.actStatus,
-      actType: this.activityDetailObj.actType,
-      recorder: this.activityDetailObj.recorder,
-      inspDate: new Date(this.activityDetailObj.inspDate).getTime()
-    }
-
-    let loading = this.loadingCtrl.create({
-      dismissOnPageChange: true,
-      duration: 2000
-    });
-
-    loading.present();
-
-    this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
-      this.viewCtrl.dismiss(result);
-    }, (error) => {
-      let alert = this._alertController.create({
-        title: '出错啦！',
-        message: '创建活动未能成功！请重新尝试！'
-      });
-      alert.present();
-    });
+    
   }
 
   private _getLookUpValue(list, order){
