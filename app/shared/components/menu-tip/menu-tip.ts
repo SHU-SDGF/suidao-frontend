@@ -21,6 +21,7 @@ interface IconPosition{
 export interface ActionMenuControl{
   icon: string,
   action: Function,
+  diseaseType?: any,
   rotation?: number,
   originPos?: IconPosition
   $ele?: JQuery

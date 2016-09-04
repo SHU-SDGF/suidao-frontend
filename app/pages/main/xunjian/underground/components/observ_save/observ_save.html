@@ -17,24 +17,14 @@
   <ion-list>
     <ion-item>
       <ion-label>病害大类</ion-label>
-      <ion-select [(ngModel)]="diseaseDetailObj.diseaseType">
-        <ion-option value="nes">NES</ion-option>
-        <ion-option value="n64">Nintendo64</ion-option>
-        <ion-option value="ps">PlayStation</ion-option>
-        <ion-option value="genesis">Sega Genesis</ion-option>
-        <ion-option value="saturn">Sega Saturn</ion-option>
-        <ion-option value="snes">SNES</ion-option>
+      <ion-select [(ngModel)]="diseaseDetailObj.diseaseType" okText="确认" cancelText="取消">
+        <ion-option *ngFor="let diseaseType of diseaseTypeList" [value]="diseaseType.id">{{diseaseType.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>病害小类</ion-label>
-      <ion-select [(ngModel)]="diseaseDetailObj.detailType">
-        <ion-option value="nes">NES</ion-option>
-        <ion-option value="n64">Nintendo64</ion-option>
-        <ion-option value="ps">PlayStation</ion-option>
-        <ion-option value="genesis">Sega Genesis</ion-option>
-        <ion-option value="saturn">Sega Saturn</ion-option>
-        <ion-option value="snes">SNES</ion-option>
+      <ion-select [(ngModel)]="diseaseDetailObj.detailType" okText="确认" cancelText="取消">
+        <ion-option *ngFor="let detailType of detailTypeList" [value]="detailType.id">{{detailType.name}}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -48,7 +38,7 @@
       <ion-label>深度</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.depth"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="true">
       <ion-label>长度</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.length"></ion-input>
     </ion-item>

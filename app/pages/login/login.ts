@@ -4,6 +4,7 @@ import { NavController, AlertController, LoadingController, LoadingOptions } fro
 
 import { MainPage } from '../main/main';
 import { UserService, Credentials} from '../../providers/user_service';
+import { LookupService } from '../../providers/lookup_service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class LoginPage {
 
   constructor(
     public navCtrl: NavController, 
-    public userService: UserService, 
+    public userService: UserService,
+    public lookupService: LookupService,
     private alertController: AlertController,
     private loadingController: LoadingController
   ) { }
@@ -34,6 +36,7 @@ export class LoginPage {
 
       this.userService.login(this.credentials).then(
         res => {
+          this.lookupService.getWholeLookupTable();
           loader.dismiss().then(() => {
             _that.navCtrl.setRoot(MainPage);
           });
