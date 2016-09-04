@@ -88,9 +88,9 @@ export class ObservInfoPage implements OnInit{
       updateCnt: ''
     };
 
-    for(let i = 0; i < 5; i++){
+    for(let i = 0; i < 1000; i++){
       a.id = ~~(Math.random() * 10000);
-      a.diseaseNo = i;
+      a.diseaseNo = i % 7;
       a.diseaseDate = (new Date).getTime();
 
       let disease = FacilityInspSummary.deserialize(a);

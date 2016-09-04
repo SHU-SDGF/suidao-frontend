@@ -22,7 +22,7 @@
 </ion-header>
 
 <ion-content class="activity_info" >
-  <div [hidden]="selectedPage !== 'detail'">
+  <div [hidden]="selectedPage !== 'detail'" padding>
     <ion-list>
       <ion-item>
         <ion-label>活动编号</ion-label>
@@ -54,7 +54,7 @@
       </ion-item>
     </ion-list>
 
-    <div padding>
+    <div>
       <button block (click)="edit()" secondary>编辑</button>
     </div>
   </div>

@@ -1,0 +1,8 @@
+
+.offlinePanel{
+  background: #fff;
+  height: 100%;
+  &:before{
+    content: ""
+  }
+}

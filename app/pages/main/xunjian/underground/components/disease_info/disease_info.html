@@ -61,7 +61,7 @@
     <ion-list>
       <ion-item-group>
         <div>
-          <button ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
+          <button clear ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
             <ion-icon item-left name="ios-pin-outline"></ion-icon>
             <div item-inner class="act-detail">
               <h3>{{environmentActivityList[idx].recorder}}</h3>

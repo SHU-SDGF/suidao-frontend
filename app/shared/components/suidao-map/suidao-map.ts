@@ -27,6 +27,11 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
   private _previousPoint: {x: number, y: number};
   private _previousLabels = [];
   private _longClickEnabled: boolean = false;
+  public offlineOpts = {
+    retryInterval: 3000,
+    txt: ''
+  };
+
   constructor(private _el: ElementRef, private zoom: NgZone) {
     super(_el);
   }

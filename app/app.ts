@@ -87,8 +87,9 @@ export class MyApp implements OnInit{
           text: '同意',
           handler: () => {
             this.userService.logout();
-            this.nav.setRoot(LoginPage);
-            this.menu.close();
+            this.menu.close().then(()=>{
+              this.nav.setRoot(LoginPage);
+            });
           }
         }
       ]

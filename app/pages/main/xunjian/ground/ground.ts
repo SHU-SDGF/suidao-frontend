@@ -64,7 +64,7 @@ export class GroundPage implements OnInit, OnDestroy {
       this.pageLeave();
     }
   }.bind(this);
-  
+
   /**
    * toggle editing */
   toggleEditing = function () {
@@ -156,7 +156,8 @@ export class GroundPage implements OnInit, OnDestroy {
       },
       overviewCtrl: {
         isOpen: false
-      }
+      },
+      
     };
     
     this.environmentActivityService.getEnvironmentActivitiesSummaryList().then((result) => {
@@ -198,17 +199,12 @@ export class GroundPage implements OnInit, OnDestroy {
             inspDate: result["content"][index]["inspDate"],
             actNo: result["content"][index]["actNo"],
             id: result["content"][index]["id"]
-
           });
         }
       }
       that.opts.markers = that.opts.markers.concat(markers);
 
       that.mapOptionEmitter.emit(that.opts);
-      that.offlineOpts = {
-        retryInterval: 5000,
-        txt: 'NO-NETWORK'
-      };
     }, (error) => {
       console.log('error');
     });
