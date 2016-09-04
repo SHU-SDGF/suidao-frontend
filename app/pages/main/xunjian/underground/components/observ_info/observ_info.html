@@ -6,10 +6,7 @@
       </button>
     </ion-buttons>
     <ion-title center>
-      <ion-label [SelectPopover] 
-        [itemList]="huanhaoList" 
-        [itemDisplayName]="'name'" 
-        (selectChanged)="huanhao = $event">环号: {{huanhao.name}}</ion-label>
+      <ion-label>里程号: {{huanhao.name}}</ion-label>
     </ion-title>
     <ion-buttons end>
       <button (click)="viewGraph()">

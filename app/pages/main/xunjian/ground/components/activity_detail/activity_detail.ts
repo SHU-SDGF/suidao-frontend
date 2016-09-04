@@ -14,6 +14,7 @@ import {UserService} from '../../../../../../providers';
 export class ActivityDetailPage implements OnInit{
   
   private activityDetailObj: EnvironmentActivitySummary;
+  images = [];
 
   private actStatusList: [{
     name: string,
@@ -36,6 +37,10 @@ export class ActivityDetailPage implements OnInit{
   ) {}
 
   ngOnInit() {
+    for(let i=0;i< 10;i++){
+      this.images[i] = 'https://unsplash.it/800?image=' + (i + 1);
+    }
+
     let _self = this;
     let point: MapPoint = this.params.get('point');
     this.activityDetailObj = {

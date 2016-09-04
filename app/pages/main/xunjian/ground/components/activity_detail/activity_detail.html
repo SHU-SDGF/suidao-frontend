@@ -39,6 +39,13 @@
       <ion-label>记录人</ion-label>
       <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
     </ion-item>
+    <ion-item class="img-gallery">
+      <ion-scroll scrollX="true">
+        <div class="img-item" *ngFor="let img of images">
+          <img src="{{img}}" />
+        </div>
+      </ion-scroll>
+    </ion-item>
     <ion-item>
       <ion-label>描述</ion-label>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>

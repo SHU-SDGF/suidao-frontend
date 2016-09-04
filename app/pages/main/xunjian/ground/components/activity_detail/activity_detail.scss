@@ -1,3 +1,19 @@
-  .datetime-text {
-      color: white !important;
+.img-gallery{
+  ion-label{
+    margin-right: 0px;
+    .img-item{
+      
+      width: 25%;
+      padding: 10px;
+      display: inline-block;
+      
+      &:first-child{
+        padding-left: 0px;
+      }
+      img{
+        
+      }
+    }
   }
+  
+}
