@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Storage, LocalStorage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
+import { HttpService } from './http_service';
 
 let PouchDB = require('pouchdb');
 
@@ -23,7 +24,7 @@ const DETAIL_TYPES = "detail_types";
 @Injectable()
 export class LookupService {
 
-  constructor(private http: Http) {}
+  constructor(private http: Http, private httpService: HttpService) {}
 
   private localStorage: Storage;
 
@@ -183,30 +184,41 @@ export class LookupService {
 		this.localStorage.set(ACT_TYPES, JSON.stringify(act_types_data));
 		this.localStorage.set(ACTION_STATUS_DATA, JSON.stringify(act_status_data));
 		this.localStorage.set(AUTHORITY_DATA, JSON.stringify(authority_data));
-		this.localStorage.set(DISEASE_TYPES, JSON.stringify(disease_types));
-		this.localStorage.set(DETAIL_TYPES, JSON.stringify(detail_types));
+		// this.localStorage.set(DISEASE_TYPES, JSON.stringify(disease_types));
+		//this.localStorage.set(DETAIL_TYPES, JSON.stringify(detail_types));
+	}
+
+	getWholeLookupTable() {
+		this.httpService.get({}, 'enum/whole-enum-type/list').then((result) => {
+			//病害类型枚举表
+			let diseaseTypesObj = result["diseaseTypeList"].map((obj) => {
+				return { id: obj.id, name: obj.diseaseTypeName};
+			})
+			this.localStorage.set(DISEASE_TYPES, JSON.stringify(diseaseTypesObj));
+			//病害小类枚举表
+			this.localStorage.set(DETAIL_TYPES, JSON.stringify(result["diseaseTypeTreeVoList"]));
+		})
 	}
 
 	//根据病害大类找小类
-	getDetailTypesByDiseaseTypes(order: number): Promise<Array<any>> {
-		return this.localStorage.get(DETAIL_TYPES).then((_detailTypes) => {
-			let detailTypes = JSON.parse(_detailTypes);
-			let filteredDetailType = [];
-			for (var index in detailTypes) {
-				if(detailTypes[index].disease_types_order == order) {
-					filteredDetailType.push(detailTypes[index]);
-				}
+	getDetailTypesByDiseaseTypes(diseaseTypeId: string) {
+		this.localStorage.get(DETAIL_TYPES);
+		var diseaseTypeTreeVoList = JSON.parse(localStorage.getItem(DETAIL_TYPES));
+		var selectedDetailType = null;
+		for(var index in diseaseTypeTreeVoList) {
+			if(diseaseTypeTreeVoList[index]["id"] == diseaseTypeId) {
+				selectedDetailType = diseaseTypeTreeVoList[index]["children"];
 			}
-			return filteredDetailType;
+		}
+		return selectedDetailType.map(function(selectedDetail) {
+			return {id: selectedDetail.id, name: selectedDetail.diseaseTypeName}
 		});
-	}
+	};
 
 	//查询病害大类枚举表
-	getDiseaseTypes(): Promise<Array<any>> {
-		return this.localStorage.get(DISEASE_TYPES).then((_diseaseTypes) => {
-			return JSON.parse(_diseaseTypes);
-		})
-	}
+	getDiseaseTypes(): any {
+		return JSON.parse(localStorage.getItem(DISEASE_TYPES));
+	};
 
 	//查询位置描述枚举表
 	getPositionDescriptions(): Promise<Array<any>> {

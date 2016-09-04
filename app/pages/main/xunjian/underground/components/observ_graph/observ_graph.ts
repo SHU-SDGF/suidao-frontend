@@ -3,6 +3,8 @@ import {NavController, ViewController, ToastController, Toast, AlertController, 
 import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../../../../shared/components/image-editor/image-editor';
 import {MenuTip, ActionMenuControl} from '../../../../../../shared/components/menu-tip/menu-tip';
 import {ObservSavePage} from '../observ_save/observ_save';
+import {LookupService} from '../../../../../../providers/lookup_service';
+
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_graph/observ_graph.html',
@@ -22,42 +24,49 @@ export class ObservGraphPage implements OnInit{
   private actionMenuItems: Array<ActionMenuControl> = [
     {
       icon: 'build/imgs/cuotai.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[0]);
       }.bind(this),
     },
     {
       icon: 'build/imgs/jiefeng.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[1]);
       }.bind(this),
     },
     {
       icon: 'build/imgs/liefeng.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[2]);
       }.bind(this),
     },
     {
       icon: 'build/imgs/luoshuang.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[3]);
       }.bind(this),
     },
     {
       icon: 'build/imgs/shenlou.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[4]);
       }.bind(this),
     },
     {
       icon: 'build/imgs/sunhuai.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[5]);
       }.bind(this),
     },
     {
       icon: 'build/imgs/xichu.png',
+      diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[6]);
       }.bind(this),
@@ -68,10 +77,17 @@ export class ObservGraphPage implements OnInit{
     private _viewCtrl: ViewController,
     private _toastCtrl: ToastController,
     private _alertCtrl: AlertController,
-    private _modalCtrl: ModalController
+    private _modalCtrl: ModalController,
+    private _lookupService: LookupService
   ){ }
 
   ngOnInit(){
+    let diseaseTypeList = this._lookupService.getDiseaseTypes();
+
+    for(let index in diseaseTypeList) {
+      this.actionMenuItems[index]["diseaseType"] = diseaseTypeList[index];
+    }
+
     this._mapOptions = {
       imageUrl: 'build/imgs/underground.png',
       markers:[]
@@ -102,7 +118,6 @@ export class ObservGraphPage implements OnInit{
   private mapTap($event){
     if(!this._onEdit) return;
     let _self = this;
-
     this._unsavedMarker = this._imageEditor.addMarker({
       longitude: $event.latlng.lng,
       latitude: $event.latlng.lat,
@@ -139,7 +154,7 @@ export class ObservGraphPage implements OnInit{
   }
 
   showCreateModal(marker: MarkerOptions){
-    let modal = this._modalCtrl.create(ObservSavePage, {point: marker});
+    let modal = this._modalCtrl.create(ObservSavePage, {point: marker, diseaseType: this._selectedDiseaseType});
     modal.present();
 
     modal.onDidDismiss((value)=>{
