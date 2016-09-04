@@ -21,15 +21,13 @@
         <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
       </ion-select>
     </ion-item>
-    <div class="simulate-ion-label">
+    <ion-item>
       <ion-label>起始日期</ion-label>
-      <div class="time-picker" (click)="onStartDateFocus($event)">{{activityDetailObj.startDate}}</div>
-<!--       <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.startDate"></ion-datetime>
- -->    </div>
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.startDate"></ion-datetime>
+    </ion-item>
     <ion-item>
       <ion-label>结束日期</ion-label>
-      <ion-input type="text" (focus)="onEndDateFocus($event)" [(ngModel)]="activityDetailObj.endDate" disabled="true"></ion-input>
-<!--       <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.endDate"></ion-datetime> -->
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.endDate"></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label>活动状态</ion-label>

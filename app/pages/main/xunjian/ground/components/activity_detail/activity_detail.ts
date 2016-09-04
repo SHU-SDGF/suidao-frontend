@@ -5,7 +5,7 @@ import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySum
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
 import {LookupService} from '../../../../../../providers';
 import {UserService} from '../../../../../../providers';
-import { DatePicker } from 'ionic-native';
+
 
 @Component({
   selector: 'activity-detail',
@@ -34,28 +34,6 @@ export class ActivityDetailPage implements OnInit{
     private loadingCtrl: LoadingController,
     private _userService: UserService
   ) {}
-
-  onStartDateFocus() {
-    let that = this;
-    DatePicker.show({
-      date: new Date(),
-      mode: 'date'
-    }).then(
-      date => that.activityDetailObj.startDate = that._convertDate(date),
-      err => console.log('Error occurred while getting date: ', err)
-    );
-  }
-
-  onEndDateFocus() {
-    let that = this;
-    DatePicker.show({
-      date: new Date(),
-      mode: 'date'
-    }).then(
-      date => that.activityDetailObj.endDate = that._convertDate(date),
-      err => console.log('Error occurred while getting date: ', err)
-    );
-  }
 
   ngOnInit() {
     let _self = this;
@@ -127,13 +105,6 @@ export class ActivityDetailPage implements OnInit{
 
   dismiss() {
     this.viewCtrl.dismiss();
-  }
-
-  private _convertDate(datetime) {
-    let date = new Date(datetime)
-    var month = (date.getMonth() + 1) > 9 ? '-' + (date.getMonth() + 1) : '-0' + (date.getMonth() + 1); 
-    var day = (date.getDate() + 1) > 9 ? '-' + (date.getDate()) : '-0' + (date.getDate()); 
-    return date.getFullYear() + month + day;
   }
   
 }
