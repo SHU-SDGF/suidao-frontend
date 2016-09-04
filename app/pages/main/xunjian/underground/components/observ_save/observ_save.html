@@ -30,27 +30,27 @@
     <ion-item>
       <ion-label style="color:white;">病害描述</ion-label>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D2' || diseaseDetailObj.diseaseType == 'D3' || diseaseDetailObj.diseaseType == 'D4'">
       <ion-label>面积</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.area"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D1' || diseaseDetailObj.diseaseType == 'D2'">
       <ion-label>深度</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.depth"></ion-input>
     </ion-item>
-    <ion-item *ngIf="true">
+    <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D1'">
       <ion-label>长度</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.length"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D1'">
       <ion-label>宽度</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.width"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D5'">
       <ion-label>张开量</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.jointOpen"></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D7'">
       <ion-label>错开量</ion-label>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.dislocation"></ion-input>
     </ion-item>
