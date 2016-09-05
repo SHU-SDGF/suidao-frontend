@@ -56,6 +56,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
     console.log(info);
     let modal = this._modalCtrl.create(ObservInfoPage, {data: result});
     modal.present();
+
+    localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "mfacility": result["NO"]}));
+
     /*
     cordova.plugins.barcodeScanner.scan((result) => {
         let alert = this._alertCtrl.create({

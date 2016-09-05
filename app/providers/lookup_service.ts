@@ -14,7 +14,7 @@ const MODELNAMES = "model_names";
 const POSITION_DESCRIPTIONS = "position_descriptions";
 const DISEASE_TYPES = "disease_types";
 const DETAIL_TYPES = "detail_types";
-
+const FACILITY_TYPES = "facility_types";
 /*
   Generated class for the LookupService provider.
 
@@ -190,10 +190,14 @@ export class LookupService {
 
 	getWholeLookupTable() {
 		this.httpService.get({}, 'enum/whole-enum-type/list').then((result) => {
+			//设施小类枚举表
+			let facilityTypesObj = result["facilityTypeList"].map((obj) => {
+				return { id: obj.id, name: obj.facilityType}
+			});
 			//病害类型枚举表
 			let diseaseTypesObj = result["diseaseTypeList"].map((obj) => {
 				return { id: obj.id, name: obj.diseaseTypeName};
-			})
+			});
 
 			let modelNamesObj = result["modelNameList"].map((obj) => {
 				return { id: obj.id, name: obj.modelName}
@@ -203,6 +207,7 @@ export class LookupService {
 				return { id: obj.monomerNo, name: obj.monomerName}
 			});
 
+			this.localStorage.set(FACILITY_TYPES, JSON.stringify(facilityTypesObj));
 			//单体名称枚举表
 			this.localStorage.set(MONOMERS, JSON.stringify(monomersObj));
 			//模型名称枚举表

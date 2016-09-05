@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
 import {NavController, ViewController, 
-  AlertController, ModalController} from 'ionic-angular';
+  AlertController, ModalController, NavParams} from 'ionic-angular';
 import {ObservSavePage} from '../observ_save/observ_save';
 import {AppUtils} from '../../../../../../shared/utils';
 import {SelectPopover} from  '../../../../../../shared/components/select-popover/select-popover';
@@ -58,6 +58,7 @@ export class ObservInfoPage implements OnInit{
   ];
 
   private selectedPage = 'disease';
+  private scanMileage = '';
 
   private huanhao = this.huanhaoList[1];
 
@@ -66,12 +67,12 @@ export class ObservInfoPage implements OnInit{
   constructor(
     private _navCtrl: NavController,
     private _viewCtrl: ViewController,
-    private _modalCtrl: ModalController){
+    private _modalCtrl: ModalController,
+    private _params: NavParams){
 
   }
 
-  ngOnInit(){
-    
+  ngOnInit(){    
     let a = {
       id: 0,
       diseaseNo: 0,
@@ -95,7 +96,7 @@ export class ObservInfoPage implements OnInit{
 
       let disease = FacilityInspSummary.deserialize(a);
       this.diseaseList.push(disease);
-    }    
+    }
   }
 
   viewDisease(disease){

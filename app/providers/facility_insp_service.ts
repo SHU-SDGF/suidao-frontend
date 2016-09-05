@@ -15,15 +15,16 @@ export class FacilityInspService {
 		facilityInspSummaryParam._id = facilityInspSummaryParam.diseaseNo;
 		this.facilityInspSummaryDB._initDB();
 		let facilityInspobj = FacilityInspSummary.deserialize(facilityInspSummaryParam);
+		//先创建巡检记录
+		return this.facilityInspSummaryDB.addNewFacilityInspSummary(facilityInspobj);
+	}
+
+	// 新增一条巡检历史记录
+	addNewFacilityInspDetail(facilityInspSummaryParam: any) {
+		this.facilityInspDetailDB._initDB();
 		let facilityDetailObj = FacilityInspDetail.deserialize(facilityInspSummaryParam);
-		//先创建巡检记录 再创建巡检活动记录
-		this.facilityInspSummaryDB.addNewFacilityInspSummary(facilityInspobj).then((result) => {
-			this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj).then((result) => {
-				return result;
-			});
-		}, (error) => {
-			return error;
-		});
+		facilityDetailObj["_id"] = new Date().getTime().toString();
+		return this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj);
 	}
 
 	//批量新增巡检记录
