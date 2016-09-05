@@ -18,6 +18,7 @@ export class DiseaseHistoryInfoPage implements OnInit{
     name: string,
     order: number
   }];
+  
   activityDetailObj: EnvironmentActivity;
 
   constructor(

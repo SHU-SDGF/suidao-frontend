@@ -1,6 +1,8 @@
-import { MediaCapture } from 'ionic-native';
 import {Directive, Input, HostListener} from '@angular/core';
-import { PhotoViewer, VideoPlayer} from 'ionic-native';
+import {NavController, PopoverController} from 'ionic-angular';
+import { PhotoViewer, VideoPlayer, MediaCapture, MediaPlugin} from 'ionic-native';
+import {VideoPlayerPage} from './video-player';
+import {AudioPlayerPage} from './audio-player';
 
 declare const Media: any;
 
@@ -37,16 +39,14 @@ export class MediaViewer{
   }
 
   playVideo(media: IMediaContent){
-    VideoPlayer.play(media.fileUri);
+    this._navCtrl.push(VideoPlayerPage, {media: media});
+    //VideoPlayer.play(media.fileUri);
   }
 
   playAudio(media: IMediaContent){
-    let mediaPlayer = new Media(media.fileUri);
-    mediaPlayer.play();
+    this._popoverCtrl.create(AudioPlayerPage, {media: media}).present();
   }
 
-  constructor(){}
-
-
+  constructor(private _navCtrl: NavController, private _popoverCtrl: PopoverController){}
 
 }

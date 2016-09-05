@@ -18,6 +18,40 @@ let convertDate = function (datetime, args?) {
     ].join('-');
 };
 
+@Pipe({
+    name: 'TimePipe'
+})
+class TimePipe{
+    transform(time, args?){
+        return convertTime(time);
+    }
+}
+
+function convertTime(time: number){
+    time /= 1000;
+    time = ~~time;
+    let sec = 0,
+        min = 0,
+        hour = 0;
+    
+    sec = time % 60;
+    time /= 60;
+    time = ~~time;
+
+    min = time % 60;
+    time /= 60;
+    time = ~~time;
+
+    hour = time;
+
+    let result = [sec];
+
+    if(min) result.unshift(min);
+    if(hour) result.unshift(hour);
+
+    return result.join(':');
+}
+
 
 /**
  * 常用的字符串处理方法
@@ -159,6 +193,8 @@ let StringUtils = (function () {
 
 export class AppUtils {
     static DatePipe = DatePipe;
+    static TimePipe = TimePipe;
     static convertDate = convertDate;
     static StringUtils = StringUtils;
+    static convertTime = convertTime;
 }
