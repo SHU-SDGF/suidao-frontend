@@ -20,6 +20,11 @@ export class ObservGraphPage implements OnInit{
   private changeOptions = new EventEmitter();
   private _mapOptions: MapOptions;
   private _unsavedMarker: MarkerOptions;
+  private isnewRecord = true;
+  private diseaseInfo: {
+    date: string,
+    count: number
+  };
 
   private actionMenuItems: Array<ActionMenuControl> = [
     {
@@ -62,13 +67,6 @@ export class ObservGraphPage implements OnInit{
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[5]);
-      }.bind(this),
-    },
-    {
-      icon: 'build/imgs/xichu.png',
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[6]);
       }.bind(this),
     }
   ];
@@ -141,7 +139,7 @@ export class ObservGraphPage implements OnInit{
           {
             text: '确认',
             handler: () => {
-              alert.dismiss().then(() => {
+              alert.dismiss().then((result) => {
                 this.showCreateModal(this._unsavedMarker);
                 _self.removeUnsavedMarker();
               })
@@ -154,11 +152,20 @@ export class ObservGraphPage implements OnInit{
   }
 
   showCreateModal(marker: MarkerOptions){
-    let modal = this._modalCtrl.create(ObservSavePage, {point: marker, diseaseType: this._selectedDiseaseType});
+    let diesaseNo = '';
+    if(this.isnewRecord) {
+      diesaseNo = this.generateDiseaseNo();
+    } else {
+      diesaseNo = this.fetchDiseaseNo();
+    }
+    let modal = this._modalCtrl.create(ObservSavePage, {point: marker, diseaseType: this._selectedDiseaseType, diseaseNo: diesaseNo, isNewRecord: this.isnewRecord, diseaseInfo: this.diseaseInfo});
     modal.present();
-
+    let that = this;
     modal.onDidDismiss((value)=>{
       if(value){
+        marker.longitude = value.position.longitude;
+        marker.latitude = value.position.latitude;
+        that.isnewRecord = false;
         this._imageEditor.addMarker(marker);
       }else{
         this.showToast();
@@ -198,4 +205,37 @@ export class ObservGraphPage implements OnInit{
     return this._toast.dismiss();
   }
 
+  private fetchDiseaseNo() {
+    let createDiseaseInfo = JSON.parse(localStorage.getItem("createDiseaseInfo"));
+    this.diseaseInfo = {
+      date: createDiseaseInfo["date"],
+      count: createDiseaseInfo["count"]
+    }
+    return this.diseaseInfo.date + this.diseaseInfo.count;
+  }
+
+  private generateDiseaseNo() {
+    let today = new Date().toISOString().slice(0, 10).split('-').join('');
+    let createDiseaseInfo = JSON.parse(localStorage.getItem("createDiseaseInfo"));
+    if(createDiseaseInfo){
+      if(createDiseaseInfo["date"] == today) {
+        this.diseaseInfo = {
+          date: createDiseaseInfo["date"],
+          count: createDiseaseInfo["count"] + 1
+        }
+      } else {
+        this.diseaseInfo = {
+          date: today,
+          count: 1
+        }
+      }
+    } else {
+       this.diseaseInfo = {
+         date: today,
+         count: 1
+       }
+    }
+
+    return this.diseaseInfo.date + this.diseaseInfo.count;
+  }
 }

@@ -10,12 +10,12 @@
       环境巡检
     </ion-title>
     <ion-title center [hidden]="onGround" class="underground-title">
-      <ion-icon [SelectPopover] [itemList]="directions" [itemDisplayName]="'displayName'" (selectChanged)="selectedTunnelOption.direction = $event">
-        {{selectedTunnelOption.direction.displayName}}
+      <ion-icon [SelectPopover] [itemList]="directions" [itemDisplayName]="'name'" (selectChanged)="selectedTunnelDirectionChanged($event)">
+        {{selectedTunnelOption.direction.name}}
       </ion-icon>
       -
-      <ion-icon [SelectPopover] [itemList]="structs" [itemDisplayName]="'displayName'" (selectChanged)="selectedTunnelOption.struct = $event">
-        {{selectedTunnelOption.struct.displayName}}
+      <ion-icon [SelectPopover] [itemList]="structs" [itemDisplayName]="'name'" (selectChanged)="selectedTunnelStructChanged($event)">
+        {{selectedTunnelOption.struct.name}}
       </ion-icon>
     </ion-title>
     

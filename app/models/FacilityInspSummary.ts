@@ -16,6 +16,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	photoStandard: any //标准图
 	posDespList: any //位置描述
 	tagId: any //标签id
+	needRepair: any //是否需要维修
 	updateCnt: any //更新次数
 
 	constructor() {
@@ -33,6 +34,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.photoStandard = null;
 		this.posDespList = null;
 		this.tagId = null;
+		this.needRepair = null;
 		this.updateCnt = null;
 	}
 

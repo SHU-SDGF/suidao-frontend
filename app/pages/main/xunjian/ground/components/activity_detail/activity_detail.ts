@@ -58,7 +58,7 @@ export class ActivityDetailPage implements OnInit{
       actStatus: '',
       actType: '',
       recorder: '',
-      startDate: new Date().toISOString().slice(0,10),
+      startDate: new Date(),
       endDate: new Date().toISOString().slice(0,10)
     };
 

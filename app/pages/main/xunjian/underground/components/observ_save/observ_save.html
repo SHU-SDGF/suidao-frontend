@@ -28,7 +28,8 @@
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label style="color:white;">病害描述</ion-label>
+      <ion-label>病害描述</ion-label>
+      <ion-textarea rows="6" [(ngModel)]="diseaseDetailObj.diseaseDescription"></ion-textarea>
     </ion-item>
     <ion-item *ngIf="diseaseDetailObj.diseaseType == 'D2' || diseaseDetailObj.diseaseType == 'D3' || diseaseDetailObj.diseaseType == 'D4'">
       <ion-label>面积</ion-label>
@@ -63,23 +64,23 @@
     </ion-item>
     <ion-item>
       <ion-label>病害编号</ion-label>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.diseaseNo"></ion-input>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.diseaseNo" disabled="true"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>里程</ion-label>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.mileage"></ion-input>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.mileage" disabled="true"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>隧道内方位</ion-label>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.posDespList"></ion-input>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayModelName" disabled="true"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>记录人</ion-label>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.recorder"></ion-input>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.recorder" disabled="true"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label>日期</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="diseaseDetailObj.diseaseDate"></ion-datetime>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayDiseaseDate" disabled="true"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>
