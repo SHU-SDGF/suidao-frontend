@@ -77,6 +77,6 @@ export class UndergroundPage implements OnInit, OnDestroy {
 }
 
 export interface TunnelOption{
-  direction: { id: number, displayName: string },
-  struct: {id: number, displayName: string}
+  direction: { id: number, name: string },
+  struct: {id: number, name: string}
 }

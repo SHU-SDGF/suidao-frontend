@@ -3,6 +3,7 @@ import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
 
 import {AppUtils} from '../../../../../../shared/utils';
 import {LookupService} from '../../../../../../providers/lookup_service';
+import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
 
 
 @Component({
@@ -20,11 +21,12 @@ export class ObservSavePage implements OnInit{
   private detailTypeList: any;
 
 
-  constructor(private _viewCtrl: ViewController, private lookupService: LookupService, private params: NavParams){
+  constructor(private _viewCtrl: ViewController, private lookupService: LookupService, private params: NavParams, private facilityInspService: FacilityInspService){
 
   }
 
   ngOnInit(){
+    debugger;
     this.diseaseTypeList = [this.params.data.diseaseType.diseaseType];
     this.diseaseDetailObj.diseaseType = this.diseaseTypeList[0]["id"];
     this.detailTypeList = this.lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseType);
@@ -35,6 +37,10 @@ export class ObservSavePage implements OnInit{
   }
 
   createDisease(){
+    //create new Disease
+    debugger;
+    //this.facilityInspService.addNewFacilityInspSummary(this.diseaseDetailObj);
+
     this._viewCtrl.dismiss(this.diseaseDetailObj);
   }
 }

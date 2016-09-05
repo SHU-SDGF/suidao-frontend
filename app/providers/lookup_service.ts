@@ -178,9 +178,9 @@ export class LookupService {
 		]
 
 		this.localStorage = new Storage(LocalStorage);
-		this.localStorage.set(MODELNAMES, JSON.stringify(model_names));
+		// this.localStorage.set(MODELNAMES, JSON.stringify(model_names));
 		this.localStorage.set(POSITION_DESCRIPTIONS, JSON.stringify(position_descriptions));
-		this.localStorage.set(MONOMERS, JSON.stringify(monomers_data));
+		// this.localStorage.set(MONOMERS, JSON.stringify(monomers_data));
 		this.localStorage.set(ACT_TYPES, JSON.stringify(act_types_data));
 		this.localStorage.set(ACTION_STATUS_DATA, JSON.stringify(act_status_data));
 		this.localStorage.set(AUTHORITY_DATA, JSON.stringify(authority_data));
@@ -194,6 +194,21 @@ export class LookupService {
 			let diseaseTypesObj = result["diseaseTypeList"].map((obj) => {
 				return { id: obj.id, name: obj.diseaseTypeName};
 			})
+
+			let modelNamesObj = result["modelNameList"].map((obj) => {
+				return { id: obj.id, name: obj.modelName}
+			});
+
+			let monomersObj = result["monomerNoList"].slice(0,2).map((obj) => {
+				return { id: obj.monomerNo, name: obj.monomerName}
+			});
+
+			//单体名称枚举表
+			this.localStorage.set(MONOMERS, JSON.stringify(monomersObj));
+			//模型名称枚举表
+			this.localStorage.set(MODELNAMES, JSON.stringify(modelNamesObj));
+
+			//病害大类
 			this.localStorage.set(DISEASE_TYPES, JSON.stringify(diseaseTypesObj));
 			//病害小类枚举表
 			this.localStorage.set(DETAIL_TYPES, JSON.stringify(result["diseaseTypeTreeVoList"]));
