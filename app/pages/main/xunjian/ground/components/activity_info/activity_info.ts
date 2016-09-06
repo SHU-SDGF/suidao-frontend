@@ -53,8 +53,9 @@ export class ActivityInfoPage implements OnInit{
     };
 
     // username
-    this._userService.getUsername().then((username) => {
-      this.activityDetailObj.recorder = username;
+    this._userService.getUserInfo().then((userInfo) => {
+      this.activityDetailObj.recorder = userInfo.userName;
+      this.activityDetailObj.createUser = userInfo.userName;
     });
 
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {

@@ -9,30 +9,28 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="activity_history_detail">
-  <ion-list>
-    <ion-item>
-      <ion-label>活动名称</ion-label>
-      <ion-input type="text" [(ngModel)]="activityDetailObj.actName" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>活动类别</ion-label>
-      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actType" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>巡检日期</ion-label>
-      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.inspDate" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>活动状态</ion-label>
-      <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actStatus" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>记录人</ion-label>
-      <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label stacked>描述</ion-label>
-      <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
-    </ion-item>
-  </ion-list>
+  <h5 class="assertive-field field-label">活动名称</h5>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="activityDetailObj.actName" disabled="true"></ion-input>
+  </ion-item>
+  <h5 class="assertive-field field-label">活动类别</h5>
+  <ion-item>
+    <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actType" disabled="true"></ion-input>
+  </ion-item>
+  <h5 class="assertive-field field-label">巡检日期</h5>
+  <ion-item>
+    <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.inspDate" disabled="true"></ion-input>
+  </ion-item>
+  <h5 class="assertive-field field-label">活动状态</h5>
+  <ion-item>
+    <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.actStatus" disabled="true"></ion-input>
+  </ion-item>
+  <h5 class="assertive-field field-label">记录人</h5>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
+  </ion-item>
+  <h5 class="assertive-field field-label">描述</h5>
+  <ion-item>
+    <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
+  </ion-item>
 </ion-content>

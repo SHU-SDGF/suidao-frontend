@@ -15,6 +15,7 @@ ion-tabbar{
       -ms-flex-pack: center;   
     -webkit-justify-content: center;   
             justify-content: center;   
+    opacity: 1;
     & > ion-icon{
       flex: 1;
       position: relative;
@@ -28,9 +29,9 @@ ion-tabbar{
         display: block;
         height: 6rem;
         line-height: 6rem;
-        background: #0c2c48;
+        background: color($colors, dark);
         border-radius: 100%;
-        box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.4);
+        box-shadow: 0px 0px 10px 2px rgba(255,255,255,0.2);
         display: inline-block;
         font-family: "Ionicons";
         speak: none;

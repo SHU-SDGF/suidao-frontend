@@ -1,21 +1,22 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, LoadingController, ActionSheetController} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
+import { EnvironmentActivity, EnvironmentActivityService } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
 import {LookupService} from '../../../../../../providers';
 import {UserService} from '../../../../../../providers';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
 
 @Component({
   selector: 'activity-detail',
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
-  directives: [MediaViewer]
+  directives: [MediaViewer, CaptureMedia]
 })
 export class ActivityDetailPage implements OnInit{
   
-  private activityDetailObj: EnvironmentActivitySummary;
+  private activityDetailObj: any;
   medias: Array<IMediaContent> = [];
 
   private actStatusList: [{
@@ -55,10 +56,10 @@ export class ActivityDetailPage implements OnInit{
       description: '', //活动描述
       longitude: point.lng, //经度
       latitude: point.lat, //纬度
-      actStatus: '',
-      actType: '',
+      actStatus: 0,
+      actType: 0,
       recorder: '',
-      startDate: new Date(),
+      startDate: new Date().toISOString().slice(0,10),
       endDate: new Date().toISOString().slice(0,10)
     };
 
@@ -75,6 +76,7 @@ export class ActivityDetailPage implements OnInit{
 
 
     this._lookupService.getActTypes().then((actTypes:[{name: string, order: number}]) => {
+      _self.activityDetailObj.actType = actTypes[0].order;
       _self.actTypes = actTypes;
     });
   }
@@ -115,37 +117,8 @@ export class ActivityDetailPage implements OnInit{
     });
   }
 
-  captureMedia(){
-    ActionSheet.show({
-      'title': "选择媒体种类",
-      "buttonLabels": ['图片', '视频', '音频']
-    }).then((buttonIndex: number) => {
-      if(buttonIndex == 1){
-        MediaCapture.captureImage().then((medieFiles: Array<MediaFile>) => {
-          this.medias.unshift({
-            fileUri: medieFiles[0].fullPath,
-            mediaType: 'img',
-            preview: medieFiles[0].fullPath
-          });
-        });
-      }else if(buttonIndex == 2){
-        MediaCapture.captureVideo().then((medieFiles: Array<MediaFile>)=>{
-          this.medias.unshift({
-            fileUri: medieFiles[0].fullPath,
-            mediaType: 'video',
-            preview: 'build/imgs/video.png'
-          });
-        });
-      }else if(buttonIndex == 3){
-        MediaCapture.captureAudio().then((medieFiles: Array<MediaFile>)=>{
-          this.medias.unshift({
-            fileUri: medieFiles[0].fullPath,
-            mediaType: 'audio',
-            preview: 'build/imgs/audio.png'
-          });
-        });
-      }
-    });
+  captureMedia(media: IMediaContent){
+    this.medias.unshift(media);
   }
 
   dismiss() {

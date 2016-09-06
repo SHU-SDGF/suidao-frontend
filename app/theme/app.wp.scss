@@ -29,3 +29,90 @@
 // App Windows Only Sass
 // --------------------------------------------------
 // CSS that should only apply to the Windows app
+
+
+
+[tabsPlacement=bottom] .tab-button[aria-selected=true] {
+  border-top-color: color($colors, deep-blue);
+}
+
+[tabsPlacement=bottom] .tab-button[aria-selected=true]{
+      border-top-color: transparent;
+}
+
+ion-buttons[start]{
+  order: 1;
+}
+
+.toolbar{
+  min-height: 3.6rem;
+  .toolbar-background{
+    background-color: color($colors, deep-blue) !important;
+  }
+  .toolbar-content{
+    position: absolute;
+    width: 100%;
+    .toolbar-title{
+      text-align: center;
+      min-height: 0rem;
+      color: color($colors, primary);
+    }
+  }
+
+  .bar-button-default{
+    color: color($colors, primary);
+  }
+}
+
+ion-tabbar{
+  height: 4.8rem;
+  background: color($colors, dark);
+  .tab-button{
+    color: color($colors, primary);
+    opacity: 0.7;
+    &[aria-selected=true]{
+      opacity: 1;
+      color: color($colors, blue);
+    }
+  }
+}
+
+ion-alert{
+  .alert-wrapper{
+    .alert-head{
+      border-bottom: 1px solid #eee;
+      text-align: center;
+      padding: 15px 10px;
+      h2{
+        font-size: 15px;
+        font-weight: bold;
+      }
+    }
+    .alert-message{
+      padding: 10px;
+    }
+    background-color: color($colors, light-white);
+    width: 250px;
+    max-height: 90%;
+    .alert-button-group{
+      padding: 10px;
+      button.alert-button{
+        flex: 1;
+        display: block;
+        min-height: 45px;
+        border-radius: 2px;
+        line-height: 20px;
+        margin-right: 5px;
+        background-color: #fff;
+        border-color: #b2b2b2;
+        border-width: 1px;
+        border-style: solid;
+
+        &:last-child{
+          background-color: color($colors, blue);
+          color: color($colors, light);
+        }
+      }
+    }
+  }
+}

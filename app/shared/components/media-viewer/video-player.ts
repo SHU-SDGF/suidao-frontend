@@ -7,11 +7,6 @@ import {IMediaContent} from './media-viewer';
   template: `
     <ion-header>
       <ion-navbar no-border-bottom>
-        <ion-buttons start>
-          <button (click)="dismiss()">
-            取消
-          </button>
-        </ion-buttons>
       </ion-navbar>
     </ion-header>
     <ion-content>

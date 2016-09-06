@@ -270,9 +270,11 @@ export class GroundPage implements OnInit, OnDestroy {
                 let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
                 modal.present();
                 modal.onDidDismiss((activity) => {
-                  debugger;
                   _self.removeUnsavedMarker();
-                  if (!activity) return;
+                  if (!activity) {
+                    this.toggleEditing();
+                    return;
+                  };
                   _self.environmentActivityList.unshift({
                     actName: activity["environmentActitivitySummary"]["actName"],
                     actNo: activity["environmentActitivitySummary"]["actNo"],

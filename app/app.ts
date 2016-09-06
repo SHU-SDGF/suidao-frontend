@@ -106,5 +106,6 @@ for(let p in _providers ){
 }
 
 ionicBootstrap(MyApp, providersAr, {
-  mode : 'ios'
+  mode : 'ios',
+  backButtonText: "返回"
 });

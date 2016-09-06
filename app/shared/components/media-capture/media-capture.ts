@@ -4,7 +4,7 @@ import {Directive, Output, EventEmitter, HostListener} from '@angular/core';
 import {IMediaContent} from '../../../shared/components/media-viewer/media-viewer';
 
 @Directive({
-  selector: '[CaptureImage]'
+  selector: '[CaptureMedia]'
 })
 export class CaptureMedia{
   @Output() onCaptured: EventEmitter<IMediaContent> = new EventEmitter();
