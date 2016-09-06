@@ -43,11 +43,11 @@ export class ObservSavePage implements OnInit{
       } else {
         this.diseaseDetailObj = {
           diseaseType: this.diseaseTypeList[0]["id"],
-          modelNameList: {
+          monomer: {
             "id": tunnelOptions["direction"]["id"],
             "modelName": tunnelOptions["direction"]["name"]
           },
-          monomerNoList: {
+          modelNameList: {
             "id": tunnelOptions["struct"]["id"],
           },
           recorder: '',
@@ -58,8 +58,10 @@ export class ObservSavePage implements OnInit{
           length: 0,
           area: 0,
           width: 0,
-          jointOpen: 0,
-          position: {longitude: this.point.longitude, latitude: this.point.latitude},
+          jointopen: 0,
+          dislocation: 0,
+          longitude: this.point.longitude,
+          latitude: this.point.latitude,
           diseaseNo: this.params.data.diseaseNo,
           diseaseDate: new Date().getTime(),
           diseaseDescription: '',
@@ -92,6 +94,7 @@ export class ObservSavePage implements OnInit{
       dismissOnPageChange: true,
       duration: 2000
     });
+    this.diseaseDetailObj.isNewCreated = true;
     loader.present();
     if(this.isNewRecord) {
       this.facilityInspService.addNewFacilityInspSummary(this.diseaseDetailObj).then((result) => {
@@ -102,12 +105,6 @@ export class ObservSavePage implements OnInit{
       },(error) => {
       });
     } else {
-      // this.facilityInspService.addNewFacilityInspDetail(that.diseaseDetailObj).then((result) => {
-      //   if(result.ok) {
-      //     this._viewCtrl.dismiss(this.diseaseDetailObj);
-      //   }
-      // }, (error) => {
-      // });
     }
   }
 }

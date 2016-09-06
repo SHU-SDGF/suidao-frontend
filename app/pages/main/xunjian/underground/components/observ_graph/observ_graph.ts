@@ -165,9 +165,8 @@ export class ObservGraphPage implements OnInit{
     modal.onDidDismiss((value)=>{
       if(value){
         marker.diseaseNo = value.diseaseNo;
-        marker.longitude = value.position.longitude;
-        marker.latitude = value.position.latitude;
-        that.isnewRecord = false;
+        marker.longitude = value.longitude;
+        marker.latitude = value.latitude;
         this._imageEditor.addMarker(marker);
       }else{
         this.showToast();
@@ -178,7 +177,7 @@ export class ObservGraphPage implements OnInit{
   dismiss(){
     this._viewCtrl.dismiss();
   }
-
+  
   enableDisease(disease){
     this._menuTip.hide();
     
