@@ -52,10 +52,6 @@ export class EnvironmentActivityService {
 		return this.httpService.post(activitySummaryObj, 'environment-activities-summary/create');
 	}
 
-	//根据活动名称来寻找环境活动
-	searchEnvironmentActivitySummaryByActName(act_name: string) {
-	}
-
 	//显示活动列表
 	getEnvironmentActivitiesSummaryList() {
 		return this.httpService.get({}, 'environment-activities-summary/list');

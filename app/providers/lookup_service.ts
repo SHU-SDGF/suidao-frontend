@@ -190,6 +190,7 @@ export class LookupService {
 
 	getWholeLookupTable() {
 		this.httpService.get({}, 'enum/whole-enum-type/list').then((result) => {
+			debugger;
 			//设施小类枚举表
 			let facilityTypesObj = result["facilityTypeList"].map((obj) => {
 				return { id: obj.id, name: obj.facilityType}
@@ -203,8 +204,8 @@ export class LookupService {
 				return { id: obj.id, name: obj.modelName}
 			});
 
-			let monomersObj = result["monomerNoList"].slice(0,2).map((obj) => {
-				return { id: obj.monomerNo, name: obj.monomerName}
+			let monomersObj = result["monomer"].slice(0,2).map((obj) => {
+				return { id: obj.id, name: obj.name}
 			});
 
 			this.localStorage.set(FACILITY_TYPES, JSON.stringify(facilityTypesObj));

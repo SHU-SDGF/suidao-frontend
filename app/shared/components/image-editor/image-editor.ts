@@ -129,6 +129,7 @@ export interface MarkerOptions {
   latitude: number,
   icon?: string,
   content?: string,
+  diseaseNo?: string,
   description?: string,
   marker?: any
 }

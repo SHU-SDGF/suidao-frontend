@@ -153,19 +153,20 @@ export class ObservGraphPage implements OnInit{
 
   showCreateModal(marker: MarkerOptions){
     let diesaseNo = '';
-    if(this.isnewRecord) {
-      diesaseNo = this.generateDiseaseNo();
+    if(marker.diseaseNo && marker.diseaseNo != '') {
+      diesaseNo = marker.diseaseNo;
     } else {
-      diesaseNo = this.fetchDiseaseNo();
+      diesaseNo = this.generateDiseaseNo();
     }
+
     let modal = this._modalCtrl.create(ObservSavePage, {point: marker, diseaseType: this._selectedDiseaseType, diseaseNo: diesaseNo, isNewRecord: this.isnewRecord, diseaseInfo: this.diseaseInfo});
     modal.present();
     let that = this;
     modal.onDidDismiss((value)=>{
       if(value){
-        marker.longitude = value.position.longitude;
-        marker.latitude = value.position.latitude;
-        that.isnewRecord = false;
+        marker.diseaseNo = value.diseaseNo;
+        marker.longitude = value.longitude;
+        marker.latitude = value.latitude;
         this._imageEditor.addMarker(marker);
       }else{
         this.showToast();
@@ -176,7 +177,7 @@ export class ObservGraphPage implements OnInit{
   dismiss(){
     this._viewCtrl.dismiss();
   }
-
+  
   enableDisease(disease){
     this._menuTip.hide();
     
@@ -236,6 +237,6 @@ export class ObservGraphPage implements OnInit{
        }
     }
 
-    return this.diseaseInfo.date + this.diseaseInfo.count;
+    return this.diseaseInfo.date + ("00" + this.diseaseInfo.count).slice(-3);
   }
 }
