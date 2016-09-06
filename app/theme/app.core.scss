@@ -121,29 +121,46 @@ h5{
   position: relative;
   bottom: -3px;
 }
-ion-item.item{
-  min-height: 3rem;
-  border-top: solid 1px #ddd;
-  border-bottom: solid 1px #ddd;
-  .item-inner{
-    border-bottom: none;
-    input{
-      font-size: 1rem;
+ion-content{
+  ion-item.item{
+    min-height: 3rem;
+    border-top: solid 1px #ddd;
+    border-bottom: solid 1px #ddd;
+    .item-inner{
+      border-bottom: none;
+      input{
+        font-size: 1rem;
+      }
+    }
+  }
+  ion-toolbar{
+    ion-item.item{
+      min-height: 3rem;
+      border-top: none;
+      border-bottom: none;
+      background-color: color($colors, deep-blue);
+      .item-inner{
+        border-bottom: none;
+        input{
+          font-size: 1rem;
+        }
+      }
     }
   }
 }
 
+
 ion-modal{
   ion-toolbar.toolbar{
     .toolbar-background{
-      background-color: color($colors, light);
+      background-color: #fff;
     }
     .toolbar-content{
       .toolbar-title{
         color: color($colors, dark);
       }
     }
-    ion-buttons[start]{
+    ion-buttons[start], ion-buttons[end]{
       button.bar-button-default{
         color: color($colors, blue);
       }
@@ -173,4 +190,33 @@ ion-list{
       border-bottom: none;
     }
   }
+}
+
+
+ion-item-group {
+    .act-card {
+        color: color($colors, dark);
+        background-color: #fff;
+        box-shadow: 0px 4px 5px 1px rgba(0, 0, 0, 0.2);
+        margin-top: 10px;
+        &:active{
+          background-color: rgba(0, 0, 0, 0.3);
+        }
+        .act-detail {
+            color: color($colors, dark); 
+            p {
+                margin-top: 5px;
+                color: color($colors, dark); 
+            }
+        }
+        .item-inner{
+            border-bottom: none;
+        }
+        ion-icon.item-icon{
+            min-width: 2.4rem;
+            img{
+                width: 2.4rem;
+            }
+        }
+    }
 }

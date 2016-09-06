@@ -24,37 +24,37 @@
 <ion-content>
   <div [hidden]="selectedPage !== 'detail'">
     <ion-list>
+      <h5 class="assertive-field field-label">活动编号</h5>
       <ion-item>
-        <ion-label>活动编号</ion-label>
         <ion-input [(ngModel)]="myDisease.actNo" disabled="true"></ion-input>
       </ion-item>
+      <h5 class="assertive-field field-label">巡检时间</h5>
       <ion-item>
-        <ion-label>巡检时间</ion-label>
         <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="myDisease.inspDate"></ion-datetime>
       </ion-item>
+      <h5 class="assertive-field field-label">活动类别</h5>
       <ion-item>
-        <ion-label>活动类别</ion-label>
         <ion-select [(ngModel)]="myDisease.actType" okText="确认" cancelText="取消">
           <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
         </ion-select>
       </ion-item>
+      <h5 class="assertive-field field-label">活动状态</h5>
       <ion-item>
-        <ion-label>活动状态</ion-label>
         <ion-select [(ngModel)]="myDisease.actStatus" okText="确认" cancelText="取消">
           <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
         </ion-select>
       </ion-item>
+      <h5 class="assertive-field field-label">记录人</h5>
       <ion-item>
-        <ion-label>记录人</ion-label>
         <ion-input type="text" [(ngModel)]="myDisease.recorder" disabled="true"></ion-input>
       </ion-item>
+      <h5 class="assertive-field field-label">描述</h5>
       <ion-item>
-        <ion-label>描述</ion-label>
         <ion-textarea rows="6" [(ngModel)]="myDisease.description"></ion-textarea>
       </ion-item>
     </ion-list>
 
-    <button block (click)="edit()" secondary>编辑</button>
+    <button block (click)="edit()">编辑</button>
   </div>
 
   <div [hidden]="selectedPage !== 'history'">
