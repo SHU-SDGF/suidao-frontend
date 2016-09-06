@@ -2,7 +2,7 @@ import {MapUtils, JsonProperty, Serializable} from '../providers/JsonMapper';
 import {_baseClass} from './_baseClass';
 
 @Serializable()
-export class EnvironmentActivitySummary {
+export class EnvironmentActivitySummary extends _baseClass{
   actNo: string //活动编码
 
   @JsonProperty('title')
@@ -19,7 +19,9 @@ export class EnvironmentActivitySummary {
 	actStatus: any
   actType: any
 
-  constructor() {
+  constructor(obj = null) {
+    super();
+
     this.actNo = null;
     this.actName = null;
     this.startDate = null;
@@ -31,6 +33,8 @@ export class EnvironmentActivitySummary {
     this.recorder = null;
     this.actStatus = null;
     this.actType = null;
+
+    this.assign(obj);
   }
 
   static deserialize(obj): EnvironmentActivitySummary {

@@ -19,7 +19,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	needRepair: any //是否需要维修
 	updateCnt: any //更新次数
 
-	constructor() {
+	constructor(obj = null) {
 		super()
 		this._id = null;
 		this.id = null;
@@ -36,6 +36,8 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.tagId = null;
 		this.needRepair = null;
 		this.updateCnt = null;
+
+		this.assign(obj);
 	}
 
 	static deserialize(obj): FacilityInspSummary {

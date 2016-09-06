@@ -17,7 +17,7 @@ export class EnvironmentActivity extends _baseClass{
 	video: any // 视频
   recorder: string //记录人
 
-  constructor() {
+  constructor(obj = null) {
     super();
     this.actName = null;
     this.actNo = null;
@@ -30,6 +30,8 @@ export class EnvironmentActivity extends _baseClass{
     this.audio = null;
     this.video = null;
     this.recorder = null; 
+
+    this.assign(obj);
   }
 
   static deserialize(obj): EnvironmentActivity {

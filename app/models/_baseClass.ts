@@ -14,4 +14,11 @@ export abstract class _baseClass{
   }
 
   public serialize() {}
+
+  public assign(obj){
+    if(!obj) return;
+    for(let key in this){
+      this[key] = obj[key];
+    }
+  }
 }

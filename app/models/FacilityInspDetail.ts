@@ -20,7 +20,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	width: any //宽度
 	updateCnt: number //更新次数
 
-	constructor() {
+	constructor(obj = null) {
 		super()
 		this._id = null;
 		this.area = null;
@@ -38,6 +38,8 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.recorder = null;
 		this.width = null;
 		this.updateCnt = null;
+
+		this.assign(obj);
 	}
 
 	static deserialize(obj): FacilityInspDetail {
