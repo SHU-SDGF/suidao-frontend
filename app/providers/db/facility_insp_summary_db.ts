@@ -19,6 +19,14 @@ export class FacilityInspSummaryDB {
   	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
   }
 
+
+  //根据巡检活动编号找到巡检活动
+  getFacilityInspByDiseaseNo(diseaseNo: any) {
+    return this._db.find({
+      selector: {diseaseNo: diseaseNo}
+    })
+  }
+
   //生成一条巡检活动
   addNewFacilityInspSummary(FacilityInspSummaryObject: any) {
   	return this._db.post(FacilityInspSummaryObject.serialize());

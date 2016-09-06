@@ -47,7 +47,7 @@ export class UserService {
           generateAuthToken(result);
           _that._setUsername(credentials.userName);
           _that._setUserInfo(result);
-          _that._setUserToken(result.accessToken);
+          _that._setUserToken(result.token);
           _that.events.publish(this.LOGIN_EVENT);
           
           resolve();

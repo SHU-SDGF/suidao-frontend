@@ -4,38 +4,55 @@ import {_baseClass} from './_baseClass';
 @Serializable()
 export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	_id: string //pouchdb 主键id,其实就是diseaseNo
-	diseaseNo: string //病害编号
-	delFlg: any //删除标记
-	diseaseDate: any //病害日期
-	facilityType: any // 设施小类
-	id: any //id
-	mfacilityList: any //设施编号
-	mileage: any //里程
-	modelNameList: any //模型名称
-	monomerNoList: any //单体名称
-	photoStandard: any //标准图
-	posDespList: any //位置描述
-	tagId: any //标签id
-	needRepair: any //是否需要维修
-	updateCnt: any //更新次数
+	area: any
+	createDate: any
+	createUser: string
+	depth: any
+	detailType: any
+	diseaseDate: any
+	diseaseDiscription: string
+	diseaseNo: string
+	diseaseType: any
+	dislocation: number
+	facility: any
+	facilityType: any
+	isNeedRepair: any
+	isNewCreated: any
+	jointopen: number
+	langitude: number
+	latitude: number
+	length: number
+	mileage: string
+	modelNameList: any // id, modelName
+	monomer: any
+	recorder: string
+	width: number
 
 	constructor() {
 		super()
 		this._id = null;
-		this.id = null;
-		this.diseaseNo = null;
-		this.delFlg = null;
+		this.area = null;
+		this.createDate = null;
+		this.createUser = null;
+		this.depth = null;
+		this.detailType = null;
 		this.diseaseDate = null;
+		this.diseaseNo = null;
+		this.diseaseType = null;
+		this.dislocation = null; 
+		this.facility = null;
 		this.facilityType = null;
-		this.mfacilityList = null;
+		this.isNeedRepair = null;
+		this.isNewCreated = null;
+		this.jointopen = null;
+		this.langitude = null;
+		this.langitude = null;
+		this.length = null;
 		this.mileage = null;
-		this.modelNameList = null;
-		this.monomerNoList = null;
-		this.photoStandard = null;
-		this.posDespList = null;
-		this.tagId = null;
-		this.needRepair = null;
-		this.updateCnt = null;
+		this.modelNameList = null; 
+		this.monomer = null;
+		this.recorder = null;
+		this.width = null;
 	}
 
 	static deserialize(obj): FacilityInspSummary {

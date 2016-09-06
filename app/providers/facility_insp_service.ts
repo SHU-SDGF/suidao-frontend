@@ -27,9 +27,10 @@ export class FacilityInspService {
 		return this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj);
 	}
 
-	//批量新增巡检记录
-	batchCreateFacilityInspSummary(facilityInspSummaryParams: any) {
-		
+	// 根据灾害编号来查找巡检活动
+	findFacilityInspByDiseaseNo(diseaseNo: any) {
+		this.facilityInspSummaryDB._initDB();
+		return this.facilityInspSummaryDB.getFacilityInspByDiseaseNo(diseaseNo);
 	}
 }
 

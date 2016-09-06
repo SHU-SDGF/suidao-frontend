@@ -6,6 +6,7 @@ import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
 import {GroundPage} from './ground/ground';
 import {UndergroundPage, TunnelOption} from './underground/underground';
 import {SelectPopover} from '../../../shared/components/select-popover/select-popover';
+import {LookupService} from '../../../providers/lookup_service';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/xunjian.html',
@@ -13,8 +14,8 @@ import {SelectPopover} from '../../../shared/components/select-popover/select-po
 })
 export class XunjianPage extends ToggleMenu{
   private onGround: boolean = true;
+  private directions: any;
 
-  private directions = JSON.parse(localStorage.getItem("monomers"));
   private structs = JSON.parse(localStorage.getItem("model_names"));
 
   private selectedTunnelOption: TunnelOption;
@@ -23,6 +24,7 @@ export class XunjianPage extends ToggleMenu{
     private _menuCtrl: MenuController,
     private _modalCtrl: ModalController,
     private _popoverCtrl: PopoverController,
+    private _lookupService: LookupService,
     private _zoon: NgZone,
     private _event: Events
   ) {
@@ -30,9 +32,10 @@ export class XunjianPage extends ToggleMenu{
   }
 
   ngOnInit() {
+    this.directions = JSON.parse(localStorage.getItem("monomers"));
     this.selectedTunnelOption = {
-      direction: this.directions[0],
-      struct: this.structs[0]
+      direction: {"id": 1, name: "东线隧道"},
+      struct: {"id": 3, name: "大型车道"}
     };
 
     localStorage.setItem('tunnelOption', JSON.stringify(this.selectedTunnelOption));
