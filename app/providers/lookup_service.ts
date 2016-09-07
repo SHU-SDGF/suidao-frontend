@@ -190,7 +190,6 @@ export class LookupService {
 
 	getWholeLookupTable() {
 		this.httpService.get({}, 'enum/whole-enum-type/list').then((result) => {
-			debugger;
 			//设施小类枚举表
 			let facilityTypesObj = result["facilityTypeList"].map((obj) => {
 				return { id: obj.id, name: obj.facilityType}
@@ -223,7 +222,6 @@ export class LookupService {
 
 	//根据病害大类找小类
 	getDetailTypesByDiseaseTypes(diseaseTypeId: string) {
-		debugger;
 		this.localStorage.get(DETAIL_TYPES);
 		var diseaseTypeTreeVoList = JSON.parse(localStorage.getItem(DETAIL_TYPES));
 		var selectedDetailType = null;
@@ -282,5 +280,17 @@ export class LookupService {
 		return this.localStorage.get(AUTHORITY_DATA).then((data) => {
 			return JSON.parse(data);
 		});
+	}
+
+	//根据key查询value
+	getNameBy(key, lookupTable): string {
+		var lookupTableData = JSON.parse(localStorage.getItem(lookupTable));
+		var value = '';
+		for(let index in lookupTableData) {
+			if(lookupTableData[index]["id"] == key) {
+				value = lookupTableData[index]["name"];
+			}
+		}
+		return value
 	}
 }

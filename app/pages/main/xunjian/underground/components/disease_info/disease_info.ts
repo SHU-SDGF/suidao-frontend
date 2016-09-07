@@ -6,7 +6,7 @@ import {DiseaseHistoryInfoPage} from '../disease_history_info/disease_history_in
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
 import {FacilityInspSummary} from  '../../../../../../models/FacilityInspSummary';
-
+ 
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/disease_info/disease_info.html',
@@ -27,7 +27,10 @@ export class DiseaseInfoPage implements OnInit{
     order: number
   }];
 
-  private myDisease: FacilityInspSummary;
+  private diseaseDetailObj: FacilityInspSummary;
+  private detailTypeList: any;
+  private diseaseTypeList: any;
+  private isEditing = false;
 
   private environmentActivityList: any = [];
   constructor(
@@ -42,17 +45,11 @@ export class DiseaseInfoPage implements OnInit{
 
   ngOnInit() {
     let _self = this;
-    this.myDisease = this.params.get('disease');
-
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
-      _self.actStatusList = actStatusList;
-    });
-
-    // 获取病害历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo('12016090112').then((result) => {
-      this.environmentActivityList = result["content"];
-    }, (error) => {
-    });
+    this.diseaseDetailObj = this.params.get('disease');
+    this.diseaseDetailObj["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailObj.diseaseType, 'disease_types');
+    this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseType);
+    this.diseaseDetailObj["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailObj.modelName, 'model_names');
+    this.diseaseDetailObj["displayDiseaseDate"] = new Date(this.diseaseDetailObj.diseaseDate).toISOString().slice(0,10);
   }
 
   dismiss() {
@@ -60,7 +57,11 @@ export class DiseaseInfoPage implements OnInit{
   }
 
   edit() {
-    
+    this.isEditing = true;
+  }
+
+  update() {
+    this.isEditing = false;
   }
 
   private _getLookUpValue(list, order){

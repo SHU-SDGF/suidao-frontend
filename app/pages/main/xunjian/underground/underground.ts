@@ -26,7 +26,6 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   ngOnInit(){
     //search
-
   }
 
   ngAfterViewInit() {
@@ -35,7 +34,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
     this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
       var filteredResult =  _.groupBy(result.docs, 'mileage');
       for(var index in filteredResult) {
-        that.facilityInspList.push({mileage: index, info: filteredResult[index]})
+        that.facilityInspList.push({mileage: index, facilityInsp: filteredResult[index]})
       }
     }, (error) => {
 
@@ -46,9 +45,8 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   }
 
-  showObservInfo(mileage){
-    debugger;
-    let modal = this._modalCtrl.create(ObservInfoPage, {'mileage': mileage});
+  showObservInfo(facilityInspInfo){
+    let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
   }
 

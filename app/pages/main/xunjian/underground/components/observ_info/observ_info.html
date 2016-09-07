@@ -6,7 +6,7 @@
       </button>
     </ion-buttons>
     <ion-title center>
-      <ion-label>里程号: {{huanhao.name}}</ion-label>
+      <ion-label>里程号: {{huanhao}}</ion-label>
     </ion-title>
     <ion-buttons end>
       <button (click)="viewGraph()">
@@ -34,13 +34,13 @@
     <ion-list>
       <ion-item-group>
         <button clear ion-item class="act-card" *ngFor = "let disease of diseaseList" (click)="viewDisease(disease)">
-          <ion-icon item-left><img src="{{diseaseTypes[disease.diseaseNo].icon}}"/></ion-icon>
+          <ion-icon item-left><img src="{{diseaseTypes[disease.facilityType].icon}}"/></ion-icon>
           <div item-inner class="act-detail">
-            <h3>病害编号：{{disease.id}}</h3>
+            <h3>病害编号：{{disease.diseaseNo}}</h3>
             <p>
-              {{diseaseTypes[disease.diseaseNo].name}}
+              {{diseaseTypes[disease.facilityType].name}}
               &mdash;
-              {{disease.diseaseDate | DatePipe}}
+              {{_convertDate(disease.diseaseDate)}}
             </p>
           </div>
         </button>
@@ -57,11 +57,11 @@
         <button ion-item class="act-card" *ngFor = "let disease of diseaseList">
           <ion-icon item-left name="ios-construct"></ion-icon>
           <div item-inner class="act-detail">
-            <h3>维修编号：{{disease.id}}</h3>
+            <h3>维修编号：{{disease.diseaseNo}}</h3>
             <p>
-              {{diseaseTypes[disease.diseaseNo].name}}
+              {{diseaseTypes[disease.facilityType].name}}
               &mdash;
-              {{disease.diseaseDate | DatePipe}}
+              {{_convertDate(disease.diseaseDate)}}
             </p>
           </div>
         </button>

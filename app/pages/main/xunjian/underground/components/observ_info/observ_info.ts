@@ -28,20 +28,8 @@ export class ObservInfoPage implements OnInit{
 
   private diseaseTypes = [
     {
-      "icon": 'build/imgs/cuotai.png',
-      "name": "错台"
-    },
-    {
-      "icon": 'build/imgs/jiefeng.png',
-      "name": "接缝"
-    },
-    {
       "icon": 'build/imgs/liefeng.png',
       "name": "裂缝"
-    },
-    {
-      "icon": 'build/imgs/luoshuang.png',
-      "name": "螺栓"
     },
     {
       "icon": 'build/imgs/shenlou.png',
@@ -49,18 +37,26 @@ export class ObservInfoPage implements OnInit{
     },
     {
       "icon": 'build/imgs/sunhuai.png',
-      "name": "损坏"
+      "name": "缺损"
+    },
+    {
+      "icon": 'build/imgs/cuotai.png',
+      "name": "错台"
     },
     {
       "icon": 'build/imgs/xichu.png',
-      "name": "析出"
+      "name": "张开"
+    },
+    {
+      "icon": 'build/imgs/jiefent.png',
+      "name": "腐蚀"
     }
   ];
 
   private selectedPage = 'disease';
   private scanMileage = '';
 
-  private huanhao = this.huanhaoList[1];
+  private huanhao = '';
 
   private diseaseList: FacilityInspSummary[] = [];
 
@@ -72,31 +68,9 @@ export class ObservInfoPage implements OnInit{
 
   }
 
-  ngOnInit(){    
-    let a = {
-      id: 0,
-      diseaseNo: 0,
-      delFlg: '',
-      diseaseDate: 0,
-      facilityType: 0,
-      mfacilityList: '',
-      mileage: '',
-      modelNameList: '',
-      monomerNoList: '',
-      photoStandard: '',
-      posDespList: '',
-      tagId: '',
-      updateCnt: ''
-    };
-
-    for(let i = 0; i < 5; i++){
-      a.id = ~~(Math.random() * 10000);
-      a.diseaseNo = i % 7;
-      a.diseaseDate = (new Date).getTime();
-
-      let disease = FacilityInspSummary.deserialize(a);
-      this.diseaseList.push(disease);
-    }
+  ngOnInit(){  
+    this.huanhao = this._params.data.facilityInspInfo["mileage"];
+    this.diseaseList = this._params.data.facilityInspInfo["facilityInsp"];
   }
 
   viewDisease(disease){
@@ -111,5 +85,9 @@ export class ObservInfoPage implements OnInit{
 
   dismiss(){
     this._viewCtrl.dismiss();
+  }
+
+  private _convertDate(date) {
+    return new Date(date).toISOString().slice(0,10);
   }
 }
