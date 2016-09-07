@@ -32,7 +32,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     this.reloadData();
-    this._events.subscribe('optionChange', this.reloadData());
+    this._events.subscribe('optionChange', this.reloadData);
   }
 
   ngOnDestroy(){
