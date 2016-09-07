@@ -3,7 +3,6 @@ import {_baseClass} from './_baseClass';
 
 @Serializable()
 export class EnvironmentActivity extends _baseClass{
-  @JsonProperty('title')
   actName: string //活动名称
   actNo: string //活动编码
 	inspDate: any //巡检日期

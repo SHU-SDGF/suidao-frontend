@@ -4,42 +4,9 @@ import { Storage, LocalStorage } from 'ionic-angular';
 import { AppConfig } from './config';
 import {URLSearchParams} from '@angular/http';
 import {HttpService} from './http_service';
+import {EnvironmentActivitySummary} from '../models/EnvironmentActivitySummary';
+import {EnvironmentActivity} from '../models/EnvironmentActivity';
 
-export interface EnvironmentActivity {
-	actName?: string //活动名称
-  actNo?: string //活动编码
-	inspDate: any //巡检日期
-	endDate: any //更新日时
-	actStatus: any //活动状态 
-	actType?: any //活动类型
-	description: string // 描述
-	createUser?: string //作成者
-	updateUser?: string // 更新者
-	photo: any // 图片
-	audio: any // 音频
-	video: any // 视频
-	recorder?: string //记录人
-	createDate?: any //作成日时
-	updateDate?: any //更新日时
-}
-
-export interface EnvironmentActivitySummary {
-	actNo?: string //活动编码
-	actName: string //活动名称
-	startDate?: any //起始日期
-	endDate?: any //结束日期
-	description: string //活动描述
-	longitude?: number //经度
-	latitude?: number //纬度
-	createUser?: string //作成者
-	updateUser?: string //更新者
-	createDate?: any //作成日时
-	updateDate?: any //更新日时,
-	inspDate?: any //巡检日期
-	recorder?: string
-	actStatus: any
-	actType?: any
-}
 
 @Injectable()
 export class EnvironmentActivityService {
@@ -48,8 +15,11 @@ export class EnvironmentActivityService {
 	storage = new Storage(LocalStorage);
 
 	//添加活动环境活动
-	addNewEnvironmentActivitySummary(activitySummaryObj: any) {
-		return this.httpService.post(activitySummaryObj, 'environment-activities-summary/create');
+	addNewEnvironmentActivitySummary(activitySummaryObj: {environmentActitivitySummary: EnvironmentActivitySummary, environmentActivity: EnvironmentActivity}) {
+		return this.httpService.post({
+			environmentActitivitySummary: activitySummaryObj.environmentActitivitySummary.serialize(), 
+			environmentActivity: activitySummaryObj.environmentActivity.serialize()
+		}, 'environment-activities-summary/create');
 	}
 
 	//显示活动列表

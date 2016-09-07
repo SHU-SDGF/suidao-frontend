@@ -18,7 +18,8 @@ export abstract class _baseClass{
   public assign(obj){
     if(!obj) return;
     for(let key in this){
-      this[key] = obj[key];
+      if(obj.hasOwnProperty(key))
+        this[key] = obj[key];
     }
   }
 }

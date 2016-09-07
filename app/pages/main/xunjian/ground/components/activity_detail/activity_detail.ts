@@ -1,22 +1,26 @@
 import {Component, OnInit,
-  ViewChild} from '@angular/core';
+  ViewChild, } from '@angular/core';
+import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ViewController, AlertController, NavParams, LoadingController, ActionSheetController} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService } from '../../../../../../providers';
+import {EnvironmentActivityService } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
 import {LookupService} from '../../../../../../providers';
 import {UserService} from '../../../../../../providers';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
+import { FormValidors } from '../../../../../../providers/form-validators';
+import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
+import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 
 @Component({
   selector: 'activity-detail',
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
-  directives: [MediaViewer, CaptureMedia]
+  directives: [MediaViewer, CaptureMedia, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
 export class ActivityDetailPage implements OnInit{
-  
-  private activityDetailObj: any;
+  private submitAttempt = false;
+  private activityForm: FormGroup = new FormGroup({});
   medias: Array<IMediaContent> = [];
 
   private actStatusList: [{
@@ -37,68 +41,64 @@ export class ActivityDetailPage implements OnInit{
     private params: NavParams,
     private loadingCtrl: LoadingController,
     private _userService: UserService,
-    private _asCtrl: ActionSheetController
+    private _asCtrl: ActionSheetController,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit() {
-    for(let i=0;i< 10;i++){
-      this.medias.push({
-        fileUri: 'https://unsplash.it/800?image=' + (i + 1),
-        mediaType: 'img',
-        preview: 'https://unsplash.it/800?image=' + (i + 1)
-      });
-    }
-
     let _self = this;
     let point: MapPoint = this.params.get('point');
-    this.activityDetailObj = {
-      actName: '', //活动名称
-      description: '', //活动描述
-      longitude: point.lng, //经度
-      latitude: point.lat, //纬度
-      actStatus: 0,
-      actType: 0,
-      recorder: '',
-      startDate: new Date().toISOString().slice(0,10),
-      endDate: new Date().toISOString().slice(0,10)
-    };
+
+    let formGroup = this.formBuilder.group({
+      actName: ['', ...FormValidors.actNameValidator() ], //活动名称
+      description: ['', ...FormValidors.descriptionValidator() ], //活动描述
+      longitude: [point.lng], //经度
+      latitude: [point.lat], //纬度
+      actStatus: [0],
+      recorder: [''],
+      inspDate: [(new Date).getTime()],
+      actType: [0, ...FormValidors.actTypeValidator()],
+      startDate: [new Date().toISOString().slice(0,10), ...FormValidors.startDateValidator()],
+      endDate: [new Date().toISOString().slice(0,10),  ...FormValidors.endDateValidator(this.activityForm)]
+    });
+
+    for(let key in formGroup.controls){
+      this.activityForm.addControl(key, formGroup.controls[key]);
+    }
 
     // username
     this._userService.getUsername().then((username) => {
-      this.activityDetailObj.recorder = username;
+      (<FormControl>this.activityForm.controls['recorder']).updateValue(username, {onlySelf: true});
     });
 
     // load status    
     this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
       _self.actStatusList = actStatusList;
-      this.activityDetailObj.actStatus = _self.actStatusList[0].order;
+      (<FormControl>this.activityForm.controls['actStatus']).updateValue(actStatusList[0].order, {onlySelf: true});
     });
 
-
+    /// load activity types
     this._lookupService.getActTypes().then((actTypes:[{name: string, order: number}]) => {
-      _self.activityDetailObj.actType = actTypes[0].order;
+      (<FormControl>this.activityForm.controls['actType']).updateValue(actTypes[0].order, {onlySelf: true});
       _self.actTypes = actTypes;
     });
   }
 
-  createActivity() {
-    let activityObj = {
-      environmentActitivitySummary: {
-        actName: this.activityDetailObj.actName,
-        description: this.activityDetailObj.description,
-        longtitude: this.activityDetailObj.longitude,
-        latitude: this.activityDetailObj.latitude,
-        startDate: new Date(this.activityDetailObj.startDate).getTime(),
-        endDate: new Date(this.activityDetailObj.endDate).getTime()
-      },
-      environmentActivity: {
-        actType: this.activityDetailObj.actType,
-        actStatus: this.activityDetailObj.actStatus,
-        description: this.activityDetailObj.description,
-        recorder: this.activityDetailObj.recorder,
-        inspDate: new Date().getTime()
-      }
+  /**
+   * 创建活动
+   */
+  createActivity(activityObj) {
+    this.submitAttempt = true;
+    if(!this.activityForm.valid) return;
+
+    activityObj.startDate = new Date(activityObj.startDate).getTime();
+    activityObj.endDate = new Date(activityObj.endDate).getTime();
+
+    let activityObjPayload = {
+      environmentActitivitySummary: new EnvironmentActivitySummary(activityObj),
+      environmentActivity: new EnvironmentActivity(activityObj)
     };
+    
 
     let loading = this.loadingCtrl.create({
       dismissOnPageChange: true
@@ -106,9 +106,10 @@ export class ActivityDetailPage implements OnInit{
 
     loading.present();
     
-    this._actService.addNewEnvironmentActivitySummary(activityObj).then((result) => {
+    this._actService.addNewEnvironmentActivitySummary(activityObjPayload).then((result) => {
       this.viewCtrl.dismiss(result);
     }, (error) => {
+      loading.dismiss();
       let alert = this._alertCtrl.create({
         title: '出错啦！',
         message: '创建活动未能成功！请重新尝试！'
@@ -117,10 +118,16 @@ export class ActivityDetailPage implements OnInit{
     });
   }
 
+  /**
+   * 获取多媒体文件
+   */
   captureMedia(media: IMediaContent){
     this.medias.unshift(media);
   }
 
+  /**
+   * 消失
+   */
   dismiss() {
     this.viewCtrl.dismiss();
   }

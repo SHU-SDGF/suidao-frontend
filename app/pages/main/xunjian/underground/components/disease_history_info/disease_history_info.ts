@@ -1,7 +1,7 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
+import { EnvironmentActivityService } from '../../../../../../providers';
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
 
@@ -19,7 +19,7 @@ export class DiseaseHistoryInfoPage implements OnInit{
     order: number
   }];
   
-  activityDetailObj: EnvironmentActivity;
+  activityDetailObj: any;
 
   constructor(
     private viewCtrl: ViewController,

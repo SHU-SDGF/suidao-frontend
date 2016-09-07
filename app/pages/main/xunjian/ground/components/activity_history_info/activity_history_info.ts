@@ -1,8 +1,11 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
+import { EnvironmentActivityService} from '../../../../../../providers';
 import {LookupService} from '../../../../../../providers';
+import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
+import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
+
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_history_info/activity_history_info.html'
@@ -17,7 +20,7 @@ export class ActivityHistoryInfoPage implements OnInit{
     name: string,
     order: number
   }];
-  activityDetailObj: EnvironmentActivity;
+  activityDetailObj: any;
 
   constructor(
     private viewCtrl: ViewController,

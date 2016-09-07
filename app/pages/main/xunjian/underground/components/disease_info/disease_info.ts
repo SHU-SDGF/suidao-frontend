@@ -1,7 +1,7 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
+import {EnvironmentActivityService } from '../../../../../../providers';
 import {DiseaseHistoryInfoPage} from '../disease_history_info/disease_history_info';
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
@@ -15,7 +15,7 @@ import {FacilityInspSummary} from  '../../../../../../models/FacilityInspSummary
 export class DiseaseInfoPage implements OnInit{
   
   selectedPage: string = 'detail';
-  activityDetailObj: EnvironmentActivitySummary;
+  activityDetailObj: any;
 
   private actStatusList: [{
     name: string,

@@ -5,7 +5,6 @@ import {_baseClass} from './_baseClass';
 export class EnvironmentActivitySummary extends _baseClass{
   actNo: string //活动编码
 
-  @JsonProperty('title')
 	actName: string //活动名称
 	startDate: any //起始日期
 	endDate: any //结束日期

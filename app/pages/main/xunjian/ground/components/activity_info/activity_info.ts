@@ -1,11 +1,14 @@
 import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
-import { EnvironmentActivity, EnvironmentActivityService, EnvironmentActivitySummary } from '../../../../../../providers';
+import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
 import {UserService} from '../../../../../../providers';
+import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
+import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
+
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
@@ -14,7 +17,7 @@ import {UserService} from '../../../../../../providers';
 export class ActivityInfoPage implements OnInit{
   
   selectedPage: string = 'detail';
-  activityDetailObj: EnvironmentActivitySummary;
+  activityDetailObj: any;
 
   private actStatusList: [{
     name: string,
