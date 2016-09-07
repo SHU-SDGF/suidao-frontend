@@ -104,7 +104,6 @@ export class UndergroundPage implements OnInit, OnDestroy {
   }
 
   private reloadData() {
-    debugger;
     let that = this;
     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
     this.facilityInspList = [];
