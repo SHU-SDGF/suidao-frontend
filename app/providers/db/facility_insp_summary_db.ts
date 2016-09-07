@@ -28,8 +28,8 @@ export class FacilityInspSummaryDB {
        }).then(function() {
          that._db.find({
            selector: {
-             monomer: monomerId,
-             modelName: modelId
+             monomer: parseInt(monomerId),
+             modelName: parseInt(modelId)
            }
          }).then((result) => {
            resolve(result);

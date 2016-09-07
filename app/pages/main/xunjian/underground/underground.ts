@@ -32,7 +32,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   ngAfterViewInit() {
     this.reloadData();
-    this._events.subscribe('optionChange', this.reloadData);
+    this._events.subscribe('optionChange', this.reloadData.bind(this));
   }
 
   ngOnDestroy(){
@@ -107,6 +107,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
     debugger;
     let that = this;
     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
+    this.facilityInspList = [];
     this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
       var filteredResult =  _.groupBy(result.docs, 'mileage');
       for(var index in filteredResult) {
