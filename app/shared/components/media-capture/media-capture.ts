@@ -7,7 +7,7 @@ import {IMediaContent} from '../../../shared/components/media-viewer/media-viewe
   selector: '[CaptureMedia]'
 })
 export class CaptureMedia{
-  @Output() onCaptured: EventEmitter<IMediaContent> = new EventEmitter();
+  @Output() onCaptured: EventEmitter<IMediaContent> = new EventEmitter<IMediaContent>();
 
   constructor(){}
 
