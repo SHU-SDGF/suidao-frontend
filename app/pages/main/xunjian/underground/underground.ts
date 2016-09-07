@@ -18,6 +18,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
   private facilityInspList: any = [];
 
   constructor(
+    private _events: Events,
     private _alertCtrl: AlertController, 
     private _modalCtrl: ModalController,
     private _codeService: QRCodeService,
@@ -26,19 +27,12 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   ngOnInit(){
     //search
+    
   }
 
   ngAfterViewInit() {
-    let that = this;
-    let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
-    this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
-      var filteredResult =  _.groupBy(result.docs, 'mileage');
-      for(var index in filteredResult) {
-        that.facilityInspList.push({mileage: index, facilityInsp: filteredResult[index]})
-      }
-    }, (error) => {
-
-    });
+    this.reloadData();
+    this._events.subscribe('optionChange', this.reloadData());
   }
 
   ngOnDestroy(){
@@ -67,12 +61,27 @@ export class UndergroundPage implements OnInit, OnDestroy {
       生产厂商：隧道股份股份上海隧道工程\r\n
       拼装日期：2013.12
     `;
-    
+    let scannedIndex = "";
     let result = this._codeService.parse(info);
     console.log(info);
-    let modal = this._modalCtrl.create(ObservInfoPage, {data: result});
-    modal.present();
 
+    for(let index in this.facilityInspList) {
+      if(this.facilityInspList[index]["mileage"] == result["mileage"]) {
+        scannedIndex = index;
+      }
+    }
+    let facilityInspInfo = {};
+
+    if(scannedIndex == "") {
+      facilityInspInfo = {
+        mileage: result["mileage"],
+        facilityInsp: null
+      }
+    } else {
+      facilityInspInfo = this.facilityInspList[scannedIndex];
+    }
+    let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
+    modal.present();
     localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "mfacility": result["NO"]}));
 
     /*
@@ -92,6 +101,20 @@ export class UndergroundPage implements OnInit, OnDestroy {
       alert.present();
     });
     */
+  }
+
+  private reloadData() {
+    debugger;
+    let that = this;
+    let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
+    this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
+      var filteredResult =  _.groupBy(result.docs, 'mileage');
+      for(var index in filteredResult) {
+        that.facilityInspList.push({mileage: index, facilityInsp: filteredResult[index]})
+      }
+    }, (error) => {
+
+    });
   }
 }
 

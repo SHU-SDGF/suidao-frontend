@@ -20,13 +20,14 @@ export class XunjianPage extends ToggleMenu{
 
   private selectedTunnelOption: TunnelOption;
 
+  OPTIONCHANGE_EVENT: string = "optionChange";
   constructor(
     private _menuCtrl: MenuController,
     private _modalCtrl: ModalController,
     private _popoverCtrl: PopoverController,
     private _lookupService: LookupService,
     private _zoon: NgZone,
-    private _event: Events
+    private _events: Events
   ) {
     super(_menuCtrl);
   }
@@ -44,16 +45,18 @@ export class XunjianPage extends ToggleMenu{
   private selectedTunnelDirectionChanged($event) {
     this.selectedTunnelOption.direction = $event;
     localStorage.setItem('tunnelOption', JSON.stringify(this.selectedTunnelOption));
+    this._events.publish(this.OPTIONCHANGE_EVENT);
   };
 
   private selectedTunnelStructChanged($event) {
     this.selectedTunnelOption.struct = $event;
     localStorage.setItem('tunnelOption', JSON.stringify(this.selectedTunnelOption));
+    this._events.publish(this.OPTIONCHANGE_EVENT);
   };
 
   private switchView() {
     this.onGround = !this.onGround;
-    this._event.publish('xunjian-view-switch', this.onGround);
+    this._events.publish('xunjian-view-switch', this.onGround);
   }
 
   private tunnelOnchange(tunnelOption: TunnelOption) {

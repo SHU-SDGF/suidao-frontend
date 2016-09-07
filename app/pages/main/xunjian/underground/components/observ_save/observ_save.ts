@@ -5,7 +5,7 @@ import {AppUtils} from '../../../../../../shared/utils';
 import {LookupService} from '../../../../../../providers/lookup_service';
 import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
 import {UserService} from '../../../../../../providers';
-
+import * as  _ from 'lodash';
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_save/observ_save.html',
   pipes: [AppUtils.DatePipe]
