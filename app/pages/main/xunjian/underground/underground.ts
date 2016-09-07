@@ -6,7 +6,8 @@ import {MenuController, Events, ToastController, AlertController, ModalControlle
 import {Camera} from 'ionic-native';
 import {ObservInfoPage} from './components/observ_info/observ_info';
 import {QRCodeService} from '../../../../providers/qrcode_service';
-
+import {FacilityInspService} from '../../../../providers/facility_insp_service';
+import * as  _ from 'lodash';
 declare const cordova;
 
 @Component({
@@ -14,23 +15,40 @@ declare const cordova;
   templateUrl: './build/pages/main/xunjian/underground/underground.html',
 })
 export class UndergroundPage implements OnInit, OnDestroy {
+  private facilityInspList: any = [];
 
   constructor(
     private _alertCtrl: AlertController, 
     private _modalCtrl: ModalController,
-    private _codeService: QRCodeService
+    private _codeService: QRCodeService,
+    private _facilityInspService: FacilityInspService
   ){}
 
   ngOnInit(){
+    //search
 
+  }
+
+  ngAfterViewInit() {
+    let that = this;
+    let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
+    this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
+      var filteredResult =  _.groupBy(result.docs, 'mileage');
+      for(var index in filteredResult) {
+        that.facilityInspList.push({mileage: index, info: filteredResult[index]})
+      }
+    }, (error) => {
+
+    });
   }
 
   ngOnDestroy(){
 
   }
 
-  showObservInfo(){
-    let modal = this._modalCtrl.create(ObservInfoPage);
+  showObservInfo(mileage){
+    debugger;
+    let modal = this._modalCtrl.create(ObservInfoPage, {'mileage': mileage});
     modal.present();
   }
 

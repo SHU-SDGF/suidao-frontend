@@ -223,6 +223,7 @@ export class LookupService {
 
 	//根据病害大类找小类
 	getDetailTypesByDiseaseTypes(diseaseTypeId: string) {
+		debugger;
 		this.localStorage.get(DETAIL_TYPES);
 		var diseaseTypeTreeVoList = JSON.parse(localStorage.getItem(DETAIL_TYPES));
 		var selectedDetailType = null;

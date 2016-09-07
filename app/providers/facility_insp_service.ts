@@ -27,6 +27,16 @@ export class FacilityInspService {
 		return this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj);
 	}
 
+	getFacilityInspDetailsByAttrs(attrs) {
+		let monomer = attrs["direction"]["id"];
+		let model = attrs["struct"]["id"];
+		return this.facilityInspSummaryDB.getFacilityInspsByAttrs(monomer, model);
+	}
+
+	getAllFacilityInspSummaries() {
+		return this.facilityInspSummaryDB.getAllFacilityInspSummaries();
+	}
+
 	// 根据灾害编号来查找巡检活动
 	findFacilityInspByDiseaseNo(diseaseNo: any) {
 		this.facilityInspSummaryDB._initDB();

@@ -43,13 +43,8 @@ export class ObservSavePage implements OnInit{
       } else {
         this.diseaseDetailObj = {
           diseaseType: this.diseaseTypeList[0]["id"],
-          monomer: {
-            "id": tunnelOptions["direction"]["id"],
-            "modelName": tunnelOptions["direction"]["name"]
-          },
-          modelNameList: {
-            "id": tunnelOptions["struct"]["id"],
-          },
+          monomer: tunnelOptions["direction"]["id"],
+          modelName: tunnelOptions["struct"]["id"],
           recorder: '',
           createUser: '',
           createDate: new Date().getTime(),
@@ -68,7 +63,7 @@ export class ObservSavePage implements OnInit{
           displayDiseaseDate: new Date().toISOString().slice(0, 10),
           displayModelName: tunnelOptions["direction"]["name"],
           facilityType: "1",
-          mfacilityList: { facilityNo: scannedInfo["mfacility"]},
+          mFacilityNo: scannedInfo["mfacility"],
           mileage: scannedInfo["mileage"]
         };
 

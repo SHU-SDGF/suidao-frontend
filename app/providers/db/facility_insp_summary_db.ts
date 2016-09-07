@@ -19,6 +19,26 @@ export class FacilityInspSummaryDB {
   	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
   }
 
+  getFacilityInspsByAttrs(monomerId, modelId): any{
+    let that = this;
+     this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
+     return new Promise((resolve, reject) =>{
+       this._db.createIndex({
+         index: {fields: ['monomer']}
+       }).then(function() {
+         that._db.find({
+           selector: {
+             monomer: monomerId,
+             modelName: modelId
+           }
+         }).then((result) => {
+           resolve(result);
+         }, (error) => {
+           reject(error);
+         });
+       });
+     });
+  }
 
   //根据巡检活动编号找到巡检活动
   getFacilityInspByDiseaseNo(diseaseNo: any) {
@@ -56,6 +76,7 @@ export class FacilityInspSummaryDB {
   }
 
   getAllFacilityInspSummaries() {
+    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
   	if(!this._facilityInspSummary) {
 	  	return this._db.allDocs({include_docs: true})
 				.then(docs => {

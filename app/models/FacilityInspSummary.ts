@@ -14,16 +14,16 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	diseaseNo: string
 	diseaseType: any
 	dislocation: number
-	facility: any
+	mFacilityNo: any
 	facilityType: any
 	isNeedRepair: any
 	isNewCreated: any
 	jointopen: number
-	langitude: number
 	latitude: number
 	length: number
+	longitude: number
 	mileage: string
-	modelNameList: any // id, modelName
+	modelName: any // id, modelName
 	monomer: any
 	recorder: string
 	width: number
@@ -40,16 +40,16 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.diseaseNo = null;
 		this.diseaseType = null;
 		this.dislocation = null; 
-		this.facility = null;
+		this.mFacilityNo = null;
 		this.facilityType = null;
 		this.isNeedRepair = null;
 		this.isNewCreated = null;
 		this.jointopen = null;
-		this.langitude = null;
-		this.langitude = null;
+		this.longitude = null;
+		this.latitude = null;
 		this.length = null;
 		this.mileage = null;
-		this.modelNameList = null; 
+		this.modelName = null; 
 		this.monomer = null;
 		this.recorder = null;
 		this.width = null;
