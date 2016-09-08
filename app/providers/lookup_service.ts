@@ -199,7 +199,7 @@ export class LookupService {
 				return { id: obj.id, name: obj.diseaseTypeName};
 			});
 
-			let modelNamesObj = result["modelNameList"].map((obj) => {
+			let modelNamesObj = result["modelList"].map((obj) => {
 				return { id: obj.id, name: obj.modelName}
 			});
 
