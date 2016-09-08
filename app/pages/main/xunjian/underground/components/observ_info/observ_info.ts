@@ -7,6 +7,7 @@ import {SelectPopover} from  '../../../../../../shared/components/select-popover
 import {ObservGraphPage} from '../observ_graph/observ_graph';
 import {FacilityInspSummary} from  '../../../../../../models/FacilityInspSummary';
 import {DiseaseInfoPage} from '../disease_info/disease_info';
+import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_info/observ_info.html',
@@ -64,8 +65,8 @@ export class ObservInfoPage implements OnInit{
     private _navCtrl: NavController,
     private _viewCtrl: ViewController,
     private _modalCtrl: ModalController,
+    private _facilityInspService: FacilityInspService,
     private _params: NavParams){
-
   }
 
   ngOnInit(){  
@@ -76,15 +77,31 @@ export class ObservInfoPage implements OnInit{
   viewDisease(disease){
     let modal = this._modalCtrl.create(DiseaseInfoPage,{disease: disease});
     modal.present();
+    modal.onDidDismiss(() => {
+      this._updateFacilityInspList();
+    });
   }
 
   viewGraph(){
     let modal = this._modalCtrl.create(ObservGraphPage);
     modal.present();
+    modal.onDidDismiss(() => {
+      this._updateFacilityInspList();
+    });
   }
 
   dismiss(){
     this._viewCtrl.dismiss();
+  }
+
+  private _updateFacilityInspList() {
+    var attrOption = JSON.parse(localStorage.getItem("tunnelOption"));
+    attrOption["mileage"] = this.huanhao;
+    this._facilityInspService.getFacilityInspDetailsListByAttrs(attrOption).then((result)=> {
+      this.diseaseList = result.docs;
+    }, (error) => {
+
+    });
   }
 
   private _convertDate(date) {

@@ -15,7 +15,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	diseaseType: any //病害类型
 	dislocation: any //错台量
 	id:any
-	jointOpen: any //张开量
+	jointopen: any //张开量
 	length: any //长度
 	recorder: string //记录人
 	width: any //宽度
@@ -34,7 +34,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.diseaseType = null;
 		this.dislocation = null;
 		this.id = 0;
-		this.jointOpen = null;
+		this.jointopen = null;
 		this.length = null;
 		this.recorder = null;
 		this.width = null;

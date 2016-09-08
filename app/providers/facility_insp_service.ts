@@ -19,13 +19,33 @@ export class FacilityInspService {
 		return this.facilityInspSummaryDB.addNewFacilityInspSummary(facilityInspobj);
 	}
 
+	// 更新巡检历史记录
+	updateFacilityInsp(facilityInspObj: any) {
+		return this.facilityInspSummaryDB.updateFacilityInsp(facilityInspObj);
+	}
+
 	// 新增一条巡检历史记录
 	addNewFacilityInspDetail(facilityInspSummaryParam: any) {
 		this.facilityInspDetailDB._initDB();
 		let facilityDetailObj = FacilityInspDetail.deserialize(facilityInspSummaryParam);
 		facilityDetailObj["_id"] = new Date().getTime().toString();
+		facilityDetailObj["createDate"] = new Date().getTime();
+		facilityDetailObj["updateUser"] = '';
+		facilityDetailObj["updateDate"] = '';
 		return this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj);
-	}
+	};
+
+	//根据病害号获取历史活动巡检
+	getFacilityInspDetailByDiseaseNo(diseaseNo: any) {
+		return this.facilityInspDetailDB.getFacilityInspDetailByDiseaseNo(diseaseNo);
+	};
+
+	getFacilityInspDetailsListByAttrs(attrs) {
+		let monomer = attrs["direction"]["id"];
+		let model = attrs["struct"]["id"];
+		let mileage = attrs["mileage"]
+		return this.facilityInspSummaryDB.getFacilityInspDetailsListByAttrs(monomer, model, mileage);
+	};
 
 	getFacilityInspDetailsByAttrs(attrs) {
 		let monomer = attrs["direction"]["id"];

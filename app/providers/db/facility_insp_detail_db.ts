@@ -42,8 +42,25 @@ export class FacilityInspDetailDB {
     });
   }
 
-  updateFacilityInspDetail(FacilityInspDetailObject: FacilityInspDetail) {
-  	return this._db.put(FacilityInspDetailObject.serialize());
+  //根据病害号获取历史活动巡检
+  getFacilityInspDetailByDiseaseNo(diseaseNo: any) {
+    let that = this;
+     this._db = new PouchDB('facilityInspDetails', { adapter: 'websql' });
+     return new Promise((resolve, reject) =>{
+       this._db.createIndex({
+         index: {fields: ['diseaseNo']}
+       }).then(function() {
+         that._db.find({
+           selector: {
+             diseaseNo: diseaseNo
+           }
+         }).then((result) => {
+           resolve(result);
+         }, (error) => {
+           reject(error);
+         });
+       });
+     });
   }
 
   //获取巡检活动明细列表
