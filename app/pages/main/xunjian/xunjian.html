@@ -1,5 +1,5 @@
-<ion-header no-shadow>
-  <ion-navbar no-border-bottom>
+<ion-header no-shadow #header>
+  <ion-toolbar no-border-bottom>
     <ion-buttons start>
       <button (click)="toggleMenu()">
         <ion-icon name="menu"></ion-icon>
@@ -24,10 +24,17 @@
         <ion-icon name="md-swap"></ion-icon>
       </button>
     </ion-buttons>
-  </ion-navbar>
+  </ion-toolbar>
+  <ion-toolbar class="sub-header" [hidden]="onGround" no-border>
+    <button class="icon-holder" (click)="scanCode()" clear>
+      <ion-icon name="md-barcode"></ion-icon>
+      <p>扫一扫</p>
+    </button>
+    <ion-input placeholder="输入评估段号进行查询"></ion-input>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="xunjian-page">
+<ion-content class="xunjian-page" #mainContent>
   <ground-page [hidden]="!onGround" ></ground-page>
   <underground-page [hidden]="onGround"></underground-page>
 </ion-content>

@@ -246,7 +246,7 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
         backgroundColor: 'rgba(0,0,0,0.5)',
         padding: '5px 8px',
         border: 'none',
-        fontSize: '1rem'
+        fontSize: '13px'
       });
 
       // add marker to the map
@@ -264,7 +264,7 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
     };
 
     function getTextWidth(text) {
-      const font = 'normal 1rem arial';
+      const font = 'normal 13px arial';
       // re-use canvas object for better performance
       var canvas = getTextWidth['canvas'] || (getTextWidth['canvas'] = document.createElement("canvas"));
       var context = canvas.getContext("2d");

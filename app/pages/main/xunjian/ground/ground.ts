@@ -267,54 +267,7 @@ export class GroundPage implements OnInit, OnDestroy {
             text: '确认',
             handler: () => {
               alert.dismiss().then(() => {
-                let modal = _self._modalCtrl.create(ActivityDetailPage, {point: $event.point});
-                modal.present();
-                modal.onDidDismiss((activity) => {
-                  _self.removeUnsavedMarker();
-                  if (!activity) {
-                    this.toggleEditing();
-                    return;
-                  };
-                  _self.environmentActivityList.unshift({
-                    actName: activity["environmentActitivitySummary"]["actName"],
-                    actNo: activity["environmentActitivitySummary"]["actNo"],
-                    actStatus: activity["environmentActivity"]["actStatus"],
-                    createUser: activity["environmentActitivitySummary"]["createUser"],
-                    description: activity["environmentActitivitySummary"]["description"],
-                    endDate: activity["environmentActitivitySummary"]["endDate"],
-                    id: activity["environmentActitivitySummary"]["id"],
-                    inspDate: activity["environmentActivity"]["inspDate"],
-                    latitude: activity["environmentActitivitySummary"]["latitude"],
-                    longtitude: activity["environmentActitivitySummary"]["longtitude"],
-                    startDate: activity["environmentActitivitySummary"]["startDate"],
-                  });
-                  _self.toggleEditing();
-                  
-                  // refresh markers
-                  let newMarker = {
-                    id: activity["environmentActitivitySummary"]["id"],
-                    longitude: activity["environmentActitivitySummary"]["longtitude"],
-                    latitude: activity["environmentActitivitySummary"]["latitude"],
-                    title: activity["environmentActitivitySummary"]["actName"],
-                    icon: 'build/imgs/map-marker.png',
-                    description: activity["environmentActitivitySummary"]["description"],
-                    width: 30,
-                    height: 30,
-                    actStatus: activity["environmentActivity"]["actStatus"],
-                    actType: activity["environmentActivity"]["actType"],
-                    recorder: activity["environmentActivity"]["recorder"],
-                    content: '',
-                    inspDate: activity["environmentActivity"]["inspDate"],
-                    actNo: activity["environmentActivity"]["actNo"],
-                    createUser: activity["environmentActitivitySummary"]["createUser"]
-                  };
-
-                  _self._suidaoMap.addMarker(newMarker);
-                  _self._suidaoMap.changeCenter({
-                    lat: activity["environmentActitivitySummary"]["latitude"],
-                    lng: activity["environmentActitivitySummary"]["longtitude"]
-                  });
-                });
+                this.openCreateModal($event);
               });
             }
           }
@@ -323,6 +276,58 @@ export class GroundPage implements OnInit, OnDestroy {
       alert.present();
     });
   }
+
+  private openCreateModal($event: MapEvent){
+
+    let modal = this._modalCtrl.create(ActivityDetailPage, {point: $event.point});
+    modal.present();
+    modal.onDidDismiss((activity) => {
+      this.removeUnsavedMarker();
+      if (!activity) {
+        this.toggleEditing();
+        return;
+      };
+      this.environmentActivityList.unshift({
+        actName: activity["environmentActitivitySummary"]["actName"],
+        actNo: activity["environmentActitivitySummary"]["actNo"],
+        actStatus: activity["environmentActivity"]["actStatus"],
+        createUser: activity["environmentActitivitySummary"]["createUser"],
+        description: activity["environmentActitivitySummary"]["description"],
+        endDate: activity["environmentActitivitySummary"]["endDate"],
+        id: activity["environmentActitivitySummary"]["id"],
+        inspDate: activity["environmentActivity"]["inspDate"],
+        latitude: activity["environmentActitivitySummary"]["latitude"],
+        longtitude: activity["environmentActitivitySummary"]["longtitude"],
+        startDate: activity["environmentActitivitySummary"]["startDate"],
+      });
+      this.toggleEditing();
+      
+      // refresh markers
+      let newMarker = {
+        id: activity["environmentActitivitySummary"]["id"],
+        longitude: activity["environmentActitivitySummary"]["longtitude"],
+        latitude: activity["environmentActitivitySummary"]["latitude"],
+        title: activity["environmentActitivitySummary"]["actName"],
+        icon: 'build/imgs/map-marker.png',
+        description: activity["environmentActitivitySummary"]["description"],
+        width: 30,
+        height: 30,
+        actStatus: activity["environmentActivity"]["actStatus"],
+        actType: activity["environmentActivity"]["actType"],
+        recorder: activity["environmentActivity"]["recorder"],
+        content: '',
+        inspDate: activity["environmentActivity"]["inspDate"],
+        actNo: activity["environmentActivity"]["actNo"],
+        createUser: activity["environmentActitivitySummary"]["createUser"]
+      };
+
+      this._suidaoMap.addMarker(newMarker);
+      this._suidaoMap.changeCenter({
+        lat: activity["environmentActitivitySummary"]["latitude"],
+        lng: activity["environmentActitivitySummary"]["longtitude"]
+      });
+    });
+  };
 
   private mapLoaded() {
     this._mapLoader.dismiss();

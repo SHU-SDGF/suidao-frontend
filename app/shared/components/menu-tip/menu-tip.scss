@@ -1,5 +1,6 @@
 $menu-tip-item-radius: 40px;
 .menu-tip-item{
+  padding: 0px;
   transition: all 0.2s;
   position: absolute;
   display: none;
@@ -12,9 +13,9 @@ $menu-tip-item-radius: 40px;
   box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.4);
 
   img{
-    margin: $menu-tip-item-radius * 0.2;
-    width: $menu-tip-item-radius * 0.6;
-    height: $menu-tip-item-radius * 0.6;
+    margin: $menu-tip-item-radius * 0.15;
+    width: $menu-tip-item-radius * 0.7;
+    height: $menu-tip-item-radius * 0.7;
   }
 }
 .menu-tip-handler{

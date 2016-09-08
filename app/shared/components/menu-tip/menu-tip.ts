@@ -77,7 +77,7 @@ export class MenuTip implements OnInit{
     // add items to parent
     this.actionMenuItems.forEach((menuControl, i) => {
       let _self = this;
-      let $menuTipItem = $('<menu-tip-item class="menu-tip-item"><img/></menu-tip-item>').appendTo($parent);
+      let $menuTipItem = $('<button clear class="menu-tip-item"><img/></button>').appendTo($parent);
 
       // init properties
       $menuTipItem.find('img').attr({"src": menuControl.icon});

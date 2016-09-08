@@ -1,12 +1,3 @@
-<ion-toolbar class="sub-header">
-  <ion-item>
-    <ion-icon item-left (click)="scanCode()">
-      <ion-icon name="md-barcode"></ion-icon>
-      <p>扫一扫</p>
-    </ion-icon>
-    <ion-input placeholder="输入评估段号进行查询"></ion-input>
-  </ion-item>
-</ion-toolbar>
 <div class="content-body">
   <ion-card *ngFor = "let el of facilityInspList; let idx=index">
     <ion-card-header>

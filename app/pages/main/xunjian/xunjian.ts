@@ -15,6 +15,9 @@ import {LookupService} from '../../../providers/lookup_service';
 export class XunjianPage extends ToggleMenu{
   private onGround: boolean = true;
   private directions: any;
+  @ViewChild(UndergroundPage) _underGroundPage: UndergroundPage;
+  @ViewChild('mainContent') _mainContent: ElementRef;
+  @ViewChild('header') _header: ElementRef;
 
   private structs = JSON.parse(localStorage.getItem("model_names"));
 
@@ -57,9 +60,18 @@ export class XunjianPage extends ToggleMenu{
   private switchView() {
     this.onGround = !this.onGround;
     this._events.publish('xunjian-view-switch', this.onGround);
+    setTimeout(()=>{
+      console.log(this._mainContent['_elementRef'].nativeElement);
+      let $scrollContent = $(this._mainContent['_elementRef'].nativeElement).find('scroll-content').eq(0);
+      $($scrollContent).css({"marginTop": $(this._header.nativeElement).height()});
+    });
   }
 
   private tunnelOnchange(tunnelOption: TunnelOption) {
     this.selectedTunnelOption = tunnelOption;
+  }
+
+  private scanCode(){
+    this._underGroundPage.scanCode();
   }
 }

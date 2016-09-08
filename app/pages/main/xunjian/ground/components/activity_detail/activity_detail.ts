@@ -14,7 +14,6 @@ import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity'
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 
 @Component({
-  selector: 'activity-detail',
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
   directives: [MediaViewer, CaptureMedia, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
