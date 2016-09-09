@@ -66,7 +66,10 @@ export class ObservSavePage implements OnInit{
           mileage: scannedInfo["mileage"]
         };
 
-        this.detailTypeList = this.lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId);
+        this.lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId).then((result) => {
+          this.detailTypeList = result;
+        });
+
         this.diseaseDetailObj.detailTypeId = this.detailTypeList[0]["id"];
         this.userService.getUsername().then((username) => {
           this.diseaseDetailObj.recorder = username;

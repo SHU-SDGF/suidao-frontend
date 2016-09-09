@@ -50,9 +50,22 @@ export class DiseaseInfoPage implements OnInit{
   ngOnInit() {
     let _self = this;
     this.diseaseDetailObj = this.params.get('disease');
-    this.diseaseDetailObj["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types');
-    this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId);
-    this.diseaseDetailObj["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailObj.modelId, 'model_names');
+    this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types').then((result) => {
+      this.diseaseDetailObj["displayDiseaseType"] = result;
+    });
+
+    this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId).then((result) => {
+      this.detailTypeList = result;
+    });
+
+    this._lookupService.getNameBy(this.diseaseDetailObj.modelId, 'model_names').then((result) => {
+      this.diseaseDetailObj["displayModelName"] = result;
+    });
+
+
+    // this.diseaseDetailObj["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types');
+    // this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId);
+    // this.diseaseDetailObj["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailObj.modelId, 'model_names');
     this.diseaseDetailObj["displayDiseaseDate"] = new Date(this.diseaseDetailObj.diseaseDate).toISOString().slice(0,10);
 
     this._userService.getUsername().then((result) => {
@@ -124,14 +137,23 @@ export class DiseaseInfoPage implements OnInit{
   }
 
   private displayDiseaseType(disease) {
-    let detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(disease["diseaseTypeId"]);
-    let detailType = '';
-    for(let index in detailTypeList) {
-      if(detailTypeList[index]["id"] == disease["detailTypeId"]) {
-        detailType = detailTypeList[index]["name"];
+    let detailTypeList = null;
+    this._lookupService.getDetailTypesByDiseaseTypes(disease["diseaseTypeId"]).then((result) => {
+      detailTypeList = result;
+      let detailType = '';
+      for(let index in detailTypeList) {
+        if(detailTypeList[index]["id"] == disease["detailTypeId"]) {
+          detailType = detailTypeList[index]["name"];
+        }
       }
-    }
-    return this._lookupService.getNameBy(disease["diseaseTypeId"],'disease_types') + ':' + detailType;
+      this._lookupService.getNameBy(disease["diseaseTypeId"],'disease_types').then((result) => {
+        return result + ':' + detailType;
+      })
+    })
+
+    //let detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(disease["diseaseTypeId"]);
+    
+    //return this._lookupService.getNameBy(disease["diseaseTypeId"],'disease_types') + ':' + detailType;
   }
 
   showHistory(index) {

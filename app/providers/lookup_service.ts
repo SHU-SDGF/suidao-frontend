@@ -221,23 +221,28 @@ export class LookupService {
 	}
 
 	//根据病害大类找小类
-	getDetailTypesByDiseaseTypes(diseaseTypeId: string) {
+	getDetailTypesByDiseaseTypes(diseaseTypeId: string): Promise<any> {
 		this.localStorage.get(DETAIL_TYPES);
-		var diseaseTypeTreeVoList = JSON.parse(localStorage.getItem(DETAIL_TYPES));
-		var selectedDetailType = null;
-		for(var index in diseaseTypeTreeVoList) {
-			if(diseaseTypeTreeVoList[index]["id"] == diseaseTypeId) {
-				selectedDetailType = diseaseTypeTreeVoList[index]["children"];
+
+		return this.localStorage.get(DETAIL_TYPES).then((data) => {
+			var diseaseTypeTreeVoList = JSON.parse(data);
+			var selectedDetailType = null;
+			for(var index in diseaseTypeTreeVoList) {
+				if(diseaseTypeTreeVoList[index]["id"] == diseaseTypeId) {
+					selectedDetailType = diseaseTypeTreeVoList[index]["children"];
+				}
 			}
-		}
-		return selectedDetailType.map(function(selectedDetail) {
-			return {id: selectedDetail.id, name: selectedDetail.diseaseTypeName}
-		});
+			return selectedDetailType.map(function(selectedDetail) {
+				return {id: selectedDetail.id, name: selectedDetail.diseaseTypeName}
+			});
+		});		
 	};
 
 	//查询病害大类枚举表
-	getDiseaseTypes(): any {
-		return JSON.parse(localStorage.getItem(DISEASE_TYPES));
+	getDiseaseTypes(): Promise<Array<any>> {
+		return this.localStorage.get(DISEASE_TYPES).then((data) => {
+			return JSON.parse(data);
+		})
 	};
 
 	//查询位置描述枚举表
@@ -283,14 +288,16 @@ export class LookupService {
 	}
 
 	//根据key查询value
-	getNameBy(key, lookupTable): string {
-		var lookupTableData = JSON.parse(localStorage.getItem(lookupTable));
-		var value = '';
-		for(let index in lookupTableData) {
-			if(lookupTableData[index]["id"] == key) {
-				value = lookupTableData[index]["name"];
+	getNameBy(key, lookupTable):  Promise<String>{
+		return this.localStorage.get(lookupTable).then((data) => {
+			var lookupTableData = JSON.parse(data);
+			var value = '';
+			for(let index in lookupTableData) {
+				if(lookupTableData[index]["id"] == key) {
+					value = lookupTableData[index]["name"];
+				}
 			}
-		}
-		return value
+			return value;
+		})		
 	}
 }

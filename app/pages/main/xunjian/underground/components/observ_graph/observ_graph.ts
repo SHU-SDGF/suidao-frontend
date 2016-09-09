@@ -99,6 +99,7 @@ export class ObservGraphPage implements OnInit{
   ];
 
   private diseaseDetailRecords: any;
+  private diseaseTypeList: any;
 
   constructor(
     private _navCtrl: NavController,
@@ -113,10 +114,12 @@ export class ObservGraphPage implements OnInit{
   ngOnInit(){
     //获取list
     this.diseaseDetailRecords = this._params["data"]["existingDiseaseList"];
-    let diseaseTypeList = this._lookupService.getDiseaseTypes();
+    this._lookupService.getDiseaseTypes().then((result) => {
+      this.diseaseTypeList = result;
+    });
 
-    for(let index in diseaseTypeList) {
-      this.actionMenuItems[index]["diseaseType"] = diseaseTypeList[index];
+    for(let index in this.diseaseTypeList) {
+      this.actionMenuItems[index]["diseaseType"] = this.diseaseTypeList[index];
     }
 
     this._mapOptions = {
