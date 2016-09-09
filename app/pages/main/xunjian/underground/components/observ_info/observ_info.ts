@@ -49,7 +49,7 @@ export class ObservInfoPage implements OnInit{
       "name": "张开"
     },
     {
-      "icon": 'build/imgs/jiefent.png',
+      "icon": 'build/imgs/jiefeng.png',
       "name": "腐蚀"
     }
   ];
@@ -71,6 +71,7 @@ export class ObservInfoPage implements OnInit{
 
   ngOnInit(){  
     this.huanhao = this._params.data.facilityInspInfo["mileage"];
+    this._updateFacilityInspList();
     this.diseaseList = this._params.data.facilityInspInfo["facilityInsp"];
   }
 
@@ -102,6 +103,11 @@ export class ObservInfoPage implements OnInit{
     }, (error) => {
 
     });
+  }
+
+  private getIconByDiseaseType(diseaseType) {
+    var diseaseTypeIndex = diseaseType[1] - 1;
+    return this.diseaseTypes[diseaseTypeIndex]["icon"];
   }
 
   private _convertDate(date) {

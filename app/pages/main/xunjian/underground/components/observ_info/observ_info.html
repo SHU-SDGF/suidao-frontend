@@ -34,7 +34,7 @@
     <ion-list>
       <ion-item-group>
         <button clear ion-item class="act-card" *ngFor = "let disease of diseaseList" (click)="viewDisease(disease)">
-          <ion-icon item-left><img src="{{diseaseTypes[disease.facilityType].icon}}"/></ion-icon>
+          <ion-icon item-left><img src="{{getIconByDiseaseType(disease.diseaseType)}}"/></ion-icon>
           <div item-inner class="act-detail">
             <h3>病害编号：{{disease.diseaseNo}}</h3>
             <p>
