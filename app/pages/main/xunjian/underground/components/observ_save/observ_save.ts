@@ -63,6 +63,7 @@ export class ObservSavePage implements OnInit{
         };
 
         this.lookupService.getTunnelOption().then((result) => {
+          console.log(result);
           this.tunnelOptions = result;
           this.diseaseDetailObj.monomerId = this.tunnelOptions["direction"]["id"];
           this.diseaseDetailObj.modelId =  this.tunnelOptions["struct"]["id"];
