@@ -101,7 +101,6 @@ export class ObservInfoPage implements OnInit{
     this._facilityInspService.getFacilityInspDetailsListByAttrs(attrOption).then((result)=> {
       this.diseaseList = result.docs;
     }, (error) => {
-
     });
   }
 

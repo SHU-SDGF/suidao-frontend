@@ -22,8 +22,8 @@ export class DiseaseHistoryInfoPage implements OnInit{
   ngOnInit() {
     let _self = this;
     this.diseaseDetailRecord = this.params.get('diseaseDetailRecord');
-    this.diseaseDetailRecord["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailRecord.diseaseType, 'disease_types');
-    this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailRecord.diseaseType);
+    this.diseaseDetailRecord["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailRecord.diseaseTypeId, 'disease_types');
+    this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailRecord.diseaseTypeId);
     this.diseaseDetailRecord["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailRecord.modelName, 'model_names');
     this.diseaseDetailRecord["displayDiseaseDate"] = new Date(this.diseaseDetailRecord.diseaseDate).toISOString().slice(0,10);
   }

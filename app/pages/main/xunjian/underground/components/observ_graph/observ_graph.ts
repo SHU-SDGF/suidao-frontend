@@ -134,7 +134,7 @@ export class ObservGraphPage implements OnInit{
             diseaseNo: this.diseaseDetailRecords[index]["diseaseNo"],
             longitude: this.diseaseDetailRecords[index]["longitude"],
             latitude: this.diseaseDetailRecords[index]["latitude"],
-            icon: this.getIconByDiseaseType(this.diseaseDetailRecords[index]["diseaseType"])
+            icon: this.getIconByDiseaseType(this.diseaseDetailRecords[index]["diseaseTypeId"])
           })
         }
       }, 200);

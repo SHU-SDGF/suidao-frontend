@@ -84,12 +84,29 @@ export class DiseaseInfoPage implements OnInit{
         //更新历史记录
         this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
           this.diseaseHistoryList = result["docs"];
+          let alert = this._alertController.create({
+            message: '更新活动成功！',
+            buttons: ['OK']
+          });
+          alert.present();
         }, (error) => {
+          this.showErrorInfoModal();
         });
       }, (error) => {
+        this.showErrorInfoModal();
       });
     }, (error) => {
+      this.showErrorInfoModal();
     });
+  }
+
+
+  private showErrorInfoModal() {
+    let alert = this._alertController.create({
+      message: '更新活动成功！',
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
   private _getLookUpValue(list, order){
@@ -106,8 +123,19 @@ export class DiseaseInfoPage implements OnInit{
     return new Date(date).toISOString().slice(0,10);
   }
 
+  private displayDiseaseType(disease) {
+    let detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(disease["diseaseTypeId"]);
+    let detailType = '';
+    for(let index in detailTypeList) {
+      if(detailTypeList[index]["id"] == disease["detailTypeId"]) {
+        detailType = detailTypeList[index]["name"];
+      }
+    }
+    return this._lookupService.getNameBy(disease["diseaseTypeId"],'disease_types') + ':' + detailType;
+  }
+
   showHistory(index) {
-    let modal = this._modelCtrl.create(DiseaseHistoryInfoPage, {'diseaseDetailRecords': this.diseaseHistoryList[index]});
+    let modal = this._modelCtrl.create(DiseaseHistoryInfoPage, {'diseaseDetailRecord': this.diseaseHistoryList[index]});
     modal.present();
   }
 }

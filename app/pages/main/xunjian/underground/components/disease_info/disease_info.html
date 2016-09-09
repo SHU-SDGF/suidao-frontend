@@ -85,7 +85,7 @@
 
       <h5 class="assertive-field field-label">是否申请维修</h5>
       <ion-item>
-        <ion-select [(ngModel)]="diseaseDetailObj.isNeedRepair" disabled={{!isEditing}}>
+        <ion-select [(ngModel)]="diseaseDetailObj.needRepair" disabled={{!isEditing}}>
           <ion-option value="true">是</ion-option>
           <ion-option value="false">否</ion-option>
         </ion-select>
@@ -130,6 +130,8 @@
             <div item-inner class="act-detail">
               <h3>{{diseaseHistoryList[idx].recorder}}</h3>
               <p>
+                {{displayDiseaseType(diseaseHistoryList[idx])}}
+                &mdash;
                 {{_convertDate(diseaseHistoryList[idx].createDate)}}
               </p>
             </div>
