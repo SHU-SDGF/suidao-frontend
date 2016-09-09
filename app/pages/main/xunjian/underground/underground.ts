@@ -48,7 +48,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
 
   scanCode(){
     let info = `
-      里程：EK11+700\r\n
+      里程：EK11+702\r\n
       编码：HMNL104SZCQHK117000_A00\r\n
       埋深：-11.62m\r\n
       管片类型：出洞环\r\n

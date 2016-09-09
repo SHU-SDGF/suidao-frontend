@@ -1,7 +1,7 @@
 <div class="content-body">
   <ion-card *ngFor = "let el of facilityInspList; let idx=index">
     <ion-card-header>
-      Card Header
+      环号： {{facilityInspList[idx]["mileage"]}}
     </ion-card-header>
     <ion-card-content>
       <img (click)="showObservInfo(el)" src="build/imgs/underground.png"/>
