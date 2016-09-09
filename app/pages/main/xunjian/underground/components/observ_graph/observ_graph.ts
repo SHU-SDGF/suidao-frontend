@@ -100,6 +100,7 @@ export class ObservGraphPage implements OnInit{
 
   private diseaseDetailRecords: any;
   private diseaseTypeList: any;
+  private createDiseaseInfo: any;
 
   constructor(
     private _navCtrl: NavController,
@@ -116,16 +117,19 @@ export class ObservGraphPage implements OnInit{
     this.diseaseDetailRecords = this._params["data"]["existingDiseaseList"];
     this._lookupService.getDiseaseTypes().then((result) => {
       this.diseaseTypeList = result;
+      for(let index in this.diseaseTypeList) {
+        this.actionMenuItems[index]["diseaseType"] = this.diseaseTypeList[index];
+      }
     });
-
-    for(let index in this.diseaseTypeList) {
-      this.actionMenuItems[index]["diseaseType"] = this.diseaseTypeList[index];
-    }
-
+    
     this._mapOptions = {
       imageUrl: 'build/imgs/underground.png',
       markers:[]
     };
+
+    this._lookupService.getDiseaseInfo().then((result) =>{
+      this.createDiseaseInfo = result;
+    })
 
     setTimeout(()=>{
       this.changeOptions.emit(this._mapOptions);
@@ -256,10 +260,9 @@ export class ObservGraphPage implements OnInit{
   }
 
   private fetchDiseaseNo() {
-    let createDiseaseInfo = JSON.parse(localStorage.getItem("createDiseaseInfo"));
     this.diseaseInfo = {
-      date: createDiseaseInfo["date"],
-      count: createDiseaseInfo["count"]
+      date: this.createDiseaseInfo["date"],
+      count: this.createDiseaseInfo["count"]
     }
     return this.diseaseInfo.date + this.diseaseInfo.count;
   }
@@ -271,12 +274,12 @@ export class ObservGraphPage implements OnInit{
 
   private generateDiseaseNo() {
     let today = new Date().toISOString().slice(0, 10).split('-').join('');
-    let createDiseaseInfo = JSON.parse(localStorage.getItem("createDiseaseInfo"));
-    if(createDiseaseInfo){
-      if(createDiseaseInfo["date"] == today) {
+    
+    if(this.createDiseaseInfo){
+      if(this.createDiseaseInfo["date"] == today) {
         this.diseaseInfo = {
-          date: createDiseaseInfo["date"],
-          count: createDiseaseInfo["count"] + 1
+          date: this.createDiseaseInfo["date"],
+          count: this.createDiseaseInfo["count"] + 1
         }
       } else {
         this.diseaseInfo = {

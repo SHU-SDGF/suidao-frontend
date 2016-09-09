@@ -300,4 +300,22 @@ export class LookupService {
 			return value;
 		})		
 	}
+
+	getTunnelOption(): Promise<Array<any>> {
+		return this.localStorage.get("tunnelOption").then((data) => {
+			return JSON.parse(data);
+		})
+	}
+
+	getScannedInfo(): Promise<Array<any>> {
+		return this.localStorage.get("scannedInfo").then((data) => {
+			return JSON.parse(data);
+		})
+	}
+
+	getDiseaseInfo(): Promise<Array<any>> {
+		return this.localStorage.get("createDiseaseInfo").then((data) => {
+			return JSON.parse(data);
+		})
+	};
 }

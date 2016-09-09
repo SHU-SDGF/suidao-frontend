@@ -8,6 +8,7 @@ import {ObservGraphPage} from '../observ_graph/observ_graph';
 import {FacilityInspSummary} from  '../../../../../../models/FacilityInspSummary';
 import {DiseaseInfoPage} from '../disease_info/disease_info';
 import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
+import {LookupService} from '../../../../../../providers/lookup_service';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_info/observ_info.html',
@@ -66,6 +67,7 @@ export class ObservInfoPage implements OnInit{
     private _viewCtrl: ViewController,
     private _modalCtrl: ModalController,
     private _facilityInspService: FacilityInspService,
+    private _lookupService: LookupService,
     private _params: NavParams){
   }
 
@@ -96,12 +98,14 @@ export class ObservInfoPage implements OnInit{
   }
 
   private _updateFacilityInspList() {
-    var attrOption = JSON.parse(localStorage.getItem("tunnelOption"));
-    attrOption["mileage"] = this.huanhao;
-    this._facilityInspService.getFacilityInspDetailsListByAttrs(attrOption).then((result)=> {
-      this.diseaseList = result.docs;
-    }, (error) => {
-    });
+    this._lookupService.getTunnelOption().then((result) => {
+      var attrOption = result;
+      attrOption["mileage"] = this.huanhao;
+      this._facilityInspService.getFacilityInspDetailsListByAttrs(attrOption).then((result)=> {
+        this.diseaseList = result.docs;
+      }, (error) => {
+      });
+    })
   }
 
   private getInfoByDiseaseType(diseaseType) {
