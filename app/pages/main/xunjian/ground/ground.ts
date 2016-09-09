@@ -188,7 +188,7 @@ export class GroundPage implements OnInit, OnDestroy {
             longitude: result["content"][index]["longtitude"],
             latitude: result["content"][index]["latitude"],
             title: result["content"][index]["actName"],
-            icon: 'build/imgs/map-marker.png',
+            icon: this.getIcon(result["content"][index]["actStatus"]),
             description: result["content"][index]["description"],
             width: 30,
             height: 30,
@@ -277,6 +277,12 @@ export class GroundPage implements OnInit, OnDestroy {
     });
   }
 
+  private getIcon(status){
+    let types = ['initial', 'ongoing', 'finished'];
+    let type = types[status];
+    return `build/imgs/markert-${type}.png`;
+  }
+
   private openCreateModal($event: MapEvent){
 
     let modal = this._modalCtrl.create(ActivityDetailPage, {point: $event.point});
@@ -308,7 +314,7 @@ export class GroundPage implements OnInit, OnDestroy {
         longitude: activity["environmentActitivitySummary"]["longtitude"],
         latitude: activity["environmentActitivitySummary"]["latitude"],
         title: activity["environmentActitivitySummary"]["actName"],
-        icon: 'build/imgs/map-marker.png',
+        icon: 'build/imgs/marker-initial.png',
         description: activity["environmentActitivitySummary"]["description"],
         width: 30,
         height: 30,

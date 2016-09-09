@@ -13,6 +13,4 @@ const AppConfigs = {
 const ENV = 'development';
 var _appConfig: config = AppConfigs[ENV];
 
-
-
 export const AppConfig = _appConfig;

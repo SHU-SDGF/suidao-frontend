@@ -33,8 +33,6 @@ export class EnvironmentActivity extends _baseClass{
     this.assign(obj);
   }
 
-  static deserialize(obj): EnvironmentActivity {
-    return null;
-  }
+  static deserialize: (obj)=> EnvironmentActivity;
   
 }

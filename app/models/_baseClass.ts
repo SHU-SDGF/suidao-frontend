@@ -13,7 +13,7 @@ export abstract class _baseClass{
     this.updateUser = null;
   }
 
-  public serialize() {}
+  public serialize: ()=>any;
 
   public assign(obj){
     if(!obj) return;

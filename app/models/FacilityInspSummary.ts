@@ -58,7 +58,5 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.assign(obj);
 	}
 
-	static deserialize(obj): FacilityInspSummary {
-    return null;
-  }
+	static deserialize: (obj)=> FacilityInspSummary;
 }

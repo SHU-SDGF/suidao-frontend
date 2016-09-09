@@ -13,6 +13,7 @@ import {CaptureMedia} from '../../../../../../shared/components/media-capture/me
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
+import {AppMeta} from '../../../../../../providers/app_meta';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
@@ -23,10 +24,11 @@ export class ActivityDetailPage implements OnInit{
   private activityForm: FormGroup = new FormGroup({});
   medias: Array<IMediaContent> = [];
 
-  private actStatusList: [{
+  private actStatusList: Array<{
     name: string,
-    order: number
-  }];
+    order: number,
+    color: string
+  }>;
 
   private actTypes: [{
     name: string,
@@ -72,8 +74,14 @@ export class ActivityDetailPage implements OnInit{
     });
 
     // load status    
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
-      _self.actStatusList = actStatusList;
+    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number, color: string}]) => {
+      actStatusList.sort((a,b)=>{ return a.order > b.order? 1: -1;});
+
+      _self.actStatusList = actStatusList.map((obj, i)=>{
+        obj.color = AppMeta.STATUS_CLASSES[i];
+        return obj;
+      });
+
       (<FormControl>this.activityForm.controls['actStatus']).updateValue(actStatusList[0].order, {onlySelf: true});
     });
 

@@ -36,7 +36,5 @@ export class EnvironmentActivitySummary extends _baseClass{
     this.assign(obj);
   }
 
-  static deserialize(obj): EnvironmentActivitySummary {
-    return null;
-  }
+  static deserialize: (obj)=> EnvironmentActivitySummary;
 }

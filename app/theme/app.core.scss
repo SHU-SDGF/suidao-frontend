@@ -224,3 +224,19 @@ ion-item-group {
 .loading-wrapper{
   border-radius: 0px;
 }
+
+.initial-status{
+  background-color: color($colors, grey) !important;
+  color: color($colors, light) !important;
+  border-color: color($colors, grey) !important;
+} 
+.ongoing-status{
+  background-color: color($colors, secondary) !important;
+  color: color($colors, light) !important;
+  border-color: color($colors, secondary) !important;
+}
+.finished-status{
+  background-color: color($colors, warning) !important;
+  color: color($colors, light) !important;
+  border-color: color($colors, warning) !important;
+}
