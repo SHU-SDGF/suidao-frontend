@@ -8,23 +8,23 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	createDate: any
 	createUser: string
 	depth: any
-	detailType: any
+	detailTypeId: any
 	diseaseDate: any
 	diseaseDescription: string
 	diseaseNo: string
-	diseaseType: any
+	diseaseTypeId: any
 	dislocation: number
-	mFacilityNo: any
-	facilityType: any
-	isNeedRepair: any
-	isNewCreated: any
+	facilityId: any
+	facilityTypeId: any
 	jointopen: number
 	latitude: number
 	length: number
 	longitude: number
 	mileage: string
-	modelName: any // id, modelName
-	monomer: any
+	modelId: any // id, modelName
+	monomerId: any
+	newCreated: any
+	needRepair: any
 	recorder: string
 	width: number
 
@@ -35,23 +35,23 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.createDate = null;
 		this.createUser = null;
 		this.depth = null;
-		this.detailType = null;
+		this.detailTypeId = null;
 		this.diseaseDate = null;
 		this.diseaseNo = null;
-		this.diseaseType = null;
+		this.diseaseTypeId = null;
 		this.dislocation = null; 
-		this.mFacilityNo = null;
+		this.facilityId = null;
 		this.diseaseDescription = null;
-		this.facilityType = null;
-		this.isNeedRepair = null;
-		this.isNewCreated = null;
+		this.facilityTypeId = null;
+		this.needRepair = null;
+		this.newCreated = null;
 		this.jointopen = null;
 		this.longitude = null;
 		this.latitude = null;
 		this.length = null;
 		this.mileage = null;
-		this.modelName = null; 
-		this.monomer = null;
+		this.modelId = null; 
+		this.monomerId = null;
 		this.recorder = null;
 		this.width = null;
 

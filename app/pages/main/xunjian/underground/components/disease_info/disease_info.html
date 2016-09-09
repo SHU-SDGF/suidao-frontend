@@ -31,7 +31,7 @@
 
       <h5 class="assertive-field field-label">病害小类</h5>
       <ion-item>
-        <ion-select [(ngModel)]="diseaseDetailObj.detailType" okText="确认" cancelText="取消" disabled="true">
+        <ion-select [(ngModel)]="diseaseDetailObj.detailTypeId" okText="确认" cancelText="取消" disabled={{!isEditing}}>
           <ion-option *ngFor="let detailType of detailTypeList" [value]="detailType.id">{{detailType.name}}</ion-option>
         </ion-select>
       </ion-item>

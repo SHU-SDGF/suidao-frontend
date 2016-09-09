@@ -8,15 +8,16 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	createdDate: any
 	createUser: any
 	depth: any
-	detailType: any //病害小类
+	detailTypeId: any //病害小类
 	diseaseNo: any
 	diseaseDate: any //病害日期
 	diseaseDescription: string //病害描述
-	diseaseType: any //病害类型
+	diseaseTypeId: any //病害类型
 	dislocation: any //错台量
 	id:any
 	jointopen: any //张开量
 	length: any //长度
+	newCreated: any //是否新建
 	recorder: string //记录人
 	width: any //宽度
 
@@ -27,15 +28,16 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.createDate = null;
 		this.createUser = null;
 		this.depth = null;
-		this.detailType = null;
+		this.detailTypeId = null;
 		this.diseaseDate = null;
 		this.diseaseDescription = null;
 		this.diseaseNo = null;
-		this.diseaseType = null;
+		this.diseaseTypeId = null;
 		this.dislocation = null;
 		this.id = 0;
 		this.jointopen = null;
 		this.length = null;
+		this.newCreated = null;
 		this.recorder = null;
 		this.width = null;
 

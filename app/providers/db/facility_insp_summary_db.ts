@@ -28,8 +28,8 @@ export class FacilityInspSummaryDB {
        }).then(function() {
          that._db.find({
            selector: {
-             monomer: monomerId,
-             modelName: modelId
+             monomerId: monomerId,
+             modelId: modelId
            }
          }).then((result) => {
            resolve(result);
@@ -49,8 +49,8 @@ export class FacilityInspSummaryDB {
       }).then(() => {
         this._db.find({
           selector: {
-            monomer: monomerId,
-            modelName: modelId,
+            monomerId: monomerId,
+            modelId: modelId,
             mileage: mileage
           }
         }).then((result) => {

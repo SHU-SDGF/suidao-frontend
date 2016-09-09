@@ -33,7 +33,6 @@ export class ObservSavePage implements OnInit{
     var tunnelOptions = JSON.parse(localStorage.getItem("tunnelOption"));
     this.diseaseInfo = this.params.data.diseaseInfo;
     let scannedInfo = JSON.parse(localStorage.getItem("scannedInfo"));
-    // this.mileage = this.params.data.
     this.point = this.params.data.point;
     this.diseaseTypeList = [this.params.data.diseaseType.diseaseType];
     this.isNewRecord = this.params.data.isNewRecord;
@@ -42,13 +41,13 @@ export class ObservSavePage implements OnInit{
         this.isNewRecord = false;
       } else {
         this.diseaseDetailObj = {
-          diseaseType: this.diseaseTypeList[0]["id"],
-          monomer: tunnelOptions["direction"]["id"],
-          modelName: tunnelOptions["struct"]["id"],
+          diseaseTypeId: this.diseaseTypeList[0]["id"],
+          monomerId: tunnelOptions["direction"]["id"],
+          modelId: tunnelOptions["struct"]["id"],
           recorder: '',
           createUser: '',
           createDate: new Date().getTime(),
-          isNeedRepair: true,
+          needRepair: true,
           depth: 0,
           length: 0,
           area: 0,
@@ -66,9 +65,9 @@ export class ObservSavePage implements OnInit{
           mFacilityNo: scannedInfo["mfacility"],
           mileage: scannedInfo["mileage"]
         };
-
-        this.detailTypeList = this.lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseType);
-        this.diseaseDetailObj.detailType = this.detailTypeList[0]["id"];
+        debugger;
+        this.detailTypeList = this.lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId);
+        this.diseaseDetailObj.detailTypeId = this.detailTypeList[0]["id"];
         this.userService.getUsername().then((username) => {
           this.diseaseDetailObj.recorder = username;
           this.diseaseDetailObj.createUser = username;
@@ -89,7 +88,7 @@ export class ObservSavePage implements OnInit{
       dismissOnPageChange: true,
       duration: 2000
     });
-    this.diseaseDetailObj.isNewCreated = true;
+    this.diseaseDetailObj.newCreated = true;
     loader.present();
     if(this.isNewRecord) {
       this.facilityInspService.addNewFacilityInspSummary(this.diseaseDetailObj).then((result) => {

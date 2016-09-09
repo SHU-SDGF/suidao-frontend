@@ -17,14 +17,14 @@
   <ion-list>
     <h5 class="assertive-field field-label">病害大类</h5>
     <ion-item>
-      <ion-select [(ngModel)]="diseaseDetailObj.diseaseType" okText="确认" cancelText="取消">
+      <ion-select [(ngModel)]="diseaseDetailObj.diseaseTypeId" okText="确认" cancelText="取消">
         <ion-option *ngFor="let diseaseType of diseaseTypeList" [value]="diseaseType.id">{{diseaseType.name}}</ion-option>
       </ion-select>
     </ion-item>
 
     <h5 class="assertive-field field-label">病害小类</h5>
     <ion-item>
-      <ion-select [(ngModel)]="diseaseDetailObj.detailType" okText="确认" cancelText="取消">
+      <ion-select [(ngModel)]="diseaseDetailObj.detailTypeId" okText="确认" cancelText="取消">
         <ion-option *ngFor="let detailType of detailTypeList" [value]="detailType.id">{{detailType.name}}</ion-option>
       </ion-select>
     </ion-item>
@@ -78,7 +78,7 @@
 
     <h5 class="assertive-field field-label">是否申请维修</h5>
     <ion-item>
-      <ion-select [(ngModel)]="diseaseDetailObj.isNeedRepair">
+      <ion-select [(ngModel)]="diseaseDetailObj.needRepair">
         <ion-option value="true">是</ion-option>
         <ion-option value="false">否</ion-option>
       </ion-select>

@@ -105,9 +105,9 @@ export class ObservInfoPage implements OnInit{
     });
   }
 
-  private getIconByDiseaseType(diseaseType) {
+  private getInfoByDiseaseType(diseaseType) {
     var diseaseTypeIndex = diseaseType[1] - 1;
-    return this.diseaseTypes[diseaseTypeIndex]["icon"];
+    return this.diseaseTypes[diseaseTypeIndex];
   }
 
   private _convertDate(date) {
