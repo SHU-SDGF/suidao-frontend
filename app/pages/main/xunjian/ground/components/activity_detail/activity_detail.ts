@@ -8,6 +8,7 @@ import {LookupService} from '../../../../../../providers';
 import {UserService} from '../../../../../../providers';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {StatusPicker} from '../../../../../../shared/components/status-picker/status-picker';
 import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
@@ -15,7 +16,7 @@ import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentAc
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
-  directives: [MediaViewer, CaptureMedia, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
+  directives: [MediaViewer, CaptureMedia, StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
 export class ActivityDetailPage implements OnInit{
   private submitAttempt = false;
@@ -66,8 +67,8 @@ export class ActivityDetailPage implements OnInit{
     }
 
     // username
-    this._userService.getUsername().then((username) => {
-      (<FormControl>this.activityForm.controls['recorder']).updateValue(username, {onlySelf: true});
+    this._userService.getUserInfo().then((userInfo) => {
+      (<FormControl>this.activityForm.controls['recorder']).updateValue(userInfo.userName, {onlySelf: true});
     });
 
     // load status    

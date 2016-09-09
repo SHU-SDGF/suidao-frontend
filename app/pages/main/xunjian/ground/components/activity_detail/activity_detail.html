@@ -35,11 +35,11 @@
     </ion-item>
 
     <h5 class="assertive-field field-label">活动状态</h5>
-    <ion-item>  
-      <ion-select [formControl]="activityForm.controls['actStatus']" okText="确认" cancelText="取消" disabled="true">
-        <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
-      </ion-select>
-    </ion-item>
+    <status-picker 
+      [options]="actStatusList"
+      [textField]="'name'"
+      [valueField]="'order'">
+    </status-picker>
 
     <h5 class="field-label">记录人</h5>
     <ion-item>  
