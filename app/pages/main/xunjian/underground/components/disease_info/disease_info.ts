@@ -107,7 +107,7 @@ export class DiseaseInfoPage implements OnInit{
   }
 
   showHistory(index) {
-    let modal = this._modelCtrl.create(DiseaseHistoryInfoPage, {'diseaseDetailRecord': this.diseaseHistoryList[index]});
+    let modal = this._modelCtrl.create(DiseaseHistoryInfoPage, {'diseaseDetailRecords': this.diseaseHistoryList[index]});
     modal.present();
   }
 }

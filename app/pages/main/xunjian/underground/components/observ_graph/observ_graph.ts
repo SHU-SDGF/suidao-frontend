@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
-import {NavController, ViewController, ToastController, Toast, AlertController, ModalController} from 'ionic-angular';
+import {NavController, ViewController, ToastController, Toast, AlertController, ModalController, NavParams} from 'ionic-angular';
 import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../../../../shared/components/image-editor/image-editor';
 import {MenuTip, ActionMenuControl} from '../../../../../../shared/components/menu-tip/menu-tip';
 import {ObservSavePage} from '../observ_save/observ_save';
@@ -26,44 +26,71 @@ export class ObservGraphPage implements OnInit{
     count: number
   };
 
+  private diseaseTypes = [
+    {
+      "icon": 'build/imgs/liefeng.png',
+      "name": "裂缝"
+    },
+    {
+      "icon": 'build/imgs/shenlou.png',
+      "name": "渗漏"
+    },
+    {
+      "icon": 'build/imgs/sunhuai.png',
+      "name": "缺损"
+    },
+    {
+      "icon": 'build/imgs/cuotai.png',
+      "name": "错台"
+    },
+    {
+      "icon": 'build/imgs/xichu.png',
+      "name": "张开"
+    },
+    {
+      "icon": 'build/imgs/jiefeng.png',
+      "name": "腐蚀"
+    }
+  ];
+
   private actionMenuItems: Array<ActionMenuControl> = [
     {
-      icon: 'build/imgs/cuotai.png',
+      icon:  this.diseaseTypes[0]["icon"],
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[0]);
       }.bind(this),
     },
     {
-      icon: 'build/imgs/jiefeng.png',
+      icon: this.diseaseTypes[1]["icon"],
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[1]);
       }.bind(this),
     },
     {
-      icon: 'build/imgs/liefeng.png',
+      icon: this.diseaseTypes[2]["icon"],
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[2]);
       }.bind(this),
     },
     {
-      icon: 'build/imgs/luoshuang.png',
+      icon: this.diseaseTypes[3]["icon"],
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[3]);
       }.bind(this),
     },
     {
-      icon: 'build/imgs/shenlou.png',
+      icon: this.diseaseTypes[4]["icon"],
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[4]);
       }.bind(this),
     },
     {
-      icon: 'build/imgs/sunhuai.png',
+      icon: this.diseaseTypes[5]["icon"],
       diseaseType: '',
       action: function() {
         this.enableDisease(this.actionMenuItems[5]);
@@ -71,15 +98,21 @@ export class ObservGraphPage implements OnInit{
     }
   ];
 
-  constructor(private _navCtrl: NavController,
+  private diseaseDetailRecords: any;
+
+  constructor(
+    private _navCtrl: NavController,
     private _viewCtrl: ViewController,
     private _toastCtrl: ToastController,
     private _alertCtrl: AlertController,
     private _modalCtrl: ModalController,
-    private _lookupService: LookupService
+    private _lookupService: LookupService,
+    private _params: NavParams
   ){ }
 
   ngOnInit(){
+    //获取list
+    this.diseaseDetailRecords = this._params["data"]["existingDiseaseList"];
     let diseaseTypeList = this._lookupService.getDiseaseTypes();
 
     for(let index in diseaseTypeList) {
@@ -90,9 +123,22 @@ export class ObservGraphPage implements OnInit{
       imageUrl: 'build/imgs/underground.png',
       markers:[]
     };
+
     setTimeout(()=>{
       this.changeOptions.emit(this._mapOptions);
-    })
+
+      //添加坐标
+      setTimeout(() => {
+        for(let index in this.diseaseDetailRecords) {
+          this._imageEditor.addMarker({
+            diseaseNo: this.diseaseDetailRecords[index]["diseaseNo"],
+            longitude: this.diseaseDetailRecords[index]["longitude"],
+            latitude: this.diseaseDetailRecords[index]["latitude"],
+            icon: this.getIconByDiseaseType(this.diseaseDetailRecords[index]["diseaseType"])
+          })
+        }
+      }, 200);
+    });
   }
 
   menuBtnClick(event: Event){
@@ -213,6 +259,11 @@ export class ObservGraphPage implements OnInit{
       count: createDiseaseInfo["count"]
     }
     return this.diseaseInfo.date + this.diseaseInfo.count;
+  }
+
+  private getIconByDiseaseType(diseaseType) {
+    var diseaseTypeIndex = diseaseType[1] - 1;
+    return this.diseaseTypes[diseaseTypeIndex]["icon"];
   }
 
   private generateDiseaseNo() {

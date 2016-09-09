@@ -15,6 +15,7 @@ export class FacilityInspService {
 		facilityInspSummaryParam._id = facilityInspSummaryParam.diseaseNo;
 		this.facilityInspSummaryDB._initDB();
 		let facilityInspobj = FacilityInspSummary.deserialize(facilityInspSummaryParam);
+		debugger;
 		//先创建巡检记录
 		return this.facilityInspSummaryDB.addNewFacilityInspSummary(facilityInspobj);
 	}

@@ -82,8 +82,8 @@ export class ObservInfoPage implements OnInit{
     });
   }
 
-  viewGraph(){
-    let modal = this._modalCtrl.create(ObservGraphPage);
+  viewGraph() {
+    let modal = this._modalCtrl.create(ObservGraphPage, {'existingDiseaseList': this.diseaseList});
     modal.present();
     modal.onDidDismiss(() => {
       this._updateFacilityInspList();

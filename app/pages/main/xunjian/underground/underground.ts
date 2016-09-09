@@ -1,4 +1,3 @@
-
 import {Component, OnInit, OnDestroy,
   DynamicComponentLoader, ViewChild,
   AfterViewInit, ElementRef, EventEmitter} from '@angular/core';
@@ -42,6 +41,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
   showObservInfo(facilityInspInfo){
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
+    modal.onDidDismiss((value) => {
+      // this.reloadData();
+    });
   }
 
   scanCode(){
@@ -82,6 +84,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
     }
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
+    modal.onDidDismiss((value) => {
+      this.reloadData();
+    });
     localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "mfacility": result["NO"]}));
 
     /*

@@ -10,7 +10,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	depth: any
 	detailType: any
 	diseaseDate: any
-	diseaseDiscription: string
+	diseaseDescription: string
 	diseaseNo: string
 	diseaseType: any
 	dislocation: number
@@ -41,6 +41,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.diseaseType = null;
 		this.dislocation = null; 
 		this.mFacilityNo = null;
+		this.diseaseDescription = null;
 		this.facilityType = null;
 		this.isNeedRepair = null;
 		this.isNewCreated = null;
