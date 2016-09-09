@@ -16,7 +16,7 @@ export class FacilityInspDetailDB {
   }
 
   _initDB() {
-  	this._db = new PouchDB('facilityInspDetails', { adapter: 'websql' });
+  	this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default' });
   };
 
   addNewFacilityInspDetail(FacilityInspDetailObject: FacilityInspDetail) {
@@ -45,7 +45,7 @@ export class FacilityInspDetailDB {
   //根据病害号获取历史活动巡检
   getFacilityInspDetailByDiseaseNo(diseaseNo: any) {
     let that = this;
-     this._db = new PouchDB('facilityInspDetails', { adapter: 'websql' });
+     this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default'});
      return new Promise((resolve, reject) =>{
        this._db.createIndex({
          index: {fields: ['diseaseNo']}

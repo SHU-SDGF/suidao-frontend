@@ -16,12 +16,14 @@ export class FacilityInspSummaryDB {
   }
 
   _initDB() {
-  	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
+  	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
+    console.log("*****************");
+    console.log(this._db.adapter);
   }
 
   getFacilityInspsByAttrs(monomerId, modelId): any{
     let that = this;
-     this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
+     this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
      return new Promise((resolve, reject) =>{
        this._db.createIndex({
          index: {fields: ['monomer']}
@@ -42,7 +44,7 @@ export class FacilityInspSummaryDB {
 
   getFacilityInspDetailsListByAttrs(monomerId, modelId, mileage): any{
     let that = this;
-    this._db = new PouchDB('facitlityInspSummaries', {adapter: 'websql'});
+    this._db = new PouchDB('facitlityInspSummaries', {adapter: 'websql', location: 'default'});
     return new Promise((resolve, reject) => {
       this._db.createIndex({
         index: {fields: ['monomer, modelName, mileage']}
@@ -98,7 +100,7 @@ export class FacilityInspSummaryDB {
   }
 
   getAllFacilityInspSummaries() {
-    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql' });
+    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
   	if(!this._facilityInspSummary) {
 	  	return this._db.allDocs({include_docs: true})
 				.then(docs => {

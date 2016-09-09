@@ -22,9 +22,22 @@ export class DiseaseHistoryInfoPage implements OnInit{
   ngOnInit() {
     let _self = this;
     this.diseaseDetailRecord = this.params.get('diseaseDetailRecord');
-    this.diseaseDetailRecord["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailRecord.diseaseTypeId, 'disease_types');
-    this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailRecord.diseaseTypeId);
-    this.diseaseDetailRecord["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailRecord.modelName, 'model_names');
+
+    this._lookupService.getNameBy(this.diseaseDetailRecord.diseaseTypeId, 'disease_types').then((result) => {
+      this.diseaseDetailRecord["displayDiseaseType"] = result;
+    });
+
+    this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailRecord.diseaseTypeId).then((result) => {
+      this.detailTypeList = result;
+    });
+
+    this._lookupService.getNameBy(this.diseaseDetailRecord.modelId, 'model_names').then((result) => {
+      this.diseaseDetailRecord["displayModelName"] = result;
+    });
+    
+    // this.diseaseDetailRecord["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailRecord.diseaseTypeId, 'disease_types');
+    // this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailRecord.diseaseTypeId);
+    // this.diseaseDetailRecord["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailRecord.modelName, 'model_names');
     this.diseaseDetailRecord["displayDiseaseDate"] = new Date(this.diseaseDetailRecord.diseaseDate).toISOString().slice(0,10);
   }
 

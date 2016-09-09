@@ -46,13 +46,19 @@ export class XunjianPage extends ToggleMenu{
   }
 
   private selectedTunnelDirectionChanged($event) {
-    this.selectedTunnelOption.direction = $event;
+    this.selectedTunnelOption.direction = {
+      "id": parseInt($event["id"]),
+      "name": $event["name"]
+    }
     localStorage.setItem('tunnelOption', JSON.stringify(this.selectedTunnelOption));
     this._events.publish(this.OPTIONCHANGE_EVENT);
   };
 
   private selectedTunnelStructChanged($event) {
-    this.selectedTunnelOption.struct = $event;
+    this.selectedTunnelOption.struct = {
+      "id": parseInt($event["id"]),
+      "name": $event["name"]
+    };
     localStorage.setItem('tunnelOption', JSON.stringify(this.selectedTunnelOption));
     this._events.publish(this.OPTIONCHANGE_EVENT);
   };
