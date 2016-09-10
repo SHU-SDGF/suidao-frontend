@@ -8,6 +8,11 @@
     <ion-title center>
       <ion-icon item-left name="md-pin"></ion-icon>{{activityDetailObj.actName}}
     </ion-title>
+    <ion-buttons end>
+      <button (click)="edit()">
+        编辑
+      </button>
+    </ion-buttons>
   </ion-toolbar>
   <div padding>
     <ion-segment [(ngModel)]="selectedPage">
@@ -72,9 +77,6 @@
     <ion-item>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
     </ion-item>
-    <div padding>
-      <button block (click)="edit()">编辑</button>
-    </div>
   </div>
 
   <div [hidden]="selectedPage !== 'history'">
@@ -82,7 +84,7 @@
       <ion-item-group>
         <div>
           <button ion-item (click)="showHistory(el)" class="act-card" *ngFor = "let el of environmentActivityList; let idx=index">
-            <ion-icon item-left name="ios-pin-outline"></ion-icon>
+            <ion-icon item-left name="md-pin" [ngClass]="el.actStatus | StatusPipe"></ion-icon>
             <div item-inner class="act-detail">
               <h3>{{el.recorder}}</h3>
               <p>
@@ -95,5 +97,8 @@
         </div>
       </ion-item-group>
     </ion-list>
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
 </ion-content>

@@ -4,7 +4,7 @@ import {ViewController, AlertController, NavParams, ModalController, LoadingCont
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
-import {AppUtils, OptionPipe} from '../../../../../../shared/utils';
+import {AppUtils, OptionPipe, StatusPipe} from '../../../../../../shared/utils';
 import {UserService} from '../../../../../../providers';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
@@ -13,7 +13,7 @@ import {StatusPicker} from '../../../../../../shared/components/status-picker/st
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
-  pipes: [AppUtils.DatePipe, OptionPipe],
+  pipes: [AppUtils.DatePipe, OptionPipe, StatusPipe],
   directives: [StatusPicker]
 })
 export class ActivityInfoPage implements OnInit{
@@ -107,5 +107,9 @@ export class ActivityInfoPage implements OnInit{
   showHistory(el) {
     let modal = this._modelCtrl.create(ActivityHistoryInfoPage, {'activityDetail': el, 'activityName': this.activityDetailObj["actName"]});
     modal.present();
+  }
+
+  loadMore(){
+    console.log('123');
   }
 }

@@ -23,7 +23,7 @@ import {DatePipe} from '../../../../../../shared/utils';
 export class ActivityDetailPage implements OnInit{
   private submitAttempt = false;
   private activityForm: FormGroup = new FormGroup({});
-  medias: Array<IMediaContent> = [];
+  private medias: Array<IMediaContent> = [];
 
   private actStatusList: Array<IActionStatus>;
 

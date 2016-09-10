@@ -11,21 +11,21 @@ import {StatusPicker} from '../../../../../../shared/components/status-picker/st
 import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {UserService} from '../../../../../../providers';
+import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_edit/activity_edit.html',
   pipes: [AppUtils.DatePipe],
-  directives: [StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
+  directives: [StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, MediaViewer]
 })
 export class ActivityEditPage implements OnInit{
   
   private activityForm: FormGroup = new FormGroup({});
-
   private actStatusList: Array<IActionStatus>;
-
-   private actTypes: [IActionType];
-
+  private actTypes: [IActionType];
   private environmentActivityList: any = [];
+  private medias: Array<IMediaContent> = [];
+  
   constructor(
     private viewCtrl: ViewController,
     private _modelCtrl: ModalController,
@@ -98,5 +98,12 @@ export class ActivityEditPage implements OnInit{
       });
       loading.dismiss();
     });
+  }
+
+    /**
+   * 获取多媒体文件
+   */
+  captureMedia(media: IMediaContent){
+    this.medias.unshift(media);
   }
 }
