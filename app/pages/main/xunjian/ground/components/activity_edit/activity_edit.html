@@ -6,45 +6,62 @@
       </button>
     </ion-buttons>
     <ion-title center>
-      <ion-icon item-left name="md-pin"></ion-icon>{{activityDetailObj.actName}}
+      编辑活动
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content class="activity_info">
-  <ion-list [hidden]="selectedPage !== 'detail'">
+  <form [formGroup]="activityForm" (ngSubmit)="save(activityForm.value)">
+    <h5 class="field-label">活动编号</h5>
     <ion-item>
-      <ion-label>活动编号</ion-label>
-      <ion-input [(ngModel)]="activityDetailObj.actNo" disabled="true"></ion-input>
+      <ion-input [formControl]="activityForm.controls['actNo']" disabled="true"></ion-input>
     </ion-item>
+    <h5 class="field-label">活动名称</h5>
     <ion-item>
-      <ion-label>巡检时间</ion-label>
-      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [(ngModel)]="activityDetailObj.inspDate"></ion-datetime>
+      <ion-input [formControl]="activityForm.controls['actName']" disabled="true"></ion-input>
     </ion-item>
+    <h5 class="field-label">巡检时间</h5>
     <ion-item>
-      <ion-label>活动类别</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.actType" okText="确认" cancelText="取消" disabled="true">
-        <ion-option *ngFor="let actType of actTypes" [value]="actType.order">{{actType.name}}</ion-option>
-      </ion-select>
+      <p>
+        {{activityForm.controls['inspDate'].value | DatePipe}}
+      </p>
     </ion-item>
-    <ion-item>
-      <ion-label>活动状态</ion-label>
-      <ion-select [(ngModel)]="activityDetailObj.actStatus" okText="确认" cancelText="取消">
-        <ion-option *ngFor="let actStatus of actStatusList" [value]="actStatus.order">{{actStatus.name}}</ion-option>
-      </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>记录人</ion-label>
-      <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>描述</ion-label>
-      <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description"></ion-textarea>
-    </ion-item>
-  </ion-list>
 
-  <div padding>
-    <button block secondary (click)="save()"></button>
-  </div>
+    <h5 class="field-label">开始时间</h5>
+    <ion-item>
+      <p>{{activityForm.controls['startDate'].value | DatePipe}}</p>
+    </ion-item>
+
+    <h5 class="field-label">结束时间</h5>
+    <ion-item>
+      <p>{{activityForm.controls['endDate'].value | DatePipe}}</p>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">活动状态</h5>
+    <status-picker 
+      [formControl]="activityForm.controls['actStatus']"
+      [options]="actStatusList"
+      [textField]="'name'"
+      [valueField]="'order'"
+      [disabled]="false">
+    </status-picker>
+    <h5 class="field-label">作成者</h5>
+    <ion-item>
+      <ion-input type="text" [formControl]="activityForm.controls['createUser']" disabled="true"></ion-input>
+    </ion-item>
+    <h5 class="field-label">记录人</h5>
+    <ion-item>
+      <ion-input type="text" [formControl]="activityForm.controls['recorder']" disabled="true"></ion-input>
+    </ion-item>
+    <h5 class="field-label">描述</h5>
+    <ion-item>
+      <ion-textarea rows="6" [formControl]="activityForm.controls['description']"></ion-textarea>
+    </ion-item>
+
+    <div padding>
+      <button type="submit" block>保存</button>
+    </div>
+  </form>
 </ion-content>

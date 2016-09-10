@@ -34,12 +34,13 @@
       <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [formControl]="activityForm.controls['endDate']"></ion-datetime>
     </ion-item>
 
-    <h5 class="assertive-field field-label">活动状态</h5>
+    <h5 class="field-label">活动状态</h5>
     <status-picker 
+      [formControl]="activityForm.controls['actStatus']"
       [options]="actStatusList"
       [textField]="'name'"
       [valueField]="'order'"
-      [disabled]="false">
+      [disabled]="true">
     </status-picker>
 
     <h5 class="field-label">记录人</h5>

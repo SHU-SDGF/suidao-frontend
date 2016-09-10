@@ -4,7 +4,7 @@ import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTI
 import {ViewController, AlertController, NavParams, LoadingController, ActionSheetController} from 'ionic-angular';
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
-import {LookupService} from '../../../../../../providers';
+import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {UserService} from '../../../../../../providers';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
@@ -13,7 +13,6 @@ import {CaptureMedia} from '../../../../../../shared/components/media-capture/me
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
-import {AppMeta} from '../../../../../../providers/app_meta';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
@@ -24,16 +23,9 @@ export class ActivityDetailPage implements OnInit{
   private activityForm: FormGroup = new FormGroup({});
   medias: Array<IMediaContent> = [];
 
-  private actStatusList: Array<{
-    name: string,
-    order: number,
-    color: string
-  }>;
+  private actStatusList: Array<IActionStatus>;
 
-  private actTypes: [{
-    name: string,
-    order: number
-  }];
+  private actTypes: Array<IActionType>;
 
   constructor(public viewCtrl: ViewController,
     private _activityDetail: EnvironmentActivityService,
@@ -74,19 +66,14 @@ export class ActivityDetailPage implements OnInit{
     });
 
     // load status    
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number, color: string}]) => {
+    this._lookupService.getActionStatus().then((actStatusList) => {
       actStatusList.sort((a,b)=>{ return a.order > b.order? 1: -1;});
-
-      _self.actStatusList = actStatusList.map((obj, i)=>{
-        obj.color = AppMeta.STATUS_CLASSES[i];
-        return obj;
-      });
-
+      _self.actStatusList = actStatusList;
       (<FormControl>this.activityForm.controls['actStatus']).updateValue(actStatusList[0].order, {onlySelf: true});
     });
 
     /// load activity types
-    this._lookupService.getActTypes().then((actTypes:[{name: string, order: number}]) => {
+    this._lookupService.getActTypes().then((actTypes) => {
       (<FormControl>this.activityForm.controls['actType']).updateValue(actTypes[0].order, {onlySelf: true});
       _self.actTypes = actTypes;
     });

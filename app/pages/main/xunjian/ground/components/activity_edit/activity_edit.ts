@@ -3,31 +3,27 @@ import {Component, OnInit,
 import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
 import {EnvironmentActivityService} from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
-import {LookupService} from '../../../../../../providers';
+import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {AppUtils} from '../../../../../../shared/utils';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
-
+import {StatusPicker} from '../../../../../../shared/components/status-picker/status-picker';
+import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
+import { FormValidors } from '../../../../../../providers/form-validators';
+import {UserService} from '../../../../../../providers';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_edit/activity_edit.html',
-  pipes: [AppUtils.DatePipe]
+  pipes: [AppUtils.DatePipe],
+  directives: [StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
 })
 export class ActivityEditPage implements OnInit{
   
-  selectedPage: string = 'detail';
-  activityDetail: EnvironmentActivity;
-  activityDetailSummary: EnvironmentActivitySummary
+  private activityForm: FormGroup = new FormGroup({});
 
-  private actStatusList: [{
-    name: string,
-    order: number
-  }];
+  private actStatusList: Array<IActionStatus>;
 
-   private actTypes: [{
-    name: string,
-    order: number
-  }];
+   private actTypes: [IActionType];
 
   private environmentActivityList: any = [];
   constructor(
@@ -37,64 +33,54 @@ export class ActivityEditPage implements OnInit{
     private _alertController: AlertController,
     private _environmentActivityService: EnvironmentActivityService,
     private params: NavParams,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private formBuilder: FormBuilder,
+    private _userService: UserService
   ) { }
 
   ngOnInit() {
     let _self = this;
-    let paramsObj = this.params.get('activityDetail');
+    let activityDetailObj = this.params.get('activityDetail');
 
-    this.activityDetail = EnvironmentActivity.deserialize(paramsObj);
-    this.activityDetailSummary = EnvironmentActivitySummary.deserialize(paramsObj);
-    
-    /*
-    this.activityDetailObj = {
-      actNo: paramsObj.actNo,
-      actName: paramsObj.title, //活动名称
-      description: paramsObj.description, //活动描述
-      actStatus: paramsObj.actStatus,
-      actType: paramsObj.actType,
-      inspDate: this._convertDate(paramsObj.inspDate)
-    };
-    */
-
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
+    this._lookupService.getActionStatus().then((actStatusList) => {
       _self.actStatusList = actStatusList;
     });
 
     // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetail.actNo).then((result) => {
+    this._environmentActivityService.searchEnvironmentActivitiesByActNo(activityDetailObj.actNo).then((result) => {
       this.environmentActivityList = result["content"];
     }, (error) => {
     });
-  }
 
-  private _convertDate(datetime) {
-    let date = new Date(datetime)
-    var month = (date.getMonth() + 1) > 9 ? '-' + (date.getMonth() + 1) : '-0' + (date.getMonth() + 1); 
-    var day = (date.getDate()) > 9 ? '-' + (date.getDate()) : '-0' + (date.getDate()); 
-    return date.getFullYear() + month + day;
+    let formGroup = this.formBuilder.group({
+      actNo: [activityDetailObj.actNo],
+      actName: [activityDetailObj.actName, ...FormValidors.actNameValidator() ], //活动名称
+      description: [activityDetailObj.description, ...FormValidors.descriptionValidator() ], //活动描述
+      actStatus: [activityDetailObj.actStatus],
+      createUser: [activityDetailObj.createUser],
+      recorder: [''],
+      inspDate: [new Date(activityDetailObj.inspDate).getTime()],
+      actType: [activityDetailObj.actType, ...FormValidors.actTypeValidator()],
+      startDate: [AppUtils.convertDate(activityDetailObj.startDate), ...FormValidors.startDateValidator()],
+      endDate: [AppUtils.convertDate(activityDetailObj.endDate),  ...FormValidors.endDateValidator(this.activityForm)]
+    });
+
+    for(let key in formGroup.controls){
+      this.activityForm.addControl(key, formGroup.controls[key]);
+    }
+
+    // username
+    this._userService.getUserInfo().then((userInfo) => {
+      (<FormControl>this.activityForm.controls['recorder']).updateValue(userInfo.userName, {onlySelf: true});
+    });
   }
 
   dismiss() {
     this.viewCtrl.dismiss();
   }
 
-  save() {
+  save(value) {
     let _that = this;
-
-    /*
-    let paramsObj = {
-      actNo: this.activityDetailObj.actNo,
-      actName: this.activityDetailObj.actName,
-      description: this.activityDetailObj.description,
-      actStatus: this.activityDetailObj.actStatus,
-      actType: this.activityDetailObj.actType,
-      recorder: this.activityDetailObj.recorder,
-      inspDate: new Date(this.activityDetailObj.inspDate).getTime()
-    }
-    */
-
 
     let loading = this.loadingCtrl.create({
       dismissOnPageChange: true,
@@ -103,7 +89,7 @@ export class ActivityEditPage implements OnInit{
 
     loading.present();
 
-    this._environmentActivityService.addNewEnvironmentActivity(this.activityDetail).then((result) => {
+    this._environmentActivityService.addNewEnvironmentActivity(value).then((result) => {
       this.viewCtrl.dismiss(result);
     }, (error) => {
       let alert = this._alertController.create({
@@ -112,20 +98,5 @@ export class ActivityEditPage implements OnInit{
       });
       alert.present();
     });
-  }
-
-  private _getLookUpValue(list, order){
-    let value = '';
-    for(let el in list){
-      if(list[el]["order"]  == order){
-        value = list[el]["name"];
-      }
-    }
-    return value;
-  }
-
-  showHistory(index) {
-    let modal = this._modelCtrl.create(ActivityHistoryInfoPage, {'activityDetail': this.environmentActivityList[index], 'activityName': this.activityDetail["actName"]});
-    modal.present();
   }
 }

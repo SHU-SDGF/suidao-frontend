@@ -4,25 +4,28 @@ import {ViewController, AlertController, NavParams, ModalController, LoadingCont
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService} from '../../../../../../providers';
-import {AppUtils} from '../../../../../../shared/utils';
+import {AppUtils, OptionPipe} from '../../../../../../shared/utils';
 import {UserService} from '../../../../../../providers';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
-
+import {ActivityEditPage} from '../activity_edit/activity_edit';
+import {StatusPicker} from '../../../../../../shared/components/status-picker/status-picker';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
-  pipes: [AppUtils.DatePipe]
+  pipes: [AppUtils.DatePipe, OptionPipe],
+  directives: [StatusPicker]
 })
 export class ActivityInfoPage implements OnInit{
   
   selectedPage: string = 'detail';
   activityDetailObj: any;
 
-  private actStatusList: [{
+  private actStatusList: Array<{
     name: string,
-    order: number
-  }];
+    order: number,
+    color: string
+  }>;
 
    private actTypes: [{
     name: string,
@@ -48,10 +51,12 @@ export class ActivityInfoPage implements OnInit{
       actNo: paramsObj.actNo,
       actName: paramsObj.title, //活动名称
       description: paramsObj.description, //活动描述
-      actStatus: paramsObj.actStatus,
+      actStatus: parseInt(paramsObj.actStatus),
       actType: paramsObj.actType,
       inspDate: AppUtils.convertDate(paramsObj.inspDate),
       createUser: paramsObj.createUser,
+      startDate: paramsObj.startDate,
+      endDate: paramsObj.endDate,
       recorder: ''
     };
 
@@ -61,7 +66,7 @@ export class ActivityInfoPage implements OnInit{
       this.activityDetailObj.createUser = userInfo.userName;
     });
 
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
+    this._lookupService.getActionStatus().then((actStatusList) => {
       _self.actStatusList = actStatusList;
     });
 
@@ -77,6 +82,10 @@ export class ActivityInfoPage implements OnInit{
   }
 
   edit() {
+    let modal = this._modelCtrl.create(ActivityEditPage, {activityDetail: this.activityDetailObj});
+    modal.present();
+
+    /*
     let _that = this;
     let paramsObj = {
       actNo: this.activityDetailObj.actNo,
@@ -89,31 +98,23 @@ export class ActivityInfoPage implements OnInit{
     }
 
     let loading = this.loadingCtrl.create({
-      dismissOnPageChange: true,
       duration: 2000
     });
 
     loading.present();
 
     this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
+      loading.dismiss();
       this.viewCtrl.dismiss(result);
     }, (error) => {
+      loading.dismiss();
       let alert = this._alertController.create({
         title: '出错啦！',
         message: '创建活动未能成功！请重新尝试！'
       });
       alert.present();
     });
-  }
-
-  private _getLookUpValue(list, order){
-    let value = '';
-    for(let el in list){
-      if(list[el]["order"]  == order){
-        value = list[el]["name"];
-      }
-    }
-    return value;
+    */
   }
 
   showHistory(el) {

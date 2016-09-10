@@ -7,7 +7,7 @@ import {MenuController, Events,
   ViewController, NavParams
 } from 'ionic-angular';
 import {SelectPopover} from '../../../../../../shared/components/select-popover/select-popover';
-import {LookupService} from '../../../../../../providers';
+import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {ActivityInfoPage} from '../../components/activity_info/activity_info';
 import * as  _ from 'lodash';
 
@@ -17,15 +17,8 @@ import * as  _ from 'lodash';
 })
 export class SearchPage implements OnInit, OnDestroy {
 
-  private actStatusList: [{
-    name: string,
-    order: number
-  }];
-
-  private actTypesList: [{
-    name: string,
-    order: number
-  }];
+  private actStatusList: Array<IActionStatus>;
+  private actTypesList: Array<IActionType>;
 
   private searchArg: string = ''; // 搜索参数
   private searchedResults: Array<any>; // 搜索结果列表
@@ -41,7 +34,7 @@ export class SearchPage implements OnInit, OnDestroy {
   
   ngOnInit() {
     let _self = this;
-    this._lookupService.getActionStatus().then((actStatusList:[{name: string, order: number}]) => {
+    this._lookupService.getActionStatus().then((actStatusList) => {
       _self.actStatusList = actStatusList;
     });
 
@@ -73,20 +66,5 @@ export class SearchPage implements OnInit, OnDestroy {
     modal.present(modal);
     modal.onDidDismiss(() => {
     });
-  }
-
-  private _convertDate(datetime) {
-    let date = new Date(datetime)
-    return date.getFullYear() + '-0' + (date.getMonth() + 1) + '-0' + (date.getDay() + 1)
-  }
-
-  private _getLookUpValue(list, order){
-    let value = '';
-    for(let el in list){
-      if(list[el]["order"]  == order){
-        value = list[el]["name"];
-      }
-    }
-    return value;
   }
 }

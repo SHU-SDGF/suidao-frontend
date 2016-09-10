@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { Storage, LocalStorage } from 'ionic-angular';
 import 'rxjs/add/operator/map';
 import { HttpService } from './http_service';
+import {AppMeta} from './app_meta';
 
 let PouchDB = require('pouchdb');
 
@@ -267,16 +268,20 @@ export class LookupService {
 	}
 
 	//查询活动类型枚举表
-	getActTypes(): Promise<Array<any>>{
+	getActTypes(): Promise<Array<IActionType>>{
 		return this.localStorage.get(ACT_TYPES).then((_actTypes) => {
 			return JSON.parse(_actTypes);
 		});
 	}	
 
 	//查询活动状态枚举表
-	getActionStatus(): Promise<Array<any>>{
+	getActionStatus(): Promise<Array<IActionStatus>>{
 		return this.localStorage.get(ACTION_STATUS_DATA).then((_actStatusData) => {
-			return JSON.parse(_actStatusData);
+			let statusList = JSON.parse(_actStatusData);
+			return statusList.map((obj, i)=>{
+        obj.color = AppMeta.STATUS_CLASSES[i];
+        return obj;
+      });
 		});
 	}
 
@@ -318,4 +323,15 @@ export class LookupService {
 			return JSON.parse(data);
 		})
 	};
+}
+
+
+export interface IActionStatus{
+	name: string,
+	order: number, 
+	color: string
+}
+export interface IActionType{
+	name: string,
+	order: number
 }

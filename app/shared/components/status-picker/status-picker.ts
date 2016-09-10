@@ -1,7 +1,12 @@
-import {Component, Input, Output, OnChanges, EventEmitter, SimpleChange, ChangeDetectionStrategy, OnInit, HostListener, ElementRef, Renderer} from '@angular/core';
-import {NgModel} from '@angular/common';
+import {forwardRef, Component, Input, Output, OnChanges, EventEmitter, SimpleChange, ChangeDetectionStrategy, OnInit, HostListener, ElementRef, Renderer} from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
+
+export const STATUS_PICKER_VALUE_ACCESSOR: any = {
+    provide: NG_VALUE_ACCESSOR,
+    useExisting: forwardRef(() => StatusPicker),
+    multi: true
+};
 
 const noop = () => {
 };
@@ -10,21 +15,17 @@ const noop = () => {
 @Component({
   selector: 'status-picker',
   template: `
-    <button *ngFor="let option of options" 
+    <button *ngFor="let option of options" type="button"
       [attr.aria-pressed]="selectedValue == option[valueField]? true: false"
       [ngClass]="selectedValue == option[valueField] ? option[selectedClassField] : []" 
       (click)="selectOption(option)">
         {{option[textField]}}
     </button>
   `,
-  providers: [NgModel],
-  host: {
-    '(ngModelChange)' : 'onStatusChange($event)'
-  },
+  providers: [STATUS_PICKER_VALUE_ACCESSOR],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatusPicker  implements OnInit, ControlValueAccessor{
-  @Output() ngModelChange: EventEmitter<any> = new EventEmitter();
   @Input() options: Array<any>;
   @Input() textField: string;
   @Input() valueField: string;
@@ -63,32 +64,20 @@ export class StatusPicker  implements OnInit, ControlValueAccessor{
     if(changes['options']){
       this.options = changes['options'].currentValue;
       if(this.options && this.options.length && (this.selectedValue === undefined || this.selectedValue === null)){
-        this.selectedValue = this.options[0][this.valueField];
-      }
-    }
-  }
-
-  onStatusChange($event){
-    if($event.target){
-      this.selectedValue = $event.target.value;
-      if(this.ngModelChange){
-        this.ngModelChange.emit(this.selectedValue);
+        this.selectOption(this.options[0]);
       }
     }
   }
 
   selectOption(option:any) {
     if(this.disabled) return;
-    this.selectedValue = option[this.valueField];
-    if(this.ngModelChange){
-      this.ngModelChange.emit(option[this.valueField]);
-    }
+    this.value = option[this.valueField];
   }
 
   //From ControlValueAccessor interface
   writeValue(value: any) {
-    if (value !== this.selectedValue) {
-        this.selectedValue = value;
+    if (value !== this.value) {
+        this.value = value;
     }
   }
 

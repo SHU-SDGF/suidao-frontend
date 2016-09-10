@@ -183,25 +183,17 @@ export class GroundPage implements OnInit, OnDestroy {
           longitude: result["content"][0]["longitude"],
           latitude: result["content"][0]["latitude"]
         }
-        for(var index in result["content"]) {
-          markers.push({
-            longitude: result["content"][index]["longtitude"],
-            latitude: result["content"][index]["latitude"],
-            title: result["content"][index]["actName"],
-            icon: this.getIcon(result["content"][index]["actStatus"]),
-            description: result["content"][index]["description"],
+        markers = result["content"].map(activity=>{
+          Object.assign(activity, {
             width: 30,
             height: 30,
-            actStatus: result["content"][index]["actStatus"],
-            actType: result["content"][index]["actType"],
-            recorder: result["content"][index]["recorder"],
-            content: '',
-            inspDate: result["content"][index]["inspDate"],
-            actNo: result["content"][index]["actNo"],
-            createUser: result["content"][index]["createUser"],
-            id: result["content"][index]["id"]
+            icon: this.getIcon(activity["actStatus"]),
+            title: activity['actName'],
+            longitude: activity["longtitude"],
+            latitude: activity["latitude"],
           });
-        }
+          return activity;
+        });
       }
       that.opts.markers = that.opts.markers.concat(markers);
 
@@ -280,7 +272,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private getIcon(status){
     let types = ['initial', 'ongoing', 'finished'];
     let type = types[status];
-    return `build/imgs/markert-${type}.png`;
+    return `build/imgs/marker-${type}.png`;
   }
 
   private openCreateModal($event: MapEvent){
@@ -350,32 +342,23 @@ export class GroundPage implements OnInit, OnDestroy {
     modal.present(modal);
     modal.onDidDismiss((result) => {
       if(result) {
-        for(let index in _self.environmentActivityList) {
-          if(_self.environmentActivityList[index]["id"] == result["actSumId"]) {
-            _self.environmentActivityList[index]["actStatus"] = result["actStatus"];
-            _self.environmentActivityList[index]["description"] = result["description"];
-            _self.environmentActivityList[index]["inspDate"] = result["inspDate"];
-          }
+        let act = _self.environmentActivityList.find(act=> act['id'] == result["actSumId"]);
+        if(act){
+          act["actStatus"] = result["actStatus"];
+          act["description"] = result["description"];
+          act["inspDate"] = result["inspDate"];
         }
 
-        for(let index in _self.opts.markers) {
-          if(_self.opts.markers[index]["id"] == result["actSumId"]) {
-            _self.opts.markers[index]["actStatus"] = result["actStatus"];
-            _self.opts.markers[index]["description"] = result["description"];
-            _self.opts.markers[index]["inspDate"] = result["inspDate"];
-          }
+        let marker = _self.opts.markers.find(marker => marker['id'] == result["actSumId"]);
+        if(marker){
+          marker["actStatus"] = result["actStatus"];
+          marker["description"] = result["description"];
+          marker["inspDate"] = result["inspDate"];
+          marker["icon"] = _self.getIcon(marker["actStatus"]);
         }
-        console.log(_self);
+        _self._suidaoMap.removeMarker(marker);
+        _self._suidaoMap.addMarker(marker);
       }
     });
-    // setTimeout((($event) => {
-    //   let modal = this._modalCtrl.create(ActivityInfoPage, {'activityDetail': $event.obj});
-    //   debugger;
-    //   modal.present(modal);
-    //   let _self = self;
-    //   modal.onDidDismiss((result) => {
-    //     debugger;
-    //   });
-    // }).bind(self),0, $event);
   }
 }

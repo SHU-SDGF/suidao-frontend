@@ -3,7 +3,7 @@ import {Pipe, Injectable} from '@angular/core';
 @Pipe({
     name: 'DatePipe'
 })
-class DatePipe {
+export class DatePipe {
     transform(datetime, args?) {
         return convertDate(datetime);
     }
@@ -21,7 +21,7 @@ let convertDate = function (datetime, args?) {
 @Pipe({
     name: 'TimePipe'
 })
-class TimePipe{
+export class TimePipe{
     transform(time, args?){
         return convertTime(time);
     }
@@ -52,6 +52,21 @@ function convertTime(time: number){
     return result.join(':');
 }
 
+@Pipe({
+    name: 'OptionPipe'
+})
+export class OptionPipe{
+    transform(value, options: Array<{name:string, order: number}>){
+        return getOptionName(value, options);
+    }
+}
+
+function getOptionName(order, options: Array<{name:string, order: number}>){
+    let name = '';
+    let option = options.find(option=>option.order == order);
+    if(option) return option.name;
+    return null;
+}
 
 /**
  * 常用的字符串处理方法
