@@ -22,8 +22,10 @@ export class XunjianPage extends ToggleMenu{
   private structs = JSON.parse(localStorage.getItem("model_names"));
 
   private selectedTunnelOption: TunnelOption;
+  private searchArg = "";
 
   OPTIONCHANGE_EVENT: string = "optionChange";
+  SEARCHINSPACT_EVENT: string = "searchInspAct";
   constructor(
     private _menuCtrl: MenuController,
     private _modalCtrl: ModalController,
@@ -43,6 +45,13 @@ export class XunjianPage extends ToggleMenu{
     };
 
     localStorage.setItem('tunnelOption', JSON.stringify(this.selectedTunnelOption));
+  }
+
+  onInput(event) {
+    console.log('99999');
+    console.log(this.searchArg);
+    this._events.publish(this.SEARCHINSPACT_EVENT, this.searchArg);
+    console.log(event);
   }
 
   private selectedTunnelDirectionChanged($event) {

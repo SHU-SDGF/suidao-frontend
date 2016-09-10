@@ -15,6 +15,7 @@ declare const cordova;
 })
 export class UndergroundPage implements OnInit, OnDestroy {
   private facilityInspList: any = [];
+  private shadowFacilityInspList: any = [];
 
   constructor(
     private _events: Events,
@@ -32,6 +33,14 @@ export class UndergroundPage implements OnInit, OnDestroy {
   ngAfterViewInit() {
     this.reloadData();
     this._events.subscribe('optionChange', this.reloadData.bind(this));
+
+    this._events.subscribe('searchInspAct', ((searchArg) => {
+      console.log(searchArg);
+      this.facilityInspList = _.cloneDeep(this.shadowFacilityInspList);
+      this.facilityInspList = _.filter(this.facilityInspList, ((result) => {
+        return result["mileage"].includes(searchArg)
+      }));
+    }))
   }
 
   ngOnDestroy(){
@@ -108,6 +117,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
     */
   }
 
+  private filterFacilityInsp(searchArg) {
+  };
+
   private reloadData() {
     let that = this;
     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
@@ -117,6 +129,8 @@ export class UndergroundPage implements OnInit, OnDestroy {
       for(var index in filteredResult) {
         that.facilityInspList.push({mileage: index, facilityInsp: filteredResult[index]})
       }
+
+      that.shadowFacilityInspList = _.cloneDeep(that.facilityInspList);
     }, (error) => {
 
     });
