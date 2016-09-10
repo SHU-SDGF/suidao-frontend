@@ -13,10 +13,12 @@ import {CaptureMedia} from '../../../../../../shared/components/media-capture/me
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
+import {DatePipe} from '../../../../../../shared/utils';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
-  directives: [MediaViewer, CaptureMedia, StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES]
+  directives: [MediaViewer, CaptureMedia, StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES],
+  pipes: [DatePipe]
 })
 export class ActivityDetailPage implements OnInit{
   private submitAttempt = false;

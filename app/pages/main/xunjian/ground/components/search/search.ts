@@ -9,16 +9,18 @@ import {MenuController, Events,
 import {SelectPopover} from '../../../../../../shared/components/select-popover/select-popover';
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {ActivityInfoPage} from '../../components/activity_info/activity_info';
+import {AppUtils, OptionPipe, DatePipe, StatusPipe} from '../../../../../../shared/utils';
 import * as  _ from 'lodash';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/search/search.html',
-  directives: [SelectPopover]
+  directives: [SelectPopover],
+  pipes: [OptionPipe, DatePipe, StatusPipe]
 })
 export class SearchPage implements OnInit, OnDestroy {
 
-  private actStatusList: Array<IActionStatus>;
-  private actTypesList: Array<IActionType>;
+  private actStatusList: Array<IActionStatus> = [];
+  private actTypesList: Array<IActionType> = [];
 
   private searchArg: string = ''; // 搜索参数
   private searchedResults: Array<any>; // 搜索结果列表
@@ -27,6 +29,7 @@ export class SearchPage implements OnInit, OnDestroy {
     { name: '环境巡检', value: 1 },
     { name: '周围环境', value: 1 }
   ];
+  
   private selectedType = this.itemList[0]; //选择的种类
 
   constructor(private _viewCtrl: ViewController, private params: NavParams, private _lookupService: LookupService,private  _modalCtrl: ModalController) {

@@ -1,4 +1,4 @@
-import {forwardRef, Component, Input, Output, OnChanges, EventEmitter, SimpleChange, ChangeDetectionStrategy, OnInit, HostListener, ElementRef, Renderer} from '@angular/core';
+import {forwardRef, Component, Input, Output, OnChanges, EventEmitter, SimpleChange, ChangeDetectionStrategy, OnInit, HostListener, ElementRef, Renderer, NgZone} from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 
 
@@ -22,8 +22,7 @@ const noop = () => {
         {{option[textField]}}
     </button>
   `,
-  providers: [STATUS_PICKER_VALUE_ACCESSOR],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [STATUS_PICKER_VALUE_ACCESSOR]
 })
 export class StatusPicker  implements OnInit, ControlValueAccessor{
   @Input() options: Array<any>;
@@ -43,14 +42,17 @@ export class StatusPicker  implements OnInit, ControlValueAccessor{
   //set accessor including call the onchange callback
   set value(v: any) {
     if (v !== this.selectedValue) {
+      this._zone.run(()=>{
         this.selectedValue = v;
         this.onChangeCallback(v);
+      });
     }
   }
 
   constructor(
     private el: ElementRef,
-    public renderer: Renderer) {
+    public renderer: Renderer,
+    private _zone: NgZone) {
   }
 
   ngOnInit(){

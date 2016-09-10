@@ -5,11 +5,12 @@ import { EnvironmentActivityService} from '../../../../../../providers';
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
-import {AppUtils} from '../../../../../../shared/utils';
+import {AppUtils, DatePipe} from '../../../../../../shared/utils';
 
 
 @Component({
-  templateUrl: './build/pages/main/xunjian/ground/components/activity_history_info/activity_history_info.html'
+  templateUrl: './build/pages/main/xunjian/ground/components/activity_history_info/activity_history_info.html',
+  pipes: [DatePipe]
 })
 export class ActivityHistoryInfoPage implements OnInit{
   private actStatusList: Array<IActionStatus>;
@@ -37,7 +38,7 @@ export class ActivityHistoryInfoPage implements OnInit{
     let activityParams = this.params.get('activityDetail');
     this.activityDetailObj = {
       actName: activityName,
-      inspDate: AppUtils.convertDate(activityParams["inspDate"]),
+      inspDate: activityParams["inspDate"],
       endDate: activityParams["endDate"],
       description: activityParams["description"], //活动描述
       actStatus: activityParams["actStatus"],

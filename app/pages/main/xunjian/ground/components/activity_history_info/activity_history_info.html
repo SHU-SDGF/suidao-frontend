@@ -19,7 +19,7 @@
   </ion-item>
   <h5 class="assertive-field field-label">巡检日期</h5>
   <ion-item>
-    <ion-input type="text" disabled="true" [(ngModel)]="activityDetailObj.inspDate" disabled="true"></ion-input>
+    <p>{{activityDetailObj.inspDate | DatePipe}}</p>
   </ion-item>
   <h5 class="assertive-field field-label">活动状态</h5>
   <ion-item>

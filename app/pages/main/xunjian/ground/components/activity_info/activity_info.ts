@@ -1,9 +1,9 @@
-import {Component, OnInit,
+import {Component, OnInit, NgZone,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
-import {LookupService} from '../../../../../../providers';
+import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {AppUtils, OptionPipe} from '../../../../../../shared/utils';
 import {UserService} from '../../../../../../providers';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
@@ -20,28 +20,20 @@ export class ActivityInfoPage implements OnInit{
   
   selectedPage: string = 'detail';
   activityDetailObj: any;
-
-  private actStatusList: Array<{
-    name: string,
-    order: number,
-    color: string
-  }>;
-
-   private actTypes: [{
-    name: string,
-    order: number
-  }];
+  actStatusList: Array<IActionStatus> = [];
+  actTypes: Array<IActionType> = [];
 
   private environmentActivityList: any = [];
   constructor(
-    private viewCtrl: ViewController,
+    private _viewCtrl: ViewController,
     private _modelCtrl: ModalController,
     private _lookupService: LookupService,
     private _alertController: AlertController,
     private _environmentActivityService: EnvironmentActivityService,
     private params: NavParams,
-    private loadingCtrl: LoadingController,
-    private _userService: UserService
+    private _loadingCtrl: LoadingController,
+    private _userService: UserService,
+    private _zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -70,51 +62,46 @@ export class ActivityInfoPage implements OnInit{
       _self.actStatusList = actStatusList;
     });
 
+    this._lookupService.getActTypes().then((actTypeList)=>{
+      _self.actTypes = actTypeList;
+    });
+    setTimeout(()=>{
+      this.getHistory();
+    }, 200);
+  }
+
+  getHistory(){
+
     // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).then((result) => {
+    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).then((result: any) => {
       this.environmentActivityList = result["content"];
+      if(result.content.length){
+        Object.assign(this.activityDetailObj, result.content[0]); 
+        this.activityDetailObj.actStatus = parseInt(this.activityDetailObj.actStatus);
+      }
     }, (error) => {
+      let alert =this._alertController.create({
+        title: '获取历史列表失败，请连续管理员！'
+      });
+      alert.present();
+      alert.onDidDismiss(()=>{
+        this.dismiss();
+      });
     });
   }
 
   dismiss() {
-    this.viewCtrl.dismiss();
+    this._viewCtrl.dismiss();
   }
 
   edit() {
     let modal = this._modelCtrl.create(ActivityEditPage, {activityDetail: this.activityDetailObj});
     modal.present();
-
-    /*
-    let _that = this;
-    let paramsObj = {
-      actNo: this.activityDetailObj.actNo,
-      actName: this.activityDetailObj.actName,
-      description: this.activityDetailObj.description,
-      actStatus: this.activityDetailObj.actStatus,
-      actType: this.activityDetailObj.actType,
-      recorder: this.activityDetailObj.recorder,
-      inspDate: new Date(this.activityDetailObj.inspDate).getTime()
-    }
-
-    let loading = this.loadingCtrl.create({
-      duration: 2000
+    modal.onDidDismiss((result)=>{
+      if(!result) return;
+      Object.assign(this.activityDetailObj, result); 
+      this.getHistory();
     });
-
-    loading.present();
-
-    this._environmentActivityService.addNewEnvironmentActivity(paramsObj).then((result) => {
-      loading.dismiss();
-      this.viewCtrl.dismiss(result);
-    }, (error) => {
-      loading.dismiss();
-      let alert = this._alertController.create({
-        title: '出错啦！',
-        message: '创建活动未能成功！请重新尝试！'
-      });
-      alert.present();
-    });
-    */
   }
 
   showHistory(el) {

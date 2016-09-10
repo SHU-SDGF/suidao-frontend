@@ -241,3 +241,13 @@ ion-item-group {
   color: color($colors, light) !important;
   border-color: color($colors, warning) !important;
 }
+
+.initial-status-color{
+  color: color($colors, grey) !important;
+} 
+.ongoing-status-color{
+  color: color($colors, secondary) !important;
+}
+.finished-status-color{
+  color: color($colors, warning) !important;
+}

@@ -1,4 +1,14 @@
 import {Pipe, Injectable} from '@angular/core';
+import {AppMeta} from '../providers/app_meta';
+
+@Pipe({
+    name: 'StatusPipe'
+})
+export class StatusPipe{
+    transform(status, args?) {
+        return AppMeta.STATUS_COLOR_CLASSES[status];
+    }
+}
 
 @Pipe({
     name: 'DatePipe'

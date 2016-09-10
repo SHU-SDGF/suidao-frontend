@@ -3,6 +3,7 @@ import {NavController, PopoverController} from 'ionic-angular';
 import { PhotoViewer, VideoPlayer, MediaCapture, MediaPlugin} from 'ionic-native';
 import {VideoPlayerPage} from './video-player';
 import {AudioPlayerPage} from './audio-player';
+import {PictureViewerPage} from './picture-viewer';
 
 declare const Media: any;
 
@@ -35,7 +36,8 @@ export class MediaViewer{
   }
 
   viewImg(media: IMediaContent){
-    PhotoViewer.show(media.fileUri, media.fileUri, {share: false});
+    this._navCtrl.push(PictureViewerPage, {media: media});
+    //PhotoViewer.show(media.fileUri, media.fileUri, {share: false});
   }
 
   playVideo(media: IMediaContent){

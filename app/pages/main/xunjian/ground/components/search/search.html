@@ -18,19 +18,14 @@
   <ion-list>
     <ion-item-group *ngFor = "let result of searchedResults; let idx=index">
       <div>
-        <ion-item>
-          <ion-label class="act-no">活动编号：{{result.actNo}}</ion-label>
-        </ion-item>
-      </div>
-      <div>
         <button ion-item (click)="showHistory(result)" class="act-card">
-          <ion-icon item-left name="md-pin"></ion-icon>
+          <ion-icon item-left name="md-pin" [ngClass]=" result.actStatus | StatusPipe"></ion-icon>
           <div item-inner class="act-detail">
             <h3>{{result.actName}}</h3>
             <p>
-              {{_getLookUpValue(actStatusList, result.actStatus)}}
+              {{result.actStatus | OptionPipe:actStatusList}}
               &mdash;
-              {{_convertDate(result.inspDate)}}
+              {{result.inspDate | DatePipe}}
             </p>
           </div>
         </button>

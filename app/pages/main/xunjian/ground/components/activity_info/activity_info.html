@@ -27,6 +27,25 @@
     <ion-item>
       <ion-input [(ngModel)]="activityDetailObj.actNo" disabled="true"></ion-input>
     </ion-item>
+
+    <h5 class="field-label">活动名称</h5>
+    <ion-item>
+      <p>{{activityDetailObj.actName}}</p>
+    </ion-item>
+
+    <h5 class="field-label">活动类别</h5>
+    <ion-item>
+      <p>{{activityDetailObj.actType | OptionPipe:actTypes}}</p>
+    </ion-item>
+
+    <h5 class="field-label">活动状态</h5>
+    <status-picker 
+      [(ngModel)]="activityDetailObj.actStatus"
+      [options]="actStatusList"
+      [textField]="'name'"
+      [valueField]="'order'"
+      [disabled]="true">
+    </status-picker>
     <h5 class="field-label">巡检时间</h5>
     <ion-item>
       <p>{{activityDetailObj.inspDate | DatePipe}}</p>
@@ -41,15 +60,6 @@
     <ion-item>
       <p>{{activityDetailObj.endDate | DatePipe}}</p>
     </ion-item>
-
-    <h5 class="field-label">活动状态</h5>
-    <status-picker 
-      [(ngModel)]="activityDetailObj.actStatus"
-      [options]="actStatusList"
-      [textField]="'name'"
-      [valueField]="'order'"
-      [disabled]="true">
-    </status-picker>
     <h5 class="field-label">作成者</h5>
     <ion-item>
       <ion-input type="text" [(ngModel)]="activityDetailObj.createUser" disabled="true"></ion-input>

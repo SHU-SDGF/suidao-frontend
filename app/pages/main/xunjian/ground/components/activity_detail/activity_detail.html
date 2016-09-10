@@ -24,6 +24,11 @@
       </ion-select>
     </ion-item>
 
+    <h5 class="field-label">巡检日期</h5>
+    <ion-item>  
+      <p>{{activityForm.controls['inspDate'] |  DatePipe}}</p>
+    </ion-item>
+
     <h5 class="assertive-field field-label">起始日期</h5>
     <ion-item>  
       <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [formControl]="activityForm.controls['startDate']"></ion-datetime>

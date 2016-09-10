@@ -6,11 +6,6 @@
       </button>
     </ion-buttons>
     <ion-title>添加病害</ion-title>
-    <ion-buttons round end>
-      <button (click)="createDisease(diseaseDetailObj)">
-        创建
-      </button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="activity_detail">
@@ -108,6 +103,9 @@
     <ion-item>
       <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayDiseaseDate" disabled="true"></ion-input>
     </ion-item>
-
   </ion-list>
+  <div padding>
+    <button (click)="createDisease(diseaseDetailObj)" block>创建</button>
+  </div>
+  
 </ion-content>

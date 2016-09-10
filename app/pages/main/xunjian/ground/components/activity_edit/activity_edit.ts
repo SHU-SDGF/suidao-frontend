@@ -46,16 +46,10 @@ export class ActivityEditPage implements OnInit{
       _self.actStatusList = actStatusList;
     });
 
-    // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(activityDetailObj.actNo).then((result) => {
-      this.environmentActivityList = result["content"];
-    }, (error) => {
-    });
-
     let formGroup = this.formBuilder.group({
       actNo: [activityDetailObj.actNo],
       actName: [activityDetailObj.actName, ...FormValidors.actNameValidator() ], //活动名称
-      description: [activityDetailObj.description, ...FormValidors.descriptionValidator() ], //活动描述
+      description: ['', ...FormValidors.descriptionValidator() ], //活动描述
       actStatus: [activityDetailObj.actStatus],
       createUser: [activityDetailObj.createUser],
       recorder: [''],
@@ -80,23 +74,29 @@ export class ActivityEditPage implements OnInit{
   }
 
   save(value) {
-    let _that = this;
 
     let loading = this.loadingCtrl.create({
       dismissOnPageChange: true,
-      duration: 2000
+      content: '正在保存活动'
     });
 
     loading.present();
 
     this._environmentActivityService.addNewEnvironmentActivity(value).then((result) => {
-      this.viewCtrl.dismiss(result);
-    }, (error) => {
-      let alert = this._alertController.create({
-        title: '出错啦！',
-        message: '创建活动未能成功！请重新尝试！'
+      result['description'] = this.activityForm.controls['description'].value;
+      loading.onDidDismiss(()=>{
+        this.viewCtrl.dismiss(result);
       });
-      alert.present();
+      loading.dismiss();
+    }, (error) => {
+      loading.onDidDismiss(()=>{
+        let alert = this._alertController.create({
+          title: '出错啦！',
+          message: '创建活动未能成功！请重新尝试！'
+        });
+        alert.present();
+      });
+      loading.dismiss();
     });
   }
 }

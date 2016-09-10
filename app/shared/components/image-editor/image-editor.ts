@@ -15,6 +15,7 @@ interface ImageSize{
 export class ImageEditor implements OnInit{
   @Input() changeOptions: EventEmitter<MapOptions>;
   @Output() onTap = new EventEmitter();
+  private scale: number = 1;
 
   private map: any;
   private _markers: Array<MarkerOptions> = [];
@@ -61,10 +62,18 @@ export class ImageEditor implements OnInit{
 
     this.$ele.nativeElement.innerHTML = '';
     this.map = L.map(this.$ele.nativeElement, {
-      crs: L.CRS.Simple
+      crs: L.CRS.Simple,
+      zoomControl: false,
+      attributionControl: false
     });
 
-    var bounds = [[0,0], [size.height, size.width]];
+    if(this.$ele.nativeElement.offsetWidth / size.width < this.$ele.nativeElement.offsetHeight / size.height){
+      this.scale = this.$ele.nativeElement.offsetWidth / size.width;
+    }else{
+      this.scale = this.$ele.nativeElement.offsetHeight / size.height;
+    }
+
+    var bounds = [[0,0], [size.height * this.scale, size.width * this.scale]];
     L.imageOverlay(this.mapOptions.imageUrl, bounds).addTo(this.map);
     
     this.map.fitBounds(bounds);
@@ -72,13 +81,9 @@ export class ImageEditor implements OnInit{
       if($event.originalEvent.target.className.indexOf('leaflet-image-layer') < 0){
         return;
       }
+      $event.latlng.lat /= this.scale;
+      $event.latlng.lng /= this.scale;
       self.onTap.emit($event);
-      /*
-      let marker = L.marker($event.latlng)
-        .bindPopup('Popup')
-        .addTo(this.map)
-        .openPopup();
-        */
     });
   }
 
@@ -112,7 +117,7 @@ export class ImageEditor implements OnInit{
       iconSize: [30, 30]
     });
 
-    let marker = L.marker([markerOptions.latitude, markerOptions.longitude], {icon: myIcon});
+    let marker = L.marker([markerOptions.latitude * this.scale, markerOptions.longitude * this.scale], {icon: myIcon});
     
     marker.addTo(this.map);
     markerOptions.marker = marker;
