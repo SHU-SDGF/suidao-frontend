@@ -16,6 +16,7 @@ const POSITION_DESCRIPTIONS = "position_descriptions";
 const DISEASE_TYPES = "disease_types";
 const DETAIL_TYPES = "detail_types";
 const FACILITY_TYPES = "facility_types";
+const USER_LIST = "user_list";
 /*
   Generated class for the LookupService provider.
 
@@ -208,6 +209,10 @@ export class LookupService {
 				return { id: obj.id, name: obj.name}
 			});
 
+			let userList = result["userList"].map((obj) => {
+				return { id: obj.loginId, name: obj.userName }
+			});
+
 			this.localStorage.set(FACILITY_TYPES, JSON.stringify(facilityTypesObj));
 			//单体名称枚举表
 			this.localStorage.set(MONOMERS, JSON.stringify(monomersObj));
@@ -218,6 +223,9 @@ export class LookupService {
 			this.localStorage.set(DISEASE_TYPES, JSON.stringify(diseaseTypesObj));
 			//病害小类枚举表
 			this.localStorage.set(DETAIL_TYPES, JSON.stringify(result["diseaseTypeTreeVoList"]));
+
+			//用户列表
+			this.localStorage.set(USER_LIST, JSON.stringify(userList));
 		})
 	}
 
@@ -304,6 +312,12 @@ export class LookupService {
 			}
 			return value;
 		})		
+	}
+
+	getUserList(): Promise<Array<any>> {
+		return this.localStorage.get("user_list").then((data) => {
+			return JSON.parse(data);
+		});
 	}
 
 	getTunnelOption(): Promise<Array<any>> {
