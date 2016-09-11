@@ -104,7 +104,7 @@ export class ActivityDetailPage implements OnInit{
 
     loading.present();
     
-    this._actService.addNewEnvironmentActivitySummary(activityObjPayload).then((result) => {
+    this._actService.addNewEnvironmentActivitySummary(activityObjPayload).subscribe((result) => {
       this.viewCtrl.dismiss(result);
     }, (error) => {
       loading.dismiss();

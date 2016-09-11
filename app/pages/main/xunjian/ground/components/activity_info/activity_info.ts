@@ -52,6 +52,10 @@ export class ActivityInfoPage implements OnInit{
       recorder: ''
     };
 
+    this._userService.getUserByID(this.activityDetailObj.createUser).subscribe((user)=>{
+      this.activityDetailObj.createUsername = user.userName;
+    });
+
     // username
     this._userService.getUserInfo().then((userInfo) => {
       this.activityDetailObj.recorder = userInfo.userName;
@@ -73,7 +77,7 @@ export class ActivityInfoPage implements OnInit{
   getHistory(){
 
     // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).then((result: any) => {
+    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).subscribe((result: any) => {
       this.environmentActivityList = result["content"];
       if(result.content.length){
         Object.assign(this.activityDetailObj, result.content[0]); 

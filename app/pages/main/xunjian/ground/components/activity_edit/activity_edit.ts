@@ -89,7 +89,7 @@ export class ActivityEditPage implements OnInit{
 
     loading.present();
 
-    this._environmentActivityService.addNewEnvironmentActivity(value).then((result) => {
+    this._environmentActivityService.addNewEnvironmentActivity(value).subscribe((result) => {
       result['description'] = this.activityForm.controls['description'].value;
       loading.onDidDismiss(()=>{
         this.viewCtrl.dismiss(result);

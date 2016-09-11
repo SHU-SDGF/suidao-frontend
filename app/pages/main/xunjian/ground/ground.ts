@@ -160,7 +160,7 @@ export class GroundPage implements OnInit, OnDestroy {
       
     };
     
-    this.environmentActivityService.getEnvironmentActivitiesSummaryList().then((result) => {
+    this.environmentActivityService.getEnvironmentActivitiesSummaryList().subscribe((result) => {
       let markers = [];
       let centerCord = {
         longitude: 0,

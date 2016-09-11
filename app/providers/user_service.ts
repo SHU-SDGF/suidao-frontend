@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Events, LocalStorage, Storage} from 'ionic-angular';
 import { Http, Headers } from '@angular/http';
 import {AppConfig} from './config';
+import {User} from '../models/User';
+import {HttpService} from './http_service';
 
 export interface Credentials{
   userName: string, 
@@ -25,7 +27,10 @@ export class UserService {
 
   storage = new Storage(LocalStorage);
   
-  constructor(public http: Http, public events: Events) { }
+  constructor(
+    public http: Http, 
+    public events: Events, 
+    public httpService: HttpService) { }
   
   /**
    * user login
@@ -122,6 +127,13 @@ export class UserService {
     return this.storage.get(this.storageKeys.HAS_LOGGED_IN).then((value) => {
       return value;
     });
+  }
+
+  public getUserByID(id: string){
+    return this.httpService
+      .get({loginId: id}, '/user/searchByLoginId').map((response)=>{
+        return User.deserialize(response);
+      });
   }
 }
 

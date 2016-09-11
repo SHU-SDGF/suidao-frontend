@@ -190,7 +190,7 @@ export class LookupService {
 	}
 
 	getWholeLookupTable() {
-		this.httpService.get({}, 'enum/whole-enum-type/list').then((result) => {
+		this.httpService.get({}, 'enum/whole-enum-type/list').subscribe((result) => {
 			//设施小类枚举表
 			let facilityTypesObj = result["facilityTypeList"].map((obj) => {
 				return { id: obj.id, name: obj.facilityType}

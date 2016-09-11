@@ -3,6 +3,7 @@ import { Storage, LocalStorage } from 'ionic-angular';
 import { AppConfig } from './config';
 import {URLSearchParams} from '@angular/http';
 import { Injectable } from '@angular/core';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class HttpService {
@@ -13,23 +14,16 @@ export class HttpService {
 
 		var headers = new Headers();
 		headers.append('Authorization',localStorage.getItem("authToken"));
-		return new Promise((resolve, reject) =>{
-      var request = _that.http.post(
-        AppConfig.apiBase + '/' + url,
-        paramsObj,{
-        	headers: headers
-        }
-      );
-      request.subscribe((response)=>{
-        if(response.status < 400){
-          var result = response.json();
-          resolve(result);
-        }else{
-          reject();
-        }
-      }, (error)=>{
-        reject(error);
-      });
+
+    let request = _that.http.post(
+      AppConfig.apiBase + '/' + url,
+      paramsObj,{
+        headers: headers
+      }
+    );
+    
+    return request.map((response)=>{
+      return response.json();
     });
 	}
 
@@ -49,20 +43,11 @@ export class HttpService {
       queryObj["search"] = searchParams;
     }
 
-    return new Promise((resolve, reject) =>{
-      var request = _that.http.get(
-        AppConfig.apiBase + '/' + url, queryObj
-      );
-      request.subscribe((response)=>{
-        if(response.status < 400){
-          var result = response.json();
-          resolve(result);
-        }else{
-          reject();
-        }
-      }, (error)=>{
-        reject();
-      });
+    let request = _that.http.get(
+      AppConfig.apiBase + '/' + url, queryObj
+    );
+    return request.map((response)=>{
+      return response.json();
     });
   }
 }
