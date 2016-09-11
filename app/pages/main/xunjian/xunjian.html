@@ -30,7 +30,7 @@
       <ion-icon name="md-barcode"></ion-icon>
       <p>扫一扫</p>
     </button>
-     <ion-searchbar class="insp-activity-searchbar" [(ngModel)]="searchArg" placeholder="输入评估段号进行查询" (ionInput)="onInput($event)"></ion-searchbar>
+     <ion-searchbar class="insp-activity-searchbar" [showCancelButton]="true" [(ngModel)]="searchArg" placeholder="输入评估段号进行查询" (ionInput)="onInput($event)"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 

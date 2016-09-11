@@ -9,7 +9,7 @@
       <ion-icon class="dropdown-addon" item-left [SelectPopover] [itemList]="itemList" [itemDisplayName]="'name'" (selectChanged)="typeChange($event)">
         {{selectedType.name}}
       </ion-icon>
-      <ion-searchbar [(ngModel)]="searchArg" (ionInput)="searchBarOnInput($event)" (ionCancel)="searchActivities($event) "[showCancelButton]="false" placeholder="搜索巡检活动">
+      <ion-searchbar [(ngModel)]="searchArg" [showCancelButton]="true" (ionInput)="searchBarOnInput($event)" (ionCancel)="searchActivities($event) "[showCancelButton]="false" placeholder="搜索巡检活动">
       </ion-searchbar>
     </ion-item>
   </ion-navbar>
