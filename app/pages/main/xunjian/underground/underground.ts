@@ -56,12 +56,13 @@ export class UndergroundPage implements OnInit, OnDestroy {
   }
 
   scanCode(){
-    
+    /*
     if(window['cordova']){
       cordova.plugins.barcodeScanner.scan((result) => {
         result.text && this.showInfo(result.text);
       });
     }else{
+    */
       let info = `
         里程：EK11+702\r\n
         编码：HMNL104SZCQHK117000_A00\r\n
@@ -79,7 +80,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
         拼装日期：2013.12
       `;
       this.showInfo(info);
+      /*
     }
+    */
   }
 
   private showInfo(info){
