@@ -1,5 +1,5 @@
 import {Directive, Input, HostListener} from '@angular/core';
-import {NavController, PopoverController} from 'ionic-angular';
+import {NavController, PopoverController, Platform} from 'ionic-angular';
 import { PhotoViewer, VideoPlayer, MediaCapture, MediaPlugin} from 'ionic-native';
 import {VideoPlayerPage} from './video-player';
 import {AudioPlayerPage} from './audio-player';
@@ -36,8 +36,11 @@ export class MediaViewer{
   }
 
   viewImg(media: IMediaContent){
-    this._navCtrl.push(PictureViewerPage, {media: media});
-    //PhotoViewer.show(media.fileUri, media.fileUri, {share: false});
+    if(this.platform.is('ios')){
+      this._navCtrl.push(PictureViewerPage, {media: media});
+    }else{
+      PhotoViewer.show(media.fileUri, '', {share: false});
+    }
   }
 
   playVideo(media: IMediaContent){
@@ -49,6 +52,6 @@ export class MediaViewer{
     this._popoverCtrl.create(AudioPlayerPage, {media: media}).present();
   }
 
-  constructor(private _navCtrl: NavController, private _popoverCtrl: PopoverController){}
+  constructor(private _navCtrl: NavController, private _popoverCtrl: PopoverController, private platform: Platform){}
 
 }

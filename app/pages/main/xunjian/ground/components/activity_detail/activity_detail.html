@@ -26,7 +26,7 @@
 
     <h5 class="field-label">巡检日期</h5>
     <ion-item>  
-      <p>{{activityForm.controls['inspDate'] |  DatePipe}}</p>
+      <p>{{activityForm.controls['inspDate'].value |  DatePipe}}</p>
     </ion-item>
 
     <h5 class="assertive-field field-label">起始日期</h5>
@@ -58,14 +58,14 @@
       <ion-item class="img-gallery">
         <ion-scroll scrollX="true">
           <div class="img-item">
-            <div class="img-layer" CaptureMedia (onCaptured)="captureMedia($event)">
+            <button clear type="button" class="img-layer" CaptureMedia (onCaptured)="captureMedia($event)">
               <img src="build/imgs/camera.png">
-            </div>
+            </button>
           </div>
           <div class="img-item" *ngFor="let media of medias">
-            <div class="img-layer">
+            <button clear type="button" class="img-layer">
               <img src="{{media.preview}}" mediaViewer [mediaContent]="media"/>
-            </div>
+            </button>
           </div>
         </ion-scroll>
       </ion-item>

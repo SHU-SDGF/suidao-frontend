@@ -12,17 +12,18 @@ import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTI
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {UserService} from '../../../../../../providers';
 import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_edit/activity_edit.html',
   pipes: [AppUtils.DatePipe],
-  directives: [StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, MediaViewer]
+  directives: [StatusPicker, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, MediaViewer, CaptureMedia]
 })
 export class ActivityEditPage implements OnInit{
   
   private activityForm: FormGroup = new FormGroup({});
   private actStatusList: Array<IActionStatus>;
-  private actTypes: [IActionType];
+  private actTypes: Array<IActionType>;
   private environmentActivityList: any = [];
   private medias: Array<IMediaContent> = [];
   
@@ -53,7 +54,7 @@ export class ActivityEditPage implements OnInit{
       actStatus: [activityDetailObj.actStatus],
       createUser: [activityDetailObj.createUser],
       recorder: [''],
-      inspDate: [new Date(activityDetailObj.inspDate).getTime()],
+      inspDate: [new Date().getTime()],
       actType: [activityDetailObj.actType, ...FormValidors.actTypeValidator()],
       startDate: [AppUtils.convertDate(activityDetailObj.startDate), ...FormValidors.startDateValidator()],
       endDate: [AppUtils.convertDate(activityDetailObj.endDate),  ...FormValidors.endDateValidator(this.activityForm)]
@@ -66,6 +67,12 @@ export class ActivityEditPage implements OnInit{
     // username
     this._userService.getUserInfo().then((userInfo) => {
       (<FormControl>this.activityForm.controls['recorder']).updateValue(userInfo.userName, {onlySelf: true});
+    });
+
+    /// load activity types
+    this._lookupService.getActTypes().then((actTypes) => {
+      (<FormControl>this.activityForm.controls['actType']).updateValue(actTypes[0].order, {onlySelf: true});
+      _self.actTypes = actTypes;
     });
   }
 

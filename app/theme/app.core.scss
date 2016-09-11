@@ -128,7 +128,21 @@ ion-content{
     .item-inner{
       border-bottom: none;
       input{
-        font-size: 1rem;
+        font-size: 1.2rem;
+        margin: 12px 8px 13px 0px;
+      }
+      ion-datetime, ion-select{
+        padding: 0px;
+        max-width: none;
+        width: 100%;
+        margin:12px 8px 13px 0px;
+        font-size: 1.2rem;
+        .select-icon{
+          left: -5px;
+        }
+      }
+      textarea{
+        font-size: 1.2rem;
       }
     }
   }
@@ -165,16 +179,6 @@ ion-modal{
         color: color($colors, blue);
       }
     }
-  }
-}
-
-ion-datetime, ion-select{
-  font-size: 1rem;
-  padding: 0px;
-  max-width: none;
-  width: 100%;
-  .select-icon{
-    left: -5px;
   }
 }
 
@@ -250,4 +254,57 @@ ion-item-group {
 }
 .finished-status-color{
   color: color($colors, warning) !important;
+}
+
+.img-gallery{
+  ion-scroll{
+    height: 103px;
+  }
+  ion-label{
+    margin-right: 0px;
+    .img-item{
+      height: 100px;
+      padding: 5px;
+      display: inline-block;
+      background: #fff;
+      margin-right: 5px;
+      overflow: hidden;
+
+      & > button{
+        margin: 0px;
+        padding: 0px;
+      }
+      
+      &:first-child{
+        background-color: transparent;
+        padding: 5px;
+      }
+      .img-layer{
+        height: 90px;
+        text-align: center;
+        line-height: 90px;
+        /* background-image: url('../imgs/rolling.gif'); */
+        background-repeat:no-repeat; 
+        background-position:center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        align-items: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        display: flex;
+
+        img{
+          max-height: 100%;
+          max-width: 100%;
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
+
+.leaflet-container{
+  background: #000 !important;
 }

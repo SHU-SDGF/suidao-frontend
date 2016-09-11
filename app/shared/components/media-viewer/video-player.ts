@@ -5,14 +5,24 @@ import {IMediaContent} from './media-viewer';
 
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar no-border-bottom>
-      </ion-navbar>
-    </ion-header>
     <ion-content>
+      <button class="back-btn" (click)="dismiss()">返回</button>
       <iframe frameBorder="0" width="100%" height="100%" [src]="url" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
     </ion-content>
-  `
+  `,
+  styles: [
+    `
+      .back-btn{
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1;
+        background: rgba(255,255,255,0.2);
+        border: solid 1px #ccc;
+        height: 4rem;
+      }
+    `
+  ]
 })
 export class VideoPlayerPage implements OnInit{
   private media: IMediaContent;

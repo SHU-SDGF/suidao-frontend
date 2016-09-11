@@ -24,6 +24,7 @@ export class ActivityDetailPage implements OnInit{
   private submitAttempt = false;
   private activityForm: FormGroup = new FormGroup({});
   private medias: Array<IMediaContent> = [];
+  private media: IMediaContent;
 
   private actStatusList: Array<IActionStatus>;
 

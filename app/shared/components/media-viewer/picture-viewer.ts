@@ -7,14 +7,24 @@ import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../shared/co
 
 @Component({
   template: `
-    <ion-header>
-      <ion-navbar no-border-bottom>
-      </ion-navbar>
-    </ion-header>
     <ion-content>
-      <image-editor [changeOptions]="changeOptions"></image-editor>
+      <button class="back-btn" (click)="onTap()">返回</button>
+      <image-editor [changeOptions]="changeOptions" (onTap)="onTap($event)"></image-editor>
     </ion-content>
   `,
+  styles: [
+    `
+      .back-btn{
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 1;
+        background: rgba(255,255,255,0.2);
+        border: solid 1px #ccc;
+        height: 4rem;
+      }
+    `
+  ],
   pipes: [AppUtils.TimePipe],
   directives: [ImageEditor]
 })
@@ -41,8 +51,8 @@ export class PictureViewerPage implements OnInit{
       this.changeOptions.emit(this._mapOptions);
     });
   }
-         
-  dismiss(){
+
+  private onTap(){
     this._viewCtrl.dismiss();
   }
 }
