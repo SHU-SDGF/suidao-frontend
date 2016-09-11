@@ -25,13 +25,15 @@ export class FacilityInspService {
 	}
 
 	// 新增一条巡检历史记录
-	addNewFacilityInspDetail(facilityInspSummaryParam: any) {
+	addNewFacilityInspDetail(facilityInspSummaryParam: any, createUser: string) {
 		this.facilityInspDetailDB._initDB();
 		let facilityDetailObj = FacilityInspDetail.deserialize(facilityInspSummaryParam);
 		facilityDetailObj["_id"] = new Date().getTime().toString();
 		facilityDetailObj["createDate"] = new Date().getTime();
 		facilityDetailObj["updateUser"] = '';
 		facilityDetailObj["updateDate"] = '';
+		facilityDetailObj["createUser"] = createUser;
+		facilityDetailObj["recorder"] = createUser;
 		return this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj);
 	};
 

@@ -34,6 +34,7 @@ export class DiseaseInfoPage implements OnInit{
   private udpateUser = '';
   private diseaseHistoryList: FacilityInspDetail;
   private environmentActivityList: any = [];
+  private userList = [];
 
   constructor(
     private viewCtrl: ViewController,
@@ -62,15 +63,22 @@ export class DiseaseInfoPage implements OnInit{
       this.diseaseDetailObj["displayModelName"] = result;
     });
 
+    this._userService.getUserInfo().then((userInfo) => {
+      this.udpateUser = userInfo["loginId"];
+    });
+
+    this._lookupService.getUserList().then((result) => {
+      this.userList = result;
+    });
 
     // this.diseaseDetailObj["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types');
     // this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId);
     // this.diseaseDetailObj["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailObj.modelId, 'model_names');
     this.diseaseDetailObj["displayDiseaseDate"] = new Date(this.diseaseDetailObj.diseaseDate).toISOString().slice(0,10);
 
-    this._userService.getUsername().then((result) => {
-      this.udpateUser = result;
-    });
+    // this._userService.getUsername().then((result) => {
+    //   this.udpateUser = result;
+    // });
 
     this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
       this.diseaseHistoryList = result["docs"];
@@ -93,7 +101,7 @@ export class DiseaseInfoPage implements OnInit{
     this._facilityInspService.updateFacilityInsp(this.diseaseDetailObj).then((result) => {
       this.diseaseDetailObj["_rev"] = result["rev"];
       //新增一条记录
-      this._facilityInspService.addNewFacilityInspDetail(this.diseaseDetailObj).then((result) => {
+      this._facilityInspService.addNewFacilityInspDetail(this.diseaseDetailObj, this.udpateUser).then((result) => {
         //更新历史记录
         this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
           this.diseaseHistoryList = result["docs"];
@@ -154,6 +162,16 @@ export class DiseaseInfoPage implements OnInit{
     //let detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(disease["diseaseTypeId"]);
     
     //return this._lookupService.getNameBy(disease["diseaseTypeId"],'disease_types') + ':' + detailType;
+  }
+
+  private _convertRecorder(userId) {
+    let userName = '';
+    for(let index in this.userList) {
+      if(this.userList[index]["id"] == userId) {
+        userName = this.userList[index]["name"]; 
+      }
+    }
+    return userName;
   }
 
   showHistory(index) {

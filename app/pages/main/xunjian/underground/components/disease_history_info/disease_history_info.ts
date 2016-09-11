@@ -34,6 +34,10 @@ export class DiseaseHistoryInfoPage implements OnInit{
     this._lookupService.getNameBy(this.diseaseDetailRecord.modelId, 'model_names').then((result) => {
       this.diseaseDetailRecord["displayModelName"] = result;
     });
+
+    this._lookupService.getNameBy(this.diseaseDetailRecord.recorder, 'user_list').then((name) => {
+      this.diseaseDetailRecord["displayRecorder"] = name;
+    });
     
     // this.diseaseDetailRecord["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailRecord.diseaseTypeId, 'disease_types');
     // this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailRecord.diseaseTypeId);

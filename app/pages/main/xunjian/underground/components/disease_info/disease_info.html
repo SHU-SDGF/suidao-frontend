@@ -106,10 +106,10 @@
         <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayModelName" disabled="true"></ion-input>
       </ion-item>
 
-      <h5 class="assertive-field field-label">记录人</h5>
+ <!--      <h5 class="assertive-field field-label">记录人</h5>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="diseaseDetailObj.recorder" disabled="true"></ion-input>
-      </ion-item>
+        <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayRecorder" disabled="true"></ion-input>
+      </ion-item> -->
 
       <h5 class="assertive-field field-label">日期</h5>
       <ion-item>
@@ -128,7 +128,7 @@
           <button clear ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of diseaseHistoryList; let idx=index">
             <ion-icon item-left name="ios-pin-outline"></ion-icon>
             <div item-inner class="act-detail">
-              <h3>{{diseaseHistoryList[idx].recorder}}</h3>
+              <h3>{{_convertRecorder(diseaseHistoryList[idx].recorder)}}</h3>
               <p>
                 <!-- {{displayDiseaseType(diseaseHistoryList[idx])}} -->
                 &mdash;

@@ -6,6 +6,7 @@ import * as _providers from './providers';
 import { UserService } from './providers/user_service';
 import { LookupService } from './providers/lookup_service';
 import {MainPage} from './pages/main/main';
+import { FacilityInspService } from './providers/facility_insp_service';
 
 declare const $: any;
 const ANOM_USER = '未登录';
@@ -27,6 +28,7 @@ export class MyApp implements OnInit{
     private userService: UserService,
     private lookupService: LookupService,
     private alertController: AlertController,
+    private facilityInspService: FacilityInspService,
     private events: Events
   ) {
 
@@ -97,7 +99,21 @@ export class MyApp implements OnInit{
 
     confirm.present();
   }
+
+  syncDownload() {
+    console.log('start synchronize');
+    this.facilityInspService.getAllFacilityInspSummaries().then((result) => {
+      let facilityInspList = result;
+      console.log(result);
+      //同步api
+      
+    })
+    //先retrive所有的data
+
+  }
 }
+
+
 
 // load providers
 var providersAr = [];
