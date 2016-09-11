@@ -20,7 +20,8 @@ export class EnvironmentActivitySummary extends _baseClass{
 
   constructor(obj = null) {
     super();
-
+    
+    this.id = null;
     this.actNo = null;
     this.actName = null;
     this.startDate = null;

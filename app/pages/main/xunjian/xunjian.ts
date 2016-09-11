@@ -48,8 +48,6 @@ export class XunjianPage extends ToggleMenu{
   }
 
   onInput(event) {
-    console.log('99999');
-    console.log(this.searchArg);
     this._events.publish(this.SEARCHINSPACT_EVENT, this.searchArg);
     console.log(event);
   }

@@ -19,6 +19,8 @@ export class EnvironmentActivity extends _baseClass{
 
   constructor(obj = null) {
     super();
+    
+    this.id = null;
     this.actName = null;
     this.actNo = null;
     this.inspDate = null;

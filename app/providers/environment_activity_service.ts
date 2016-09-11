@@ -31,7 +31,7 @@ export class EnvironmentActivityService {
 	searchEnvironmentActivitiesByActNo(actNo: string, pageable?: number) {
 		let params = {};
 		if(pageable){
-			params['pageable'] = pageable;
+			params['page'] = pageable;
 		}
 		return this.httpService.get(params, 'environment-activities/listByActNo/' + actNo).map((result: {content: Array<any>, first: boolean, last: boolean})=>{
 			return {

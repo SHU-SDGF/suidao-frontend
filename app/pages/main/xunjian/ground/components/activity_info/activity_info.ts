@@ -87,6 +87,8 @@ export class ActivityInfoPage implements OnInit{
 
   getHistory(pageIndex?){
     return new Promise <{actList: Array<EnvironmentActivity> , last: boolean}>((resolve, reject)=>{
+      this.currentPageIndex++;
+      
       // 获取活动历史列表
       this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo, pageIndex).subscribe((result) => {
         let actList = result.environmentActivityList;
@@ -95,7 +97,7 @@ export class ActivityInfoPage implements OnInit{
           index > -1 && actList.splice(index, 1);
         })
         this.environmentActivityList = this.environmentActivityList.concat(actList);
-        this.currentPageIndex++;
+        
         resolve({actList: actList , last: result.last});
       }, (error) => {
         let alert =this._alertController.create({
@@ -139,8 +141,8 @@ export class ActivityInfoPage implements OnInit{
   }
 
   loadMore(infiniteScroll){
-    this.getHistory(this.currentPageIndex).then((last)=>{
-      if(last){
+    this.getHistory(this.currentPageIndex).then((result)=>{
+      if(result.last){
         infiniteScroll.enable(false);
       }
       infiniteScroll.complete();

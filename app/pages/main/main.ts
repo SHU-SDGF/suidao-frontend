@@ -4,13 +4,14 @@ import {Nav, Events} from 'ionic-angular';
 import {XunjianPage} from './xunjian/xunjian';
 import {ManyouPage} from './manyou/manyou';
 import {TestPage} from './test/test';
+import {QREncoder} from './test/qrEncoder';
 
 @Component({
   templateUrl: './build/pages/main/main.html'
 })
 export class MainPage{
   private username: string = '';
-  private rootPages: Array<any> = [XunjianPage, ManyouPage, TestPage, XunjianPage];
+  private rootPages: Array<any> = [XunjianPage, ManyouPage, QREncoder, XunjianPage];
   //private rootPage: any = GroundPage;
   @ViewChild(Nav) nav: Nav;
 
