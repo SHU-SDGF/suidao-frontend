@@ -316,7 +316,9 @@ export class GroundPage implements OnInit, OnDestroy {
         content: '',
         inspDate: activity["environmentActivity"]["inspDate"],
         actNo: activity["environmentActivity"]["actNo"],
-        createUser: activity["environmentActitivitySummary"]["createUser"]
+        createUser: activity["environmentActitivitySummary"]["createUser"],
+        startDate: activity["environmentActitivitySummary"]["startDate"],
+        endDate: activity["environmentActitivitySummary"]["endDate"]
       };
 
       this._suidaoMap.addMarker(newMarker);
@@ -342,14 +344,14 @@ export class GroundPage implements OnInit, OnDestroy {
     modal.present(modal);
     modal.onDidDismiss((result) => {
       if(result) {
-        let act = _self.environmentActivityList.find(act=> act['id'] == result["actSumId"]);
+        let act = _self.environmentActivityList.find(act=> act['actNo'] == result["actNo"]);
         if(act){
           act["actStatus"] = result["actStatus"];
           act["description"] = result["description"];
           act["inspDate"] = result["inspDate"];
         }
 
-        let marker = _self.opts.markers.find(marker => marker['id'] == result["actSumId"]);
+        let marker = _self.opts.markers.find(marker => marker['actNo'] == result["actNo"]);
         if(marker){
           marker["actStatus"] = result["actStatus"];
           marker["description"] = result["description"];

@@ -3,8 +3,8 @@ import {_baseClass} from './_baseClass';
 
 @Serializable()
 export class EnvironmentActivitySummary extends _baseClass{
+  id: number
   actNo: string //活动编码
-
 	actName: string //活动名称
 	startDate: any //起始日期
 	endDate: any //结束日期

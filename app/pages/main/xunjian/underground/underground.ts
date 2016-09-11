@@ -56,25 +56,35 @@ export class UndergroundPage implements OnInit, OnDestroy {
   }
 
   scanCode(){
-    let info = `
-      里程：EK11+702\r\n
-      编码：HMNL104SZCQHK117000_A00\r\n
-      埋深：-11.62m\r\n
-      管片类型：出洞环\r\n
-      封顶块位置：3\r\n
-      管片姿态-高程：-2mm\r\n
-      管片姿态-平面：7mm\r\n
-      管片横径：13298mm\r\n
-      管片竖径：13335mm\r\n
-      横竖鸭蛋：37mm\r\n
-      管片入场状态：T,T,F,F,F,F,F,F,F\r\n
-      管片拼装后状态：T\r\n
-      生产厂商：隧道股份股份上海隧道工程\r\n
-      拼装日期：2013.12
-    `;
+    
+    if(window['cordova']){
+      cordova.plugins.barcodeScanner.scan((result) => {
+        result.text && this.showInfo(result.text);
+      });
+    }else{
+      let info = `
+        里程：EK11+702\r\n
+        编码：HMNL104SZCQHK117000_A00\r\n
+        埋深：-11.62m\r\n
+        管片类型：出洞环\r\n
+        封顶块位置：3\r\n
+        管片姿态-高程：-2mm\r\n
+        管片姿态-平面：7mm\r\n
+        管片横径：13298mm\r\n
+        管片竖径：13335mm\r\n
+        横竖鸭蛋：37mm\r\n
+        管片入场状态：T,T,F,F,F,F,F,F,F\r\n
+        管片拼装后状态：T\r\n
+        生产厂商：隧道股份股份上海隧道工程\r\n
+        拼装日期：2013.12
+      `;
+      this.showInfo(info);
+    }
+  }
+
+  private showInfo(info){
     let scannedIndex = "";
     let result = this._codeService.parse(info);
-    console.log(info);
 
     for(let index in this.facilityInspList) {
       if(this.facilityInspList[index]["mileage"] == result["mileage"]) {
@@ -97,24 +107,6 @@ export class UndergroundPage implements OnInit, OnDestroy {
       this.reloadData();
     });
     localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "mfacility": result["NO"]}));
-
-    /*
-    cordova.plugins.barcodeScanner.scan((result) => {
-        let alert = this._alertCtrl.create({
-            title: "Scan Results",
-            subTitle: result.text,
-            buttons: ["Close"]
-        });
-        alert.present();
-    }, (error) => {
-      let alert = this._alertCtrl.create({
-          title: "Scan Results",
-          subTitle: error,
-          buttons: ["Close"]
-      });
-      alert.present();
-    });
-    */
   }
 
   private filterFacilityInsp(searchArg) {

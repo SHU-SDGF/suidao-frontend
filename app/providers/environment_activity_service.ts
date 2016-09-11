@@ -28,8 +28,20 @@ export class EnvironmentActivityService {
 	}
 
 	//根据ACT_NO来寻找活动历史记录
-	searchEnvironmentActivitiesByActNo(actNo: string) {
-		return this.httpService.get({}, 'environment-activities/listByActNo/' + actNo)
+	searchEnvironmentActivitiesByActNo(actNo: string, pageable?: number) {
+		let params = {};
+		if(pageable){
+			params['pageable'] = pageable;
+		}
+		return this.httpService.get(params, 'environment-activities/listByActNo/' + actNo).map((result: {content: Array<any>, first: boolean, last: boolean})=>{
+			return {
+				environmentActivityList: result.content.map((obj)=>{
+					return EnvironmentActivity.deserialize(obj);
+				}),
+				last: result.last,
+				first: result.first
+			};
+		});
 	}
 	//添加新的环境历史活动
 	addNewEnvironmentActivity(activityObj: any) {

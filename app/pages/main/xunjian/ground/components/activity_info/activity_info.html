@@ -15,7 +15,7 @@
     </ion-buttons>
   </ion-toolbar>
   <div padding>
-    <ion-segment [(ngModel)]="selectedPage">
+    <ion-segment [(ngModel)]="selectedPage" (ngModelChange)="switchSegment($event)">
       <ion-segment-button value="detail">
         活动详情
       </ion-segment-button>
@@ -26,7 +26,7 @@
   </div>
 </ion-header>
 
-<ion-content class="activity_info" >
+<ion-content class="activity_info" #content>
   <div [hidden]="selectedPage !== 'detail'">
     <h5 class="field-label">活动编号</h5>
     <ion-item>
@@ -98,7 +98,10 @@
       </ion-item-group>
     </ion-list>
     <ion-infinite-scroll (ionInfinite)="loadMore($event)">
-      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+      <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="正在加载历史数据...">
+    </ion-infinite-scroll-content>
     </ion-infinite-scroll>
   </div>
 </ion-content>

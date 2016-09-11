@@ -1,6 +1,6 @@
 import {Component, OnInit, NgZone,
   ViewChild} from '@angular/core';
-import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
+import {ViewController, AlertController, NavParams, ModalController, LoadingController, Content} from 'ionic-angular';
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
@@ -22,8 +22,11 @@ export class ActivityInfoPage implements OnInit{
   activityDetailObj: any;
   actStatusList: Array<IActionStatus> = [];
   actTypes: Array<IActionType> = [];
+  @ViewChild('content') content: Content;
+  currentPageIndex = 0;
 
-  private environmentActivityList: any = [];
+
+  private environmentActivityList: Array<EnvironmentActivity> = [];
   constructor(
     private _viewCtrl: ViewController,
     private _modelCtrl: ModalController,
@@ -70,41 +73,58 @@ export class ActivityInfoPage implements OnInit{
       _self.actTypes = actTypeList;
     });
     setTimeout(()=>{
-      this.getHistory();
+      this.getHistory().then((result)=>{
+        if(result.actList.length){
+          let act = result.actList[0];
+          this.activityDetailObj.actType = act.actType;
+          this.activityDetailObj.inspDate = act.inspDate;
+          this.activityDetailObj.description = act.description;
+          this.activityDetailObj.actStatus = parseInt(act.actStatus);
+        }
+      });
     }, 200);
   }
 
-  getHistory(){
-
-    // 获取活动历史列表
-    this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo).subscribe((result: any) => {
-      this.environmentActivityList = result["content"];
-      if(result.content.length){
-        Object.assign(this.activityDetailObj, result.content[0]); 
-        this.activityDetailObj.actStatus = parseInt(this.activityDetailObj.actStatus);
-      }
-    }, (error) => {
-      let alert =this._alertController.create({
-        title: '获取历史列表失败，请连续管理员！'
-      });
-      alert.present();
-      alert.onDidDismiss(()=>{
-        this.dismiss();
+  getHistory(pageIndex?){
+    return new Promise <{actList: Array<EnvironmentActivity> , last: boolean}>((resolve, reject)=>{
+      // 获取活动历史列表
+      this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo, pageIndex).subscribe((result) => {
+        let actList = result.environmentActivityList;
+        this.environmentActivityList.forEach(act=>{
+          let index = actList.findIndex(a=>a.id == act.id)
+          index > -1 && actList.splice(index, 1);
+        })
+        this.environmentActivityList = this.environmentActivityList.concat(actList);
+        this.currentPageIndex++;
+        resolve({actList: actList , last: result.last});
+      }, (error) => {
+        let alert =this._alertController.create({
+          title: '获取历史列表失败，请连续管理员！'
+        });
+        alert.present();
+        alert.onDidDismiss(()=>{
+          this.dismiss();
+        });
+        reject(error);
       });
     });
   }
 
   dismiss() {
-    this._viewCtrl.dismiss();
+    this._viewCtrl.dismiss(this.activityDetailObj);
   }
 
   edit() {
     let modal = this._modelCtrl.create(ActivityEditPage, {activityDetail: this.activityDetailObj});
     modal.present();
-    modal.onDidDismiss((result)=>{
+    modal.onDidDismiss((result: EnvironmentActivity)=>{
       if(!result) return;
-      Object.assign(this.activityDetailObj, result); 
-      this.getHistory();
+      this.activityDetailObj.actStatus = parseInt(result.actStatus);
+      this.activityDetailObj.actType = result.actType;
+      this.activityDetailObj.inspDate = result.inspDate;
+      this.activityDetailObj.description = result.description;
+
+      this.environmentActivityList.unshift(result);
     });
   }
 
@@ -113,7 +133,19 @@ export class ActivityInfoPage implements OnInit{
     modal.present();
   }
 
-  loadMore(){
-    console.log('123');
+  switchSegment($event){
+    console.log($event);
+    this.content.scrollToTop(0);
+  }
+
+  loadMore(infiniteScroll){
+    this.getHistory(this.currentPageIndex).then((last)=>{
+      if(last){
+        infiniteScroll.enable(false);
+      }
+      infiniteScroll.complete();
+    }, ()=>{
+      infiniteScroll.complete();
+    });
   }
 }
