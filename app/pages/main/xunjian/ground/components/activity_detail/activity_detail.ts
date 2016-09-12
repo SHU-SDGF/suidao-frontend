@@ -7,13 +7,14 @@ import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-ma
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
 import {UserService} from '../../../../../../providers';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
-import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {StatusPicker} from '../../../../../../shared/components/status-picker/status-picker';
 import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {DatePipe} from '../../../../../../shared/utils';
+import {IMediaContent, MediaContent} from '../../../../../../models/MediaContent';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
@@ -23,8 +24,7 @@ import {DatePipe} from '../../../../../../shared/utils';
 export class ActivityDetailPage implements OnInit{
   private submitAttempt = false;
   private activityForm: FormGroup = new FormGroup({});
-  private medias: Array<IMediaContent> = [];
-  private media: IMediaContent;
+  private medias: Array<MediaContent> = [];
 
   private actStatusList: Array<IActionStatus>;
 
@@ -119,7 +119,7 @@ export class ActivityDetailPage implements OnInit{
   /**
    * 获取多媒体文件
    */
-  captureMedia(media: IMediaContent){
+  captureMedia(media: MediaContent){
     this.medias.unshift(media);
   }
 
