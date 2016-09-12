@@ -17,7 +17,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	id:any
 	jointopen: any //张开量
 	length: any //长度
-	newCreated: any //是否新建
+	synFlg: any //是否新建
 	recorder: string //记录人
 	width: any //宽度
 
@@ -37,7 +37,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.id = 0;
 		this.jointopen = null;
 		this.length = null;
-		this.newCreated = null;
+		this.synFlg = null;
 		this.recorder = null;
 		this.width = null;
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Events, LocalStorage, Storage} from 'ionic-angular';
 import { Http } from '@angular/http';
+import { HttpService } from './http_service';
 import { FacilityInspDetail } from '../models/FacilityInspDetail';
 import { FacilityInspSummary } from '../models/FacilityInspSummary';
 import { FacilityInspDetailDB } from './db/facility_insp_detail_db';
@@ -8,7 +9,7 @@ import { FacilityInspSummaryDB } from './db/facility_insp_summary_db';
 
 @Injectable()
 export class FacilityInspService {
-	constructor(public facilityInspDetailDB: FacilityInspDetailDB, public facilityInspSummaryDB: FacilityInspSummaryDB) { };
+	constructor(public facilityInspDetailDB: FacilityInspDetailDB, public httpService: HttpService, public facilityInspSummaryDB: FacilityInspSummaryDB) { };
 
 	// 新增一条巡检记录
 	addNewFacilityInspSummary(facilityInspSummaryParam: any) {
@@ -55,14 +56,25 @@ export class FacilityInspService {
 		return this.facilityInspSummaryDB.getFacilityInspsByAttrs(monomer, model);
 	}
 
+	//获取所有的巡检记录
 	getAllFacilityInspSummaries() {
 		return this.facilityInspSummaryDB.getAllFacilityInspSummaries();
+	}
+
+	//获取所有的巡检历史记录
+	getAllFacilityInspDetails() {
+		return this.facilityInspDetailDB.getAllFacilityInspDetails();
 	}
 
 	// 根据灾害编号来查找巡检活动
 	findFacilityInspByDiseaseNo(diseaseNo: any) {
 		this.facilityInspSummaryDB._initDB();
 		return this.facilityInspSummaryDB.getFacilityInspByDiseaseNo(diseaseNo);
+	}
+
+	//上传地下巡检
+	uploadFacilityRecords(facilityRecords: any) {
+		return this.httpService.post(facilityRecords, 'facility-insp/upload');
 	}
 }
 

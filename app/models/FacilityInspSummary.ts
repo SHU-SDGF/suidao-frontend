@@ -23,7 +23,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	mileage: string
 	modelId: any // id, modelName
 	monomerId: any
-	newCreated: any
+	synFlg: any
 	needRepair: any
 	recorder: string
 	width: number
@@ -44,7 +44,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.diseaseDescription = null;
 		this.facilityTypeId = null;
 		this.needRepair = null;
-		this.newCreated = null;
+		this.synFlg = null;
 		this.jointopen = null;
 		this.longitude = null;
 		this.latitude = null;
