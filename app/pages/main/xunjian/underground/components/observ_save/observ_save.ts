@@ -72,7 +72,7 @@ export class ObservSavePage implements OnInit{
 
         this.lookupService.getScannedInfo().then((result) => {
           this.scannedInfo = result;
-          this.diseaseDetailObj.mFacilityNo = this.scannedInfo["mfacility"];
+          this.diseaseDetailObj.facilityId = this.scannedInfo["facilityId"];
           this.diseaseDetailObj.mileage = this.scannedInfo["mileage"];
         });
 

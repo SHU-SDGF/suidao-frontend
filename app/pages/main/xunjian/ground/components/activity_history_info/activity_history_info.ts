@@ -6,8 +6,9 @@ import {LookupService, IActionStatus, IActionType} from '../../../../../../provi
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {AppUtils, DatePipe, OptionPipe} from '../../../../../../shared/utils';
-import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {StatusPicker } from '../../../../../../shared/components/status-picker/status-picker';
+import {IMediaContent} from '../../../../../../models/MediaContent';
 
 
 @Component({

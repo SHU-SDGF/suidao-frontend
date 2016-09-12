@@ -11,8 +11,9 @@ import {StatusPicker} from '../../../../../../shared/components/status-picker/st
 import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {UserService} from '../../../../../../providers';
-import {MediaViewer, IMediaContent} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
+import {IMediaContent} from '../../../../../../models/MediaContent';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_edit/activity_edit.html',

@@ -5,6 +5,8 @@ import {VideoPlayerPage} from './video-player';
 import {AudioPlayerPage} from './audio-player';
 import {PictureViewerPage} from './picture-viewer';
 import {MediaContent} from '../../../models/MediaContent';
+import {IMediaContent} from '../../../models/MediaContent';
+
 
 declare const Media: any;
 

@@ -48,6 +48,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
   }
 
   showObservInfo(facilityInspInfo){
+    debugger;
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
     modal.onDidDismiss((value) => {
@@ -99,17 +100,19 @@ export class UndergroundPage implements OnInit, OnDestroy {
     if(scannedIndex == "") {
       facilityInspInfo = {
         mileage: result["mileage"],
+        facilityId: result["NO"],
         facilityInsp: null
       }
     } else {
       facilityInspInfo = this.facilityInspList[scannedIndex];
     }
+    debugger;
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
     modal.onDidDismiss((value) => {
       this.reloadData();
     });
-    localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "mfacility": result["NO"]}));
+    localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "facilityId": result["NO"]}));
   }
 
   private filterFacilityInsp(searchArg) {
