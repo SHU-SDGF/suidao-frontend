@@ -41,12 +41,11 @@ export class FileService {
 
   /**
    * upload file
-   * @param {string} id
+   * @param {string} filePath
    * @param {function} progressListener
    */  
-  public uploadFile(id, progressListener) {
+  public uploadFile(filePath, progressListener) {
     const fileTransfer = new Transfer();
-    let filePath = `${this.rootDir}/${id}`;
     let options: FileUploadOptions = {
       headers: {
         "Authorization": localStorage.getItem("authToken")

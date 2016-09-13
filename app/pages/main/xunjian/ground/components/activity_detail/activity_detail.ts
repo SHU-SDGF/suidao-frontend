@@ -15,7 +15,7 @@ import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity'
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {DatePipe} from '../../../../../../shared/utils';
 import {IMediaContent, MediaContent} from '../../../../../../models/MediaContent';
-import {MediaService} from '../../../../../../providers/media_service'
+import {MediaService, UploadTaskProgress} from '../../../../../../providers/media_service'
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
@@ -92,39 +92,58 @@ export class ActivityDetailPage implements OnInit{
     if(!this.activityForm.valid) return;
 
     let task = this._mediaService.uploadFiles(this.medias);
+    let publisher = task.start();
 
-    task.start().then(()=>{
+    let loadingOptions = {
+      dismissOnPageChange: true,
+      content: ''
+    };
+
+    let loading = this.loadingCtrl.create(loadingOptions);
+    loading.present();
+    task.$progress.subscribe((progress: UploadTaskProgress)=>{
+      loadingOptions.content = getLoadingText(progress);
+    });
+
+    publisher.subscribe((media)=>{
       console.log(task.successFiles);
-      
-      activityObj.startDate = new Date(activityObj.startDate).getTime();
-      activityObj.endDate = new Date(activityObj.endDate).getTime();
 
-      let activityObjPayload = {
-        environmentActitivitySummary: new EnvironmentActivitySummary(activityObj),
-        environmentActivity: new EnvironmentActivity(activityObj)
-      };
-      
-
-      let loading = this.loadingCtrl.create({
-        dismissOnPageChange: true
-      });
-
-      loading.present();
-      
-      this._actService.addNewEnvironmentActivitySummary(activityObjPayload).subscribe((result) => {
-        this.viewCtrl.dismiss(result);
-      }, (error) => {
-        loading.dismiss();
-        let alert = this._alertCtrl.create({
-          title: '出错啦！',
-          message: '创建活动未能成功！请重新尝试！'
+      if(task.successFiles.length == task.files.length){
+        
+        this.submitForm(activityObj).subscribe((result) => {
+          this.viewCtrl.dismiss(result);
+        }, (error) => {
+          loading.dismiss();
+          let alert = this._alertCtrl.create({
+            title: '出错啦！',
+            message: '创建活动未能成功！请重新尝试！'
+          });
+          alert.present();
         });
-        alert.present();
-      });
+      }
     }, ()=>{
 
     });
-    
+
+    function getLoadingText(progress: UploadTaskProgress){
+      if(progress.fileIndex != progress.totalFiles){
+        return `正在上传多媒体文件(${progress.fileIndex}/${progress.totalFiles}) ${progress.loaded || 0}/${progress.total || 1}`;
+      }else{
+        return `正在上传数据`;
+      }
+    }
+  }
+
+  submitForm(activityObj){
+    activityObj.startDate = new Date(activityObj.startDate).getTime();
+    activityObj.endDate = new Date(activityObj.endDate).getTime();
+
+    let activityObjPayload = {
+      environmentActitivitySummary: new EnvironmentActivitySummary(activityObj),
+      environmentActivity: new EnvironmentActivity(activityObj)
+    };
+
+    return this._actService.addNewEnvironmentActivitySummary(activityObjPayload);
   }
 
   /**

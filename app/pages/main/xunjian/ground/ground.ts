@@ -27,7 +27,7 @@ export class GroundPage implements OnInit, OnDestroy {
   private _toast: any;
   private _searchPoped: boolean = false;
   private markers: any;
-  private environmentActivityList: Array<any>;
+  private environmentActivityList: Array<EnvironmentActivitySummary>;
   private _pageEntered = false;
   private _isCurrent = true;
   private _mapLoader: Loading;
@@ -160,43 +160,26 @@ export class GroundPage implements OnInit, OnDestroy {
       
     };
     
-    this.environmentActivityService.getEnvironmentActivitiesSummaryList().subscribe((result) => {
+    this.environmentActivityService.getEnvironmentActivitiesSummaryList().subscribe((acts: Array<EnvironmentActivitySummary>) => {
       let markers = [];
       let centerCord = {
         longitude: 0,
         latitude: 0
       };
-      that.environmentActivityList = result["content"];
-
-      let list = that.environmentActivityList.map((act)=>{
-        return EnvironmentActivitySummary.deserialize(act);
-      });
-      console.log(list);
-
-      if(result["content"].length == 0) {
-        centerCord = {
-          longitude: 121.506191,
-          latitude: 31.245554
-        };
-      } else {
-        centerCord = {
-          longitude: result["content"][0]["longitude"],
-          latitude: result["content"][0]["latitude"]
-        }
-        markers = result["content"].map(activity=>{
-          Object.assign(activity, {
-            width: 30,
-            height: 30,
-            icon: this.getIcon(activity["actStatus"]),
-            title: activity['actName'],
-            longitude: activity["longtitude"],
-            latitude: activity["latitude"],
-          });
-          return activity;
+      this.environmentActivityList = acts;
+      markers = this.environmentActivityList.map(activity=>{
+        Object.assign(activity, {
+          width: 30,
+          height: 30,
+          icon: this.getIcon(activity["actStatus"]),
+          title: activity.actName,
+          longitude: activity.longitude,
+          latitude: activity.latitude
         });
-      }
-      that.opts.markers = that.opts.markers.concat(markers);
+        return activity;
+      });
 
+      that.opts.markers = that.opts.markers.concat(markers);
       that.mapOptionEmitter.emit(that.opts);
     }, (error) => {
       console.log('error');
@@ -285,19 +268,7 @@ export class GroundPage implements OnInit, OnDestroy {
         this.toggleEditing();
         return;
       };
-      this.environmentActivityList.unshift({
-        actName: activity["environmentActitivitySummary"]["actName"],
-        actNo: activity["environmentActitivitySummary"]["actNo"],
-        actStatus: activity["environmentActivity"]["actStatus"],
-        createUser: activity["environmentActitivitySummary"]["createUser"],
-        description: activity["environmentActitivitySummary"]["description"],
-        endDate: activity["environmentActitivitySummary"]["endDate"],
-        id: activity["environmentActitivitySummary"]["id"],
-        inspDate: activity["environmentActivity"]["inspDate"],
-        latitude: activity["environmentActitivitySummary"]["latitude"],
-        longtitude: activity["environmentActitivitySummary"]["longtitude"],
-        startDate: activity["environmentActitivitySummary"]["startDate"],
-      });
+      this.environmentActivityList.unshift(EnvironmentActivitySummary.deserialize(activity["environmentActitivitySummary"]));
       this.toggleEditing();
       
       // refresh markers
@@ -323,8 +294,8 @@ export class GroundPage implements OnInit, OnDestroy {
 
       this._suidaoMap.addMarker(newMarker);
       this._suidaoMap.changeCenter({
-        lat: activity["environmentActitivitySummary"]["latitude"],
-        lng: activity["environmentActitivitySummary"]["longtitude"]
+        lat: this.environmentActivityList[0].latitude,
+        lng: this.environmentActivityList[0].longitude
       });
     });
   };

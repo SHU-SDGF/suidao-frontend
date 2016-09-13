@@ -6,3 +6,5 @@ export * from './qrcode_service';
 export * from './facility_insp_service.ts';
 export * from './db/facility_insp_detail_db.ts';
 export * from './db/facility_insp_summary_db.ts';
+export {MediaService} from './media_service';
+export {FileService} from './file_service';

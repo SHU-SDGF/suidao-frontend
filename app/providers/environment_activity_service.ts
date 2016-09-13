@@ -7,7 +7,6 @@ import {HttpService} from './http_service';
 import {EnvironmentActivitySummary} from '../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../models/EnvironmentActivity';
 
-
 @Injectable()
 export class EnvironmentActivityService {
 	constructor(public httpService: HttpService, public http: Http) {}
@@ -24,7 +23,9 @@ export class EnvironmentActivityService {
 
 	//显示活动列表
 	getEnvironmentActivitiesSummaryList() {
-		return this.httpService.get({}, 'environment-activities-summary/list');
+		return this.httpService.get({}, 'environment-activities-summary/list').map((acts: Array<any>)=>{
+			return acts.map(EnvironmentActivitySummary.deserialize);
+		});
 	}
 
 	//根据ACT_NO来寻找活动历史记录

@@ -216,6 +216,22 @@ let StringUtils = (function () {
     };
 })();
 
+function promiseChain(funcs: Array<()=>Promise<any>>){
+    return new Promise((resolve, reject)=>{
+        if(funcs.length){
+            let defer = funcs[0]();
+            for(let i = 1; i< funcs.length; i++){
+                defer = defer.catch((err)=>{
+                    reject(err);
+                }).then(funcs[i]);
+            }
+            defer.then(resolve, reject);
+        }else{
+            resolve();
+        }
+    });
+}
+/*
 function chain(funcs: Array<(resolve: any) => any>) {
     return new Promise((allResolve) => {
         if (!funcs.length) return;
@@ -243,6 +259,7 @@ function chain(funcs: Array<(resolve: any) => any>) {
         funcList[0]();
     });
 }
+*/
 
 export class AppUtils {
     static DatePipe = DatePipe;
@@ -250,5 +267,5 @@ export class AppUtils {
     static convertDate = convertDate;
     static StringUtils = StringUtils;
     static convertTime = convertTime;
-    static chain = chain;
+    static chain = promiseChain;
 }

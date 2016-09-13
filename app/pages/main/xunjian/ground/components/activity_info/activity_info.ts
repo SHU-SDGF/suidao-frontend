@@ -25,7 +25,6 @@ export class ActivityInfoPage implements OnInit{
   @ViewChild('content') content: Content;
   currentPageIndex = 0;
 
-
   private environmentActivityList: Array<EnvironmentActivity> = [];
   constructor(
     private _viewCtrl: ViewController,
