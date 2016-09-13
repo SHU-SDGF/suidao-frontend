@@ -97,86 +97,86 @@ export class LookupService {
 
 		// 位置描述枚举表
 		let position_descriptions = [
-			{ id: 1, name: "环缝", order: 1},
-			{ id: 2, name: "片缝", order: 2},
-			{ id: 3, name: "裂缝", order: 3},
-			{ id: 4, name: "注浆孔", order: 4},
-			{ id: 5, name: "螺栓孔", order: 5},
-			{ id: 6, name: "螺栓", order: 6}
+			{ id: 1, name: "环缝", order: '1'},
+			{ id: 2, name: "片缝", order: '2'},
+			{ id: 3, name: "裂缝", order: '3'},
+			{ id: 4, name: "注浆孔", order: '4'},
+			{ id: 5, name: "螺栓孔", order: '5'},
+			{ id: 6, name: "螺栓", order: '6'}
 		];
 
 		// 模型名称枚举表
 		let model_names = [
-		 { id: 1, name: "紧急停靠", order: 1},
-		 { id: 2, name: "小型车道", order: 2},
-		 { id: 3, name: "大型车道", order: 3},
-		 { id: 4, name: "消防通道", order: 4},
-		 { id: 5, name: "安全通道", order: 5},
-		 { id: 6, name: "电缆通道", order: 6}
+		 { id: 1, name: "紧急停靠", order: '1'},
+		 { id: 2, name: "小型车道", order: '2'},
+		 { id: 3, name: "大型车道", order: '3'},
+		 { id: 4, name: "消防通道", order: '4'},
+		 { id: 5, name: "安全通道", order: '5'},
+		 { id: 6, name: "电缆通道", order: '6'}
 		];
 
 		// 病害类型枚举表
 		let disease_types = [
-			{ id: 1, names: "裂缝", order: 1},
-			{ id: 2, names: "渗漏", order: 2},
-			{ id: 3, names: "缺损", order: 3},
-			{ id: 4, names: "错台", order: 4},
-			{ id: 5, names: "张开", order: 5},
-			{ id: 6, names: "腐蚀", order: 6}
+			{ id: 1, names: "裂缝", order: '1'},
+			{ id: 2, names: "渗漏", order: '2'},
+			{ id: 3, names: "缺损", order: '3'},
+			{ id: 4, names: "错台", order: '4'},
+			{ id: 5, names: "张开", order: '5'},
+			{ id: 6, names: "腐蚀", order: '6'}
 		];
  		
 		// 病害小类
  		let detail_types = [
-			{ id: 1, name: "细微裂纹", order: 1, disease_types_order: 1},
-			{ id: 2, name: "径向裂缝", order: 2, disease_types_order: 1},
-			{ id: 3, name: "纵向裂缝", order: 3, disease_types_order: 1},
-			{ id: 4, name: "横向裂缝", order: 4, disease_types_order: 1},
-			{ id: 5, name: "竖向裂纹", order: 5, disease_types_order: 1},
-			{ id: 6, name: "湿渍", order: 6, disease_types_order: 2},
-			{ id: 7, name: "渗水", order: 7, disease_types_order: 2},
-			{ id: 8, name: "水珠", order: 8, disease_types_order: 2},
-			{ id: 9, name: "滴漏", order: 9, disease_types_order: 2},
-			{ id: 10, name: "线漏", order: 10, disease_types_order: 2},
-			{ id: 11, name: "漏泥沙", order: 11, disease_types_order: 2},
-			{ id: 12, name: "缺角", order: 12, disease_types_order: 3},
-			{ id: 13, name: "止水带损坏", order: 13, disease_types_order: 3},
-			{ id: 14, name: "螺栓损坏", order: 14, disease_types_order: 3},
-			{ id: 15, name: "环间错台", order: 15, disease_types_order: 4},
-			{ id: 16, name: "环内错台", order: 16, disease_types_order: 4},
-			{ id: 17, name: "变形缝张开", order: 17, disease_types_order: 5},	
-			{ id: 18, name: "裂缝张开", order: 18, disease_types_order: 5},
-			{ id: 19, name: "起壳", order: 19, disease_types_order: 6},
-			{ id: 20, name: "锈斑", order: 20, disease_types_order: 6}	,
-			{ id: 21, name: "泌出", order: 21, disease_types_order: 6},
-			{ id: 22, name: "起皮", order: 22, disease_types_order: 6},
-			{ id: 23, name: "起层", order: 23, disease_types_order: 6},
-			{ id: 24, name: "蜂窝", order: 24, disease_types_order: 6},
-			{ id: 25, name: "麻面", order: 25, disease_types_order: 6},
-			{ id: 26, name: "松花", order: 26, disease_types_order: 6},
-			{ id: 27, name: "凸起", order: 27, disease_types_order: 6},
-			{ id: 28, name: "剥落", order: 28, disease_types_order: 6},
-			{ id: 29, name: "凹陷", order: 29, disease_types_order: 6},
-			{ id: 30, name: "掉粉", order: 30, disease_types_order: 6}
+			{ id: 1, name: "细微裂纹", order: '1', disease_types_order: '1'},
+			{ id: 2, name: "径向裂缝", order: '2', disease_types_order: '1'},
+			{ id: 3, name: "纵向裂缝", order: '3', disease_types_order: '1'},
+			{ id: 4, name: "横向裂缝", order: '4', disease_types_order: '1'},
+			{ id: 5, name: "竖向裂纹", order: '5', disease_types_order: '1'},
+			{ id: 6, name: "湿渍", order: '6', disease_types_order: '2'},
+			{ id: 7, name: "渗水", order: '7', disease_types_order: '2'},
+			{ id: 8, name: "水珠", order: '8', disease_types_order: '2'},
+			{ id: 9, name: "滴漏", order: '9', disease_types_order: '2'},
+			{ id: 10, name: "线漏", order: '10', disease_types_order: '2'},
+			{ id: 11, name: "漏泥沙", order: '11', disease_types_order: '2'},
+			{ id: 12, name: "缺角", order: '12', disease_types_order: '3'},
+			{ id: 13, name: "止水带损坏", order: '13', disease_types_order: '3'},
+			{ id: 14, name: "螺栓损坏", order: '14', disease_types_order: '3'},
+			{ id: 15, name: "环间错台", order: '15', disease_types_order: '4'},
+			{ id: 16, name: "环内错台", order: '16', disease_types_order: '4'},
+			{ id: 17, name: "变形缝张开", order: '17', disease_types_order: '5'},	
+			{ id: 18, name: "裂缝张开", order: '18', disease_types_order: '5'},
+			{ id: 19, name: "起壳", order: '19', disease_types_order: '6'},
+			{ id: 20, name: "锈斑", order: '20', disease_types_order: '6'},
+			{ id: 21, name: "泌出", order: '21', disease_types_order: '6'},
+			{ id: 22, name: "起皮", order: '22', disease_types_order: '6'},
+			{ id: 23, name: "起层", order: '23', disease_types_order: '6'},
+			{ id: 24, name: "蜂窝", order: '24', disease_types_order: '6'},
+			{ id: 25, name: "麻面", order: '25', disease_types_order: '6'},
+			{ id: 26, name: "松花", order: '26', disease_types_order: '6'},
+			{ id: 27, name: "凸起", order: '27', disease_types_order: '6'},
+			{ id: 28, name: "剥落", order: '28', disease_types_order: '6'},
+			{ id: 29, name: "凹陷", order: '29', disease_types_order: '6'},
+			{ id: 30, name: "掉粉", order: '30', disease_types_order: '6'}
  		];
 
 		let act_types_data = [
-			{ id: 1, name: "加载", order: 1},
-			{ id: 2, name: "减载", order: 2},
-			{ id: 3, name: "振动", order: 3},
-			{ id: 4, name: "静载", order: 4},
-			{ id: 5, name: "其他", order: 5}
+			{ id: 1, name: "加载", order: '1'},
+			{ id: 2, name: "减载", order: '2'},
+			{ id: 3, name: "振动", order: '3'},
+			{ id: 4, name: "静载", order: '4'},
+			{ id: 5, name: "其他", order: '5'}
 		];
 
 		let act_status_data = [
-			{ id: 1, name: "未开始", order: 0},
-			{ id: 2, name: "进行中", order: 1},
-			{ id: 3, name: "已结束", order: 2}
+			{ id: 1, name: "未开始", order: '0'},
+			{ id: 2, name: "进行中", order: '1'},
+			{ id: 3, name: "已结束", order: '2'}
 		];
 
 		let authority_data = [
-			{ id: 1, name: "技术人员", order: 3},
-			{ id: 2, name: "中控巡检管理", order: 6},
-			{ id: 3, name: "中控巡检采集", order: 7}
+			{ id: 1, name: "技术人员", order: '3'},
+			{ id: 2, name: "中控巡检管理", order: '6'},
+			{ id: 3, name: "中控巡检采集", order: '7'}
 		]
 
 		this.localStorage = new Storage(LocalStorage);

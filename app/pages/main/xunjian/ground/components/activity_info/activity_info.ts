@@ -46,7 +46,7 @@ export class ActivityInfoPage implements OnInit{
       actNo: paramsObj.actNo,
       actName: paramsObj.title, //活动名称
       description: paramsObj.description, //活动描述
-      actStatus: parseInt(paramsObj.actStatus),
+      actStatus: paramsObj.actStatus,
       actType: paramsObj.actType,
       inspDate: AppUtils.convertDate(paramsObj.inspDate),
       createUser: paramsObj.createUser,
@@ -79,7 +79,7 @@ export class ActivityInfoPage implements OnInit{
           this.activityDetailObj.actType = act.actType;
           this.activityDetailObj.inspDate = act.inspDate;
           this.activityDetailObj.description = act.description;
-          this.activityDetailObj.actStatus = parseInt(act.actStatus);
+          this.activityDetailObj.actStatus = act.actStatus;
         }
       });
     }, 200);
@@ -121,7 +121,7 @@ export class ActivityInfoPage implements OnInit{
     modal.present();
     modal.onDidDismiss((result: EnvironmentActivity)=>{
       if(!result) return;
-      this.activityDetailObj.actStatus = parseInt(result.actStatus);
+      this.activityDetailObj.actStatus = result.actStatus;
       this.activityDetailObj.actType = result.actType;
       this.activityDetailObj.inspDate = result.inspDate;
       this.activityDetailObj.description = result.description;

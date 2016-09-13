@@ -71,7 +71,6 @@ export class ActivityEditPage implements OnInit{
 
     /// load activity types
     this._lookupService.getActTypes().then((actTypes) => {
-      (<FormControl>this.activityForm.controls['actType']).updateValue(actTypes[0].order, {onlySelf: true});
       _self.actTypes = actTypes;
     });
   }
