@@ -216,6 +216,10 @@ export class ObservGraphPage implements OnInit{
     modal.present();
     let that = this;
     modal.onDidDismiss((value)=>{
+      this._lookupService.getDiseaseInfo().then((result) => {
+        this.createDiseaseInfo = result;
+      })
+
       if(value){
         marker.diseaseNo = value.diseaseNo;
         marker.longitude = value.longitude;

@@ -72,7 +72,7 @@ export class ObservSavePage implements OnInit{
 
         this.lookupService.getScannedInfo().then((result) => {
           this.scannedInfo = result;
-          this.diseaseDetailObj.mFacilityNo = this.scannedInfo["mfacility"];
+          this.diseaseDetailObj.facilityId = this.scannedInfo["facilityId"];
           this.diseaseDetailObj.mileage = this.scannedInfo["mileage"];
         });
 
@@ -102,7 +102,7 @@ export class ObservSavePage implements OnInit{
       dismissOnPageChange: true,
       duration: 500
     });
-    this.diseaseDetailObj.newCreated = true;
+    this.diseaseDetailObj.synFlg = 1;
     loader.present();
     if(this.isNewRecord) {
       this.facilityInspService.addNewFacilityInspSummary(this.diseaseDetailObj).then((result) => {

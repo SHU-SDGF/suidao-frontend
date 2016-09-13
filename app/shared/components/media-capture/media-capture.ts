@@ -1,13 +1,13 @@
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {} from 'ionic-angular';
 import {Directive, Output, EventEmitter, HostListener} from '@angular/core';
-import {IMediaContent} from '../../../shared/components/media-viewer/media-viewer';
+import {MediaContent} from '../../../models/MediaContent';
 
 @Directive({
   selector: '[CaptureMedia]'
 })
 export class CaptureMedia{
-  @Output() onCaptured: EventEmitter<IMediaContent> = new EventEmitter<IMediaContent>();
+  @Output() onCaptured: EventEmitter<MediaContent> = new EventEmitter<MediaContent>();
 
   constructor(){}
 
@@ -19,27 +19,35 @@ export class CaptureMedia{
     }).then((buttonIndex: number) => {
       if(buttonIndex == 1){
         MediaCapture.captureImage().then((medieFiles: Array<MediaFile>) => {
-          this.onCaptured.emit({
+          let media = new MediaContent({
             fileUri: medieFiles[0].fullPath,
             mediaType: 'img',
             preview: medieFiles[0].fullPath
           });
+          
+          this.onCaptured.emit(media);
         });
       }else if(buttonIndex == 2){
         MediaCapture.captureVideo().then((medieFiles: Array<MediaFile>)=>{
-          this.onCaptured.emit({
+
+          let media = new MediaContent({
             fileUri: medieFiles[0].fullPath,
             mediaType: 'video',
             preview: 'build/imgs/video.png'
           });
+          
+          this.onCaptured.emit(media);
         });
       }else if(buttonIndex == 3){
         MediaCapture.captureAudio().then((medieFiles: Array<MediaFile>)=>{
-          this.onCaptured.emit({
+          
+          let media = new MediaContent({
             fileUri: medieFiles[0].fullPath,
             mediaType: 'audio',
             preview: 'build/imgs/audio.png'
           });
+
+          this.onCaptured.emit(media);
         });
       }
     });

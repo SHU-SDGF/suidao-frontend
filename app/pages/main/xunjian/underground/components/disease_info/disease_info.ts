@@ -98,10 +98,15 @@ export class DiseaseInfoPage implements OnInit{
     this.isEditing = false;
     this.diseaseDetailObj.updateDate = new Date().getTime();
     this.diseaseDetailObj.updateUser = this.udpateUser;
+    if(this.diseaseDetailObj.synFlg == 0) {
+      this.diseaseDetailObj.synFlg = 2;
+    }
     this._facilityInspService.updateFacilityInsp(this.diseaseDetailObj).then((result) => {
       this.diseaseDetailObj["_rev"] = result["rev"];
+      this.diseaseDetailObj.synFlg = 1;
       //新增一条记录
       this._facilityInspService.addNewFacilityInspDetail(this.diseaseDetailObj, this.udpateUser).then((result) => {
+
         //更新历史记录
         this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
           this.diseaseHistoryList = result["docs"];

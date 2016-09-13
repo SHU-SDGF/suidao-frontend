@@ -102,12 +102,19 @@ export class FacilityInspSummaryDB {
   getAllFacilityInspSummaries() {
     this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
   	if(!this._facilityInspSummary) {
+      this._facilityInspSummary = [];
 	  	return this._db.allDocs({include_docs: true})
 				.then(docs => {
-					this._facilityInspSummary = docs.rows.map(row => {
+					let _tempFacilityInspSummary = docs.rows.map(row => {
 						return row.doc
 					});
+          
 
+          for(let index in _tempFacilityInspSummary){
+            if(!_tempFacilityInspSummary[index]["language"]) {
+              this._facilityInspSummary.push(_tempFacilityInspSummary[index]);
+            }
+          }
 					return this._facilityInspSummary;
 				})
   	} else {

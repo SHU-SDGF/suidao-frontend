@@ -101,15 +101,45 @@ export class MyApp implements OnInit{
   }
 
   syncDownload() {
-    console.log('start synchronize');
-    this.facilityInspService.getAllFacilityInspSummaries().then((result) => {
-      let facilityInspList = result;
-      console.log(result);
-      //同步api
-      
-    })
-    //先retrive所有的data
+    this.generageFacilityInspRecordList().then((result) => {
+      this.facilityInspService.uploadFacilityRecords(result).subscribe((result) => {
+        console.log(result);
+      }, (error) => {
+        console.log(error);
+      });
+    });
+  }
 
+  private generageFacilityInspRecordList() {
+    return new Promise((resolve, reject) => {
+      let facilityInspList = [];
+      let facilityInspDetailsList = [];
+      let facilityInspRecordList = [];
+      this.facilityInspService.getAllFacilityInspSummaries().then((result) => {
+        facilityInspList = result;
+        debugger;
+        console.log(result);
+        //同步api
+        this.facilityInspService.getAllFacilityInspDetails().then((res) => {
+          facilityInspDetailsList = res;
+          for(let index in facilityInspList){
+            let facilityInspObj = {
+              "facilityInspSum": facilityInspList[index],
+              "facilityInspDetailList": []
+            };
+
+            let diseaseNo = facilityInspList[index]["diseaseNo"];
+            for(let index2 in facilityInspDetailsList) {
+              if(diseaseNo == facilityInspDetailsList[index2]["diseaseNo"]) {
+                facilityInspObj["facilityInspDetailList"].push(facilityInspDetailsList[index2]);
+              }
+            }
+            facilityInspRecordList.push(facilityInspObj);
+          }
+          resolve(facilityInspRecordList);
+        });
+    });
+    });
   }
 }
 

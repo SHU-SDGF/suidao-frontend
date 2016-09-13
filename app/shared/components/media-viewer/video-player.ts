@@ -1,7 +1,7 @@
 import {NavParams, ViewController} from 'ionic-angular';
 import {Component, OnInit} from '@angular/core';
 import {DomSanitizationService, SafeResourceUrl} from '@angular/platform-browser';
-import {IMediaContent} from './media-viewer';
+import {IMediaContent} from '../../../models/MediaContent';
 
 @Component({
   template: `

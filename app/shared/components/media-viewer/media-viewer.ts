@@ -4,21 +4,17 @@ import { PhotoViewer, VideoPlayer, MediaCapture, MediaPlugin} from 'ionic-native
 import {VideoPlayerPage} from './video-player';
 import {AudioPlayerPage} from './audio-player';
 import {PictureViewerPage} from './picture-viewer';
+import {MediaContent} from '../../../models/MediaContent';
+import {IMediaContent} from '../../../models/MediaContent';
+
 
 declare const Media: any;
-
-export interface IMediaContent{
-  mediaType: 'img' | 'video' | 'audio';
-  fileUri: string,
-  size?: number,
-  preview?: string
-}
 
 @Directive({
   selector: '[mediaViewer]'
 })
 export class MediaViewer{
-  @Input() mediaContent: IMediaContent;
+  @Input() mediaContent: MediaContent;
 
   @HostListener('click')
   eleClicked($event){
@@ -35,7 +31,7 @@ export class MediaViewer{
     }
   }
 
-  viewImg(media: IMediaContent){
+  viewImg(media: MediaContent){
     if(this.platform.is('ios')){
       this._navCtrl.push(PictureViewerPage, {media: media});
     }else{
@@ -43,12 +39,12 @@ export class MediaViewer{
     }
   }
 
-  playVideo(media: IMediaContent){
+  playVideo(media: MediaContent){
     this._navCtrl.push(VideoPlayerPage, {media: media});
     //VideoPlayer.play(media.fileUri);
   }
 
-  playAudio(media: IMediaContent){
+  playAudio(media: MediaContent){
     this._popoverCtrl.create(AudioPlayerPage, {media: media}).present();
   }
 
