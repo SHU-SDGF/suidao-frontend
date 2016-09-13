@@ -15,6 +15,7 @@ import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity'
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {DatePipe} from '../../../../../../shared/utils';
 import {IMediaContent, MediaContent} from '../../../../../../models/MediaContent';
+import {MediaService} from '../../../../../../providers/media_service'
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
@@ -39,7 +40,8 @@ export class ActivityDetailPage implements OnInit{
     private loadingCtrl: LoadingController,
     private _userService: UserService,
     private _asCtrl: ActionSheetController,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _mediaService: MediaService
   ) {}
 
   ngOnInit() {
@@ -89,31 +91,40 @@ export class ActivityDetailPage implements OnInit{
     this.submitAttempt = true;
     if(!this.activityForm.valid) return;
 
-    activityObj.startDate = new Date(activityObj.startDate).getTime();
-    activityObj.endDate = new Date(activityObj.endDate).getTime();
+    let task = this._mediaService.uploadFiles(this.medias);
 
-    let activityObjPayload = {
-      environmentActitivitySummary: new EnvironmentActivitySummary(activityObj),
-      environmentActivity: new EnvironmentActivity(activityObj)
-    };
-    
+    task.start().then(()=>{
+      console.log(task.successFiles);
+      
+      activityObj.startDate = new Date(activityObj.startDate).getTime();
+      activityObj.endDate = new Date(activityObj.endDate).getTime();
 
-    let loading = this.loadingCtrl.create({
-      dismissOnPageChange: true
-    });
+      let activityObjPayload = {
+        environmentActitivitySummary: new EnvironmentActivitySummary(activityObj),
+        environmentActivity: new EnvironmentActivity(activityObj)
+      };
+      
 
-    loading.present();
-    
-    this._actService.addNewEnvironmentActivitySummary(activityObjPayload).subscribe((result) => {
-      this.viewCtrl.dismiss(result);
-    }, (error) => {
-      loading.dismiss();
-      let alert = this._alertCtrl.create({
-        title: '出错啦！',
-        message: '创建活动未能成功！请重新尝试！'
+      let loading = this.loadingCtrl.create({
+        dismissOnPageChange: true
       });
-      alert.present();
+
+      loading.present();
+      
+      this._actService.addNewEnvironmentActivitySummary(activityObjPayload).subscribe((result) => {
+        this.viewCtrl.dismiss(result);
+      }, (error) => {
+        loading.dismiss();
+        let alert = this._alertCtrl.create({
+          title: '出错啦！',
+          message: '创建活动未能成功！请重新尝试！'
+        });
+        alert.present();
+      });
+    }, ()=>{
+
     });
+    
   }
 
   /**
