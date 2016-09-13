@@ -13,7 +13,7 @@ export class HttpService {
 		let _that = this;
 
 		var headers = new Headers();
-		headers.append('Authorization',localStorage.getItem("authToken"));
+		headers.append('Authorization', localStorage.getItem("authToken"));
 
     let request = _that.http.post(
       AppConfig.apiBase + '/' + url,

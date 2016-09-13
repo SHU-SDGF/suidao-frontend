@@ -216,10 +216,39 @@ let StringUtils = (function () {
     };
 })();
 
+function chain(funcs: Array<(resolve: any) => any>) {
+    return new Promise((allResolve) => {
+        if (!funcs.length) return;
+
+        let funcList: Array<() => any> = [];
+        funcs.forEach((func, i) => {
+            let f = ((index) => {
+                return function () {
+                    let nextFunc = funcList[index + 1]
+                    return new Promise((resolve) => {
+                        func(resolve);
+                    }).then(() => {
+                        if (nextFunc) {
+                            nextFunc();
+                        } else {
+                            allResolve();
+                        }
+                    });
+                }
+            })(i);
+
+            funcList.push(f);
+        });
+
+        funcList[0]();
+    });
+}
+
 export class AppUtils {
     static DatePipe = DatePipe;
     static TimePipe = TimePipe;
     static convertDate = convertDate;
     static StringUtils = StringUtils;
     static convertTime = convertTime;
+    static chain = chain;
 }
