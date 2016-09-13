@@ -76,5 +76,58 @@ export class FacilityInspService {
 	uploadFacilityRecords(facilityRecords: any) {
 		return this.httpService.post(facilityRecords, 'facility-insp/upload');
 	}
+
+	//下载地下巡检
+	downloadFacilityRecords() {
+		return this.httpService.get({}, 'facility-insp/download');
+	}
+
+	//将下载的数据保存到本地
+	saveFacilityRecordsToLocalDB(facilityRecords) {
+		let promise = new Promise((resolve, reject) => {
+			let facilityInspSumList = [];
+			let facilityInspDetailsList = [];
+			for(let index in facilityRecords) {
+				facilityInspSumList.push(facilityRecords[index]["facilityInspSum"]);
+				facilityInspDetailsList = facilityInspDetailsList.concat(facilityRecords[index]["facilityInspDetailList"]);
+			}
+
+			for(let index in facilityInspSumList) {
+				facilityInspSumList[index]["_id"] = facilityInspSumList[index]["diseaseNo"];
+				facilityInspSumList[index]["synFlg"] = parseInt(facilityInspSumList[index]["synFlg"]);
+				facilityInspSumList[index]["monomerId"] = parseInt(facilityInspSumList[index]["monomerId"]);
+			}
+
+			for(let index in facilityInspDetailsList) {
+				facilityInspDetailsList[index]["_id"] = facilityInspDetailsList[index]["createDate"] + '';
+				facilityInspDetailsList[index]["synFlg"] = parseInt(facilityInspDetailsList[index]["synFlg"]);
+				facilityInspDetailsList[index]["monomerId"] = parseInt(facilityInspDetailsList[index]["monomerId"]);
+			}
+			this.facilityInspSummaryDB.batchCreateFacilityInspSummaries(facilityInspSumList).then((rs1) => {
+				this.facilityInspDetailDB.batchCreateFacilityInspDetails(facilityInspDetailsList).then((result) => {
+					debugger;
+					resolve(result);
+				}, (error) => {
+					debugger;
+				});
+			}, (error) => {
+				debugger;
+			});
+		});
+		return promise;
+	}
+
+	//删除所有的巡检记录以及所有的巡检历史记录
+	deleteAllFacilityInsps() {
+		return new Promise((resolve, reject) => {
+			this.facilityInspSummaryDB.batchDeleteFacilityInspSummarise().then((result) =>{
+
+				this.facilityInspDetailDB.batchDeleteFacilityInspDetails().then((result) => {
+					debugger;
+					resolve(result);
+				})
+			})
+		});
+	}
 }
 

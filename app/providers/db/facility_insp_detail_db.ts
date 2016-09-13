@@ -25,20 +25,17 @@ export class FacilityInspDetailDB {
 
   //批量生成巡检明细活动
   batchCreateFacilityInspDetails(FacilityInspDetailsObject: any) {
-    return this._db.buckDocs(FacilityInspDetailsObject);
+    return this._db.bulkDocs(FacilityInspDetailsObject);
   };
 
   //批量删除巡检明细活动
   batchDeleteFacilityInspDetails() {
-    this._db.allDocs().then(function (result) {
-      // Promise isn't supported by all browsers; you may want to use bluebird
-      return Promise.all(result.rows.map(function (row) {
+    this._initDB();
+    return this._db.allDocs().then((result) => {
+      return Promise.all(result.rows.map((row) => {
         return this._db.remove(row.id, row.value.rev);
+      }, (error) => {
       }));
-    }).then(function () {
-      // done!
-    }).catch(function (err) {
-      // error!
     });
   }
 

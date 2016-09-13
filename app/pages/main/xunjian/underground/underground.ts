@@ -106,7 +106,6 @@ export class UndergroundPage implements OnInit, OnDestroy {
     } else {
       facilityInspInfo = this.facilityInspList[scannedIndex];
     }
-    debugger;
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
     modal.onDidDismiss((value) => {

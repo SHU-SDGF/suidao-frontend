@@ -101,23 +101,89 @@ export class MyApp implements OnInit{
   }
 
   syncDownload() {
-    this.generageFacilityInspRecordList().then((result) => {
-      this.facilityInspService.uploadFacilityRecords(result).subscribe((result) => {
-        console.log(result);
-      }, (error) => {
-        console.log(error);
-      });
-    });
+    // this.generateFacilityInspRecordList().then((result) => {
+    //   this.facilityInspService.uploadFacilityRecords(result).subscribe((res1) => {
+    //     this.facilityInspService.deleteAllFacilityInsps().then((res2) => {
+    //        //删除完毕
+    //     })
+    //   }, (error) => {
+    //     console.log(error);
+    //   });
+    // });
+
+    this.generateFacilityInspRecordList()
+      .then(this.uploadFacilityRecords.bind(this))
+      .then(this.deleteAllFacilityInsps.bind(this))
+      .then(this.downloadFacilityRecords.bind(this))
+      .then(this.saveFacilityRecordsToLocalDB.bind(this))
+      .catch(function(error){
+        let alert = this.alertController.create({
+          title: '错误',
+          subTitle: '同步数据出现错误，请重新同步数据',
+          buttons: ['确认']
+        });
+      }.bind(this));
   }
 
-  private generageFacilityInspRecordList() {
+  syncDelete() {
+    this.facilityInspService.deleteAllFacilityInsps().then((result) => {
+    }, (error) => {
+    })
+  }
+
+  private saveFacilityRecordsToLocalDB(result) {
+    this.facilityInspService.saveFacilityRecordsToLocalDB(result).then(() => {
+      //成功！！
+      let alert = this.alertController.create({
+        subTitle: '数据同步成功！',
+        buttons: ['确认']
+      });
+    })
+  }
+
+  private downloadFacilityRecords() {
+    var promise = new Promise((resolve, reject) => {
+      this.facilityInspService.downloadFacilityRecords().subscribe((result) => {
+        resolve(result);
+      },(error) => {
+        reject(error);
+      });
+    });
+
+    return promise;
+  }
+
+  private deleteAllFacilityInsps() {
+    var promise = new Promise((resolve, reject) => {
+      this.facilityInspService.deleteAllFacilityInsps().then((result) => {
+        resolve();
+      })
+    });
+    return promise;
+  }
+
+  private uploadFacilityRecords(facilityInspRecordList) {
+    var promise = new Promise((resolve, reject) => {
+      if(facilityInspRecordList.length != 0) {
+        this.facilityInspService.uploadFacilityRecords(facilityInspRecordList).subscribe((result) => {
+          resolve(result);
+        },(error) => {
+          reject(error);
+        });
+      } else {
+        resolve({'ok': true});
+      }
+    });
+    return promise;
+  }
+
+  private generateFacilityInspRecordList() {
     return new Promise((resolve, reject) => {
       let facilityInspList = [];
       let facilityInspDetailsList = [];
       let facilityInspRecordList = [];
       this.facilityInspService.getAllFacilityInspSummaries().then((result) => {
         facilityInspList = result;
-        debugger;
         console.log(result);
         //同步api
         this.facilityInspService.getAllFacilityInspDetails().then((res) => {
@@ -138,12 +204,10 @@ export class MyApp implements OnInit{
           }
           resolve(facilityInspRecordList);
         });
-    });
+      });
     });
   }
 }
-
-
 
 // load providers
 var providersAr = [];

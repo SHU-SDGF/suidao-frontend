@@ -82,20 +82,16 @@ export class FacilityInspSummaryDB {
 
   //批量生成巡检活动
   batchCreateFacilityInspSummaries(FacilityInspSummariesObject: any) {
-    return this._db.buckDocs(FacilityInspSummariesObject);
+    return this._db.bulkDocs(FacilityInspSummariesObject);
   }
 
   //批量删除巡检活动
   batchDeleteFacilityInspSummarise() {
-    this._db.allDocs().then(function(result) {
-      // Promise isn't supported by all browsers; you may want to use bluebird
-      return Promise.all(result.rows.map(function (row) {
+    this._initDB();
+    return this._db.allDocs().then((result) => {
+      return Promise.all(result.rows.map((row) => {
         return this._db.remove(row.id, row.value.rev);
       }));
-    }).then(function () {
-      // done!
-    }).catch(function (err) {
-      // error!
     });
   }
 
@@ -109,7 +105,6 @@ export class FacilityInspSummaryDB {
 						return row.doc
 					});
           
-
           for(let index in _tempFacilityInspSummary){
             if(!_tempFacilityInspSummary[index]["language"]) {
               this._facilityInspSummary.push(_tempFacilityInspSummary[index]);
