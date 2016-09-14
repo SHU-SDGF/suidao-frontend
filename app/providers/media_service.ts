@@ -4,6 +4,7 @@ import {Observable, Subscriber} from 'rxjs';
 import {MediaContent} from '../models/MediaContent';
 import {FileService} from './file_service';
 import {AppUtils} from '../shared/utils';
+import {FileUploadResult} from 'ionic-native';
 
 @Pipe({
   name: 'FilePathPipe'
@@ -91,36 +92,40 @@ export class UploadTask{
   }
   
   start(): Observable<MediaContent> {
+    let _self = this;
     return Observable.create(function(observer: Subscriber<MediaContent>){
       let index = 0;
-      if (!this.fileList.length){
+      if (!_self.fileList.length){
         observer.next();
         observer.complete();
         return;
       } 
 
-      this.filesInProcess = this.fileList.concat([]);
+      _self.filesInProcess = _self.fileList.concat([]);
       let funcs = [];
-      this.fileList.forEach((mediaFile) => {
-        let func = function () {
-          return new Promise(function(resolve, reject){
-            this.startUploadMedia(mediaFile).then((mediaFile: MediaContent) => {
-              this.fileService.storeFile(mediaFile.fileUri, mediaFile.localUri);
-              observer.next(mediaFile);
-              resolve(mediaFile);
-            }, ()=>{
-              reject(mediaFile);
+      _self.fileList.forEach((mediaFile) => {
+        let func = (function(mediaFile){
+          return function () {
+            return new Promise(function(resolve, reject){
+              _self.startUploadMedia(mediaFile).then((mediaFile: MediaContent) => {
+                _self.fileService.storeFile(mediaFile.fileUri, mediaFile.localUri);
+                observer.next(mediaFile);
+                resolve(mediaFile);
+              }, ()=>{
+                reject(mediaFile);
+              });
             });
-          }.bind(this));
-        }.bind(this);
+          };
+        })(mediaFile);
+
         funcs.push(func);
       });
 
       AppUtils.chain(funcs).then(function(){
-        this.started = false;
-        this.finished = true;
-      }.bind(this));
-    }.bind(this));
+        _self._started = false;
+        _self._finished = true;
+      });
+    });
   }
 
   startUploadMedia(mediaFile: MediaContent) {

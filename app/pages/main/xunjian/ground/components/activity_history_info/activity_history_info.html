@@ -11,7 +11,7 @@
 <ion-content class="activity_history_detail">
   <h5 class="field-label">活动名称</h5>
   <ion-item>
-    <ion-input type="text" [(ngModel)]="activityDetailObj.activityName" disabled="true"></ion-input>
+    <ion-input type="text" [(ngModel)]="activityName" disabled="true"></ion-input>
   </ion-item>
 
   <h5 class="field-label">活动类别</h5>
@@ -25,15 +25,14 @@
   </ion-item>
 
   <h5 class="field-label">活动状态</h5>
-  <ion-item>
-    <status-picker 
-      [(ngModel)]="activityDetailObj.actStatus"
-      [options]="actStatusList"
-      [textField]="'name'"
-      [valueField]="'order'"
-      [disabled]="true">
-    </status-picker>
-  </ion-item>
+  <status-picker 
+    [(ngModel)]="activityDetailObj.actStatus"
+    [options]="actStatusList"
+    [textField]="'name'"
+    [valueField]="'order'"
+    [disabled]="true">
+  </status-picker>
+
   <h5 class="field-label">记录人</h5>
   <ion-item>
     <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
@@ -44,9 +43,9 @@
     <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
   </ion-item>
 
-  <h5 class="field-label">多媒体</h5>
+  <h5 class="field-label" *ngIf="medias.length">多媒体</h5>
   <ion-list>
-    <ion-item class="img-gallery">
+    <ion-item class="img-gallery" *ngIf="medias.length">
       <ion-scroll scrollX="true">
         <div class="img-item" *ngFor="let media of medias">
           <button clear type="button" class="img-layer">

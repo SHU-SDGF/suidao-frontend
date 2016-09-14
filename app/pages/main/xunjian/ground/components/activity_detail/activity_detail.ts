@@ -139,8 +139,13 @@ export class ActivityDetailPage implements OnInit{
           alert.present();
         });
       }
-    }, ()=>{
-
+    }, (error)=>{
+      loading.dismiss();
+      let alert = this._alertCtrl.create({
+        title: '上传文件失败！',
+        message: JSON.stringify(error)
+      });
+      alert.present();
     });
 
     function getLoadingText(progress: UploadTaskProgress){

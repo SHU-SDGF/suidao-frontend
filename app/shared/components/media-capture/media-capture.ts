@@ -1,7 +1,8 @@
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
-import {} from 'ionic-angular';
 import {Directive, Output, EventEmitter, HostListener} from '@angular/core';
 import {MediaContent} from '../../../models/MediaContent';
+import {FileService} from '../../../providers';
+import {AlertController} from 'ionic-angular';
 
 @Directive({
   selector: '[CaptureMedia]'
@@ -9,7 +10,7 @@ import {MediaContent} from '../../../models/MediaContent';
 export class CaptureMedia{
   @Output() onCaptured: EventEmitter<MediaContent> = new EventEmitter<MediaContent>();
 
-  constructor(){}
+  constructor(private _fileService: FileService, private _alertCtrl: AlertController){}
 
   @HostListener('click')
   captureMedia(){
@@ -19,35 +20,47 @@ export class CaptureMedia{
     }).then((buttonIndex: number) => {
       if(buttonIndex == 1){
         MediaCapture.captureImage().then((medieFiles: Array<MediaFile>) => {
-          let media = new MediaContent({
-            localUri: medieFiles[0].fullPath,
-            mediaType: 'img',
-            preview: medieFiles[0].fullPath
+          
+          this._fileService.copyFile(medieFiles[0].fullPath).then((path)=>{
+            let media = new MediaContent({
+              localUri: path,
+              mediaType: 'img',
+              preview: path
+            });
+            
+            this.onCaptured.emit(media);
+          }, (err)=>{
+            alert(JSON.stringify(err));
           });
           
-          this.onCaptured.emit(media);
         });
       }else if(buttonIndex == 2){
         MediaCapture.captureVideo().then((medieFiles: Array<MediaFile>)=>{
 
-          let media = new MediaContent({
-            localUri: medieFiles[0].fullPath,
-            mediaType: 'video',
-            preview: 'build/imgs/video.png'
+          this._fileService.copyFile(medieFiles[0].fullPath).then((path)=>{
+            let media = new MediaContent({
+              localUri: path,
+              mediaType: 'video',
+              preview: 'build/imgs/video.png'
+            });
+            
+            this.onCaptured.emit(media);
           });
           
-          this.onCaptured.emit(media);
         });
       }else if(buttonIndex == 3){
         MediaCapture.captureAudio().then((medieFiles: Array<MediaFile>)=>{
           
-          let media = new MediaContent({
-            localUri: medieFiles[0].fullPath,
-            mediaType: 'audio',
-            preview: 'build/imgs/audio.png'
-          });
+          this._fileService.copyFile(medieFiles[0].fullPath).then((path)=>{
+            let media = new MediaContent({
+              localUri: path,
+              mediaType: 'audio',
+              preview: 'build/imgs/audio.png'
+            });
 
-          this.onCaptured.emit(media);
+            this.onCaptured.emit(media);
+          });
+          
         });
       }
     });

@@ -14,6 +14,8 @@
       </button>
     </ion-buttons>
   </ion-toolbar>
+</ion-header>
+<ion-content class="activity_info" #content>
   <div padding>
     <ion-segment [(ngModel)]="selectedPage" (ngModelChange)="switchSegment($event)">
       <ion-segment-button value="detail">
@@ -24,9 +26,6 @@
       </ion-segment-button>
     </ion-segment>
   </div>
-</ion-header>
-
-<ion-content class="activity_info" #content>
   <div [hidden]="selectedPage !== 'detail'">
     <h5 class="field-label">活动编号</h5>
     <ion-item>
@@ -77,18 +76,21 @@
     <ion-item>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
     </ion-item>
-    <h5 class="field-label">多媒体</h5>
+    <h5 class="field-label" *ngIf="activityDetailObj.medias.length">多媒体</h5>
     <ion-list>
-    <ion-item class="img-gallery">
-      <ion-scroll scrollX="true">
-        <div class="img-item" *ngFor="let media of activityDetailObj.medias">
-          <button clear type="button" class="img-layer">
-            <img src="{{media.preview}}" mediaViewer [mediaContent]="media"/>
-          </button>
-        </div>
-      </ion-scroll>
-    </ion-item>
-  </ion-list>
+      <ion-item class="img-gallery" *ngIf="activityDetailObj.medias.length">
+        <ion-scroll scrollX="true">
+          <div class="img-item" *ngFor="let media of activityDetailObj.medias">
+            <button clear type="button" class="img-layer">
+              <img [src]="media.preview | TrustUrl" mediaViewer [mediaContent]="media"/>
+            </button>
+          </div>
+        </ion-scroll>
+      </ion-item>
+    </ion-list>
+    <p *ngFor="let media of activityDetailObj.medias">
+      {{media.preview}} {{'existing:' + _fileService.doesFileExist(media.preview)}}
+    </p>
   </div>
 
   <div [hidden]="selectedPage !== 'history'">

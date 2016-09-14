@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
-import {Transfer, FileUploadOptions} from 'ionic-native';
+import {Transfer, FileUploadOptions, File} from 'ionic-native';
 import {HttpService} from './http_service';
 import { AppConfig } from './config';
 
-declare const FileTransfer;
 declare const cordova;
 declare const device;
 
@@ -14,7 +13,7 @@ const DOWNLOAD_PATH = AppConfig.apiBase + '/download';
 @Injectable()
 export class FileService {
   private get rootDir() {
-    return this.getRootFolder(device.platform) + '/files';
+    return this.getRootFolder(device.platform);
   }
   
   /**
@@ -39,17 +38,34 @@ export class FileService {
     return fileTransfer.download(source, targetPath, true, options);
   }
 
+  public copyFile(filePath: string){
+    return new Promise((resolve, reject)=>{
+      let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+      let dirPath = filePath.substr(0, filePath.lastIndexOf('/'));
+
+      if(device.platform == 'iOS'){
+        dirPath = 'file://' + dirPath;
+      }
+
+      File.copyFile(dirPath, fileName, this.rootDir, fileName).then(()=>{
+        resolve([this.rootDir, fileName].join('/'));
+      }, reject);
+    });
+  }
+
   /**
    * upload file
    * @param {string} filePath
    * @param {function} progressListener
    */  
-  public uploadFile(filePath, progressListener) {
+  public uploadFile(filePath: string, progressListener) {
+    
     const fileTransfer = new Transfer();
     let options: FileUploadOptions = {
       headers: {
         "Authorization": localStorage.getItem("authToken")
-      }
+      },
+      fileName: filePath.substr(filePath.lastIndexOf('/')+ 1)
     };
 
     if (progressListener) {
@@ -63,23 +79,23 @@ export class FileService {
   * General purpose, even if for now only Android and Iphone are supported.
   */
   private getRootFolder(deviceType:string):string {
-      let returnValue:string;
-      let deviceTypeStr:string = deviceType;
+    let returnValue:string;
+    let deviceTypeStr:string = deviceType;
 
-      if (deviceTypeStr.startsWith("BlackBerry")) deviceTypeStr = "BlackBerry";
+    if (deviceTypeStr.startsWith("BlackBerry")) deviceTypeStr = "BlackBerry";
 
-     switch (deviceTypeStr){
-           case "iOS":
-               returnValue = cordova.file.documentsDirectory;
-               break;
-           case "Mac OS X":
-               returnValue = cordova.file.applicationStorageDirectory;
-               break;
-          default:
-               returnValue = cordova.file.dataDirectory;
-      }
+    switch (deviceTypeStr){
+      case "iOS":
+        returnValue = cordova.file.documentsDirectory;
+        break;
+      case "Mac OS X":
+        returnValue = cordova.file.applicationStorageDirectory;
+        break;
+      default:
+        returnValue = cordova.file.dataDirectory;
+    }
 
-      return returnValue;
+    return returnValue;
   }
 
   generateFileNameHash() {

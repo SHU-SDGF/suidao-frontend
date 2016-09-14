@@ -1,5 +1,18 @@
 import {Pipe, Injectable} from '@angular/core';
 import {AppMeta} from '../providers/app_meta';
+import {DomSanitizationService} from '@angular/platform-browser';
+
+@Pipe({
+    name: 'TrustUrl'
+})
+export class TrustUrl{
+    constructor(
+        private _santization: DomSanitizationService
+    ){}
+    transform(url: string){
+        return this._santization.bypassSecurityTrustUrl(url);
+    }
+}
 
 @Pipe({
     name: 'StatusPipe'

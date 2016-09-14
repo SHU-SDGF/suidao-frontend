@@ -4,7 +4,7 @@ import {ViewController, AlertController, NavParams, ModalController, LoadingCont
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
-import {AppUtils, OptionPipe, StatusPipe} from '../../../../../../shared/utils';
+import {AppUtils, OptionPipe, StatusPipe, TrustUrl} from '../../../../../../shared/utils';
 import {UserService} from '../../../../../../providers';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
@@ -13,10 +13,11 @@ import {StatusPicker} from '../../../../../../shared/components/status-picker/st
 import {MediaContent} from '../../../../../../models/MediaContent';
 import {MediaService} from '../../../../../../providers/media_service';
 import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {FileService} from '../../../../../../providers/file_service';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
-  pipes: [AppUtils.DatePipe, OptionPipe, StatusPipe],
+  pipes: [AppUtils.DatePipe, OptionPipe, StatusPipe, TrustUrl],
   directives: [StatusPicker, MediaViewer]
 })
 export class ActivityInfoPage implements OnInit{
@@ -39,7 +40,8 @@ export class ActivityInfoPage implements OnInit{
     private _loadingCtrl: LoadingController,
     private _userService: UserService,
     private _zone: NgZone,
-    private _mediaService: MediaService
+    private _mediaService: MediaService,
+    private _fileService: FileService
   ) { }
 
   ngOnInit() {
@@ -102,7 +104,7 @@ export class ActivityInfoPage implements OnInit{
           localUri: null
         });
         
-        media.preview = {
+        media.preview =  {
           'img': _self._mediaService.getMediaPath(media),
           'audio': 'build/imgs/audio.png',
           'video': 'build/imgs/video.png'

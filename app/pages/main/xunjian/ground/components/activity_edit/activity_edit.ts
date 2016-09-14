@@ -81,7 +81,10 @@ export class ActivityEditPage implements OnInit{
   }
 
   save(value) {
-
+    let imgUrlList = [],
+      videoUrlList = [],
+      audioUrlList = [];
+      
     let loading = this.loadingCtrl.create({
       dismissOnPageChange: true,
       content: '正在保存活动'
