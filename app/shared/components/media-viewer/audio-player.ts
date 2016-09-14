@@ -1,9 +1,8 @@
 import {NavParams, ViewController} from 'ionic-angular';
 import {Component, OnInit} from '@angular/core';
-import {IMediaContent} from '../../../models/MediaContent';
+import {MediaContent} from '../../../models/MediaContent';
 import {AppUtils} from '../../utils';
-
-
+import {MediaService} from '../../../providers/media_service';
 
 @Component({
   template: `
@@ -20,19 +19,20 @@ export class AudioPlayerPage implements OnInit{
   private playProgress: number = 0;
   private playing: boolean = false;
   private stream: HTMLAudioElement;
-  private media: IMediaContent;
+  private media: MediaContent;
   private url: string;
   private icon: string = 'ios-play';
 
   constructor(
     private _viewCtrl: ViewController,
-    private params: NavParams
+    private params: NavParams,
+    private _mediaService: MediaService
     ) { 
   }
 
   ngOnInit(){
     this.media = this.params.get('media');
-    this.url = this.media.fileUri;
+    this.url = this._mediaService.getMediaPath(this.media);
     this.stream = new Audio(this.url);
     this.stream.addEventListener("timeupdate", this.updateProgress.bind(this), false);
   }

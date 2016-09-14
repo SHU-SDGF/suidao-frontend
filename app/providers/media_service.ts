@@ -1,9 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Pipe } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import {Observable, Subscriber} from 'rxjs';
 import {MediaContent} from '../models/MediaContent';
 import {FileService} from './file_service';
 import {AppUtils} from '../shared/utils';
+
+@Pipe({
+  name: 'FilePathPipe'
+})
+export class FilePathPipe{
+  constructor(private _mediaService: MediaService){}
+  transform(media: MediaContent, args?) {
+    return this._mediaService.getMediaPath(media);
+  }
+}
 
 @Injectable()
 export class MediaService {
@@ -11,6 +21,10 @@ export class MediaService {
   constructor(
     private fileService: FileService
   ) { }
+
+  getMediaPath(media: MediaContent) {
+    return media.localUri || this.fileService.getFilePath(media.fileUri);
+  }
   
   uploadFiles(medias: Array<MediaContent>){
     let task = new UploadTask(this.fileService);
@@ -24,6 +38,7 @@ export class MediaService {
   }
 
 }
+
 export interface UploadTaskProgress{
   loaded: number, 
   total: number, 
@@ -89,7 +104,8 @@ export class UploadTask{
       this.fileList.forEach((mediaFile) => {
         let func = function () {
           return new Promise(function(resolve, reject){
-            this.startUploadMedia(mediaFile).then((mediaFile)=>{
+            this.startUploadMedia(mediaFile).then((mediaFile: MediaContent) => {
+              this.fileService.storeFile(mediaFile.fileUri, mediaFile.localUri);
               observer.next(mediaFile);
               resolve(mediaFile);
             }, ()=>{

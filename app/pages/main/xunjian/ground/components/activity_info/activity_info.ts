@@ -10,11 +10,14 @@ import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentAc
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {ActivityEditPage} from '../activity_edit/activity_edit';
 import {StatusPicker} from '../../../../../../shared/components/status-picker/status-picker';
+import {MediaContent} from '../../../../../../models/MediaContent';
+import {MediaService} from '../../../../../../providers/media_service';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_info/activity_info.html',
   pipes: [AppUtils.DatePipe, OptionPipe, StatusPipe],
-  directives: [StatusPicker]
+  directives: [StatusPicker, MediaViewer]
 })
 export class ActivityInfoPage implements OnInit{
   
@@ -35,7 +38,8 @@ export class ActivityInfoPage implements OnInit{
     private params: NavParams,
     private _loadingCtrl: LoadingController,
     private _userService: UserService,
-    private _zone: NgZone
+    private _zone: NgZone,
+    private _mediaService: MediaService
   ) { }
 
   ngOnInit() {
@@ -51,7 +55,8 @@ export class ActivityInfoPage implements OnInit{
       createUser: paramsObj.createUser,
       startDate: paramsObj.startDate,
       endDate: paramsObj.endDate,
-      recorder: ''
+      recorder: '',
+      medias: []
     };
 
     this._userService.getUserByID(this.activityDetailObj.createUser).subscribe((user)=>{
@@ -79,9 +84,33 @@ export class ActivityInfoPage implements OnInit{
           this.activityDetailObj.inspDate = act.inspDate;
           this.activityDetailObj.description = act.description;
           this.activityDetailObj.actStatus = act.actStatus;
+          
+          this.activityDetailObj.medias = getMedias(act.photo, 'img')
+            .concat(getMedias(act.video, 'video'))
+            .concat(getMedias(act.audio, 'audio'));
         }
       });
     }, 200);
+    
+    function getMedias(urlList, type): Array<MediaContent> {
+      if (!urlList) return [];
+      
+      return urlList.split(';').map((url) => {
+        let media = new MediaContent({
+          fileUri: url,
+          mediaType: type,
+          localUri: null
+        });
+        
+        media.preview = {
+          'img': _self._mediaService.getMediaPath(media),
+          'audio': 'build/imgs/audio.png',
+          'video': 'build/imgs/video.png'
+        }[type];
+        
+        return media;
+      });
+    }
   }
 
   getHistory(pageIndex?){

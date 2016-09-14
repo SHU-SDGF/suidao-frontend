@@ -3,7 +3,7 @@ import {Component, OnInit, EventEmitter} from '@angular/core';
 import {IMediaContent, MediaContent} from '../../../models/MediaContent';
 import {AppUtils} from '../../utils';
 import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../shared/components/image-editor/image-editor';
-
+import {MediaService} from '../../../providers/media_service';
 
 @Component({
   template: `
@@ -36,13 +36,14 @@ export class PictureViewerPage implements OnInit{
 
   constructor(
     private _viewCtrl: ViewController,
-    private params: NavParams
+    private params: NavParams,
+    private _mediaService: MediaService
     ) { 
   }
 
   ngOnInit(){
     this.media = this.params.get('media');
-    this.url = this.media.localUri;
+    this.url = this._mediaService.getMediaPath(this.media);
     this._mapOptions = {
       imageUrl: this.url,
       markers:[]

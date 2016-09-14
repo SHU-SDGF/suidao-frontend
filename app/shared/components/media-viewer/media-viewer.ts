@@ -35,7 +35,7 @@ export class MediaViewer{
     if(this.platform.is('ios')){
       this._navCtrl.push(PictureViewerPage, {media: media});
     }else{
-      PhotoViewer.show(media.localUri, '', {share: false});
+      PhotoViewer.show(media.preview, '', {share: false});
     }
   }
 

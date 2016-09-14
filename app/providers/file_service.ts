@@ -91,4 +91,34 @@ export class FileService {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
       s4() + '-' + s4() + s4() + s4();
   }
+
+
+  public doesFileExist(urlToFile) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('HEAD', urlToFile, false);
+    xhr.send();
+     
+    if (xhr.status == 404) {
+        return false;
+    } else {
+        return true;
+    }
+  }
+
+
+  public storeFile(fileUri, localUri) {
+    localStorage.setItem(`media${fileUri}`, localUri);
+  }
+
+  public getFilePath(fileUri) {
+    let path = localStorage.getItem(`media${fileUri}`);
+    if (!path) {
+      return AppConfig.siteBase + '/file' + fileUri;
+    } else if (!this.doesFileExist(path)) {
+      localStorage.removeItem(`media${fileUri}`);
+      return AppConfig.siteBase + '/file' + fileUri;
+    } else {
+      return path;
+    }
+  }
 }

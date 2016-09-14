@@ -6,10 +6,10 @@ import {LookupService, IActionStatus, IActionType} from '../../../../../../provi
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {AppUtils, DatePipe, OptionPipe} from '../../../../../../shared/utils';
-import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {StatusPicker } from '../../../../../../shared/components/status-picker/status-picker';
-import {IMediaContent} from '../../../../../../models/MediaContent';
-
+import {MediaContent} from '../../../../../../models/MediaContent';
+import {MediaService} from '../../../../../../providers/media_service';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_history_info/activity_history_info.html',
@@ -19,16 +19,19 @@ import {IMediaContent} from '../../../../../../models/MediaContent';
 export class ActivityHistoryInfoPage implements OnInit{
   private actStatusList: Array<IActionStatus> = [];
   private actTypes: Array<IActionType> = [];
-  private activityDetailObj: any;
-  private medias: Array<IMediaContent>;
+  private activityDetailObj: EnvironmentActivity;
+  private medias: Array<MediaContent>;
+  private activityName: string;
 
   constructor(
     private viewCtrl: ViewController,
     private params: NavParams,
-    private _lookupService: LookupService
+    private _lookupService: LookupService,
+    private _mediaService: MediaService
   ) {}
 
   ngOnInit() {
+    let _self = this;
     this._lookupService.getActionStatus().then((actStatusList) => {
       this.actStatusList = actStatusList;
     });
@@ -37,20 +40,32 @@ export class ActivityHistoryInfoPage implements OnInit{
       this.actTypes = actTypes;
     });
 
-    let activityName = this.params.get('activityName');
+    this.activityName = this.params.get('activityName');
     let activityParams = this.params.get('activityDetail');
-    this.activityDetailObj = {
-      actName: activityName,
-      inspDate: activityParams["inspDate"],
-      description: activityParams["description"], //活动描述
-      actStatus: parseInt(activityParams["actStatus"]),
-      recorder: activityParams["recorder"],
-      photo: activityParams["photo"],
-      audio: activityParams["audio"],
-      video: activityParams["video"],
-      actNo: activityParams["actNo"],
-      actType: activityParams['actType']
-    };
+    this.activityDetailObj = this.params.get('activityDetail');
+    this.medias = getMedias(this.activityDetailObj.photo, 'img')
+      .concat(getMedias(this.activityDetailObj.video, 'video'))
+      .concat(getMedias(this.activityDetailObj.audio, 'audio'));
+
+    function getMedias(urlList, type): Array<MediaContent> {
+      if (!urlList) return [];
+      
+      return urlList.split(';').map((url) => {
+        let media = new MediaContent({
+          fileUri: url,
+          mediaType: type,
+          localUri: null
+        });
+        
+        media.preview = {
+          'img': _self._mediaService.getMediaPath(media),
+          'audio': 'build/imgs/audio.png',
+          'video': 'build/imgs/video.png'
+        }[type];
+        
+        return media;
+      });
+    }
   }
 
   dismiss() {

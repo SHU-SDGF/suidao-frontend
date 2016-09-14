@@ -11,7 +11,7 @@
 <ion-content class="activity_history_detail">
   <h5 class="field-label">活动名称</h5>
   <ion-item>
-    <ion-input type="text" [(ngModel)]="activityDetailObj.actName" disabled="true"></ion-input>
+    <ion-input type="text" [(ngModel)]="activityDetailObj.activityName" disabled="true"></ion-input>
   </ion-item>
 
   <h5 class="field-label">活动类别</h5>
@@ -39,6 +39,11 @@
     <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
   </ion-item>
 
+  <h5 class="field-label">描述</h5>
+  <ion-item>
+    <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
+  </ion-item>
+
   <h5 class="field-label">多媒体</h5>
   <ion-list>
     <ion-item class="img-gallery">
@@ -52,8 +57,4 @@
     </ion-item>
   </ion-list>
   
-  <h5 class="field-label">描述</h5>
-  <ion-item>
-    <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
-  </ion-item>
 </ion-content>

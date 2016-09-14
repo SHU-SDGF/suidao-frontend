@@ -12,9 +12,9 @@ export class EnvironmentActivity extends _baseClass{
 	actType: any //活动类型
 	description: string // 描述
 	
-	photo: any // 图片
-	audio: any // 音频
-	video: any // 视频
+	photo: string // 图片
+	audio: string // 音频
+	video: string // 视频
   recorder: string //记录人
 
   constructor(obj = null) {

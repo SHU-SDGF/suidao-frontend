@@ -77,6 +77,18 @@
     <ion-item>
       <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
     </ion-item>
+    <h5 class="field-label">多媒体</h5>
+    <ion-list>
+    <ion-item class="img-gallery">
+      <ion-scroll scrollX="true">
+        <div class="img-item" *ngFor="let media of activityDetailObj.medias">
+          <button clear type="button" class="img-layer">
+            <img src="{{media.preview}}" mediaViewer [mediaContent]="media"/>
+          </button>
+        </div>
+      </ion-scroll>
+    </ion-item>
+  </ion-list>
   </div>
 
   <div [hidden]="selectedPage !== 'history'">

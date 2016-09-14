@@ -1,11 +1,14 @@
 interface config{
-    apiBase: string
+    apiBase: string,
+    siteBase: string
 };
 const AppConfigs = {
-	'development': {
-		apiBase: 'http://114.55.55.37:3001/tunnel-service'
+    'development': {
+        siteBase: 'http://114.55.55.37:8083',
+		apiBase: 'http://114.55.55.37:8083/tunnel-service'
 	},
     'production': {
+        siteBase: 'http://114.55.55.37:8083',
         apiBase: 'http://114.215.196.178:8080/beehive-portal/api'
     }
 };
