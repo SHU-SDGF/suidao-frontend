@@ -8,7 +8,7 @@ export interface IMediaContent{
 }
 
 export class MediaContent extends _baseClass implements IMediaContent{
-  mediaType: 'img' | 'video' | 'audio';
+  mediaType: 'img' | 'video' | 'audio' = null;
   fileUri: string = '';
   size: number = 0;
   preview: string = '';

@@ -1,7 +1,7 @@
 import {NavParams, ViewController} from 'ionic-angular';
 import {Component, OnInit} from '@angular/core';
 import {DomSanitizationService, SafeResourceUrl} from '@angular/platform-browser';
-import {IMediaContent} from '../../../models/MediaContent';
+import {MediaContent} from '../../../models/MediaContent';
 
 @Component({
   template: `
@@ -25,7 +25,7 @@ import {IMediaContent} from '../../../models/MediaContent';
   ]
 })
 export class VideoPlayerPage implements OnInit{
-  private media: IMediaContent;
+  private media: MediaContent;
   private url: SafeResourceUrl;
   
   constructor(
@@ -35,7 +35,7 @@ export class VideoPlayerPage implements OnInit{
 
   ngOnInit(){
     this.media = this.params.get('media');
-    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.media.fileUri);
+    this.url = this._sanitizer.bypassSecurityTrustResourceUrl(this.media.localUri);
   }
 
   dismiss(){

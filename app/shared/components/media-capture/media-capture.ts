@@ -20,7 +20,7 @@ export class CaptureMedia{
       if(buttonIndex == 1){
         MediaCapture.captureImage().then((medieFiles: Array<MediaFile>) => {
           let media = new MediaContent({
-            fileUri: medieFiles[0].fullPath,
+            localUri: medieFiles[0].fullPath,
             mediaType: 'img',
             preview: medieFiles[0].fullPath
           });
@@ -31,7 +31,7 @@ export class CaptureMedia{
         MediaCapture.captureVideo().then((medieFiles: Array<MediaFile>)=>{
 
           let media = new MediaContent({
-            fileUri: medieFiles[0].fullPath,
+            localUri: medieFiles[0].fullPath,
             mediaType: 'video',
             preview: 'build/imgs/video.png'
           });
@@ -42,7 +42,7 @@ export class CaptureMedia{
         MediaCapture.captureAudio().then((medieFiles: Array<MediaFile>)=>{
           
           let media = new MediaContent({
-            fileUri: medieFiles[0].fullPath,
+            localUri: medieFiles[0].fullPath,
             mediaType: 'audio',
             preview: 'build/imgs/audio.png'
           });

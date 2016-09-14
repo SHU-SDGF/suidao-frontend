@@ -93,6 +93,10 @@ export class ActivityDetailPage implements OnInit{
 
     let task = this._mediaService.uploadFiles(this.medias);
     let publisher = task.start();
+    let imgUrlList = [],
+      videoUrlList = [],
+      audioUrlList = [];
+
 
     let loadingOptions = {
       dismissOnPageChange: true,
@@ -105,11 +109,25 @@ export class ActivityDetailPage implements OnInit{
       loadingOptions.content = getLoadingText(progress);
     });
 
-    publisher.subscribe((media)=>{
-      console.log(task.successFiles);
+    publisher.subscribe((media) => {
+      if (media.fileUri) {
+        switch (media.mediaType) {
+          case 'img':
+            imgUrlList.push(media.fileUri);
+            break;
+          case 'video':
+            videoUrlList.push(media.fileUri);
+            break;
+          case 'audio':
+            audioUrlList.push(media.fileUri);
+            break;
+        }
+      }
+      if (task.successFiles.length == task.files.length) {
+        activityObj.photo = imgUrlList.join(';');
+        activityObj.video = videoUrlList.join(';');
+        activityObj.audio = audioUrlList.join(';');
 
-      if(task.successFiles.length == task.files.length){
-        
         this.submitForm(activityObj).subscribe((result) => {
           this.viewCtrl.dismiss(result);
         }, (error) => {

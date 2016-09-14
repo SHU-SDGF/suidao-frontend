@@ -35,13 +35,13 @@ export class MediaViewer{
     if(this.platform.is('ios')){
       this._navCtrl.push(PictureViewerPage, {media: media});
     }else{
-      PhotoViewer.show(media.fileUri, '', {share: false});
+      PhotoViewer.show(media.localUri, '', {share: false});
     }
   }
 
   playVideo(media: MediaContent){
     this._navCtrl.push(VideoPlayerPage, {media: media});
-    //VideoPlayer.play(media.fileUri);
+    //VideoPlayer.play(media.localUri);
   }
 
   playAudio(media: MediaContent){

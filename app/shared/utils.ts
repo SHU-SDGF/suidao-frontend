@@ -221,11 +221,13 @@ function promiseChain(funcs: Array<()=>Promise<any>>){
         if(funcs.length){
             let defer = funcs[0]();
             for(let i = 1; i< funcs.length; i++){
-                defer = defer.catch((err)=>{
-                    reject(err);
-                }).then(funcs[i]);
+                defer = defer.then(funcs[i], (err) => {
+                    reject(err)
+                });
             }
-            defer.then(resolve, reject);
+            defer.then(resolve, (err) => {
+                reject(err);
+            });
         }else{
             resolve();
         }

@@ -107,13 +107,18 @@ export class UploadTask{
     }.bind(this));
   }
 
-  startUploadMedia(mediaFile) {
+  startUploadMedia(mediaFile: MediaContent) {
     return new Promise<MediaContent>(function(fileResolve, fileReject){
       this.uploadMedia(mediaFile).then((result) => {
-        let r = JSON.parse(result.response);
-        this.successList.unshift(mediaFile);
-        this.filesInProcess.shift();
-        fileResolve(mediaFile);
+        let r: {success: boolean, path: string} = JSON.parse(result.response);
+        if (r.success) {
+          mediaFile.fileUri = r.path;
+          this.successList.unshift(mediaFile);
+          this.filesInProcess.shift();
+          fileResolve(mediaFile);
+        } else {
+          fileReject(r);
+        }
       }, (error) => {
         mediaFile['error'] = error;
         this.filesInProcess.shift();
@@ -124,86 +129,10 @@ export class UploadTask{
   }
 
   uploadMedia(media: MediaContent) {
-    return this.fileService.uploadFile(media.fileUri, this._progressListener);
+    return this.fileService.uploadFile(media.localUri, this._progressListener);
   }
 }
 
 export class DownloadTask{
-  private _started: boolean = false;
-  private _finished: boolean = false;
-  private fileList: Array<MediaContent> = [];
-  private successList: Array<MediaContent> = [];
-  private failedList: Array<MediaContent> = [];
-  private filesInProcess: Array<MediaContent> = [];
-  private progressListener = function ($event) {
-    console.log($event);
-  };
-
-  constructor(
-    private fileService: FileService
-  ) { }
-
-  set files(files: Array<MediaContent>){
-    this.fileList = files;
-  }
-
-  get files(){
-    return this.fileList;
-  }
-
-  get failedFiles(){
-    return this.failedList;
-  }
-
-  get successFiles(){
-    return this.successList;
-  }
   
-  start() {
-    return Observable.create(function(observer: Subscriber<MediaContent>){
-      let index = 0;
-      if (!this.fileList.length) return;
-
-      this.filesInProcess = this.fileList.concat([]);
-      let funcs = [];
-      this.fileList.forEach((mediaFile) => {
-        let func = (function () {
-          return new Promise(function (resolve, reject) {
-            startUploadMedia(mediaFile).then((mediaFile)=>{
-              observer.next(mediaFile);
-              resolve(mediaFile);
-            }, ()=>{
-              reject(mediaFile);
-            });
-          }.bind(this));
-        })();
-        funcs.push(func);
-      });
-
-      AppUtils.chain(funcs).then(function(){
-        this.started = false;
-        this.finished = true;
-      }.bind(this));
-    }.bind(this));
-    
-    function startUploadMedia(mediaFile) {
-      return new Promise<MediaContent>(function(fileResolve, fileReject){
-        this.uploadMedia(mediaFile).then((result) => {
-          let r = JSON.parse(result.response);
-          this.successList.unshift(mediaFile);
-          this.filesInProcess.shift();
-          fileResolve(mediaFile);
-        }, (error) => {
-          mediaFile['error'] = error;
-          this.filesInProcess.shift();
-          this.failedList.unshift(mediaFile);
-          fileReject(mediaFile);
-        });
-      }.bind(this));
-    }
-  }
-
-  uploadMedia(media: MediaContent) {
-    return this.fileService.uploadFile(media.fileUri, this.progressListener);
-  }
 }

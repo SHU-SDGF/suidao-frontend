@@ -1,6 +1,6 @@
 import {NavParams, ViewController} from 'ionic-angular';
 import {Component, OnInit, EventEmitter} from '@angular/core';
-import {IMediaContent} from '../../../models/MediaContent';
+import {IMediaContent, MediaContent} from '../../../models/MediaContent';
 import {AppUtils} from '../../utils';
 import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../shared/components/image-editor/image-editor';
 
@@ -29,7 +29,7 @@ import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../shared/co
   directives: [ImageEditor]
 })
 export class PictureViewerPage implements OnInit{
-  private media: IMediaContent;
+  private media: MediaContent;
   private url: string;
   private _mapOptions: MapOptions;
   private changeOptions = new EventEmitter();
@@ -42,7 +42,7 @@ export class PictureViewerPage implements OnInit{
 
   ngOnInit(){
     this.media = this.params.get('media');
-    this.url = this.media.fileUri;
+    this.url = this.media.localUri;
     this._mapOptions = {
       imageUrl: this.url,
       markers:[]
