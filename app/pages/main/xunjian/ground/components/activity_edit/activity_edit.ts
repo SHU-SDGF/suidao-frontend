@@ -41,7 +41,7 @@ export class ActivityEditPage implements OnInit{
     private _userService: UserService,
     private _actionSheetCtrl: ActionSheetController,
     private _mediaService: MediaService,
-    private _zoon: NgZone
+    private _zone: NgZone
   ) { }
 
   ngOnInit() {
@@ -100,7 +100,7 @@ export class ActivityEditPage implements OnInit{
     let loading = this.loadingCtrl.create(loadingOptions);
     loading.present();
     task.$progress.subscribe((progress: UploadTaskProgress)=>{
-      this._zoon.run(()=>{
+      this._zone.run(()=>{
         loadingOptions.content = getLoadingText(progress);
       });
     });
