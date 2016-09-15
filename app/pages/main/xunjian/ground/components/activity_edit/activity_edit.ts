@@ -1,6 +1,6 @@
 import {Component, OnInit,
-  ViewChild} from '@angular/core';
-import {ViewController, AlertController, NavParams, ModalController, LoadingController} from 'ionic-angular';
+  ViewChild, NgZone} from '@angular/core';
+import {ViewController, AlertController, NavParams, ModalController, LoadingController, ActionSheetController} from 'ionic-angular';
 import {EnvironmentActivityService} from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
 import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
@@ -11,9 +11,10 @@ import {StatusPicker} from '../../../../../../shared/components/status-picker/st
 import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {UserService} from '../../../../../../providers';
+import {MediaService, UploadTaskProgress} from '../../../../../../providers/media_service';
 import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
-import {IMediaContent} from '../../../../../../models/MediaContent';
+import {MediaContent} from '../../../../../../models/MediaContent';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_edit/activity_edit.html',
@@ -26,7 +27,7 @@ export class ActivityEditPage implements OnInit{
   private actStatusList: Array<IActionStatus>;
   private actTypes: Array<IActionType>;
   private environmentActivityList: any = [];
-  private medias: Array<IMediaContent> = [];
+  private medias: Array<MediaContent> = [];
   
   constructor(
     private viewCtrl: ViewController,
@@ -37,7 +38,10 @@ export class ActivityEditPage implements OnInit{
     private params: NavParams,
     private loadingCtrl: LoadingController,
     private formBuilder: FormBuilder,
-    private _userService: UserService
+    private _userService: UserService,
+    private _actionSheetCtrl: ActionSheetController,
+    private _mediaService: MediaService,
+    private _zoon: NgZone
   ) { }
 
   ngOnInit() {
@@ -80,40 +84,106 @@ export class ActivityEditPage implements OnInit{
     this.viewCtrl.dismiss();
   }
 
-  save(value) {
+  save(formData) {
     let imgUrlList = [],
       videoUrlList = [],
       audioUrlList = [];
-      
-    let loading = this.loadingCtrl.create({
+
+    let loadingOptions = {
       dismissOnPageChange: true,
-      content: '正在保存活动'
+      content: ''
+    };
+
+    let task = this._mediaService.uploadFiles(this.medias);
+    let publisher = task.start();
+
+    let loading = this.loadingCtrl.create(loadingOptions);
+    loading.present();
+    task.$progress.subscribe((progress: UploadTaskProgress)=>{
+      this._zoon.run(()=>{
+        loadingOptions.content = getLoadingText(progress);
+      });
     });
 
-    loading.present();
+    publisher.subscribe((media) => {
+      if (media && media.fileUri) {
+        switch (media.mediaType) {
+          case 'img':
+            imgUrlList.push(media.fileUri);
+            break;
+          case 'video':
+            videoUrlList.push(media.fileUri);
+            break;
+          case 'audio':
+            audioUrlList.push(media.fileUri);
+            break;
+        }
+      }
+      if (task.successFiles.length == task.files.length) {
+        formData.photo = imgUrlList.join(';');
+        formData.video = videoUrlList.join(';');
+        formData.audio = audioUrlList.join(';');
 
-    this._environmentActivityService.addNewEnvironmentActivity(value).subscribe((result) => {
-      result['description'] = this.activityForm.controls['description'].value;
-      loading.onDidDismiss(()=>{
-        this.viewCtrl.dismiss(result);
-      });
-      loading.dismiss();
-    }, (error) => {
+        this._environmentActivityService.addNewEnvironmentActivity(formData).subscribe((result) => {
+          result['description'] = this.activityForm.controls['description'].value;
+          loading.onDidDismiss(()=>{
+            this.viewCtrl.dismiss(result);
+          });
+          loading.dismiss();
+        }, (error) => {
+          loading.onDidDismiss(()=>{
+            let alert = this._alertController.create({
+              title: '出错啦！',
+              message: '创建活动未能成功！请重新尝试！'
+            });
+            alert.present();
+          });
+          loading.dismiss();
+        });
+      } 
+    }, (err)=>{
+      console.log(err);
       loading.onDidDismiss(()=>{
         let alert = this._alertController.create({
-          title: '出错啦！',
-          message: '创建活动未能成功！请重新尝试！'
+          title: '上传文件失败！'
         });
         alert.present();
       });
       loading.dismiss();
     });
+
+    function getLoadingText(progress: UploadTaskProgress){
+      if(progress.fileIndex != progress.totalFiles){
+        return `正在上传多媒体文件(${progress.fileIndex}/${progress.totalFiles}) ${ AppUtils.formatBytes( progress.loaded || 0, 1)}/${AppUtils.formatBytes( progress.total || 1, 1)}`;
+      }else{
+        return `正在上传数据`;
+      }
+    }
   }
 
     /**
    * 获取多媒体文件
    */
-  captureMedia(media: IMediaContent){
+  captureMedia(media: MediaContent){
     this.medias.unshift(media);
+  }
+
+  mediaLongClick(media: MediaContent){
+    this._actionSheetCtrl.create({
+      title: '操作',
+      buttons: [
+        {
+          text: '删除',
+          handler: () => {
+            this.medias.splice(this.medias.indexOf(media), 1);
+            this._mediaService.removeMedia(media);
+          }
+        },
+        {
+          text: '取消',
+          role: 'cancel'
+        }
+      ]
+    }).present();
   }
 }

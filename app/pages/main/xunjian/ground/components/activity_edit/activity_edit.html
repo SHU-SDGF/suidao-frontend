@@ -6,7 +6,7 @@
       </button>
     </ion-buttons>
     <ion-title center>
-      编辑活动
+      更新活动
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -14,10 +14,6 @@
 
 <ion-content class="activity_info">
   <form [formGroup]="activityForm" (ngSubmit)="save(activityForm.value)">
-    <h5 class="field-label">活动编号</h5>
-    <ion-item>
-      <ion-input [formControl]="activityForm.controls['actNo']" disabled="true"></ion-input>
-    </ion-item>
     <h5 class="field-label">活动名称</h5>
     <ion-item>
       <ion-input [formControl]="activityForm.controls['actName']" disabled="true"></ion-input>
@@ -37,16 +33,6 @@
       </p>
     </ion-item>
 
-    <h5 class="field-label">开始时间</h5>
-    <ion-item>
-      <p>{{activityForm.controls['startDate'].value | DatePipe}}</p>
-    </ion-item>
-
-    <h5 class="field-label">结束时间</h5>
-    <ion-item>
-      <p>{{activityForm.controls['endDate'].value | DatePipe}}</p>
-    </ion-item>
-
     <h5 class="assertive-field field-label">活动状态</h5>
     <status-picker 
       [formControl]="activityForm.controls['actStatus']"
@@ -55,37 +41,29 @@
       [valueField]="'order'"
       [disabled]="false">
     </status-picker>
-    <h5 class="field-label">作成者</h5>
-    <ion-item>
-      <ion-input type="text" [formControl]="activityForm.controls['createUser']" disabled="true"></ion-input>
-    </ion-item>
-    <h5 class="field-label">记录人</h5>
-    <ion-item>
-      <ion-input type="text" [formControl]="activityForm.controls['recorder']" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="field-label">多媒体</h5>
-    <ion-list>
-      <ion-item class="img-gallery">
-        <ion-scroll scrollX="true">
-          <div class="img-item">
-            <button clear type="button" class="img-layer" CaptureMedia (onCaptured)="captureMedia($event)">
-              <img src="build/imgs/camera.png">
-            </button>
-          </div>
-          <div class="img-item" *ngFor="let media of medias">
-            <button clear type="button" class="img-layer">
-              <img src="{{media.preview}}" mediaViewer [mediaContent]="media"/>
-            </button>
-          </div>
-        </ion-scroll>
-      </ion-item>
-    </ion-list>
     
     <h5 class="field-label">描述</h5>
     <ion-item>
       <ion-textarea rows="6" [formControl]="activityForm.controls['description']"></ion-textarea>
     </ion-item>
+
+    <h5 class="field-label">
+      多媒体
+      <button clear CaptureMedia (onCaptured)="captureMedia($event)" type="button">
+        <ion-icon name="ios-camera"></ion-icon>
+      </button>
+    </h5>
+    <ion-list>
+      <ion-item class="img-gallery">
+        <ion-scroll scrollX="true">
+          <div class="img-item" *ngFor="let media of medias">
+            <button clear type="button" class="img-layer">
+              <img src="{{media.preview}}" mediaViewer [mediaContent]="media" (press)="mediaLongClick(media)"/>
+            </button>
+          </div>
+        </ion-scroll>
+      </ion-item>
+    </ion-list>
 
     <div padding>
       <button type="submit" block>保存</button>

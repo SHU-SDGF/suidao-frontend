@@ -1,5 +1,5 @@
 import {Component, OnInit,
-  ViewChild, } from '@angular/core';
+  ViewChild, NgZone} from '@angular/core';
 import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from '@angular/forms';
 import {ViewController, AlertController, NavParams, LoadingController, ActionSheetController} from 'ionic-angular';
 import {EnvironmentActivityService } from '../../../../../../providers';
@@ -13,7 +13,7 @@ import {CaptureMedia} from '../../../../../../shared/components/media-capture/me
 import { FormValidors } from '../../../../../../providers/form-validators';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
-import {DatePipe} from '../../../../../../shared/utils';
+import {DatePipe, AppUtils} from '../../../../../../shared/utils';
 import {IMediaContent, MediaContent} from '../../../../../../models/MediaContent';
 import {MediaService, UploadTaskProgress} from '../../../../../../providers/media_service';
 
@@ -42,7 +42,8 @@ export class ActivityDetailPage implements OnInit{
     private _asCtrl: ActionSheetController,
     private formBuilder: FormBuilder,
     private _mediaService: MediaService,
-    private _actionSheetCtrl: ActionSheetController
+    private _actionSheetCtrl: ActionSheetController,
+    private _zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -107,7 +108,9 @@ export class ActivityDetailPage implements OnInit{
     let loading = this.loadingCtrl.create(loadingOptions);
     loading.present();
     task.$progress.subscribe((progress: UploadTaskProgress)=>{
-      loadingOptions.content = getLoadingText(progress);
+      this._zone.run(()=>{
+        loadingOptions.content = getLoadingText(progress);
+      });
     });
 
     publisher.subscribe((media) => {
@@ -154,7 +157,7 @@ export class ActivityDetailPage implements OnInit{
 
     function getLoadingText(progress: UploadTaskProgress){
       if(progress.fileIndex != progress.totalFiles){
-        return `正在上传多媒体文件(${progress.fileIndex}/${progress.totalFiles}) ${progress.loaded || 0}/${progress.total || 1}`;
+        return `正在上传多媒体文件(${progress.fileIndex}/${progress.totalFiles}) ${ AppUtils.formatBytes( progress.loaded || 0, 1)}/${AppUtils.formatBytes( progress.total || 1, 1)}`;
       }else{
         return `正在上传数据`;
       }
@@ -169,6 +172,7 @@ export class ActivityDetailPage implements OnInit{
           text: '删除',
           handler: () => {
             this.medias.splice(this.medias.indexOf(media), 1);
+            this._mediaService.removeMedia(media);
           }
         },
         {

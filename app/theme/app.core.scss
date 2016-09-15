@@ -113,6 +113,16 @@ h5{
   padding: 15px 15px 5px 10px;
   background: #f2f2f2;
   font-weight: 500 !important;
+  position: relative;
+  & > button{
+    margin: 0px;
+    height: 1.6rem;
+    min-width: auto;
+    position: absolute;
+    right: 0px;
+    top: 1rem;
+    color: #000;
+  }
 }
 .assertive-field:after{
   content: '*';

@@ -92,6 +92,18 @@ function getOptionName(order, options: Array<{name:string, order: number}>){
 }
 
 /**
+ * formatBytes
+ */
+function formatBytes(bytes,decimals) {
+   if(bytes == 0) return '0 Byte';
+   var k = 1000; // or 1024 for binary
+   var dm = decimals + 1 || 3;
+   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+   var i = Math.floor(Math.log(bytes) / Math.log(k));
+   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+/**
  * 常用的字符串处理方法
  * @author accountwcx@qq.com
  * @date 2015-08-12
@@ -283,4 +295,5 @@ export class AppUtils {
     static StringUtils = StringUtils;
     static convertTime = convertTime;
     static chain = promiseChain;
+    static formatBytes = formatBytes;
 }

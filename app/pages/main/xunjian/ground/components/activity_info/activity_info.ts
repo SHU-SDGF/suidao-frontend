@@ -81,19 +81,23 @@ export class ActivityInfoPage implements OnInit{
     setTimeout(()=>{
       this.getHistory().then((result)=>{
         if(result.actList.length){
-          let act = result.actList[0];
-          this.activityDetailObj.actType = act.actType;
-          this.activityDetailObj.inspDate = act.inspDate;
-          this.activityDetailObj.description = act.description;
-          this.activityDetailObj.actStatus = act.actStatus;
-          
-          this.activityDetailObj.medias = getMedias(act.photo, 'img')
-            .concat(getMedias(act.video, 'video'))
-            .concat(getMedias(act.audio, 'audio'));
+          this.updateActivity(result.actList[0])
         }
       });
     }, 200);
+  }
+
+  updateActivity(act){
+    let _self = this;
+    this.activityDetailObj.actType = act.actType;
+    this.activityDetailObj.inspDate = act.inspDate;
+    this.activityDetailObj.description = act.description;
+    this.activityDetailObj.actStatus = act.actStatus;
     
+    this.activityDetailObj.medias = getMedias(act.photo, 'img')
+      .concat(getMedias(act.video, 'video'))
+      .concat(getMedias(act.audio, 'audio'));
+
     function getMedias(urlList, type): Array<MediaContent> {
       if (!urlList) return [];
       
@@ -151,12 +155,8 @@ export class ActivityInfoPage implements OnInit{
     modal.present();
     modal.onDidDismiss((result: EnvironmentActivity)=>{
       if(!result) return;
-      this.activityDetailObj.actStatus = result.actStatus;
-      this.activityDetailObj.actType = result.actType;
-      this.activityDetailObj.inspDate = result.inspDate;
-      this.activityDetailObj.description = result.description;
-
       this.environmentActivityList.unshift(result);
+      this.updateActivity(result);
     });
   }
 
