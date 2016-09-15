@@ -124,7 +124,6 @@ export class FacilityInspService {
 			this.facilityInspSummaryDB.batchDeleteFacilityInspSummarise().then((result) =>{
 
 				this.facilityInspDetailDB.batchDeleteFacilityInspDetails().then((result) => {
-					debugger;
 					resolve(result);
 				})
 			})

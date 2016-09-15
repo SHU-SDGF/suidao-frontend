@@ -6,6 +6,11 @@ import {LookupService} from '../../../../../../providers/lookup_service';
 import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
 import {UserService} from '../../../../../../providers';
 import * as  _ from 'lodash';
+import {MediaContent} from '../../../../../../models/MediaContent';
+import {MediaService} from '../../../../../../providers/media_service';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {FileService} from '../../../../../../providers/file_service';
+
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_save/observ_save.html',
   pipes: [AppUtils.DatePipe]
@@ -26,7 +31,17 @@ export class ObservSavePage implements OnInit{
   }
   private detailTypeList: any;
   private isNewRecord = true;
-  constructor(private _viewCtrl: ViewController, private lookupService: LookupService, private params: NavParams, private facilityInspService: FacilityInspService, private userService: UserService, private loadingController: LoadingController, private _alertController: AlertController){
+  constructor(private _viewCtrl: ViewController, 
+              private lookupService: LookupService, 
+              private params: NavParams, 
+              private facilityInspService: FacilityInspService, 
+              private userService: UserService, 
+              private loadingController: LoadingController, 
+              private _alertController: AlertController,
+              private mediaContent: MediaContent,
+              private mediaService: MediaService,
+              private mediaViewser: MediaViewer,
+              private fileService: FileService){
 
   }
 
@@ -59,7 +74,8 @@ export class ObservSavePage implements OnInit{
           diseaseDate: new Date().getTime(),
           diseaseDescription: '',
           displayDiseaseDate: new Date().toISOString().slice(0, 10),
-          facilityType: "1"
+          facilityType: "1",
+          medias: []
         };
 
         this.lookupService.getTunnelOption().then((result) => {

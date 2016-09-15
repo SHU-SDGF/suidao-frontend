@@ -1,5 +1,5 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
-import {Platform, ionicBootstrap, Nav, MenuController, AlertController, Events} from 'ionic-angular';
+import {Platform, ionicBootstrap, Nav, MenuController, AlertController, LoadingController, Events} from 'ionic-angular';
 import { Splashscreen, StatusBar } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
@@ -19,6 +19,7 @@ export class MyApp implements OnInit{
   
   private rootPage: any;
   private userDisplayName: string = ANOM_USER;
+  private loader = null;
 
   /**
    * app init */
@@ -28,6 +29,7 @@ export class MyApp implements OnInit{
     private userService: UserService,
     private lookupService: LookupService,
     private alertController: AlertController,
+    private loadingController: LoadingController,
     private facilityInspService: FacilityInspService,
     private events: Events
   ) {
@@ -111,6 +113,11 @@ export class MyApp implements OnInit{
     //   });
     // });
 
+    this.loader = this.loadingController.create({
+      content: "数据同步中。。。",
+    });
+    this.loader.present();
+
     this.generateFacilityInspRecordList()
       .then(this.uploadFacilityRecords.bind(this))
       .then(this.deleteAllFacilityInsps.bind(this))
@@ -132,12 +139,20 @@ export class MyApp implements OnInit{
   }
 
   private saveFacilityRecordsToLocalDB(result) {
-    this.facilityInspService.saveFacilityRecordsToLocalDB(result).then(() => {
+    debugger;
+    this.facilityInspService.saveFacilityRecordsToLocalDB(result).then((result) => {
       //成功！！
-      let alert = this.alertController.create({
-        subTitle: '数据同步成功！',
-        buttons: ['确认']
-      });
+      $('.loading-cmp').hide();
+
+      //发布事件
+      this.events.publish('optionChange');
+      // let alert = this.alertController.create({
+      //   subTitle: '数据同步成功！',
+      //   buttons: ['确认']
+      // });
+      // alert.present();
+    },(error) => {
+      console.log(error);
     })
   }
 
