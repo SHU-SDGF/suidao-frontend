@@ -139,7 +139,8 @@ export class MyApp implements OnInit{
   }
 
   private saveFacilityRecordsToLocalDB(result) {
-    debugger;
+    console.log('starting save to local db');
+    console.log(result);
     this.facilityInspService.saveFacilityRecordsToLocalDB(result).then((result) => {
       //成功！！
       $('.loading-cmp').hide();
@@ -159,8 +160,12 @@ export class MyApp implements OnInit{
   private downloadFacilityRecords() {
     var promise = new Promise((resolve, reject) => {
       this.facilityInspService.downloadFacilityRecords().subscribe((result) => {
+        console.log('downloading successfully!');
+        console.log(result);
         resolve(result);
       },(error) => {
+        console.log('download failed');
+        console.log(error);
         reject(error);
       });
     });
@@ -171,6 +176,8 @@ export class MyApp implements OnInit{
   private deleteAllFacilityInsps() {
     var promise = new Promise((resolve, reject) => {
       this.facilityInspService.deleteAllFacilityInsps().then((result) => {
+        console.log('delete successfully!');
+        console.log(result);
         resolve();
       })
     });
@@ -181,8 +188,12 @@ export class MyApp implements OnInit{
     var promise = new Promise((resolve, reject) => {
       if(facilityInspRecordList.length != 0) {
         this.facilityInspService.uploadFacilityRecords(facilityInspRecordList).subscribe((result) => {
+          console.log('uploading successfully!');
+          console.log(result);
           resolve(result);
         },(error) => {
+          console.log('uploading failed');
+          console.log(error);
           reject(error);
         });
       } else {
