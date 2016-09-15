@@ -39,15 +39,22 @@ export class FileService {
   }
 
   public copyFile(filePath: string){
+    alert(`file path: ${filePath}`);
     return new Promise((resolve, reject)=>{
       let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+      let suffix = fileName.substr(fileName.lastIndexOf('.') + 1);
+      let newName = [this.generateFileNameHash(), suffix].join('.');
       let dirPath = filePath.substr(0, filePath.lastIndexOf('/'));
 
       if(device.platform == 'iOS'){
         dirPath = 'file://' + dirPath;
       }
 
-      File.copyFile(dirPath, fileName, this.rootDir, fileName).then(()=>{
+      alert(`targetDir:${dirPath}`);
+      alert(`root:${this.rootDir}`);
+
+      File.moveFile(dirPath, fileName, this.rootDir, newName).then(()=>{
+        alert('success!');
         resolve([this.rootDir, fileName].join('/'));
       }, reject);
     });

@@ -124,7 +124,7 @@ export class UploadTask{
       AppUtils.chain(funcs).then(function(){
         _self._started = false;
         _self._finished = true;
-      });
+      }, observer.error);
     });
   }
 

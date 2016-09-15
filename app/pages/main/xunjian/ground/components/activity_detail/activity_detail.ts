@@ -143,7 +143,7 @@ export class ActivityDetailPage implements OnInit{
       loading.dismiss();
       let alert = this._alertCtrl.create({
         title: '上传文件失败！',
-        message: JSON.stringify(error)
+        //message: JSON.stringify(error)
       });
       alert.present();
     });
