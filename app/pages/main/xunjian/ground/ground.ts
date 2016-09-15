@@ -182,7 +182,7 @@ export class GroundPage implements OnInit, OnDestroy {
       that.opts.markers = that.opts.markers.concat(markers);
       that.mapOptionEmitter.emit(that.opts);
     }, (error) => {
-      console.log('error');
+      console.log(error);
     });
   }
 

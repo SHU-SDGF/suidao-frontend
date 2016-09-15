@@ -15,7 +15,7 @@ import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity'
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {DatePipe} from '../../../../../../shared/utils';
 import {IMediaContent, MediaContent} from '../../../../../../models/MediaContent';
-import {MediaService, UploadTaskProgress} from '../../../../../../providers/media_service'
+import {MediaService, UploadTaskProgress} from '../../../../../../providers/media_service';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/ground/components/activity_detail/activity_detail.html',
@@ -41,7 +41,8 @@ export class ActivityDetailPage implements OnInit{
     private _userService: UserService,
     private _asCtrl: ActionSheetController,
     private formBuilder: FormBuilder,
-    private _mediaService: MediaService
+    private _mediaService: MediaService,
+    private _actionSheetCtrl: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -140,12 +141,15 @@ export class ActivityDetailPage implements OnInit{
         });
       }
     }, (error)=>{
+      console.log(error);
       loading.dismiss();
-      let alert = this._alertCtrl.create({
-        title: '上传文件失败！',
-        //message: JSON.stringify(error)
+      loading.onDidDismiss(()=>{
+        let alert = this._alertCtrl.create({
+          title: '上传文件失败！',
+          //message: JSON.stringify(error)
+        });
+        alert.present();
       });
-      alert.present();
     });
 
     function getLoadingText(progress: UploadTaskProgress){
@@ -155,6 +159,24 @@ export class ActivityDetailPage implements OnInit{
         return `正在上传数据`;
       }
     }
+  }
+
+  mediaLongClick(media: MediaContent){
+    this._actionSheetCtrl.create({
+      title: '操作',
+      buttons: [
+        {
+          text: '删除',
+          handler: () => {
+            this.medias.splice(this.medias.indexOf(media), 1);
+          }
+        },
+        {
+          text: '取消',
+          role: 'cancel'
+        }
+      ]
+    }).present();
   }
 
   submitForm(activityObj){

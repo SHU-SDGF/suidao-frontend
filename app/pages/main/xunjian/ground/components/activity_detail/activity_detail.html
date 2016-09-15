@@ -64,7 +64,7 @@
           </div>
           <div class="img-item" *ngFor="let media of medias">
             <button clear type="button" class="img-layer">
-              <img src="{{media.preview}}" mediaViewer [mediaContent]="media"/>
+              <img src="{{media.preview}}" mediaViewer [mediaContent]="media" (press)="mediaLongClick(media)"/>
             </button>
           </div>
         </ion-scroll>

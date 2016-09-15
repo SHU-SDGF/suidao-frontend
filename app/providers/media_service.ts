@@ -34,8 +34,19 @@ export class MediaService {
     return task;
   }
 
-  downloadFiles(medias: Array<MediaContent>){
+  removeMedia(media: MediaContent){
+    this.fileService.deleteFile(media.localUri).then(()=>{
 
+    }, (err)=>{
+      console.log(err);
+    });
+    if(media.fileUri){
+      this.fileService.deleteFileMapper(media.fileUri);
+    }
+  }
+
+  downloadFiles(medias: Array<MediaContent>){
+    
   }
 
 }
@@ -108,7 +119,7 @@ export class UploadTask{
           return function () {
             return new Promise(function(resolve, reject){
               _self.startUploadMedia(mediaFile).then((mediaFile: MediaContent) => {
-                _self.fileService.storeFile(mediaFile.fileUri, mediaFile.localUri);
+                _self.fileService.storeFileMapper(mediaFile.fileUri, mediaFile.localUri);
                 observer.next(mediaFile);
                 resolve(mediaFile);
               }, ()=>{
@@ -124,7 +135,9 @@ export class UploadTask{
       AppUtils.chain(funcs).then(function(){
         _self._started = false;
         _self._finished = true;
-      }, observer.error);
+      }, (err)=>{
+        observer.error(err);
+      });
     });
   }
 

@@ -88,9 +88,6 @@
         </ion-scroll>
       </ion-item>
     </ion-list>
-    <p *ngFor="let media of activityDetailObj.medias">
-      {{media.preview}} {{'existing:' + _fileService.doesFileExist(media.preview)}}
-    </p>
   </div>
 
   <div [hidden]="selectedPage !== 'history'">

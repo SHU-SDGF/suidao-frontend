@@ -38,6 +38,12 @@ export class FileService {
     return fileTransfer.download(source, targetPath, true, options);
   }
 
+  public deleteFile(filePath: string){
+    let dirPath = filePath.substr(0, filePath.lastIndexOf('/'));
+    let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
+    return File.removeFile(dirPath, fileName);
+  }
+
   public copyFile(filePath: string){
     alert(`file path: ${filePath}`);
     return new Promise((resolve, reject)=>{
@@ -55,7 +61,7 @@ export class FileService {
 
       File.moveFile(dirPath, fileName, this.rootDir, newName).then(()=>{
         alert('success!');
-        resolve([this.rootDir, fileName].join('/'));
+        resolve([this.rootDir, newName].join('/'));
       }, reject);
     });
   }
@@ -128,17 +134,20 @@ export class FileService {
     }
   }
 
+  public deleteFileMapper(fileUri){
+    localStorage.removeItem(`fileMapper${fileUri}`);
+  }
 
-  public storeFile(fileUri, localUri) {
-    localStorage.setItem(`media${fileUri}`, localUri);
+  public storeFileMapper(fileUri, localUri) {
+    localStorage.setItem(`fileMapper${fileUri}`, localUri);
   }
 
   public getFilePath(fileUri) {
-    let path = localStorage.getItem(`media${fileUri}`);
+    let path = localStorage.getItem(`fileMapper${fileUri}`);
     if (!path) {
       return AppConfig.siteBase + '/file' + fileUri;
     } else if (!this.doesFileExist(path)) {
-      localStorage.removeItem(`media${fileUri}`);
+      localStorage.removeItem(`fileMapper${fileUri}`);
       return AppConfig.siteBase + '/file' + fileUri;
     } else {
       return path;
