@@ -95,7 +95,7 @@
         <ion-item class="img-gallery">
           <ion-scroll scrollX="true">
             <div class="img-item">
-              <button clear type="button" class="img-layer" CaptureMedia (onCaptured)="captureMedia($event)">
+              <button clear type="button" class="img-layer" [imgOnly] = "true" CaptureMedia (onCaptured)="captureMedia($event)">
                 <img src="build/imgs/camera.png">
               </button>
             </div>
