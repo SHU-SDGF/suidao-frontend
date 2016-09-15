@@ -69,6 +69,19 @@
       </ion-item>
     </div>
 
+    <h5 class="field-label">照片</h5>
+    <ion-list>
+      <ion-item class="img-gallery">
+        <ion-scroll scrollX="true">
+          <div class="img-item" *ngFor="let photo of photos">
+            <button clear type="button" class="img-layer">
+              <img src="{{photo.preview}}" mediaViewer [mediaContent]="photo"/>
+            </button>
+          </div>
+        </ion-scroll>
+      </ion-item>
+    </ion-list>
+
 <!--     <h5 class="assertive-field field-label">是否申请维修</h5>
     <ion-item>
       <ion-select [(ngModel)]="diseaseDetailRecord.needRepair" disabled="true">

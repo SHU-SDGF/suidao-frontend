@@ -19,7 +19,6 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	jointopen: number
 	latitude: number
 	length: number
-	photo: any
 	longitude: number
 	mileage: string
 	modelId: any // id, modelName
@@ -49,7 +48,6 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.jointopen = null;
 		this.longitude = null;
 		this.latitude = null;
-		this.photo = null;
 		this.length = null;
 		this.mileage = null;
 		this.modelId = null; 

@@ -6,14 +6,14 @@ import {LookupService} from '../../../../../../providers/lookup_service';
 import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
 import {UserService} from '../../../../../../providers';
 import * as  _ from 'lodash';
-import {MediaContent} from '../../../../../../models/MediaContent';
-import {MediaService} from '../../../../../../providers/media_service';
 import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
-import {FileService} from '../../../../../../providers/file_service';
+import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
+import {IMediaContent} from '../../../../../../models/MediaContent';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_save/observ_save.html',
-  pipes: [AppUtils.DatePipe]
+  pipes: [AppUtils.DatePipe],
+  directives: [MediaViewer, CaptureMedia]
 })
 export class ObservSavePage implements OnInit{
   private diseaseNo = '';
@@ -25,25 +25,22 @@ export class ObservSavePage implements OnInit{
   private tunnelOptions: any;
   private scannedInfo: any;
   private point: any;
+  private photos: Array<IMediaContent> = [];
   private diseaseInfo: {
     date: string,
     count: number
   }
   private detailTypeList: any;
   private isNewRecord = true;
-  constructor(private _viewCtrl: ViewController, 
-              private lookupService: LookupService, 
-              private params: NavParams, 
-              private facilityInspService: FacilityInspService, 
-              private userService: UserService, 
-              private loadingController: LoadingController, 
-              private _alertController: AlertController,
-              private mediaContent: MediaContent,
-              private mediaService: MediaService,
-              private mediaViewser: MediaViewer,
-              private fileService: FileService){
-
-  }
+  constructor(
+    private _viewCtrl: ViewController, 
+    private lookupService: LookupService, 
+    private params: NavParams, 
+    private facilityInspService: FacilityInspService, 
+    private userService: UserService, 
+    private loadingController: LoadingController, 
+    private _alertController: AlertController
+  ){}
 
   ngOnInit(){
     let diseaseNo = this.params.data.diseaseNo;
@@ -75,7 +72,8 @@ export class ObservSavePage implements OnInit{
           diseaseDescription: '',
           displayDiseaseDate: new Date().toISOString().slice(0, 10),
           facilityType: "1",
-          medias: []
+          photo: [],
+          photos: []
         };
 
         this.lookupService.getTunnelOption().then((result) => {
@@ -111,6 +109,13 @@ export class ObservSavePage implements OnInit{
     this._viewCtrl.dismiss();
   }
 
+  /**
+   * 获取多媒体文件
+   */
+  captureMedia(photo: IMediaContent){
+    this.photos.unshift(photo);
+  }
+
   createDisease(){
     let that = this;
     let options: LoadingOptions = {};
@@ -119,13 +124,17 @@ export class ObservSavePage implements OnInit{
       duration: 500
     });
     this.diseaseDetailObj.synFlg = 1;
+    this.diseaseDetailObj.photos = this.photos;
     loader.present();
     if(this.isNewRecord) {
       this.facilityInspService.addNewFacilityInspSummary(this.diseaseDetailObj).then((result) => {
         if(result.ok) {
           localStorage.setItem("createDiseaseInfo", JSON.stringify(this.diseaseInfo));
-          this._viewCtrl.dismiss(this.diseaseDetailObj);
         }
+
+        this.facilityInspService.addNewFacilityInspDetail(this.diseaseDetailObj, this.diseaseDetailObj.createUser).then((result) => {
+           this._viewCtrl.dismiss(this.diseaseDetailObj);
+        });
       },(error) => {
       });
     } else {

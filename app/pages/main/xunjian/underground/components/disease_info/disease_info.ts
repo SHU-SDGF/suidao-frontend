@@ -7,10 +7,14 @@ import {LookupService, FacilityInspService} from '../../../../../../providers';
 import {AppUtils} from '../../../../../../shared/utils';
 import {FacilityInspSummary} from  '../../../../../../models/FacilityInspSummary';
 import {FacilityInspDetail} from '../../../../../../models/FacilityInspDetail';
+import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
+import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
+import {IMediaContent} from '../../../../../../models/MediaContent';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/disease_info/disease_info.html',
-  pipes: [AppUtils.DatePipe]
+  pipes: [AppUtils.DatePipe],
+  directives: [MediaViewer, CaptureMedia]
 })
 export class DiseaseInfoPage implements OnInit{
   
@@ -27,7 +31,7 @@ export class DiseaseInfoPage implements OnInit{
     order: number
   }];
 
-  private diseaseDetailObj: FacilityInspSummary;
+  private diseaseDetailObj: any;
   private detailTypeList: any;
   private diseaseTypeList: any;
   private isEditing = false;
@@ -35,6 +39,8 @@ export class DiseaseInfoPage implements OnInit{
   private diseaseHistoryList: FacilityInspDetail;
   private environmentActivityList: any = [];
   private userList = [];
+  private photos: Array<IMediaContent> = [];
+
 
   constructor(
     private viewCtrl: ViewController,
@@ -98,6 +104,7 @@ export class DiseaseInfoPage implements OnInit{
     this.isEditing = false;
     this.diseaseDetailObj.updateDate = new Date().getTime();
     this.diseaseDetailObj.updateUser = this.udpateUser;
+    this.diseaseDetailObj.photos = this.photos;
     if(this.diseaseDetailObj.synFlg == 0) {
       this.diseaseDetailObj.synFlg = 2;
     }
@@ -145,6 +152,13 @@ export class DiseaseInfoPage implements OnInit{
     return value;
   }
 
+  /**
+   * 获取多媒体文件
+   */
+  captureMedia(photo: IMediaContent){
+    this.photos.unshift(photo);
+  }
+  
   private _convertDate(date) {
     return new Date(date).toISOString().slice(0,10);
   }

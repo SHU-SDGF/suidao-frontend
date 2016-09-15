@@ -16,8 +16,9 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	dislocation: any //错台量
 	monomerId: any
 	facilityId: any
-	photo: any
 	id:any
+	photo: any
+	photos: any
 	jointopen: any //张开量
 	length: any //长度
 	synFlg: any //是否新建
@@ -43,6 +44,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.synFlg = null;
 		this.recorder = null;
 		this.photo = null;
+		this.photos = null;
 		this.monomerId = null;
 		this.facilityId = null;
 		this.width = null;
