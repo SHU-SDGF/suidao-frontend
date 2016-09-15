@@ -95,23 +95,24 @@ export class FacilityInspService {
 			for(let index in facilityInspSumList) {
 				facilityInspSumList[index]["_id"] = facilityInspSumList[index]["diseaseNo"];
 				facilityInspSumList[index]["synFlg"] = parseInt(facilityInspSumList[index]["synFlg"]);
+				facilityInspSumList[index]["modelId"] = parseInt(facilityInspSumList[index]["modelId"]);
 				facilityInspSumList[index]["monomerId"] = parseInt(facilityInspSumList[index]["monomerId"]);
 			}
 
 			for(let index in facilityInspDetailsList) {
 				facilityInspDetailsList[index]["_id"] = facilityInspDetailsList[index]["createDate"] + '';
 				facilityInspDetailsList[index]["synFlg"] = parseInt(facilityInspDetailsList[index]["synFlg"]);
+				facilityInspDetailsList[index]["modelId"] = parseInt(facilityInspDetailsList[index]["modelId"]);
 				facilityInspDetailsList[index]["monomerId"] = parseInt(facilityInspDetailsList[index]["monomerId"]);
 			}
 			this.facilityInspSummaryDB.batchCreateFacilityInspSummaries(facilityInspSumList).then((rs1) => {
 				this.facilityInspDetailDB.batchCreateFacilityInspDetails(facilityInspDetailsList).then((result) => {
-					debugger;
 					resolve(result);
 				}, (error) => {
-					debugger;
+					reject(error);
 				});
 			}, (error) => {
-				debugger;
+				reject(error);
 			});
 		});
 		return promise;
@@ -123,7 +124,6 @@ export class FacilityInspService {
 			this.facilityInspSummaryDB.batchDeleteFacilityInspSummarise().then((result) =>{
 
 				this.facilityInspDetailDB.batchDeleteFacilityInspDetails().then((result) => {
-					debugger;
 					resolve(result);
 				})
 			})
