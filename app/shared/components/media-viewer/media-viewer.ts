@@ -15,9 +15,14 @@ declare const Media: any;
 })
 export class MediaViewer{
   @Input() mediaContent: MediaContent;
+  @Input() imgOnly: boolean = false;
 
   @HostListener('click')
   eleClicked($event){
+    if(this.imgOnly){
+      this.viewImg(this.mediaContent);
+      return;
+    }
     switch(this.mediaContent.mediaType){
       case 'img':
         this.viewImg(this.mediaContent);
