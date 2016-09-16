@@ -46,7 +46,10 @@ export class MediaService {
   }
 
   downloadFiles(medias: Array<MediaContent>){
-    
+    let task = new DownloadTask(this.fileService);
+    task.files = medias;
+
+    return task;
   }
 
 }
@@ -119,7 +122,6 @@ export class UploadTask{
           return function () {
             return new Promise(function(resolve, reject){
               _self.startUploadMedia(mediaFile).then((mediaFile: MediaContent) => {
-                _self.fileService.storeFileMapper(mediaFile.fileUri, mediaFile.localUri);
                 observer.next(mediaFile);
                 resolve(mediaFile);
               }, ()=>{
@@ -143,16 +145,11 @@ export class UploadTask{
 
   startUploadMedia(mediaFile: MediaContent) {
     return new Promise<MediaContent>(function(fileResolve, fileReject){
-      this.uploadMedia(mediaFile).then((result) => {
-        let r: {success: boolean, path: string} = JSON.parse(result.response);
-        if (r.success) {
-          mediaFile.fileUri = r.path;
-          this.successList.unshift(mediaFile);
-          this.filesInProcess.shift();
-          fileResolve(mediaFile);
-        } else {
-          fileReject(r);
-        }
+      this.uploadMedia(mediaFile).then((path) => {
+        mediaFile.fileUri = path;
+        this.successList.unshift(mediaFile);
+        this.filesInProcess.shift();
+        fileResolve(mediaFile);
       }, (error) => {
         mediaFile['error'] = error;
         this.filesInProcess.shift();
@@ -168,5 +165,106 @@ export class UploadTask{
 }
 
 export class DownloadTask{
+  private _started: boolean = false;
+  private _finished: boolean = false;
+  private fileList: Array<MediaContent> = [];
+  private successList: Array<MediaContent> = [];
+  private failedList: Array<MediaContent> = [];
+  private filesInProcess: Array<MediaContent> = [];
+  private _progress: UploadTaskProgress  = { loaded: 0, total: 0, fileIndex: 0, totalFiles: 0 };
+  private _progressObserver: Subscriber<UploadTaskProgress>;
+  public $progress = new Observable((subscriber: Subscriber<UploadTaskProgress>)=>{
+    this._progressObserver = subscriber;
+  });
+
+  private _progressListener = ($event) => {
+    Object.assign(this._progress, {
+      loaded: $event.loaded,
+      total: $event.total,
+      fileIndex: this.fileList.length - this.filesInProcess.length,
+      totalFiles: this.fileList.length
+    });
+
+    this._progressObserver.next(this._progress);
+  };
+
+  constructor(
+    private fileService: FileService
+  ) { }
+
+  set files(files: Array<MediaContent>){
+    this.fileList = files;
+  }
+
+  get files(){
+    return this.fileList;
+  }
+
+  get failedFiles(){
+    return this.failedList;
+  }
+
+  get successFiles(){
+    return this.successList;
+  }
   
+  start(): Observable<MediaContent> {
+    let _self = this;
+    return Observable.create(function(observer: Subscriber<MediaContent>){
+      let index = 0;
+      if (!_self.fileList.length){
+        observer.next();
+        observer.complete();
+        return;
+      } 
+
+      _self.filesInProcess = _self.fileList.concat([]);
+      let funcs = [];
+      _self.fileList.forEach((mediaFile) => {
+        let func = (function(mediaFile){
+          return function () {
+            return new Promise(function(resolve, reject){
+              _self.startDownloadMedia(mediaFile).then((mediaFile: MediaContent) => {
+                _self.fileService.storeFileMapper(mediaFile.fileUri, mediaFile.localUri);
+                observer.next(mediaFile);
+                resolve(mediaFile);
+              }, ()=>{
+                reject(mediaFile);
+              });
+            });
+          };
+        })(mediaFile);
+
+        funcs.push(func);
+      });
+
+      AppUtils.chain(funcs).then(function(){
+        _self._started = false;
+        _self._finished = true;
+      }, (err)=>{
+        observer.error(err);
+      });
+    });
+  }
+
+  startDownloadMedia(mediaFile: MediaContent) {
+    let _self = this;
+    return new Promise<MediaContent>(function(fileResolve, fileReject){
+      _self.downloadMedia(mediaFile).then((path) => {
+        mediaFile.fileUri = path;
+        _self.successList.unshift(mediaFile);
+        _self.filesInProcess.shift();
+        fileResolve(mediaFile);
+      }, (error) => {
+        mediaFile['error'] = error;
+        _self.filesInProcess.shift();
+        _self.failedList.unshift(mediaFile);
+        fileReject(mediaFile);
+      });
+    });
+  }
+
+  downloadMedia(media: MediaContent) {
+    return this.fileService.downloadFile(media.localUri, this._progressListener);
+  }
 }

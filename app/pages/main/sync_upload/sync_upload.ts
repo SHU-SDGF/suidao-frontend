@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MenuController, ViewController} from 'ionic-angular';
-import {ToggleMenu} from '../../../shared/components/toggle-menu/toggle-menu';
+import {ViewController} from 'ionic-angular';
 
 @Component({
   selector: 'mainyou-page',

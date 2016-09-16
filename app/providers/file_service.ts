@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Rx';
-import {Transfer, FileUploadOptions, File} from 'ionic-native';
+import {Transfer, FileUploadOptions, File, FileUploadResult, FileEntry} from 'ionic-native';
 import {HttpService} from './http_service';
 import { AppConfig } from './config';
 
@@ -21,9 +21,10 @@ export class FileService {
    * @param {string} id
    * @param {function} progressListener
    */
-  public downloadFile(id, progressListener) {
+  public downloadFile(fileUri, progressListener) {
     const fileTransfer = new Transfer();
-    let source = `${DOWNLOAD_PATH}/${id}`;
+    let _self = this;
+    let source = `${DOWNLOAD_PATH}/${fileUri}`;
     let targetPath = `${this.rootDir}/${this.generateFileNameHash()}`;
     let options = {
       headers: {
@@ -35,7 +36,18 @@ export class FileService {
       fileTransfer.onProgress(progressListener);
     }
 
-    return fileTransfer.download(source, targetPath, true, options);
+    return new Promise<string>((resolve, reject)=>{
+      if(_self.doesFileExist(`fileMapper${fileUri}`)){
+        resolve(_self.getFilePath(fileUri));
+        return;
+      }
+      fileTransfer.download(source, targetPath, true, options).then((fe: FileEntry)=>{
+        _self.storeFileMapper(fileUri, fe.fullPath);
+        resolve(fe.fullPath);
+      }, (err)=>{
+        reject(err);
+      });
+    });
   }
 
   public deleteFile(filePath: string){
@@ -45,7 +57,6 @@ export class FileService {
   }
 
   public copyFile(filePath: string){
-    alert(`file path: ${filePath}`);
     return new Promise((resolve, reject)=>{
       let fileName = filePath.substr(filePath.lastIndexOf('/') + 1);
       let suffix = fileName.substr(fileName.lastIndexOf('.') + 1);
@@ -56,11 +67,7 @@ export class FileService {
         dirPath = 'file://' + dirPath;
       }
 
-      alert(`targetDir:${dirPath}`);
-      alert(`root:${this.rootDir}`);
-
       File.moveFile(dirPath, fileName, this.rootDir, newName).then(()=>{
-        alert('success!');
         resolve([this.rootDir, newName].join('/'));
       }, reject);
     });
@@ -71,21 +78,33 @@ export class FileService {
    * @param {string} filePath
    * @param {function} progressListener
    */  
-  public uploadFile(filePath: string, progressListener) {
-    
+  public uploadFile(localUri: string, progressListener) {
     const fileTransfer = new Transfer();
+    let _self = this;
     let options: FileUploadOptions = {
       headers: {
         "Authorization": localStorage.getItem("authToken")
       },
-      fileName: filePath.substr(filePath.lastIndexOf('/')+ 1)
+      fileName: localUri.substr(localUri.lastIndexOf('/')+ 1)
     };
 
     if (progressListener) {
       fileTransfer.onProgress(progressListener);
     }
 
-    return fileTransfer.upload(filePath, UPLOAD_PATH, options, true);
+    return new Promise<string>((resolve, reject)=>{
+      fileTransfer.upload(localUri, UPLOAD_PATH, options, true).then((fur: FileUploadResult)=>{
+        let r: {success: boolean, path: string} = JSON.parse(fur.response);
+        if(r.success){
+          _self.storeFileMapper(r.path, localUri);
+          resolve(r.path);
+        }else{
+          reject(r);
+        }
+      }, (err)=>{
+        reject(err);
+      });
+    });
   }
 
   /*

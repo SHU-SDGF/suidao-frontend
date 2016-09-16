@@ -241,14 +241,19 @@ let StringUtils = (function () {
     };
 })();
 
-function promiseChain(funcs: Array<()=>Promise<any>>){
+function promiseChain(funcs: Array<()=>Promise<any>>, continueWithError?: boolean){
     return new Promise((resolve, reject)=>{
         if(funcs.length){
             let defer = funcs[0]();
             for(let i = 1; i< funcs.length; i++){
-                defer = defer.then(funcs[i], (err) => {
-                    reject(err)
-                });
+                if(continueWithError){
+                    defer = defer.then(funcs[i], funcs[i]);
+                }else{
+                    defer = defer.then(funcs[i], (err) => {
+                        reject(err)
+                    });
+                }
+                
             }
             defer.then(resolve, (err) => {
                 reject(err);
@@ -258,35 +263,6 @@ function promiseChain(funcs: Array<()=>Promise<any>>){
         }
     });
 }
-/*
-function chain(funcs: Array<(resolve: any) => any>) {
-    return new Promise((allResolve) => {
-        if (!funcs.length) return;
-
-        let funcList: Array<() => any> = [];
-        funcs.forEach((func, i) => {
-            let f = ((index) => {
-                return function () {
-                    let nextFunc = funcList[index + 1]
-                    return new Promise((resolve) => {
-                        func(resolve);
-                    }).then(() => {
-                        if (nextFunc) {
-                            nextFunc();
-                        } else {
-                            allResolve();
-                        }
-                    });
-                }
-            })(i);
-
-            funcList.push(f);
-        });
-
-        funcList[0]();
-    });
-}
-*/
 
 export class AppUtils {
     static DatePipe = DatePipe;
