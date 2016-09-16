@@ -1,5 +1,5 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
-import {Platform, ionicBootstrap, Nav, MenuController, AlertController, LoadingController, Events} from 'ionic-angular';
+import {Platform, ionicBootstrap, ModalController, Nav, NavController, MenuController, AlertController, LoadingController, Events} from 'ionic-angular';
 import { Splashscreen, StatusBar } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
@@ -7,6 +7,8 @@ import { UserService } from './providers/user_service';
 import { LookupService } from './providers/lookup_service';
 import {MainPage} from './pages/main/main';
 import { FacilityInspService } from './providers/facility_insp_service';
+import {SyncDownloadPage} from './pages/main/sync_download/sync_download';
+import {SyncUploadPage} from './pages/main/sync_upload/sync_upload';
 
 declare const $: any;
 const ANOM_USER = '未登录';
@@ -31,6 +33,7 @@ export class MyApp implements OnInit{
     private alertController: AlertController,
     private loadingController: LoadingController,
     private facilityInspService: FacilityInspService,
+    private _modalCtrl: ModalController,
     private events: Events
   ) {
 
@@ -102,7 +105,7 @@ export class MyApp implements OnInit{
     confirm.present();
   }
 
-  syncDownload() {
+  syncUpload() {
     // this.generateFacilityInspRecordList().then((result) => {
     //   this.facilityInspService.uploadFacilityRecords(result).subscribe((res1) => {
     //     this.facilityInspService.deleteAllFacilityInsps().then((res2) => {
@@ -112,7 +115,8 @@ export class MyApp implements OnInit{
     //     console.log(error);
     //   });
     // });
-
+    this._modalCtrl.create(SyncUploadPage).present();
+    /*
     this.loader = this.loadingController.create({
       content: "数据同步中。。。",
     });
@@ -130,6 +134,11 @@ export class MyApp implements OnInit{
           buttons: ['确认']
         });
       }.bind(this));
+      */
+  }
+
+  private syncDownload(){
+    this._modalCtrl.create(SyncDownloadPage).present();
   }
 
   syncDelete() {
