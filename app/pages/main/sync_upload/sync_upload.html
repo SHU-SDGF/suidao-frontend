@@ -5,7 +5,7 @@
         返回
       </button>
     </ion-buttons>
-    <ion-title center>同步上传</ion-title>
+    <ion-title center (click)="syncUpload()">同步上传</ion-title>
     <ion-buttons end>
       <button>
         <ion-icon name="md-cloud-upload" light></ion-icon>
@@ -14,6 +14,14 @@
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-item-group *ngFor = "let el of facilityInspList">
+    <ion-item-divider light>{{el["groupName"]}}</ion-item-divider>
+    <!-- <ion-item *ngFor = 'let info in el["info"]'>
+      <h5>EK-7840</h5>
+      <ion-badge item-right light-blue>4</ion-badge>
+      <ion-badge item-right danger>失败</ion-badge>
+    </ion-item> -->
+  </ion-item-group>
   <ion-item-group>
     <ion-item-divider light>东线隧道-安全通道</ion-item-divider>
     <ion-item>
