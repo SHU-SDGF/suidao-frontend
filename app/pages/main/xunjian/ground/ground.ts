@@ -7,7 +7,7 @@ import {MenuController, Events, ToastController, AlertController, ModalControlle
 import {SuidaoMap, OfflineOptions, MapOptions, ControlAnchor, NavigationControlType, MapEvent, MarkerOptions} from '../../../../shared/components/suidao-map/suidao-map';
 import {ActivityDetailPage} from './components/activity_detail/activity_detail';
 import {ActivityInfoPage} from './components/activity_info/activity_info';
-import { EnvironmentActivityService } from '../../../../providers';
+import { EnvironmentActivityService, UserService } from '../../../../providers';
 import {XunjianPage} from '../xunjian';
 import {SearchPage} from './components/search/search';
 import {EnvironmentActivitySummary} from '../../../../models/EnvironmentActivitySummary';
@@ -44,7 +44,8 @@ export class GroundPage implements OnInit, OnDestroy {
     private environmentActivityService: EnvironmentActivityService,
     private _event: Events,
     private _zoon: NgZone,
-    private _loadingCtrl: LoadingController
+    private _loadingCtrl: LoadingController,
+    private _userService: UserService
   ) { }
 
   private viewSwtichSubscriber = function (onGround) {
@@ -182,7 +183,9 @@ export class GroundPage implements OnInit, OnDestroy {
       that.opts.markers = that.opts.markers.concat(markers);
       that.mapOptionEmitter.emit(that.opts);
     }, (error) => {
-      console.log(error);
+      if(!error.ok){
+        this._event.publish(this._userService.LOGOUT_EVENT);
+      }
     });
   }
 

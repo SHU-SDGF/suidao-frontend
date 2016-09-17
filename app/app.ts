@@ -65,7 +65,6 @@ export class MyApp implements OnInit{
       } else {
         this.userDisplayName = ANOM_USER;
       }
-      
     });
     
     this.events.subscribe(this.userService.LOGIN_EVENT, () => {
@@ -76,6 +75,7 @@ export class MyApp implements OnInit{
 
     this.events.subscribe(this.userService.LOGOUT_EVENT, () => {
       this.userDisplayName = ANOM_USER;
+      this.nav.setRoot(LoginPage);
     });
 
   }
