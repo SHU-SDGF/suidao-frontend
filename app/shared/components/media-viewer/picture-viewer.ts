@@ -43,13 +43,15 @@ export class PictureViewerPage implements OnInit{
 
   ngOnInit(){
     this.media = this.params.get('media');
-    this.url = this._mediaService.getMediaPath(this.media);
-    this._mapOptions = {
-      imageUrl: this.url,
-      markers:[]
-    };
-    setTimeout(()=>{
-      this.changeOptions.emit(this._mapOptions);
+    this._mediaService.getMediaPath(this.media).then((path)=>{
+      this.url = path;
+      this._mapOptions = {
+        imageUrl: this.url,
+        markers:[]
+      };
+      setTimeout(()=>{
+        this.changeOptions.emit(this._mapOptions);
+      });
     });
   }
 

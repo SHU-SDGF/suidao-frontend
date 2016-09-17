@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
+import { Http } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
-import {Transfer, FileUploadOptions, File, FileUploadResult, FileEntry} from 'ionic-native';
+import {Transfer, FileUploadOptions, File, FileUploadResult, FileEntry, FileError} from 'ionic-native';
 import {HttpService} from './http_service';
 import { AppConfig } from './config';
 
@@ -8,10 +9,13 @@ declare const cordova;
 declare const device;
 
 const UPLOAD_PATH = AppConfig.apiBase + '/upload';
-const DOWNLOAD_PATH = AppConfig.apiBase + '/download';
+const DOWNLOAD_PATH = AppConfig.siteBase + '/file';
 
 @Injectable()
 export class FileService {
+
+  constructor(public http: Http){}
+
   private get rootDir() {
     return this.getRootFolder(device.platform);
   }
@@ -21,11 +25,12 @@ export class FileService {
    * @param {string} id
    * @param {function} progressListener
    */
-  public downloadFile(fileUri, progressListener) {
+  public downloadFile(fileUri:string, progressListener) {
     const fileTransfer = new Transfer();
     let _self = this;
-    let source = `${DOWNLOAD_PATH}/${fileUri}`;
-    let targetPath = `${this.rootDir}/${this.generateFileNameHash()}`;
+    let source = `${DOWNLOAD_PATH}${fileUri}`;
+    let suffix = fileUri.substr(fileUri.lastIndexOf('.'));
+    let targetPath = `${this.rootDir}${this.generateFileNameHash() + suffix}`;
     let options = {
       headers: {
         "Authorization": localStorage.getItem("authToken")
@@ -37,13 +42,17 @@ export class FileService {
     }
 
     return new Promise<string>((resolve, reject)=>{
-      if(_self.doesFileExist(`fileMapper${fileUri}`)){
-        resolve(_self.getFilePath(fileUri));
-        return;
-      }
-      fileTransfer.download(source, targetPath, true, options).then((fe: FileEntry)=>{
-        _self.storeFileMapper(fileUri, fe.fullPath);
-        resolve(fe.fullPath);
+      _self.getLocalFile(fileUri).then((localUri)=>{
+        if(localUri){
+          resolve(localUri);
+        }else{
+          fileTransfer.download(source, targetPath, true, options).then((fe: FileEntry)=>{
+            _self.storeFileMapper(fileUri, fe.nativeURL);
+            resolve(fe.nativeURL);
+          }, (err)=>{
+            reject(err);
+          });
+        }
       }, (err)=>{
         reject(err);
       });
@@ -68,7 +77,7 @@ export class FileService {
       }
 
       File.moveFile(dirPath, fileName, this.rootDir, newName).then(()=>{
-        resolve([this.rootDir, newName].join('/'));
+        resolve([this.rootDir, newName].join(''));
       }, reject);
     });
   }
@@ -141,16 +150,24 @@ export class FileService {
   }
 
 
-  public doesFileExist(urlToFile) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('HEAD', urlToFile, false);
-    xhr.send();
-     
-    if (xhr.status == 404) {
-        return false;
-    } else {
-        return true;
-    }
+  public doesFileExist(urlToFile: string): Promise<boolean> {
+    /*
+    let dirPath = urlToFile.substr(0, urlToFile.lastIndexOf('/'));
+    let fileName = urlToFile.substr(urlToFile.lastIndexOf('/') + 1);
+    return File.checkFile(dirPath, fileName);
+    */
+    let _self = this;
+    return new Promise((resolve, reject)=>{
+      _self.http.head(urlToFile).subscribe((response)=>{
+        if(response.ok){
+          resolve(true);
+        }else{
+          reject(response);
+        }
+      }, (err)=>{
+        reject(err);
+      });
+    });
   }
 
   public deleteFileMapper(fileUri){
@@ -158,18 +175,39 @@ export class FileService {
   }
 
   public storeFileMapper(fileUri, localUri) {
-    localStorage.setItem(`fileMapper${fileUri}`, localUri);
+    localStorage.setItem(`fileMapper${fileUri}`,JSON.stringify(localUri));
   }
 
-  public getFilePath(fileUri) {
-    let path = localStorage.getItem(`fileMapper${fileUri}`);
-    if (!path) {
-      return AppConfig.siteBase + '/file' + fileUri;
-    } else if (!this.doesFileExist(path)) {
-      localStorage.removeItem(`fileMapper${fileUri}`);
-      return AppConfig.siteBase + '/file' + fileUri;
-    } else {
-      return path;
-    }
+  public getLocalFile(fileUri): Promise<string>{
+    let _self = this;
+    return new Promise((resolve, reject)=>{
+      let path = JSON.parse(localStorage.getItem(`fileMapper${fileUri}`));
+      if (!path) {
+        resolve(null);
+      } else {
+        _self.doesFileExist(path).then((existing)=>{
+          resolve(path);
+        }, (err)=>{
+          localStorage.removeItem(`fileMapper${fileUri}`);
+          resolve(null);
+        });
+      }
+    });
+  }
+
+  public getFilePath(fileUri): Promise<string> {
+    return new Promise((resolve, reject)=>{
+      let path = JSON.parse(localStorage.getItem(`fileMapper${fileUri}`));
+      if (!path) {
+        resolve(AppConfig.siteBase + '/file' + fileUri);
+      }else{
+        this.doesFileExist(path).then((existing)=>{
+          resolve(path);
+        }, (err)=>{
+          localStorage.removeItem(`fileMapper${fileUri}`);
+          resolve(AppConfig.siteBase + '/file' + fileUri);
+        });
+      }
+    });
   }
 }

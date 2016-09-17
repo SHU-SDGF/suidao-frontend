@@ -59,14 +59,13 @@ export class VideoPlayerPage implements OnInit{
 
   ngOnInit(){
     this.media = this.params.get('media');
-    let url: string = this._mediaService.getMediaPath(this.media);
-    this.url = this._sanitizer.bypassSecurityTrustUrl(url);
-
-    this.mediaType = {
-      'mp4': 'video/mp4',
-      'mov': 'video/quicktime'
-    }[url.substr(url.lastIndexOf('.'))];
-    
+    this._mediaService.getMediaPath(this.media).then((path)=>{
+      this.url = this._sanitizer.bypassSecurityTrustUrl(path);
+      this.mediaType = {
+        'mp4': 'video/mp4',
+        'mov': 'video/quicktime'
+      }[path.substr(path.lastIndexOf('.'))];
+    });
   }
 
   dismiss(){

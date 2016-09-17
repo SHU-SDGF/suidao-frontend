@@ -12,9 +12,9 @@
   <ion-list>
     <h5 class="assertive-field field-label">病害大类</h5>
     <ion-item>
-      <ion-select [(ngModel)]="diseaseDetailObj.diseaseTypeId" okText="确认" cancelText="取消">
-        <ion-option *ngFor="let diseaseType of diseaseTypeList" [value]="diseaseType.id">{{diseaseType.name}}</ion-option>
-      </ion-select>
+      <h5>
+        {{diseaseType.id | OptionPipe:diseaseTypeList}}
+      </h5>
     </ion-item>
 
     <h5 class="assertive-field field-label">病害小类</h5>
@@ -73,20 +73,20 @@
 
     <h5 class="assertive-field field-label">是否申请维修</h5>
     <ion-item>
-      <ion-select [(ngModel)]="diseaseDetailObj.needRepair">
+      <ion-select [(ngModel)]="diseaseDetailObj.needRepair" okText="确认" cancelText="取消">
         <ion-option value="true">是</ion-option>
         <ion-option value="false">否</ion-option>
       </ion-select>
     </ion-item>
-    <h5 class="field-label">照片</h5>
+    <h5 class="field-label">
+      照片
+      <button clear CaptureMedia (onCaptured)="captureMedia($event)" type="button" [imgOnly]="true">
+        <ion-icon name="ios-camera"></ion-icon>
+      </button>
+    </h5>
     <ion-list>
       <ion-item class="img-gallery">
         <ion-scroll scrollX="true">
-          <div class="img-item">
-            <button clear type="button" class="img-layer" CaptureMedia [imgOnly]="true" (onCaptured)="captureMedia($event)">
-              <img src="build/imgs/camera.png">
-            </button>
-          </div>
           <div class="img-item" *ngFor="let photo of photos">
             <button clear type="button" class="img-layer">
               <img src="{{photo.preview}}" mediaViewer [mediaContent]="photo"/>

@@ -65,9 +65,17 @@ export class ActivityHistoryInfoPage implements OnInit{
           mediaType: type,
           localUri: null
         });
+
+        if(type == 'img'){
+          _self._mediaService.getMediaPath(media).then((path)=>{
+            media.preview = path;
+          }, (err)=>{
+            console.log(err);
+          });
+        }
         
         media.preview = {
-          'img': _self._mediaService.getMediaPath(media),
+          'img': '',
           'audio': 'build/imgs/audio.png',
           'video': 'build/imgs/video.png'
         }[type];

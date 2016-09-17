@@ -6,16 +6,6 @@ import {FileService} from './file_service';
 import {AppUtils} from '../shared/utils';
 import {FileUploadResult} from 'ionic-native';
 
-@Pipe({
-  name: 'FilePathPipe'
-})
-export class FilePathPipe{
-  constructor(private _mediaService: MediaService){}
-  transform(media: MediaContent, args?) {
-    return this._mediaService.getMediaPath(media);
-  }
-}
-
 @Injectable()
 export class MediaService {
 
@@ -23,8 +13,17 @@ export class MediaService {
     private fileService: FileService
   ) { }
 
-  getMediaPath(media: MediaContent) {
-    return media.localUri || this.fileService.getFilePath(media.fileUri);
+  getMediaPath(media: MediaContent): Promise<string> {
+    let _self = this;
+    return new Promise((resolve, reject)=>{
+      if(media.localUri){
+        resolve(media.localUri);
+        return;
+      }
+      _self.fileService.getFilePath(media.fileUri).then((path)=>{
+        resolve(path);
+      }, reject);
+    });
   }
   
   uploadFiles(medias: Array<MediaContent>){
@@ -225,7 +224,6 @@ export class DownloadTask{
           return function () {
             return new Promise(function(resolve, reject){
               _self.startDownloadMedia(mediaFile).then((mediaFile: MediaContent) => {
-                _self.fileService.storeFileMapper(mediaFile.fileUri, mediaFile.localUri);
                 observer.next(mediaFile);
                 resolve(mediaFile);
               }, ()=>{
@@ -251,7 +249,7 @@ export class DownloadTask{
     let _self = this;
     return new Promise<MediaContent>(function(fileResolve, fileReject){
       _self.downloadMedia(mediaFile).then((path) => {
-        mediaFile.fileUri = path;
+        mediaFile.localUri = path;
         _self.successList.unshift(mediaFile);
         _self.filesInProcess.shift();
         fileResolve(mediaFile);
@@ -265,6 +263,6 @@ export class DownloadTask{
   }
 
   downloadMedia(media: MediaContent) {
-    return this.fileService.downloadFile(media.localUri, this._progressListener);
+    return this.fileService.downloadFile(media.fileUri, this._progressListener);
   }
 }

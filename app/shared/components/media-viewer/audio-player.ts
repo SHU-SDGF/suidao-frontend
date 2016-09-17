@@ -32,7 +32,9 @@ export class AudioPlayerPage implements OnInit{
 
   ngOnInit(){
     this.media = this.params.get('media');
-    this.url = this._mediaService.getMediaPath(this.media);
+    this._mediaService.getMediaPath(this.media).then((path)=>{
+      this.url = path;
+    });
     this.stream = new Audio(this.url);
     this.stream.addEventListener("timeupdate", this.updateProgress.bind(this), false);
   }
