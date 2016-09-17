@@ -7,7 +7,7 @@ import {MenuController, Events,
   ViewController, NavParams
 } from 'ionic-angular';
 import {SelectPopover} from '../../../../../../shared/components/select-popover/select-popover';
-import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
+import {LookupService, IActionStatus, IOption} from '../../../../../../providers/lookup_service';
 import {ActivityInfoPage} from '../../components/activity_info/activity_info';
 import {AppUtils, OptionPipe, DatePipe, StatusPipe} from '../../../../../../shared/utils';
 import * as  _ from 'lodash';
@@ -20,7 +20,7 @@ import * as  _ from 'lodash';
 export class SearchPage implements OnInit, OnDestroy {
 
   private actStatusList: Array<IActionStatus> = [];
-  private actTypesList: Array<IActionType> = [];
+  private actTypesList: Array<IOption> = [];
 
   private searchArg: string = ''; // 搜索参数
   private searchedResults: Array<any>; // 搜索结果列表

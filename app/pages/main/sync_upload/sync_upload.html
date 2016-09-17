@@ -5,23 +5,34 @@
         返回
       </button>
     </ion-buttons>
-    <ion-title center (click)="syncUpload()">同步上传</ion-title>
+    <ion-title center>同步上传</ion-title>
     <ion-buttons end>
       <button>
-        <ion-icon name="md-cloud-upload" light></ion-icon>
+        <ion-icon name="md-cloud-upload" light (click)="syncUpload()"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content>
-  <ion-item-group *ngFor = "let el of facilityInspList">
-    <ion-item-divider light>{{el["groupName"]}}</ion-item-divider>
-    <!-- <ion-item *ngFor = 'let info in el["info"]'>
-      <h5>EK-7840</h5>
+  <!-- group -->
+  <ion-item-group *ngFor="let inspGroup of facilityInspGroups">
+    <!-- group header -->
+    <ion-item-divider light>
+      {{inspGroup.monomerId | OptionPipe:monomers}}
+       - 
+      {{inspGroup.modelId | OptionPipe:models}}
+    </ion-item-divider>
+    <!-- end of group header -->
+
+    <!-- group item -->
+    <ion-item *ngFor="let insp of inspGroup.mileages">
+      <h5>{{insp.mileage}}</h5>
       <ion-badge item-right light-blue>4</ion-badge>
       <ion-badge item-right danger>失败</ion-badge>
-    </ion-item> -->
+    </ion-item>
+    <!-- end of group item -->
   </ion-item-group>
+  <!--
   <ion-item-group>
     <ion-item-divider light>东线隧道-安全通道</ion-item-divider>
     <ion-item>
@@ -91,4 +102,5 @@
       <ion-badge item-right favorite>已完成</ion-badge>
     </ion-item>
   </ion-item-group>
+  -->
 </ion-content>

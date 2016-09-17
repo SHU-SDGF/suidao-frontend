@@ -1,6 +1,21 @@
 import {Pipe, Injectable} from '@angular/core';
 import {AppMeta} from '../providers/app_meta';
 import {DomSanitizationService} from '@angular/platform-browser';
+import {IOption} from '../providers/lookup_service';
+
+@Pipe({
+    name: 'keys'
+})
+export class KeysPipe {
+    constructor(){}
+    transform(value: Object, arg: string[]){
+        let keys = [];
+        for (let key in value) {
+            keys.push({key: key, value: value[key]});
+        }
+        return keys;
+    }
+}
 
 @Pipe({
     name: 'TrustUrl'
@@ -79,14 +94,13 @@ function convertTime(time: number){
     name: 'OptionPipe'
 })
 export class OptionPipe{
-    transform(value, options: Array<{name:string, order: number}>){
+    transform(value, options: Array<IOption>){
         return getOptionName(value, options);
     }
 }
 
-function getOptionName(order, options: Array<{name:string, order: number}>){
-    let name = '';
-    let option = options.find(option=>option.order == order);
+function getOptionName(id, options: Array<IOption>){
+    let option = options.find(option=>option.id == id);
     if(option) return option.name;
     return null;
 }

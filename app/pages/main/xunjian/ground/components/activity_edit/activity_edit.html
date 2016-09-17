@@ -22,7 +22,7 @@
     <h5 class="assertive-field field-label">活动类别</h5>
     <ion-item>  
       <ion-select [formControl]="activityForm.controls['actType']" okText="确认" cancelText="取消">
-        <ion-option *ngFor="let type of actTypes" [value]="type.order">{{type.name}}</ion-option>
+        <ion-option *ngFor="let type of actTypes" [value]="type.id">{{type.name}}</ion-option>
       </ion-select>
     </ion-item>
     
@@ -38,7 +38,7 @@
       [formControl]="activityForm.controls['actStatus']"
       [options]="actStatusList"
       [textField]="'name'"
-      [valueField]="'order'"
+      [valueField]="'id'"
       [disabled]="false">
     </status-picker>
     

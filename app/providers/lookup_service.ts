@@ -276,7 +276,7 @@ export class LookupService {
 	}
 
 	//查询活动类型枚举表
-	getActTypes(): Promise<Array<IActionType>>{
+	getActTypes(): Promise<Array<IOption>>{
 		return this.localStorage.get(ACT_TYPES).then((_actTypes) => {
 			return JSON.parse(_actTypes);
 		});
@@ -342,10 +342,12 @@ export class LookupService {
 
 export interface IActionStatus{
 	name: string,
-	order: number, 
-	color: string
+	id: number, 
+	color: string,
+	order: number
 }
-export interface IActionType{
+export interface IOption{
+	id: number,
 	name: string,
 	order: number
 }

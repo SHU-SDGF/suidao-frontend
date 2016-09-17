@@ -4,7 +4,7 @@ import {FormBuilder, Validators, FormGroup, FormControl, FORM_DIRECTIVES, REACTI
 import {ViewController, AlertController, NavParams, LoadingController, ActionSheetController} from 'ionic-angular';
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {MapPoint} from '../../../../../../shared/components/suidao-map/suidao-map';
-import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
+import {LookupService, IActionStatus, IOption} from '../../../../../../providers/lookup_service';
 import {UserService} from '../../../../../../providers';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
@@ -29,7 +29,7 @@ export class ActivityDetailPage implements OnInit{
 
   private actStatusList: Array<IActionStatus>;
 
-  private actTypes: Array<IActionType>;
+  private actTypes: Array<IOption>;
 
   constructor(public viewCtrl: ViewController,
     private _activityDetail: EnvironmentActivityService,
@@ -76,12 +76,12 @@ export class ActivityDetailPage implements OnInit{
     this._lookupService.getActionStatus().then((actStatusList) => {
       actStatusList.sort((a,b)=>{ return a.order > b.order? 1: -1;});
       _self.actStatusList = actStatusList;
-      (<FormControl>this.activityForm.controls['actStatus']).updateValue(actStatusList[0].order, {onlySelf: true});
+      (<FormControl>this.activityForm.controls['actStatus']).updateValue(actStatusList[0].id, {onlySelf: true});
     });
 
     /// load activity types
-    this._lookupService.getActTypes().then((actTypes) => {
-      (<FormControl>this.activityForm.controls['actType']).updateValue(actTypes[0].order, {onlySelf: true});
+    this._lookupService.getActTypes().then((actTypes: IOption[]) => {
+      (<FormControl>this.activityForm.controls['actType']).updateValue(actTypes[0].id, {onlySelf: true});
       _self.actTypes = actTypes;
     });
   }

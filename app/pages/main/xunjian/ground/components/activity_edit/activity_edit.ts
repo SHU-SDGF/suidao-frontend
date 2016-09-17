@@ -3,7 +3,7 @@ import {Component, OnInit,
 import {ViewController, AlertController, NavParams, ModalController, LoadingController, ActionSheetController} from 'ionic-angular';
 import {EnvironmentActivityService} from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
-import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
+import {LookupService, IActionStatus, IOption} from '../../../../../../providers/lookup_service';
 import {AppUtils} from '../../../../../../shared/utils';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
@@ -25,7 +25,7 @@ export class ActivityEditPage implements OnInit{
   
   private activityForm: FormGroup = new FormGroup({});
   private actStatusList: Array<IActionStatus>;
-  private actTypes: Array<IActionType>;
+  private actTypes: Array<IOption>;
   private environmentActivityList: any = [];
   private medias: Array<MediaContent> = [];
   

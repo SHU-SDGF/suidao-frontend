@@ -10,7 +10,7 @@ window["PouchDB"] = PouchDB;
 @Injectable()
 export class FacilityInspSummaryDB {
   private _db;
-  private _facilityInspSummary;
+  private _facilityInspSummary: Array<FacilityInspSummary>;
 
   constructor(private http: Http, private events: Events) {
   }
@@ -95,23 +95,18 @@ export class FacilityInspSummaryDB {
     });
   }
 
-  getAllFacilityInspSummaries() {
+  getAllFacilityInspSummaries(): Promise<Array<FacilityInspSummary>> {
     this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
   	if(!this._facilityInspSummary) {
       this._facilityInspSummary = [];
 	  	return this._db.allDocs({include_docs: true})
 				.then(docs => {
-					let _tempFacilityInspSummary = docs.rows.map(row => {
-						return row.doc
+					return this._facilityInspSummary = (<Array<any>>docs.rows).filter((row)=>{
+            return !row.doc.language;
+          }).map((row, index) => {
+						return FacilityInspSummary.deserialize(row.doc);
 					});
-          
-          for(let index in _tempFacilityInspSummary){
-            if(!_tempFacilityInspSummary[index]["language"]) {
-              this._facilityInspSummary.push(_tempFacilityInspSummary[index]);
-            }
-          }
-					return this._facilityInspSummary;
-				})
+				});
   	} else {
   		return Promise.resolve(this._facilityInspSummary);
   	}

@@ -1,17 +1,26 @@
 import {Component, OnInit} from '@angular/core';
-import {ViewController, Events, LoadingController} from 'ionic-angular';
+import {ViewController, Events, LoadingController, AlertController} from 'ionic-angular';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
+import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
 import * as  _ from 'lodash';
 import { LookupService } from '../../../providers/lookup_service';
+import {AppUtils, DatePipe, OptionPipe, KeysPipe} from '../../../shared/utils';
+
+interface InspSmrGroup{
+  monomerId: number;
+  modelId: number;
+  mileages: Array<{mileage: string, diseaseSmrList: Array<FacilityInspSummary>}>
+}
 
 @Component({
   selector: 'mainyou-page',
-  templateUrl: './build/pages/main/sync_upload/sync_upload.html'
+  templateUrl: './build/pages/main/sync_upload/sync_upload.html',
+  pipes: [DatePipe, OptionPipe, KeysPipe]
 })
 export class SyncUploadPage implements OnInit {
 
   private loader = null;
-  private facilityInspList = [];
+  private facilityInspGroups: InspSmrGroup[] = [];
   private monomers = [];
   private models = [];
 
@@ -20,16 +29,17 @@ export class SyncUploadPage implements OnInit {
     private facilityInspService: FacilityInspService,
     private events: Events,
     private loadingController: LoadingController,
-    private lookupService: LookupService
+    private lookupService: LookupService,
+    private _alertCtrl: AlertController
   ){}
 
   ngOnInit() {
-    this.lookupService.getMenomers().then((res1) => {
-      this.monomers = res1;
-      this.lookupService.getModelNames().then((res2) => {
-        this.models = res2;
+    Promise.all(
+      [this.lookupService.getMenomers(), 
+      this.lookupService.getModelNames()]).then((res: Array<any>)=>{
+        this.monomers = res[0];
+        this.models = res[1];
         this.reloadData();
-      })
     });
   }
 
@@ -38,6 +48,7 @@ export class SyncUploadPage implements OnInit {
   }
 
   syncUpload() {
+    let _self = this;
     this.loader = this.loadingController.create({
       content: "数据同步中。。。",
     });
@@ -49,57 +60,42 @@ export class SyncUploadPage implements OnInit {
       // .then(this.downloadFacilityRecords.bind(this))
       // .then(this.saveFacilityRecordsToLocalDB.bind(this))
       .catch(function(error){
-        let alert = this.alertController.create({
+        let alert = _self._alertCtrl.create({
           title: '错误',
           subTitle: '同步数据出现错误，请重新同步数据',
           buttons: ['确认']
-        });
-      }.bind(this));
+        }).present();
+      });
   }
 
   private reloadData() {
     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
 
-    this.facilityInspService.getAllFacilityInspSummaries().then((result) => {
-      let that = this;
-      result.map((result) => {
-        result.groupName = that.getMonomerNameByID(result.monomerId) + '-' + that.getModelNameByID(result.modelId);
+    this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
+      let groups = _.groupBy(inspSmrList.filter(inspSmr=> !inspSmr.synFlg), (inspSmr)=>{
+        return inspSmr.monomerId + '-' + inspSmr.modelId;
       });
+      Object.keys(groups).map((key)=>{
+        let inspGroup: InspSmrGroup = {
+          modelId: ~~key.split('-')[1],
+          monomerId: ~~key.split('-')[0],
+          mileages:[]
+        };
 
-      var filteredResults = _.groupBy(result, 'groupName');
-      console.log(filteredResults);
-      for(var index in filteredResults) {
-        this.facilityInspList.push({
-          'groupName': index,
-          'info': filteredResults[index]
-        })
-      }
+        let mileages = _.groupBy(groups[key], 'mileage');
+
+        Object.keys(mileages).map(mileage=>{
+          inspGroup.mileages.push({
+            mileage: mileage,
+            diseaseSmrList: mileages[mileage]
+          });
+        });
+
+        this.facilityInspGroups.push(inspGroup);
+      })
     });
   }
 
-  private getMonomerNameByID(id) {
-    var name = '';
-    var idString = id + '';
-    for(let index in this.monomers) {
-      if(this.monomers[index]["id"] == idString) {
-        name = this.monomers[index]["name"];
-      }
-    }
-
-    return name;
-  }
-
-  private getModelNameByID(id) {
-    var idString = id + '';
-    var name = '';
-    for(let index in this.models) {
-      if(this.models[index]["id"] == idString) {
-        name = this.models[index]["name"];
-      }
-    }
-
-    return name;
-  }
   private saveFacilityRecordsToLocalDB(result) {
     console.log('starting save to local db');
     console.log(result);

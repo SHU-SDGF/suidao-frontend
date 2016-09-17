@@ -2,7 +2,7 @@ import {Component, OnInit,
   ViewChild} from '@angular/core';
 import {ViewController, AlertController, NavParams} from 'ionic-angular';
 import { EnvironmentActivityService} from '../../../../../../providers';
-import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
+import {LookupService, IActionStatus, IOption} from '../../../../../../providers/lookup_service';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
 import {EnvironmentActivity} from '../../../../../../models/EnvironmentActivity';
 import {AppUtils, DatePipe, OptionPipe} from '../../../../../../shared/utils';
@@ -18,7 +18,7 @@ import {MediaViewer} from '../../../../../../shared/components/media-viewer/medi
 })
 export class ActivityHistoryInfoPage implements OnInit{
   private actStatusList: Array<IActionStatus> = [];
-  private actTypes: Array<IActionType> = [];
+  private actTypes: Array<IOption> = [];
   private activityDetailObj: EnvironmentActivity;
   private medias: Array<MediaContent>;
   private activityName: string;

@@ -3,7 +3,7 @@ import {Component, OnInit, NgZone,
 import {ViewController, AlertController, NavParams, ModalController, LoadingController, Content} from 'ionic-angular';
 import {EnvironmentActivityService } from '../../../../../../providers';
 import {ActivityHistoryInfoPage} from '../activity_history_info/activity_history_info';
-import {LookupService, IActionStatus, IActionType} from '../../../../../../providers/lookup_service';
+import {LookupService, IActionStatus, IOption} from '../../../../../../providers/lookup_service';
 import {AppUtils, OptionPipe, StatusPipe, TrustUrl} from '../../../../../../shared/utils';
 import {UserService} from '../../../../../../providers';
 import {EnvironmentActivitySummary} from '../../../../../../models/EnvironmentActivitySummary';
@@ -25,7 +25,7 @@ export class ActivityInfoPage implements OnInit{
   selectedPage: string = 'detail';
   activityDetailObj: any;
   actStatusList: Array<IActionStatus> = [];
-  actTypes: Array<IActionType> = [];
+  actTypes: Array<IOption> = [];
   @ViewChild('content') content: Content;
   currentPageIndex = 0;
 
