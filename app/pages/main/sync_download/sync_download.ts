@@ -120,7 +120,6 @@ export class SyncDownloadPage implements OnInit {
   private saveFacilityRecordsToLocalDB() {
     console.log('starting save to local db');
     this.facilityInspService.saveFacilityRecordsToLocalDB(this.downloadedFacilityData).then((result) => {
-      debugger;
       //成功！！
       this.reloadData();
       //发布事件
