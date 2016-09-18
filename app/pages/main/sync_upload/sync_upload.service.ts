@@ -50,7 +50,7 @@ export class SyncUploadService{
           });
         });
 
-        let groups = _.groupBy(inspSmrList.filter(inspSmr=> !inspSmr.synFlg), (inspSmr)=>{
+        let groups = _.groupBy(inspSmrList.filter(inspSmr=> inspSmr.synFlg), (inspSmr)=>{
           return inspSmr.monomerId + '-' + inspSmr.modelId;
         });
         Object.keys(groups).map((key)=>{
@@ -79,10 +79,10 @@ export class SyncUploadService{
           });
 
           _self.facilityInspGroups.push(inspGroup);
-        })
+        });
+        this.ready = true;
+        resolve(_self.facilityInspGroups);
       });
-      this.ready = true;
-      resolve(_self.facilityInspGroups);
     });
   }
 }
