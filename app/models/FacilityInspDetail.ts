@@ -1,3 +1,4 @@
+import {MediaContent} from './MediaContent';
 import {JsonProperty, Serializable} from '../providers/JsonMapper';
 import {_baseClass} from './_baseClass';
 
@@ -17,8 +18,8 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	monomerId: any
 	facilityId: any
 	id:any
-	photo: any
-	photos: any
+	photo: string
+	photos: MediaContent[]
 	jointopen: any //张开量
 	length: any //长度
 	synFlg: any //是否新建

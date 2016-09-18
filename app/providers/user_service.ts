@@ -96,9 +96,9 @@ export class UserService {
   /**
    * get user info
    */
-  public getUserInfo(): Promise<UserInfo> {
+  public getUserInfo(): Promise<User> {
     return this.storage.get(this.storageKeys.USER_INFO).then((userInfo) => {
-      return JSON.parse(userInfo);
+      return User.deserialize(JSON.parse(userInfo));
     });
   }
   
@@ -135,13 +135,4 @@ export class UserService {
         return User.deserialize(response);
       });
   }
-}
-
-export interface UserInfo{
-  userName: string,
-  isAdmin: boolean,
-  gender: number,
-  telNo: string,
-  mobile: string,
-  address: string
 }

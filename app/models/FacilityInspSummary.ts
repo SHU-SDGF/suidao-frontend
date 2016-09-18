@@ -1,5 +1,6 @@
 import {JsonProperty, Serializable} from '../providers/JsonMapper';
 import {_baseClass} from './_baseClass';
+import {FacilityInspDetail} from './FacilityInspDetail';
 
 @Serializable()
 export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
@@ -27,6 +28,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	needRepair: any
 	recorder: string
 	width: number
+	details: FacilityInspDetail[]
 
 	constructor(obj = null) {
 		super()
@@ -54,6 +56,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.monomerId = null;
 		this.recorder = null;
 		this.width = null;
+		this.details = [];
 
 		this.assign(obj);
 	}

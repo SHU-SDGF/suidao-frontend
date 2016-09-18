@@ -8,3 +8,4 @@ export * from './db/facility_insp_detail_db.ts';
 export * from './db/facility_insp_summary_db.ts';
 export {MediaService} from './media_service';
 export {FileService} from './file_service';
+export {SyncUploadService} from '../pages/main/sync_upload/sync_upload.service';

@@ -2,15 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {ViewController, Events, LoadingController, AlertController} from 'ionic-angular';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
 import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
+import {FacilityInspDetail} from '../../../models/FacilityInspDetail';
 import * as  _ from 'lodash';
 import { LookupService } from '../../../providers/lookup_service';
 import {AppUtils, DatePipe, OptionPipe, KeysPipe} from '../../../shared/utils';
+import {MediaService} from '../../../providers/media_service';
+import {MediaContent} from '../../../models/MediaContent';
+import {SyncUploadService, InspSmrGroup} from './sync_upload.service';
 
-interface InspSmrGroup{
-  monomerId: number;
-  modelId: number;
-  mileages: Array<{mileage: string, diseaseSmrList: Array<FacilityInspSummary>}>
-}
 
 @Component({
   selector: 'mainyou-page',
@@ -23,6 +22,13 @@ export class SyncUploadPage implements OnInit {
   private facilityInspGroups: InspSmrGroup[] = [];
   private monomers = [];
   private models = [];
+  private statusList = [{
+    id: '1',
+    name: '未开始'
+  },{
+    id: '3',
+    name: '上传失败'
+  }];
 
   constructor(
     private _viewCtrl: ViewController,
@@ -30,17 +36,26 @@ export class SyncUploadPage implements OnInit {
     private events: Events,
     private loadingController: LoadingController,
     private lookupService: LookupService,
-    private _alertCtrl: AlertController
+    private _alertCtrl: AlertController,
+    private _syncUploadService: SyncUploadService
   ){}
 
   ngOnInit() {
-    Promise.all(
-      [this.lookupService.getMenomers(), 
-      this.lookupService.getModelNames()]).then((res: Array<any>)=>{
-        this.monomers = res[0];
-        this.models = res[1];
-        this.reloadData();
+    let _self = this;
+    this.lookupService.getMenomers().then((monomers)=>{
+      this.monomers = monomers;
     });
+    this.lookupService.getModelNames().then((models)=>{
+      this.models = models;
+    });
+    
+    this._syncUploadService.getFacilityInspGroups().then((groups)=>{
+      _self.facilityInspGroups = groups;
+    });
+  }
+
+  private getStatusAttr(statusID){
+    return ['grey', 'warning', 'danger'][statusID - 1];
   }
 
   dismiss(){
@@ -66,34 +81,6 @@ export class SyncUploadPage implements OnInit {
           buttons: ['确认']
         }).present();
       });
-  }
-
-  private reloadData() {
-    let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
-
-    this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
-      let groups = _.groupBy(inspSmrList.filter(inspSmr=> !inspSmr.synFlg), (inspSmr)=>{
-        return inspSmr.monomerId + '-' + inspSmr.modelId;
-      });
-      Object.keys(groups).map((key)=>{
-        let inspGroup: InspSmrGroup = {
-          modelId: ~~key.split('-')[1],
-          monomerId: ~~key.split('-')[0],
-          mileages:[]
-        };
-
-        let mileages = _.groupBy(groups[key], 'mileage');
-
-        Object.keys(mileages).map(mileage=>{
-          inspGroup.mileages.push({
-            mileage: mileage,
-            diseaseSmrList: mileages[mileage]
-          });
-        });
-
-        this.facilityInspGroups.push(inspGroup);
-      })
-    });
   }
 
   private saveFacilityRecordsToLocalDB(result) {

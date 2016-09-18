@@ -1,4 +1,5 @@
 import {_baseClass} from './_baseClass';
+import {JsonProperty, Serializable} from '../providers/JsonMapper';
 
 export interface IMediaContent{
   mediaType: 'img' | 'video' | 'audio';
@@ -7,6 +8,7 @@ export interface IMediaContent{
   preview?: string
 }
 
+@Serializable()
 export class MediaContent extends _baseClass implements IMediaContent{
   mediaType: 'img' | 'video' | 'audio' = null;
   fileUri: string = '';

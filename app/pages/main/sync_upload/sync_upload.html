@@ -27,8 +27,11 @@
     <!-- group item -->
     <ion-item *ngFor="let insp of inspGroup.mileages">
       <h5>{{insp.mileage}}</h5>
-      <ion-badge item-right light-blue>4</ion-badge>
-      <ion-badge item-right danger>失败</ion-badge>
+      <ion-badge item-right light-blue>{{insp.medias.length}}</ion-badge>
+      <ion-badge item-right 
+        [class.badge-danger]="insp.status == 3" 
+        [class.badge-grey]="insp.status == 1" 
+        [class.badge-warining]="insp.status == 2">{{insp.status | OptionPipe:statusList}}</ion-badge>
     </ion-item>
     <!-- end of group item -->
   </ion-item-group>

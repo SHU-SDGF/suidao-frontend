@@ -10,7 +10,7 @@ window["PouchDB"] = PouchDB;
 @Injectable()
 export class FacilityInspDetailDB {
 	private _db;
-	private _facilityInspDetails;
+	private _facilityInspDetails: FacilityInspDetail[];
 
   constructor(private http: Http, private events: Events) {
   }
@@ -61,13 +61,13 @@ export class FacilityInspDetailDB {
   }
 
   //获取巡检活动明细列表
-  getAllFacilityInspDetails() {
+  getAllFacilityInspDetails(): Promise<FacilityInspDetail[]> {
     this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default' });
   	if(!this._facilityInspDetails) {
 	  	return this._db.allDocs({include_docs: true})
 				.then(docs => {
 					this._facilityInspDetails = docs.rows.map(row => {
-						return row.doc
+						return FacilityInspDetail.deserialize(row.doc);
 					});
 					return this._facilityInspDetails;
 				})

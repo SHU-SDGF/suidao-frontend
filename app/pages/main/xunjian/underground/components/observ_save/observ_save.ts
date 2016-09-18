@@ -1,31 +1,31 @@
 import {ViewController, NavParams, LoadingOptions, LoadingController, AlertController } from 'ionic-angular';
 import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
 
-import {AppUtils} from '../../../../../../shared/utils';
+import {AppUtils, OptionPipe} from '../../../../../../shared/utils';
 import {LookupService} from '../../../../../../providers/lookup_service';
 import {FacilityInspService} from '../../../../../../providers/facility_insp_service';
 import {UserService} from '../../../../../../providers';
 import * as  _ from 'lodash';
 import {MediaViewer} from '../../../../../../shared/components/media-viewer/media-viewer';
 import {CaptureMedia} from '../../../../../../shared/components/media-capture/media-capture';
-import {IMediaContent} from '../../../../../../models/MediaContent';
+import {MediaContent} from '../../../../../../models/MediaContent';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_save/observ_save.html',
-  pipes: [AppUtils.DatePipe],
+  pipes: [AppUtils.DatePipe, OptionPipe],
   directives: [MediaViewer, CaptureMedia]
 })
 export class ObservSavePage implements OnInit{
   private diseaseNo = '';
   private diseaseDetailObj: any = {};
-  private diseaseTypeList: [{
+  private diseaseTypeList: {
     name:string,
     id: string
-  }];
+  }[] = [];
   private tunnelOptions: any;
   private scannedInfo: any;
   private point: any;
-  private photos: Array<IMediaContent> = [];
+  private photos: Array<MediaContent> = [];
   private diseaseInfo: {
     date: string,
     count: number
@@ -91,9 +91,9 @@ export class ObservSavePage implements OnInit{
         });
 
         this.userService.getUserInfo().then((userInfo) => {
-          this.diseaseDetailObj.displayRecorder = userInfo["userName"];
-          this.diseaseDetailObj.recorder = userInfo["loginId"];
-          this.diseaseDetailObj.createUser = userInfo["loginId"];
+          this.diseaseDetailObj.displayRecorder = userInfo.userName;
+          this.diseaseDetailObj.recorder = userInfo.userName;
+          this.diseaseDetailObj.createUser = userInfo.loginId;
         });
 
         this.lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId).then((result) => {
@@ -112,7 +112,7 @@ export class ObservSavePage implements OnInit{
   /**
    * 获取多媒体文件
    */
-  captureMedia(photo: IMediaContent){
+  captureMedia(photo: MediaContent){
     this.photos.unshift(photo);
   }
 
