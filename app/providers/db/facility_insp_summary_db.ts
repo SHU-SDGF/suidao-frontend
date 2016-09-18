@@ -97,18 +97,14 @@ export class FacilityInspSummaryDB {
 
   getAllFacilityInspSummaries(): Promise<Array<FacilityInspSummary>> {
     this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
-  	if(!this._facilityInspSummary) {
-      this._facilityInspSummary = [];
-	  	return this._db.allDocs({include_docs: true})
-				.then(docs => {
-					return this._facilityInspSummary = (<Array<any>>docs.rows).filter((row)=>{
-            return !row.doc.language;
-          }).map((row, index) => {
-						return FacilityInspSummary.deserialize(row.doc);
-					});
+    this._facilityInspSummary = [];
+  	return this._db.allDocs({include_docs: true})
+			.then(docs => {
+				return this._facilityInspSummary = (<Array<any>>docs.rows).filter((row)=>{
+          return !row.doc.language;
+        }).map((row, index) => {
+					return FacilityInspSummary.deserialize(row.doc);
 				});
-  	} else {
-  		return Promise.resolve(this._facilityInspSummary);
-  	}
+			});
   }
 }
