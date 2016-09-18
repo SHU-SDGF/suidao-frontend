@@ -93,7 +93,7 @@ export class SyncDownloadPage implements OnInit {
     this.facilityInspGroups = [];
 
     this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
-      let groups = _.groupBy(inspSmrList.filter(inspSmr=> !inspSmr.synFlg), (inspSmr)=>{
+      let groups = _.groupBy(inspSmrList, (inspSmr)=>{
         return inspSmr.monomerId + '-' + inspSmr.modelId;
       });
       Object.keys(groups).map((key)=>{
@@ -125,7 +125,6 @@ export class SyncDownloadPage implements OnInit {
       //发布事件
       this.events.publish('optionChange');
     },(error) => {
-      debugger;
       console.log(error);
     })
   }
