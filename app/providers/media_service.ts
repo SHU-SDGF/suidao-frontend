@@ -1,4 +1,4 @@
-import { Injectable, Pipe } from '@angular/core';
+import { Injectable, Pipe , NgZone} from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import {Observable, Subscriber} from 'rxjs';
 import {MediaContent} from '../models/MediaContent';
@@ -10,7 +10,8 @@ import {FileUploadResult} from 'ionic-native';
 export class MediaService {
 
   constructor(
-    private fileService: FileService
+    private fileService: FileService,
+    private _zone: NgZone
   ) { }
 
   getMediaPath(media: MediaContent): Promise<string> {
@@ -27,7 +28,7 @@ export class MediaService {
   }
   
   uploadFiles(medias: Array<MediaContent>){
-    let task = new UploadTask(this.fileService);
+    let task = new UploadTask(this.fileService, this._zone);
     task.files = medias;
 
     return task;
@@ -45,7 +46,7 @@ export class MediaService {
   }
 
   downloadFiles(medias: Array<MediaContent>){
-    let task = new DownloadTask(this.fileService);
+    let task = new DownloadTask(this.fileService, this._zone);
     task.files = medias;
 
     return task;
@@ -80,12 +81,14 @@ export class UploadTask{
       fileIndex: this.fileList.length - this.filesInProcess.length,
       totalFiles: this.fileList.length
     });
-
-    this._progressObserver.next(this._progress);
+    this._zone.run(()=>{
+      this._progressObserver.next(this._progress);
+    });
   };
 
   constructor(
-    private fileService: FileService
+    private fileService: FileService,
+    private _zone: NgZone
   ) { }
 
   set files(files: Array<MediaContent>){
@@ -103,8 +106,12 @@ export class UploadTask{
   get successFiles(){
     return this.successList;
   }
+
+  get finished(){
+    return this._finished;
+  }
   
-  start(): Observable<MediaContent> {
+  start(continueWithError: boolean = false): Observable<MediaContent> {
     let _self = this;
     return Observable.create(function(observer: Subscriber<MediaContent>){
       let index = 0;
@@ -133,7 +140,7 @@ export class UploadTask{
         funcs.push(func);
       });
 
-      AppUtils.chain(funcs).then(function(){
+      AppUtils.chain(funcs, continueWithError).then(function(){
         _self._started = false;
         _self._finished = true;
       }, (err)=>{
@@ -176,6 +183,10 @@ export class DownloadTask{
     this._progressObserver = subscriber;
   });
 
+  private get finished(){
+    return this._finished;
+  }
+
   private _progressListener = ($event) => {
     Object.assign(this._progress, {
       loaded: $event.loaded,
@@ -183,12 +194,14 @@ export class DownloadTask{
       fileIndex: this.fileList.length - this.filesInProcess.length,
       totalFiles: this.fileList.length
     });
-
-    this._progressObserver.next(this._progress);
+    this._zone.run(()=>{
+      this._progressObserver.next(this._progress);
+    });
   };
 
   constructor(
-    private fileService: FileService
+    private fileService: FileService,
+    private _zone: NgZone
   ) { }
 
   set files(files: Array<MediaContent>){

@@ -57,6 +57,7 @@ export class DiseaseInfoPage implements OnInit{
   ngOnInit() {
     let _self = this;
     this.diseaseDetailObj = this.params.get('disease');
+    this.diseaseDetailObj.mileage = this.params.get('mileage');
     this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types').then((result) => {
       this.diseaseDetailObj["displayDiseaseType"] = result;
     });

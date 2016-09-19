@@ -25,9 +25,11 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 	synFlg: any //是否新建
 	recorder: string //记录人
 	width: any //宽度
+	_rev: any
 
 	constructor(obj = null) {
 		super()
+
 		this._id = null;
 		this.area = null;
 		this.createDate = null;
@@ -49,6 +51,8 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.monomerId = null;
 		this.facilityId = null;
 		this.width = null;
+
+		this._rev = null;
 
 		this.assign(obj);
 	}

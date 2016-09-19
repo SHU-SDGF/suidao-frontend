@@ -10,6 +10,31 @@
 </ion-header>
 <ion-content class="activity_detail">
   <ion-list>
+    <h5 class="assertive-field field-label">病害编号</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.diseaseNo" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">里程</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.mileage" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">隧道内方位</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayModelName" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">记录人</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayRecorder" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">日期</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayDiseaseDate" disabled="true"></ion-input>
+    </ion-item>
+    
     <h5 class="assertive-field field-label">病害大类</h5>
     <ion-item>
       <h5>
@@ -95,30 +120,6 @@
         </ion-scroll>
       </ion-item>
     </ion-list>
-    <h5 class="assertive-field field-label">病害编号</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.diseaseNo" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="assertive-field field-label">里程</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.mileage" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="assertive-field field-label">隧道内方位</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayModelName" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="assertive-field field-label">记录人</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayRecorder" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="assertive-field field-label">日期</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayDiseaseDate" disabled="true"></ion-input>
-    </ion-item>
   </ion-list>
   <div padding>
     <button (click)="createDisease(diseaseDetailObj)" block>创建</button>

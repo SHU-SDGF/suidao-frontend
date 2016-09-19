@@ -102,7 +102,7 @@ export class OptionPipe{
 function getOptionName(id, options: Array<IOption>){
     let option = options.find(option=>option.id == id);
     if(option) return option.name;
-    return null;
+    return id;
 }
 
 /**

@@ -143,7 +143,13 @@ export class ActivityInfoPage implements OnInit{
         resolve({actList: actList , last: result.last});
       }, (error) => {
         let alert =this._alertController.create({
-          title: '获取历史列表失败，请连续管理员！'
+          title: '获取历史列表失败，请连续管理员！',
+          buttons: [
+            {
+              text: '确定',
+              role: 'cancel'
+            }
+          ]
         });
         alert.present();
         alert.onDidDismiss(()=>{

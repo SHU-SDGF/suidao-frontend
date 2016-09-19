@@ -29,6 +29,7 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 	recorder: string
 	width: number
 	details: FacilityInspDetail[]
+	_rev: any
 
 	constructor(obj = null) {
 		super()
@@ -57,6 +58,8 @@ export class FacilityInspSummary extends _baseClass { // 结构巡检明细表
 		this.recorder = null;
 		this.width = null;
 		this.details = [];
+
+		this._rev = null;
 
 		this.assign(obj);
 	}

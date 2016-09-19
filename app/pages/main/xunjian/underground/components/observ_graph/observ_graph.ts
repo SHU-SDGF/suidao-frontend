@@ -14,6 +14,7 @@ export class ObservGraphPage implements OnInit{
   @ViewChild(MenuTip) _menuTip: MenuTip;
   @ViewChild(ImageEditor) _imageEditor: ImageEditor;
 
+  private _mileage: string;
   private _onEdit = false;
   private _selectedDiseaseType = null;
   private _toast: Toast = null;
@@ -115,6 +116,7 @@ export class ObservGraphPage implements OnInit{
   ngOnInit(){
     //获取list
     this.diseaseDetailRecords = this._params["data"]["existingDiseaseList"];
+    this._mileage = this._params['mileage'];
     this._lookupService.getDiseaseTypes().then((result) => {
       this.diseaseTypeList = result;
       for(let index in this.diseaseTypeList) {
@@ -212,7 +214,15 @@ export class ObservGraphPage implements OnInit{
       diesaseNo = this.generateDiseaseNo();
     }
 
-    let modal = this._modalCtrl.create(ObservSavePage, {point: marker, diseaseType: this._selectedDiseaseType, diseaseNo: diesaseNo, isNewRecord: this.isnewRecord, diseaseInfo: this.diseaseInfo});
+    let modal = this._modalCtrl.create(ObservSavePage, {
+      point: marker, 
+      diseaseType: this._selectedDiseaseType, 
+      diseaseNo: diesaseNo, 
+      isNewRecord: this.isnewRecord, 
+      diseaseInfo: this.diseaseInfo, 
+      mileage: this._mileage
+    });
+    
     modal.present();
     let that = this;
     modal.onDidDismiss((value)=>{

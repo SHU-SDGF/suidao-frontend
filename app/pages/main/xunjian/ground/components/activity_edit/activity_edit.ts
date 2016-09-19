@@ -100,9 +100,7 @@ export class ActivityEditPage implements OnInit{
     let loading = this.loadingCtrl.create(loadingOptions);
     loading.present();
     task.$progress.subscribe((progress: UploadTaskProgress)=>{
-      this._zone.run(()=>{
-        loadingOptions.content = getLoadingText(progress);
-      });
+      loadingOptions.content = getLoadingText(progress);
     });
 
     publisher.subscribe((media) => {
@@ -134,7 +132,13 @@ export class ActivityEditPage implements OnInit{
           loading.onDidDismiss(()=>{
             let alert = this._alertController.create({
               title: '出错啦！',
-              message: '创建活动未能成功！请重新尝试！'
+              message: '创建活动未能成功！请重新尝试！',
+              buttons: [
+                {
+                  text: '确定',
+                  role: 'cancel'
+                }
+              ]
             });
             alert.present();
           });
@@ -145,7 +149,13 @@ export class ActivityEditPage implements OnInit{
       console.log(err);
       loading.onDidDismiss(()=>{
         let alert = this._alertController.create({
-          title: '上传文件失败！'
+          title: '上传文件失败！',
+          buttons: [
+            {
+              text: '确定',
+              role: 'cancel'
+            }
+          ]
         });
         alert.present();
       });

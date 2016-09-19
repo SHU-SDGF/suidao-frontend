@@ -7,8 +7,8 @@
     </ion-buttons>
     <ion-title center>同步上传</ion-title>
     <ion-buttons end>
-      <button>
-        <ion-icon name="md-cloud-upload" light (click)="syncUpload()"></ion-icon>
+      <button (click)="syncUpload()">
+        <ion-icon name="md-cloud-upload" light></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -31,7 +31,7 @@
       <ion-badge item-right 
         [class.badge-danger]="insp.status == 3" 
         [class.badge-grey]="insp.status == 1" 
-        [class.badge-warining]="insp.status == 2">{{insp.status | OptionPipe:statusList}}</ion-badge>
+        [class.badge-warining]="insp.status != 1 && insp.status != 3">{{insp.status | OptionPipe:statusList}}</ion-badge>
     </ion-item>
     <!-- end of group item -->
   </ion-item-group>

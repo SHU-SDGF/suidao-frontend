@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
 import {NavController, ViewController, 
   AlertController, ModalController, NavParams} from 'ionic-angular';
-import {ObservSavePage} from '../observ_save/observ_save';
 import {AppUtils} from '../../../../../../shared/utils';
 import {SelectPopover} from  '../../../../../../shared/components/select-popover/select-popover';
 import {ObservGraphPage} from '../observ_graph/observ_graph';
@@ -78,7 +77,7 @@ export class ObservInfoPage implements OnInit{
   }
 
   viewDisease(disease){
-    let modal = this._modalCtrl.create(DiseaseInfoPage,{disease: disease});
+    let modal = this._modalCtrl.create(DiseaseInfoPage,{disease: disease, mileage: this.huanhao});
     modal.present();
     modal.onDidDismiss(() => {
       this._updateFacilityInspList();
@@ -86,7 +85,7 @@ export class ObservInfoPage implements OnInit{
   }
 
   viewGraph() {
-    let modal = this._modalCtrl.create(ObservGraphPage, {'existingDiseaseList': this.diseaseList});
+    let modal = this._modalCtrl.create(ObservGraphPage, {'existingDiseaseList': this.diseaseList, mileage: this.huanhao});
     modal.present();
     modal.onDidDismiss(() => {
       this._updateFacilityInspList();
