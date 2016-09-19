@@ -108,13 +108,29 @@ export class SyncDownloadPage implements OnInit {
         Object.keys(mileages).map(mileage=>{
           inspGroup.mileages.push({
             mileage: mileage,
-            diseaseSmrList: mileages[mileage]
+            diseaseSmrList: this.fetchDiseaseMedias(mileages[mileage])
           });
         });
-
+        console.log(this.downloadedFacilityData);
         this.facilityInspGroups.push(inspGroup);
       })
     });
+  }
+
+  private fetchDiseaseMedias(mileages){
+    let photos = [];
+    for(let index in mileages){
+      for(let index2 in this.downloadedFacilityData) {
+        if(mileages[index]["diseaseNo"] == this.downloadedFacilityData[index2]["facilityInspSum"]["diseaseNo"]) {
+           for(let index3 in this.downloadedFacilityData[index2]["facilityInspDetailList"]) {
+             if(this.downloadedFacilityData[index2]["facilityInspDetailList"][index3]["photo"]) {
+                photos.push(this.downloadedFacilityData[index2]["facilityInspDetailList"][index3]["photo"]);
+             }
+           }
+        }
+      }
+    }
+    return photos;
   }
 
   private saveFacilityRecordsToLocalDB() {

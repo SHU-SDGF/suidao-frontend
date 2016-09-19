@@ -25,7 +25,8 @@
     <!-- group item -->
     <ion-item *ngFor="let insp of inspGroup.mileages">
       <h5>{{insp.mileage}}</h5>
-      <ion-badge item-right light-blue>4</ion-badge>
+      <ion-badge item-right light-blue>{{insp.diseaseSmrList.length}}</ion-badge>
+      {{insp.diseaseSmrList}}
       <ion-badge item-right danger>失败</ion-badge>
     </ion-item>
     <!-- end of group item -->
