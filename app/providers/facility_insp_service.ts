@@ -20,9 +20,14 @@ export class FacilityInspService {
 		return this.facilityInspSummaryDB.addNewFacilityInspSummary(facilityInspobj);
 	}
 
-	// 更新巡检历史记录
+	// 更新巡检记录
 	updateFacilityInsp(facilityInspObj: any) {
 		return this.facilityInspSummaryDB.updateFacilityInsp(facilityInspObj);
+	}
+
+	//更新巡检历史记录
+	updateFacilityInspDetail(facilityInspDetail: any) {
+		return this.facilityInspDetailDB.updateFacilityInspDetail(facilityInspDetail);
 	}
 
 	// 新增一条巡检历史记录

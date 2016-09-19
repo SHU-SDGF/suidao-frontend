@@ -23,6 +23,10 @@ export class FacilityInspDetailDB {
   	return this._db.post(FacilityInspDetailObject.serialize());
   };
 
+  updateFacilityInspDetail(FacilityInspDetailObject: FacilityInspDetail) {
+    return this._db.put(FacilityInspDetailObject);
+  };
+
   //批量生成巡检明细活动
   batchCreateFacilityInspDetails(FacilityInspDetailsObject: any) {
     return this._db.bulkDocs(FacilityInspDetailsObject);
