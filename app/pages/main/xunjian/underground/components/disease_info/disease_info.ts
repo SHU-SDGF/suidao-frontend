@@ -40,6 +40,7 @@ export class DiseaseInfoPage implements OnInit{
   private environmentActivityList: any = [];
   private userList = [];
   private photos: Array<IMediaContent> = [];
+  private latestPhotos: Array<IMediaContent> = [];
 
 
   constructor(
@@ -87,6 +88,18 @@ export class DiseaseInfoPage implements OnInit{
     //   this.udpateUser = result;
     // });
 
+    //获取最近更新的历史巡检记录
+    this._facilityInspService.getLatestFacilityInspDetail(this.diseaseDetailObj.diseaseNo).then((result) => {
+      if(result["docs"].length > 0) {
+        let latestFacilityInspDetails = result["docs"][result["docs"].length - 1];
+        console.log("***************2");
+        console.log(latestFacilityInspDetails);
+        console.log("xxxxxxxxxx");
+        console.log(latestFacilityInspDetails["photos"]);
+        this.latestPhotos = latestFacilityInspDetails["photos"];
+      }
+    });
+
     this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
       this.diseaseHistoryList = result["docs"];
     }, (error) => {
@@ -106,6 +119,7 @@ export class DiseaseInfoPage implements OnInit{
     this.diseaseDetailObj.updateDate = new Date().getTime();
     this.diseaseDetailObj.updateUser = this.udpateUser;
     this.diseaseDetailObj.photos = this.photos;
+    this.photos = [];
     if(this.diseaseDetailObj.synFlg == 0) {
       this.diseaseDetailObj.synFlg = 2;
     }
@@ -114,15 +128,23 @@ export class DiseaseInfoPage implements OnInit{
       this.diseaseDetailObj.synFlg = 1;
       //新增一条记录
       this._facilityInspService.addNewFacilityInspDetail(this.diseaseDetailObj, this.udpateUser).then((result) => {
-
         //更新历史记录
         this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
           this.diseaseHistoryList = result["docs"];
-          let alert = this._alertController.create({
-            message: '更新活动成功！',
-            buttons: ['OK']
+          //获取最近更新的历史巡检记录
+          this._facilityInspService.getLatestFacilityInspDetail(this.diseaseDetailObj.diseaseNo).then((result) => {
+            if(result["docs"].length > 0) {
+              let latestFacilityInspDetails = result["docs"][result["docs"].length - 1];
+              console.log("***************1");
+              console.log(latestFacilityInspDetails["photos"]);
+              this.latestPhotos = latestFacilityInspDetails["photos"];
+            }
+            let alert = this._alertController.create({
+              message: '更新活动成功！',
+              buttons: ['OK']
+            });
+            alert.present();
           });
-          alert.present();
         }, (error) => {
           this.showErrorInfoModal();
         });

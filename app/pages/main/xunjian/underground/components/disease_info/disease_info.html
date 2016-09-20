@@ -110,6 +110,20 @@
           <ion-option value="false">否</ion-option>
         </ion-select>
       </ion-item>
+      <h5 class="field-label" [hidden]="isEditing">
+        照片
+      </h5>
+      <ion-list [hidden]="isEditing">
+        <ion-item class="img-gallery">
+          <ion-scroll scrollX="true">
+            <div class="img-item" *ngFor="let latestPhoto of latestPhotos">
+              <button clear type="button" class="img-layer">
+                <img src="{{latestPhoto.preview}}" mediaViewer [mediaContent]="latestPhoto"/>
+              </button>
+            </div>
+          </ion-scroll>
+        </ion-item>
+      </ion-list>
       <h5 class="field-label" [hidden]="!isEditing">
         照片
         <button clear CaptureMedia (onCaptured)="captureMedia($event)" type="button" [imgOnly]="true">

@@ -124,6 +124,10 @@ export class FacilityInspService {
 		return promise;
 	}
 
+	getLatestFacilityInspDetail(diseaseNo) {
+		return this.facilityInspDetailDB.getFacilityInspDetailByDiseaseNo(diseaseNo);
+	}
+
 	//删除所有的巡检记录以及所有的巡检历史记录
 	deleteAllFacilityInsps() {
 		return new Promise((resolve, reject) => {
