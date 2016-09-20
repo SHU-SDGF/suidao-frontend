@@ -131,6 +131,7 @@
     </ion-list>
     <div padding>
       <button block (click)="update()" *ngIf="isEditing">更新</button>
+      <button block (click)="isEditing = false;" *ngIf="isEditing">取消</button>
       <button block (click)="edit()" *ngIf="!isEditing">编辑</button>
     </div>
   </div>
