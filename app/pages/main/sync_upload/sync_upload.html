@@ -29,9 +29,11 @@
       <h5>{{insp.mileage}}</h5>
       <ion-badge item-right light-blue>{{insp.medias.length}}</ion-badge>
       <ion-badge item-right 
-        [class.badge-danger]="insp.status == 3" 
-        [class.badge-grey]="insp.status == 1" 
-        [class.badge-warining]="insp.status != 1 && insp.status != 3">{{insp.status | OptionPipe:statusList}}</ion-badge>
+          [ngClass]="{'badge-danger': insp.status == 3,
+            'badge-grey': insp.status == 1, 
+            'badge-warining': insp.status != 1 && insp.status != 3}">
+        {{insp.status | OptionPipe:statusList}}
+      </ion-badge>
     </ion-item>
     <!-- end of group item -->
   </ion-item-group>

@@ -1,4 +1,4 @@
-import {Directive, EventEmitter, ElementRef, OnInit, Input, Output} from '@angular/core';
+import {Directive, EventEmitter, ElementRef, OnInit, Input, Output, NgZone} from '@angular/core';
 
 declare const L: any;
 const IMAGE_WIDTH: number = 1000;
@@ -15,13 +15,14 @@ interface ImageSize{
 export class ImageEditor implements OnInit{
   @Input() changeOptions: EventEmitter<MapOptions>;
   @Output() onTap = new EventEmitter();
+  @Output() onMarkerClick = new EventEmitter();
   private scale: number = 1;
 
   private map: any;
   private _markers: Array<MarkerOptions> = [];
   private mapOptions: MapOptions = {markers: []};
 
-  constructor(private $ele: ElementRef){
+  constructor(private $ele: ElementRef, private _zone: NgZone){
   }
 
   ngOnInit(){
@@ -111,15 +112,19 @@ export class ImageEditor implements OnInit{
     this._redrawMarkers();
   }
 
-  _drawMarker(markerOptions: MarkerOptions){
+  _drawMarker(markerOptions: MarkerOptions) {
+    let _self = this;
     var myIcon = L.icon({
       iconUrl: markerOptions.icon,
       iconSize: [30, 30]
     });
 
     let marker = L.marker([markerOptions.latitude * this.scale, markerOptions.longitude * this.scale], {icon: myIcon});
-    
-    marker.addTo(this.map);
+    marker.addTo(this.map).on('click', () => {
+      _self._zone.run(() => {
+        _self.onMarkerClick.emit(markerOptions);
+      });
+    });
     markerOptions.marker = marker;
   }
 

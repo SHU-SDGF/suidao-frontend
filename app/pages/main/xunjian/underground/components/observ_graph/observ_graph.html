@@ -9,8 +9,8 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <image-editor [changeOptions]="changeOptions" (onTap)="mapTap($event)" ></image-editor>
-  <button class="md-control-btn" [ngClass]="{'active': _onEdit}" menu-tip [actionMenuItems]="actionMenuItems" (click)="menuBtnClick($event)">
+  <image-editor [changeOptions]="changeOptions" (onTap)="mapTap($event)" (onMarkerClick)="markerClick($event)"></image-editor>
+  <button class="md-control-btn" #actionButton menu-tip [actionMenuItems]="actionMenuItems" (click)="menuBtnClick($event)">
     <ion-icon name="md-add-circle"></ion-icon>
   </button>
 </ion-content>

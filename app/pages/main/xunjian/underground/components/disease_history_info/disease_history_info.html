@@ -10,6 +10,22 @@
 </ion-header>
 <ion-content class="activity_history_detail">
   <ion-list>
+
+    <h5 class="assertive-field field-label">病害编号</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.diseaseNo" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">记录人</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.displayRecorder" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">日期</h5>
+    <ion-item>
+      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.displayDiseaseDate" disabled="true"></ion-input>
+    </ion-item>
+
     <h5 class="assertive-field field-label">病害大类</h5>
     <ion-item>
       <ion-input type="text" [(ngModel)]="diseaseDetailRecord.displayDiseaseType" disabled="true"></ion-input>
@@ -90,29 +106,5 @@
       </ion-select>
     </ion-item> -->
 
-    <h5 class="assertive-field field-label">病害编号</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.diseaseNo" disabled="true"></ion-input>
-    </ion-item>
-
-<!--     <h5 class="assertive-field field-label">里程</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.mileage" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="assertive-field field-label">隧道内方位</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.displayModelName" disabled="true"></ion-input>
-    </ion-item> -->
-
-    <h5 class="assertive-field field-label">记录人</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.displayRecorder" disabled="true"></ion-input>
-    </ion-item>
-
-    <h5 class="assertive-field field-label">日期</h5>
-    <ion-item>
-      <ion-input type="text" [(ngModel)]="diseaseDetailRecord.displayDiseaseDate" disabled="true"></ion-input>
-    </ion-item>
   </ion-list>
 </ion-content>

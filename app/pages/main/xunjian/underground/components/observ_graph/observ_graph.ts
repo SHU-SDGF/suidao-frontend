@@ -1,9 +1,10 @@
-import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
+import {Component, OnInit, ViewChild, EventEmitter, ElementRef} from '@angular/core';
 import {NavController, ViewController, ToastController, Toast, AlertController, ModalController, NavParams} from 'ionic-angular';
 import {ImageEditor, MapOptions, MarkerOptions, Latlng} from '../../../../../../shared/components/image-editor/image-editor';
 import {MenuTip, ActionMenuControl} from '../../../../../../shared/components/menu-tip/menu-tip';
 import {ObservSavePage} from '../observ_save/observ_save';
 import {LookupService} from '../../../../../../providers/lookup_service';
+import {DiseaseInfoPage} from '../disease_info/disease_info';
 
 
 @Component({
@@ -13,6 +14,7 @@ import {LookupService} from '../../../../../../providers/lookup_service';
 export class ObservGraphPage implements OnInit{
   @ViewChild(MenuTip) _menuTip: MenuTip;
   @ViewChild(ImageEditor) _imageEditor: ImageEditor;
+  @ViewChild('actionButton') actionButton: ElementRef;
 
   private _mileage: string;
   private _onEdit = false;
@@ -63,53 +65,7 @@ export class ObservGraphPage implements OnInit{
       }.bind(this),
     };
   })
-  /*
-  [
-    {
-      icon:  this.diseaseTypes[0]["icon"],
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[0]);
-      }.bind(this),
-    },
-    {
-      icon: this.diseaseTypes[1]["icon"],
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[1]);
-      }.bind(this),
-    },
-    {
-      icon: this.diseaseTypes[2]["icon"],
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[2]);
-      }.bind(this),
-    },
-    {
-      icon: this.diseaseTypes[3]["icon"],
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[3]);
-      }.bind(this),
-    },
-    {
-      icon: this.diseaseTypes[4]["icon"],
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[4]);
-      }.bind(this),
-    },
-    {
-      icon: this.diseaseTypes[5]["icon"],
-      diseaseType: '',
-      action: function() {
-        this.enableDisease(this.actionMenuItems[5]);
-      }.bind(this),
-    }
-  ];
-  */
-
+  
   private diseaseDetailRecords: any;
   private diseaseTypeList: any;
   private createDiseaseInfo: any;
@@ -126,8 +82,8 @@ export class ObservGraphPage implements OnInit{
 
   ngOnInit(){
     //获取list
-    this.diseaseDetailRecords = this._params["data"]["existingDiseaseList"];
-    this._mileage = this._params['mileage'];
+    this.diseaseDetailRecords = this._params.get("existingDiseaseList");
+    this._mileage = this._params.get('mileage');
     this._lookupService.getDiseaseTypes().then((result) => {
       this.diseaseTypeList = result;
       for(let index in this.diseaseTypeList) {
@@ -172,9 +128,15 @@ export class ObservGraphPage implements OnInit{
 
   private toggleEdit(){
     this._onEdit = !this._onEdit;
-    if(!this._onEdit){
+    if (!this._onEdit) {
+      // this fixes a bug of IONIC 2
+      this.actionButton['_elementRef'].nativeElement.classList.remove('active');
+      // done
       this.hideToast();
-    }else{
+    } else {
+      // this fixes a bug of IONIC 2
+      this.actionButton['_elementRef'].nativeElement.classList.add('active');
+      // done
       this.showToast();
     }
   }
@@ -217,6 +179,13 @@ export class ObservGraphPage implements OnInit{
     });
   }
 
+  private markerClick(markerOptions: MarkerOptions) {
+    let detail = this.diseaseDetailRecords.find((detail) => {
+      return detail.diseaseNo == markerOptions.diseaseNo;
+    });
+    this._modalCtrl.create(DiseaseInfoPage, {disease: detail, mileage: this._mileage}).present();
+  }
+
   showCreateModal(marker: MarkerOptions){
     let diesaseNo = '';
     if(marker.diseaseNo && marker.diseaseNo != '') {
@@ -238,6 +207,7 @@ export class ObservGraphPage implements OnInit{
     let that = this;
     modal.onDidDismiss((value) => {
       this.toggleEdit();
+
       this._lookupService.getDiseaseInfo().then((result) => {
         this.createDiseaseInfo = result;
       })
@@ -247,8 +217,6 @@ export class ObservGraphPage implements OnInit{
         marker.longitude = value.longitude;
         marker.latitude = value.latitude;
         this._imageEditor.addMarker(marker);
-      }else{
-        this.showToast();
       }
     });
   }
