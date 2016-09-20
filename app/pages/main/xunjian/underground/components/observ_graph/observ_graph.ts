@@ -54,7 +54,17 @@ export class ObservGraphPage implements OnInit{
     }
   ];
 
-  private actionMenuItems: Array<ActionMenuControl> = [
+  private actionMenuItems: Array<ActionMenuControl> = this.diseaseTypes.map((item, index) => {
+    return {
+      icon:  item["icon"],
+      diseaseType: '',
+      action: function() {
+        this.enableDisease(this.actionMenuItems[index]);
+      }.bind(this),
+    };
+  })
+  /*
+  [
     {
       icon:  this.diseaseTypes[0]["icon"],
       diseaseType: '',
@@ -98,6 +108,7 @@ export class ObservGraphPage implements OnInit{
       }.bind(this),
     }
   ];
+  */
 
   private diseaseDetailRecords: any;
   private diseaseTypeList: any;
@@ -225,7 +236,8 @@ export class ObservGraphPage implements OnInit{
     
     modal.present();
     let that = this;
-    modal.onDidDismiss((value)=>{
+    modal.onDidDismiss((value) => {
+      this.toggleEdit();
       this._lookupService.getDiseaseInfo().then((result) => {
         this.createDiseaseInfo = result;
       })

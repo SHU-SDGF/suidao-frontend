@@ -133,7 +133,8 @@ export class GroundPage implements OnInit, OnDestroy {
     setTimeout(() => {
       that._mapLoader = that._loadingCtrl.create({
         content: '地图加载中...',
-        dismissOnPageChange: true
+        dismissOnPageChange: true,
+        duration: 5000
       });
       that._mapLoader.present();
     });
@@ -304,6 +305,7 @@ export class GroundPage implements OnInit, OnDestroy {
   };
 
   private mapLoaded() {
+    if (this._mapLoader.didLeave) return;
     this._mapLoader.dismiss();
   }
 
