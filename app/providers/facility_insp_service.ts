@@ -40,6 +40,7 @@ export class FacilityInspService {
 		facilityDetailObj["updateDate"] = '';
 		facilityDetailObj["createUser"] = createUser;
 		facilityDetailObj["recorder"] = createUser;
+		delete facilityDetailObj["_rev"];
 		return this.facilityInspDetailDB.addNewFacilityInspDetail(facilityDetailObj);
 	};
 
