@@ -162,6 +162,7 @@ export class SyncUploadService{
         resolve(_self.facilityInspGroups);
         return;
       }
+      _self.facilityInspGroups = [];
       Promise.all([
           _self.facilityInspService.getAllFacilityInspDetails(), 
           _self.facilityInspService.getAllFacilityInspSummaries()])

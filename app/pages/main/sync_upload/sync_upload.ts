@@ -67,7 +67,6 @@ export class SyncUploadPage implements OnInit {
     this._syncUploadService.uploadMedias().then(()=>{
       this._alertCtrl.create({
         title: '同步完成！',
-        message: '创建活动未能成功！请重新尝试！',
         buttons: [
           {
             text: '确定',
