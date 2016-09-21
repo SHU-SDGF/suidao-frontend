@@ -59,7 +59,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
     
     if(window['cordova']){
       cordova.plugins.barcodeScanner.scan((result) => {
-        result.text && this.showInfo(result.text);
+        this.showInfo(result.text);
       });
     }else{
       let info = `
@@ -104,6 +104,8 @@ export class UndergroundPage implements OnInit, OnDestroy {
     } else {
       facilityInspInfo = this.facilityInspList[scannedIndex];
     }
+
+    console.log('start jumping');
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
     modal.onDidDismiss((value) => {

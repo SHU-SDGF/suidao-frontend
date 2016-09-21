@@ -5,6 +5,8 @@ import { FacilityInspService } from '../../../providers/facility_insp_service';
 import { LookupService } from '../../../providers/lookup_service';
 import * as  _ from 'lodash';
 import {AppUtils, DatePipe, OptionPipe, KeysPipe} from '../../../shared/utils';
+import {MediaService, DownloadTask, DownloadTaskProgress} from '../../../providers/media_service';
+import {SyncDownloadService} from './sync_download.service'; 
 
 interface InspSmrGroup{
   monomerId: number;
@@ -27,10 +29,15 @@ export class SyncDownloadPage implements OnInit {
   private monomers = [];
   private models = [];
 
+  private taskOnProcess: DownloadTask = null;
+  private tasks: any[] = [];
+  private started = false;
+
   constructor(
     private _viewCtrl: ViewController,
     private lookupService: LookupService,
     private facilityInspService: FacilityInspService,
+    private _mediaService: MediaService,
     private events: Events
   ){}
 
@@ -48,6 +55,8 @@ export class SyncDownloadPage implements OnInit {
     this.downloadFacilityRecords()
       .then(this.deleteAllFacilityInsps.bind(this))
       .then(this.saveFacilityRecordsToLocalDB.bind(this))
+      .then(this.reloadData.bind(this))
+      .then(this.downloadMedias.bind(this))
       .catch(function(error){
         let alert = this.alertController.create({
           title: '错误',
@@ -59,6 +68,10 @@ export class SyncDownloadPage implements OnInit {
 
   dismiss(){
     this._viewCtrl.dismiss();
+  }
+
+  private downloadMedias() {
+    console.log(this.downloadedFacilityData);
   }
 
   private downloadFacilityRecords() {
@@ -88,32 +101,34 @@ export class SyncDownloadPage implements OnInit {
     return promise;
   }
 
-  private reloadData() {
-    let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
-    this.facilityInspGroups = [];
+  private reloadData(): Promise<InspSmrGroup[]> {
+    return new Promise((resolve, reject) => {
+      let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
+      this.facilityInspGroups = [];
 
-    this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
-      let groups = _.groupBy(inspSmrList, (inspSmr)=>{
-        return inspSmr.monomerId + '-' + inspSmr.modelId;
-      });
-      Object.keys(groups).map((key)=>{
-        let inspGroup: InspSmrGroup = {
-          modelId: ~~key.split('-')[1],
-          monomerId: ~~key.split('-')[0],
-          mileages:[]
-        };
-
-        let mileages = _.groupBy(groups[key], 'mileage');
-
-        Object.keys(mileages).map(mileage=>{
-          inspGroup.mileages.push({
-            mileage: mileage,
-            diseaseSmrList: this.fetchDiseaseMedias(mileages[mileage])
-          });
+      this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
+        let groups = _.groupBy(inspSmrList, (inspSmr)=>{
+          return inspSmr.monomerId + '-' + inspSmr.modelId;
         });
-        console.log(this.downloadedFacilityData);
-        this.facilityInspGroups.push(inspGroup);
-      })
+        Object.keys(groups).map((key)=>{
+          let inspGroup: InspSmrGroup = {
+            modelId: ~~key.split('-')[1],
+            monomerId: ~~key.split('-')[0],
+            mileages:[]
+          };
+
+          let mileages = _.groupBy(groups[key], 'mileage');
+          Object.keys(mileages).map(mileage=>{
+            inspGroup.mileages.push({
+              mileage: mileage,
+              diseaseSmrList: this.fetchDiseaseMedias(mileages[mileage])
+            });
+          });
+          console.log(this.downloadedFacilityData);
+          this.facilityInspGroups.push(inspGroup);
+          resolve(this.facilityInspGroups);
+        })
+      });
     });
   }
 
@@ -134,14 +149,18 @@ export class SyncDownloadPage implements OnInit {
   }
 
   private saveFacilityRecordsToLocalDB() {
-    console.log('starting save to local db');
-    this.facilityInspService.saveFacilityRecordsToLocalDB(this.downloadedFacilityData).then((result) => {
-      //成功！！
-      this.reloadData();
-      //发布事件
-      this.events.publish('optionChange');
-    },(error) => {
-      console.log(error);
-    })
+    return new Promise((resolve, reject) => {
+      console.log('starting save to local db');
+      this.facilityInspService.saveFacilityRecordsToLocalDB(this.downloadedFacilityData).then((result) => {
+        //成功！！
+        // this.reloadData();
+        //发布事件
+        this.events.publish('optionChange');
+        resolve(result);
+      },(error) => {
+        console.log(error);
+        reject(error);
+      })
+    });
   }
 }
