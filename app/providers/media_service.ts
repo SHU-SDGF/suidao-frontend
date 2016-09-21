@@ -61,6 +61,13 @@ export interface UploadTaskProgress{
   totalFiles: number
 };
 
+export interface DownloadTaskProgress {
+  loaded: number,
+  total: number,
+  fileIndex: number,
+  totalFiles: number
+}
+
 export class UploadTask{
   private _started: boolean = false;
   private _finished: boolean = false;

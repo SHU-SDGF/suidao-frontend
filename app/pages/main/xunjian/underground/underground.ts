@@ -114,8 +114,17 @@ export class UndergroundPage implements OnInit, OnDestroy {
       facilityInspInfo = this.facilityInspList[scannedIndex];
     }
 
+<<<<<<< HEAD
     this.showObservInfo(facilityInspInfo);
     
+=======
+    console.log('start jumping');
+    let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
+    modal.present();
+    modal.onDidDismiss((value) => {
+      this.reloadData();
+    });
+>>>>>>> 78fdaf20f8e2113b2e5e8eeede4f1071a3f9dd03
     localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "facilityId": result["NO"]}));
   }
 
