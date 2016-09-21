@@ -4,6 +4,7 @@ import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
 import { LookupService } from '../../../providers/lookup_service';
 import * as  _ from 'lodash';
+import {MediaContent} from '../../../models/MediaContent';
 import {AppUtils, DatePipe, OptionPipe, KeysPipe} from '../../../shared/utils';
 import {MediaService, DownloadTask, DownloadTaskProgress} from '../../../providers/media_service';
 import {SyncDownloadService} from './sync_download.service'; 
@@ -11,7 +12,7 @@ import {SyncDownloadService} from './sync_download.service';
 interface InspSmrGroup{
   monomerId: number;
   modelId: number;
-  mileages: Array<{mileage: string, diseaseSmrList: Array<FacilityInspSummary>}>,
+  mileages: Array<{mileage: string, mediasList: Array<MediaContent>}>,
 }
 
 @Component({
@@ -71,6 +72,21 @@ export class SyncDownloadPage implements OnInit {
   }
 
   private downloadMedias() {
+    let _self = this;
+    this.facilityInspGroups.forEach((group) => {
+      group.mileages.forEach((mileage) => {
+        if(mileage.mediasList.length > 0) {
+          this.tasks.push(function() {
+            return new Promise((resolve, reject) => {
+              // _self.taskOnProcess = _self._mediaService.downloadFiles(new MediaContent{
+
+              // })
+              //download media
+            })
+          })
+        }        
+      })
+    });
     console.log(this.downloadedFacilityData);
   }
 
@@ -121,7 +137,7 @@ export class SyncDownloadPage implements OnInit {
           Object.keys(mileages).map(mileage=>{
             inspGroup.mileages.push({
               mileage: mileage,
-              diseaseSmrList: this.fetchDiseaseMedias(mileages[mileage])
+              mediasList: this.fetchDiseaseMedias(mileages[mileage])
             });
           });
           console.log(this.downloadedFacilityData);
@@ -134,6 +150,8 @@ export class SyncDownloadPage implements OnInit {
 
   private fetchDiseaseMedias(mileages){
     let photos = [];
+    let photosObj: Array<MediaContent> = [];
+
     for(let index in mileages){
       for(let index2 in this.downloadedFacilityData) {
         if(mileages[index]["diseaseNo"] == this.downloadedFacilityData[index2]["facilityInspSum"]["diseaseNo"]) {
@@ -145,7 +163,19 @@ export class SyncDownloadPage implements OnInit {
         }
       }
     }
-    return photos;
+
+    photos.forEach((photo) => {
+      photosObj.push(MediaContent.deserialize({
+        mediaType: 'img',
+        fileUri: photo,
+        size: 0,
+        preview: '',
+        cached: false,
+        localUri: ''
+      }));
+    });
+   
+    return photosObj;
   }
 
   private saveFacilityRecordsToLocalDB() {

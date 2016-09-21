@@ -21,4 +21,6 @@ export class MediaContent extends _baseClass implements IMediaContent{
     super();
     this.assign(obj);
   }
+
+  static deserialize: (obj)=> MediaContent;
 }
