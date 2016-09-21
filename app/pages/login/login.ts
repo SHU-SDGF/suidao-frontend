@@ -32,26 +32,26 @@ export class LoginPage {
         content: '登录中...',
         dismissOnPageChange: true
       });
-      loader.present();
-
-      this.userService.login(this.credentials).then(
-        res => {
-          this.lookupService.getWholeLookupTable();
-          loader.dismiss().then(() => {
-            _that.navCtrl.setRoot(MainPage);
-          });
-        },
-        error => {
-          loader.dismiss().then(() => {
-            let alert = _that.alertController.create({
-              title: '创建',
-              subTitle: '请检查用户名与密码是否正确',
-              buttons: ['确定']
+      loader.present().then(()=>{
+        this.userService.login(this.credentials).then(
+          res => {
+            this.lookupService.getWholeLookupTable();
+            loader.dismiss().then(() => {
+              _that.navCtrl.setRoot(MainPage);
             });
-            alert.present();
-          });
-        }
-      );
+          },
+          error => {
+            loader.dismiss().then(() => {
+              let alert = _that.alertController.create({
+                title: '创建',
+                subTitle: '请检查用户名与密码是否正确',
+                buttons: ['确定']
+              });
+              alert.present();
+            });
+          }
+        );
+      });
     }
   }
 }

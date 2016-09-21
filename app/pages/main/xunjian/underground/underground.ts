@@ -6,7 +6,6 @@ import {Camera} from 'ionic-native';
 import {ObservInfoPage} from './components/observ_info/observ_info';
 import {QRCodeService} from '../../../../providers/qrcode_service';
 import {FacilityInspService} from '../../../../providers/facility_insp_service';
-import {BarCodeScanner} from '../../../../shared/components/barcode-scanner/barcode-scanner';
 import * as  _ from 'lodash';
 declare const cordova;
 
@@ -23,12 +22,15 @@ export class UndergroundPage implements OnInit, OnDestroy {
     private _alertCtrl: AlertController, 
     private _modalCtrl: ModalController,
     private _codeService: QRCodeService,
-    private _facilityInspService: FacilityInspService
+    private _facilityInspService: FacilityInspService,
+    private _navCtrl: NavController
   ){}
 
   ngOnInit(){
     //search
-    
+    this._events.subscribe('groundDataChange', ()=>{
+      this.reloadData();
+    });
   }
 
   ngAfterViewInit() {
@@ -49,15 +51,17 @@ export class UndergroundPage implements OnInit, OnDestroy {
   }
 
   showObservInfo(facilityInspInfo){
+    this._navCtrl.push(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
+    /*
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
     modal.onDidDismiss((value) => {
       this.reloadData();
     });
+    */
   }
 
   scanCode(){
-    
     if(window['cordova']){
       cordova.plugins.barcodeScanner.scan((result) => {
         try{
@@ -113,18 +117,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
     } else {
       facilityInspInfo = this.facilityInspList[scannedIndex];
     }
-
-<<<<<<< HEAD
+    
     this.showObservInfo(facilityInspInfo);
     
-=======
-    console.log('start jumping');
-    let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
-    modal.present();
-    modal.onDidDismiss((value) => {
-      this.reloadData();
-    });
->>>>>>> 78fdaf20f8e2113b2e5e8eeede4f1071a3f9dd03
     localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "facilityId": result["NO"]}));
   }
 

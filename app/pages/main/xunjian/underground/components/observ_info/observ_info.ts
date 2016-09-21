@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild, EventEmitter} from '@angular/core';
-import {NavController, ViewController, 
+import {Component, OnInit, OnDestroy, ViewChild, EventEmitter} from '@angular/core';
+import {NavController, ViewController, Events,
   AlertController, ModalController, NavParams} from 'ionic-angular';
 import {AppUtils} from '../../../../../../shared/utils';
 import {SelectPopover} from  '../../../../../../shared/components/select-popover/select-popover';
@@ -14,7 +14,7 @@ import {LookupService} from '../../../../../../providers/lookup_service';
   pipes: [AppUtils.DatePipe],
   directives: [SelectPopover]
 })
-export class ObservInfoPage implements OnInit{
+export class ObservInfoPage implements OnInit, OnDestroy{
 
   private huanhaoList = [{
     number: 49,
@@ -67,6 +67,7 @@ export class ObservInfoPage implements OnInit{
     private _modalCtrl: ModalController,
     private _facilityInspService: FacilityInspService,
     private _lookupService: LookupService,
+    private _event: Events,
     private _params: NavParams){
   }
 
@@ -94,7 +95,12 @@ export class ObservInfoPage implements OnInit{
   }
 
   dismiss(){
-    this._viewCtrl.dismiss();
+    this._navCtrl.pop();
+    //this._viewCtrl.dismiss();
+  }
+
+  ngOnDestroy(){
+    this._event.publish('groundDataChange');
   }
 
   private _updateFacilityInspList() {
