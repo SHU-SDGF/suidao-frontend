@@ -74,6 +74,7 @@ export class ObservInfoPage implements OnInit{
     this.huanhao = this._params.data.facilityInspInfo["mileage"];
     this._updateFacilityInspList();
     this.diseaseList = this._params.data.facilityInspInfo["facilityInsp"];
+    console.log('in modal class');
   }
 
   viewDisease(disease){

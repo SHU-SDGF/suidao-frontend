@@ -10,7 +10,7 @@ import {TestPage} from './test/test';
 })
 export class MainPage{
   private username: string = '';
-  private rootPages: Array<any> = [XunjianPage, ManyouPage, ManyouPage, XunjianPage];
+  private rootPages: Array<any> = [XunjianPage, TestPage, ManyouPage, XunjianPage];
   //private rootPage: any = GroundPage;
   @ViewChild(Nav) nav: Nav;
 

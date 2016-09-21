@@ -48,6 +48,7 @@ export class TestPage implements OnInit {
             });
 
             // Listen for user click on the "take a photo" button
+            /*
             document.getElementById('take').addEventListener('click', function(){
                 if (videoPlaying){
                     var canvas = document.getElementById('canvas');
@@ -58,6 +59,7 @@ export class TestPage implements OnInit {
                     document.getElementById('photo').setAttribute('src', data);
                 }
             }, false);
+            */
 
         } else {
             console.log("KO");

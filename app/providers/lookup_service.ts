@@ -287,7 +287,7 @@ export class LookupService {
 		return this.localStorage.get(ACTION_STATUS_DATA).then((_actStatusData) => {
 			let statusList = JSON.parse(_actStatusData);
 			return statusList.map((obj, i)=>{
-        obj.color = AppMeta.STATUS_CLASSES[i];
+        obj.color = AppMeta.STATUS_CLASSES[obj.id];
         return obj;
       });
 		});

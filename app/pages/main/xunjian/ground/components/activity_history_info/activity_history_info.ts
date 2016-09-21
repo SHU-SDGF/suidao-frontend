@@ -47,15 +47,6 @@ export class ActivityHistoryInfoPage implements OnInit{
       .concat(getMedias(this.activityDetailObj.video, 'video'))
       .concat(getMedias(this.activityDetailObj.audio, 'audio'));
 
-    let task = this._mediaService.downloadFiles(this.medias);
-    task.start().subscribe((response)=>{
-      console.log(response);
-    });
-    
-    task.$progress.subscribe((progress)=>{
-      console.log(progress);
-    });
-
     function getMedias(urlList, type): Array<MediaContent> {
       if (!urlList) return [];
       

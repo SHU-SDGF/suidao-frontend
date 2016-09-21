@@ -1,6 +1,6 @@
 import {Component, ViewChild, OnInit} from '@angular/core';
-import {Platform, ionicBootstrap, ModalController, Nav, NavController, MenuController, AlertController, LoadingController, Events} from 'ionic-angular';
-import { Splashscreen, StatusBar } from 'ionic-native';
+import {Platform, ionicBootstrap, ModalController, Nav, NavController, NavPop, MenuController, AlertController, LoadingController, Events} from 'ionic-angular';
+import { Splashscreen, StatusBar, BackgroundMode } from 'ionic-native';
 import {LoginPage} from './pages/login/login';
 import * as _providers from './providers';
 import { UserService } from './providers/user_service';
@@ -38,13 +38,26 @@ export class MyApp implements OnInit{
   ) {
 
     platform.ready().then(() => {
+      BackgroundMode.setDefaults({
+        title: '隧道运维系统',
+        text: '程序正在后台运行',
+        silent: false
+      });
+      BackgroundMode.enable();
+      platform.registerBackButtonAction(()=>{
+        if(!this.nav.canGoBack()){
+          return;
+        }
+        this.nav.pop();
+      });
       lookupService.initDB();
       StatusBar.styleDefault();
       Splashscreen.hide();
       let _self = this;
       this.menu.enable(true, 'user-menu');
       
-      userService.hasLoggedIn().then(function(loggedIn: boolean){
+      userService.hasLoggedIn().then((loggedIn: boolean) => {
+        
         if(loggedIn){
           _self.nav.setRoot(MainPage);
         }else{

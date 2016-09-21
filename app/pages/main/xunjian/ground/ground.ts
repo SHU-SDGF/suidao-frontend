@@ -134,7 +134,7 @@ export class GroundPage implements OnInit, OnDestroy {
       that._mapLoader = that._loadingCtrl.create({
         content: '地图加载中...',
         dismissOnPageChange: true,
-        duration: 5000
+        duration: 3000
       });
       that._mapLoader.present();
     });
@@ -257,7 +257,7 @@ export class GroundPage implements OnInit, OnDestroy {
   }
 
   private getIcon(status){
-    let types = ['initial', 'ongoing', 'finished'];
+    let types = {1: 'initial', 2: 'ongoing', 3: 'finished'};
     let type = types[status];
     return `build/imgs/marker-${type}.png`;
   }

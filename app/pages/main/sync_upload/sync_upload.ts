@@ -9,6 +9,7 @@ import {AppUtils, DatePipe, OptionPipe, KeysPipe} from '../../../shared/utils';
 import {MediaService} from '../../../providers/media_service';
 import {MediaContent} from '../../../models/MediaContent';
 import {SyncUploadService, InspSmrGroup} from './sync_upload.service';
+import { LocalNotifications } from 'ionic-native';
 
 
 @Component({
@@ -66,7 +67,7 @@ export class SyncUploadPage implements OnInit {
     console.log('upload start');
     this._syncUploadService.uploadMedias().then(()=>{
       this._alertCtrl.create({
-        title: '同步完成！',
+        title: '同步上传已完成',
         buttons: [
           {
             text: '确定',
@@ -74,6 +75,12 @@ export class SyncUploadPage implements OnInit {
           }
         ]
       }).present();
+
+      LocalNotifications.schedule([{
+        id: ~~(Math.random()*100000),
+        text: '同步上传已完成'
+      }]);
+
     }, (err)=>{
       this._alertCtrl.create({
         title: '出错啦！',

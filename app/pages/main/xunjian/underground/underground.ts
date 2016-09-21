@@ -6,6 +6,7 @@ import {Camera} from 'ionic-native';
 import {ObservInfoPage} from './components/observ_info/observ_info';
 import {QRCodeService} from '../../../../providers/qrcode_service';
 import {FacilityInspService} from '../../../../providers/facility_insp_service';
+import {BarCodeScanner} from '../../../../shared/components/barcode-scanner/barcode-scanner';
 import * as  _ from 'lodash';
 declare const cordova;
 
@@ -51,7 +52,7 @@ export class UndergroundPage implements OnInit, OnDestroy {
     let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
     modal.present();
     modal.onDidDismiss((value) => {
-      // this.reloadData();
+      this.reloadData();
     });
   }
 
@@ -59,7 +60,18 @@ export class UndergroundPage implements OnInit, OnDestroy {
     
     if(window['cordova']){
       cordova.plugins.barcodeScanner.scan((result) => {
-        result.text && this.showInfo(result.text);
+        try{
+          result.text && this.showInfo(result.text);
+        }catch(e){
+          this._alertCtrl.create({
+            title: '扫码失败',
+            message: '扫描错误，或二维码信息有误，请重试！'
+          });
+          console.log(e);
+        }
+        
+      }, (error) => {
+        console.log(error);
       });
     }else{
       let info = `
@@ -85,17 +97,14 @@ export class UndergroundPage implements OnInit, OnDestroy {
   }
 
   private showInfo(info){
-    let scannedIndex = "";
+    let scannedIndex = -1;
     let result = this._codeService.parse(info);
+    console.log(result);
 
-    for(let index in this.facilityInspList) {
-      if(this.facilityInspList[index]["mileage"] == result["mileage"]) {
-        scannedIndex = index;
-      }
-    }
+    scannedIndex = (<Array<any>>this.facilityInspList).findIndex((insp=>insp.mileage == result["mileage"]));
     let facilityInspInfo = {};
 
-    if(scannedIndex == "") {
+    if(scannedIndex == -1) {
       facilityInspInfo = {
         mileage: result["mileage"],
         facilityId: result["NO"],
@@ -104,11 +113,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
     } else {
       facilityInspInfo = this.facilityInspList[scannedIndex];
     }
-    let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
-    modal.present();
-    modal.onDidDismiss((value) => {
-      this.reloadData();
-    });
+
+    this.showObservInfo(facilityInspInfo);
+    
     localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "facilityId": result["NO"]}));
   }
 
