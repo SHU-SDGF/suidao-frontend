@@ -9,6 +9,9 @@
       {{myDisease}}
     </ion-title>
   </ion-toolbar>
+</ion-header>
+
+<ion-content>
   <div padding>
     <ion-segment [(ngModel)]="selectedPage">
       <ion-segment-button value="detail">
@@ -19,9 +22,6 @@
       </ion-segment-button>
     </ion-segment>
   </div>
-</ion-header>
-
-<ion-content>
   <div [hidden]="selectedPage !== 'detail'">
     <ion-list>
       <h5 class="assertive-field field-label">病害编号</h5>
