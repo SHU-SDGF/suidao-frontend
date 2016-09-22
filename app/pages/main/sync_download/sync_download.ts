@@ -117,6 +117,7 @@ export class SyncDownloadPage implements OnInit {
                 let matchedInspDetail = null;
                 if(media) {
                   //存起来
+                  media.preview = media.localUri;
                   for(let index in mileage.diseaseSmrList) {
                     for(let index2 in mileage.diseaseSmrList[index]["details"]) {
                       let photoArray = mileage.diseaseSmrList[index]["details"][index2]["photo"].split(';');
