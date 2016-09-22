@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ViewController, Events} from 'ionic-angular';
 import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
+import {FacilityInspDetail} from '../../../models/FacilityInspDetail';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
 import { LookupService } from '../../../providers/lookup_service';
 import * as  _ from 'lodash';
@@ -12,7 +13,14 @@ import {SyncDownloadService} from './sync_download.service';
 interface InspSmrGroup{
   monomerId: number;
   modelId: number;
-  mileages: Array<{mileage: string, mediasList: Array<MediaContent>}>,
+  mileages: Array<InspMileage>,
+}
+
+export interface InspMileage{
+  mileage: string, 
+  medias: Array<MediaContent>, 
+  diseaseSmrList: Array<FacilityInspSummary>,
+  status?: '1' | '2' | '3' //未开始，成功，失败
 }
 
 @Component({
@@ -48,7 +56,6 @@ export class SyncDownloadPage implements OnInit {
       this.lookupService.getModelNames()]).then((res: Array<any>)=>{
         this.monomers = res[0];
         this.models = res[1];
-        this.reloadData();
     });
   }
 
@@ -75,13 +82,39 @@ export class SyncDownloadPage implements OnInit {
     let _self = this;
     this.facilityInspGroups.forEach((group) => {
       group.mileages.forEach((mileage) => {
-        if(mileage.mediasList.length > 0) {
+        if(mileage.medias.length > 0) {
+          let mediaContentList = [];
+          for(let index in mileage.medias) {
+            mediaContentList.push(
+              MediaContent.deserialize({
+                mediaType: 'img',
+                fileUri: mileage.medias[index],
+                size: 0,
+                preview: '',
+                cached: false,
+                localUri: ''
+              })
+            )
+          }
+
+          mileage.medias = mediaContentList;
+          mileage.medias.map((media) => {
+            MediaContent.deserialize({
+              mediaType: 'img',
+              fileUri: media,
+              size: 0,
+              preview: '',
+              cached: false,
+              localUri: ''
+            });
+          });
           this.tasks.push(function() {
             return new Promise((resolve, reject) => {
-              // _self.taskOnProcess = _self._mediaService.downloadFiles(new MediaContent{
+              _self.taskOnProcess = _self._mediaService.downloadFiles(mileage.medias);
 
-              // })
-              //download media
+              _self.taskOnProcess.start().subscribe((media) => {
+                debugger;
+              })
             })
           })
         }        
@@ -118,11 +151,27 @@ export class SyncDownloadPage implements OnInit {
   }
 
   private reloadData(): Promise<InspSmrGroup[]> {
-    return new Promise((resolve, reject) => {
-      let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
-      this.facilityInspGroups = [];
+    let _self = this;
+    return new Promise((resolve, reject)=>{
+      if(_self.started){
+        resolve(_self.facilityInspGroups);
+        return;
+      }
+      _self.facilityInspGroups = [];
+      Promise.all([
+          _self.facilityInspService.getAllFacilityInspDetails(), 
+          _self.facilityInspService.getAllFacilityInspSummaries()])
+      .then((result: Array<any>) => {
 
-      this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
+        let inspSmrList: FacilityInspSummary[] = result[1];
+        let inspDetailList: FacilityInspDetail[] = result[0];
+        
+        inspSmrList.forEach(inspSmr=>{
+          inspSmr.details = inspDetailList.filter((inspDetail)=>{
+            return inspDetail.diseaseNo == inspSmr.diseaseNo;
+          });
+        });
+
         let groups = _.groupBy(inspSmrList, (inspSmr)=>{
           return inspSmr.monomerId + '-' + inspSmr.modelId;
         });
@@ -134,19 +183,61 @@ export class SyncDownloadPage implements OnInit {
           };
 
           let mileages = _.groupBy(groups[key], 'mileage');
+
           Object.keys(mileages).map(mileage=>{
-            inspGroup.mileages.push({
+            let insp = {
               mileage: mileage,
-              mediasList: this.fetchDiseaseMedias(mileages[mileage])
+              medias: [],
+              diseaseSmrList: mileages[mileage]
+            };
+            inspGroup.mileages.push(insp);
+            inspGroup.mileages[inspGroup.mileages.length - 1].status = '1';
+
+            mileages[mileage].forEach((disease)=>{
+              disease.details.forEach((detail)=>{
+                let detailPhoto = detail.photo.split(';');
+                insp.medias = insp.medias.concat(detailPhoto);
+              });
             });
           });
-          console.log(this.downloadedFacilityData);
-          this.facilityInspGroups.push(inspGroup);
-          resolve(this.facilityInspGroups);
-        })
+
+          _self.facilityInspGroups.push(inspGroup);
+        });
+        resolve(_self.facilityInspGroups);
       });
     });
   }
+  // private reloadData(): Promise<InspSmrGroup[]> {
+  //   return new Promise((resolve, reject) => {
+  //     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
+  //     this.facilityInspGroups = [];
+
+
+  //     this.facilityInspService.getAllFacilityInspSummaries().then((inspSmrList) => {
+  //       let groups = _.groupBy(inspSmrList, (inspSmr)=>{
+  //         return inspSmr.monomerId + '-' + inspSmr.modelId;
+  //       });
+  //       Object.keys(groups).map((key)=>{
+  //         let inspGroup: InspSmrGroup = {
+  //           modelId: ~~key.split('-')[1],
+  //           monomerId: ~~key.split('-')[0],
+  //           mileages:[]
+  //         };
+
+  //         let mileages = _.groupBy(groups[key], 'mileage');
+  //         Object.keys(mileages).map(mileage=>{
+  //           inspGroup.mileages.push({
+  //             mileage: mileage,
+  //             mediasList: this.fetchDiseaseMedias(mileages[mileage])
+  //           });
+  //         });
+  //         console.log(this.downloadedFacilityData);
+  //         this.facilityInspGroups.push(inspGroup);
+  //         resolve(this.facilityInspGroups);
+  //       })
+  //     });
+  //   });
+  // }
 
   private fetchDiseaseMedias(mileages){
     let photos = [];
@@ -183,7 +274,6 @@ export class SyncDownloadPage implements OnInit {
       console.log('starting save to local db');
       this.facilityInspService.saveFacilityRecordsToLocalDB(this.downloadedFacilityData).then((result) => {
         //成功！！
-        // this.reloadData();
         //发布事件
         this.events.publish('optionChange');
         resolve(result);

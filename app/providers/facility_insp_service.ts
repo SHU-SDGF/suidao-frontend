@@ -106,7 +106,7 @@ export class FacilityInspService {
 			}
 
 			for(let index in facilityInspDetailsList) {
-				facilityInspDetailsList[index]["_id"] = facilityInspDetailsList[index]["createDate"] + '';
+				facilityInspDetailsList[index]["_id"] = facilityInspDetailsList[index]["diseaseDate"] + '';
 				facilityInspDetailsList[index]["synFlg"] = parseInt(facilityInspDetailsList[index]["synFlg"]);
 				facilityInspDetailsList[index]["modelId"] = parseInt(facilityInspDetailsList[index]["modelId"]);
 				facilityInspDetailsList[index]["monomerId"] = parseInt(facilityInspDetailsList[index]["monomerId"]);
