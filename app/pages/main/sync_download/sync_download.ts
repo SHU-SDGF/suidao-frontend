@@ -41,6 +41,8 @@ export class SyncDownloadPage implements OnInit {
   private taskOnProcess: DownloadTask = null;
   private tasks: any[] = [];
   private started = false;
+  private updatedInspDetailList = [];
+
 
   constructor(
     private _viewCtrl: ViewController,
@@ -96,7 +98,6 @@ export class SyncDownloadPage implements OnInit {
               })
             )
           }
-
           mileage.medias = mediaContentList;
           mileage.medias.map((media) => {
             MediaContent.deserialize({
@@ -113,14 +114,51 @@ export class SyncDownloadPage implements OnInit {
               _self.taskOnProcess = _self._mediaService.downloadFiles(mileage.medias);
 
               _self.taskOnProcess.start().subscribe((media) => {
-                debugger;
+                let matchedInspDetail = null;
+                if(media) {
+                  //存起来
+                  for(let index in mileage.diseaseSmrList) {
+                    for(let index2 in mileage.diseaseSmrList[index]["details"]) {
+                      let photoArray = mileage.diseaseSmrList[index]["details"][index2]["photo"].split(';');
+                      let match = false;
+                      for(let index3 in photoArray) {
+                        if(photoArray[index3] == media.fileUri) {
+                          match = true;
+                        }
+                      }
+                      if(match) {
+                      // if(mileage.diseaseSmrList[index]["details"][index2]["photo"] == media.fileUri) {
+                        console.log('find-one');
+                        if(mileage.diseaseSmrList[index]["details"][index2]["photos"]) {
+                          mileage.diseaseSmrList[index]["details"][index2]["photos"].push(media);
+                        } else {
+                          mileage.diseaseSmrList[index]["details"][index2]["photos"] = [];
+                          mileage.diseaseSmrList[index]["details"][index2]["photos"].push(media);
+                        }
+                        matchedInspDetail = mileage.diseaseSmrList[index]["details"][index2];
+                      }
+                    }
+                  }
+
+                  if(matchedInspDetail) {
+                    console.log('update to db');
+                    console.log(matchedInspDetail);
+                    _self.facilityInspService.updateFacilityInspDetail(matchedInspDetail).then((result) => {
+                      console.log('success');
+                      console.log(result);
+                    },(error) => {
+                      console.log('failed');
+                      console.log(error);
+                    })  
+                  }
+                }
               })
             })
           })
         }        
-      })
+      });
+      AppUtils.chain(this.tasks, true);
     });
-    console.log(this.downloadedFacilityData);
   }
 
   private downloadFacilityRecords() {
@@ -143,7 +181,6 @@ export class SyncDownloadPage implements OnInit {
     var promise = new Promise((resolve, reject) => {
       this.facilityInspService.deleteAllFacilityInsps().then((result) => {
         console.log('delete successfully!');
-        console.log(result);
         resolve();
       })
     });
