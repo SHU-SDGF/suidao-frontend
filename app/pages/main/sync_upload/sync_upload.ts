@@ -21,10 +21,7 @@ declare const $;
 export class SyncUploadPage implements OnInit {
   @ViewChild('header') _header: ElementRef;
 
-  private loader = null;
   private facilityInspGroups: InspSmrGroup[] = [];
-  private monomers = [];
-  private models = [];
   private statusList = [{
     id: '1',
     name: '未开始'
@@ -52,20 +49,9 @@ export class SyncUploadPage implements OnInit {
       });
     }
     
-    this.lookupService.getMenomers().then((monomers)=>{
-      this.monomers = monomers;
-    });
-    this.lookupService.getModelNames().then((models)=>{
-      this.models = models;
-    });
-    
     this._syncUploadService.getFacilityInspGroups().then((groups)=>{
       this.facilityInspGroups = groups;
     });
-  }
-
-  private getStatusAttr(statusID){
-    return ['grey', 'warning', 'danger'][statusID - 1];
   }
 
   dismiss(){
@@ -87,12 +73,12 @@ export class SyncUploadPage implements OnInit {
 
       LocalNotifications.schedule([{
         id: ~~(Math.random()*100000),
-        text: '同步上传已完成'
+        text: '同步上传已完成！'
       }]);
 
     }, (err)=>{
       this._alertCtrl.create({
-        title: '出错啦！',
+        title: '错误',
         message: '同步过程中发生错误！请重新尝试！',
         buttons: [
           {

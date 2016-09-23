@@ -39,7 +39,7 @@ export class SyncUploadService{
 
   public uploadMedias(){
     let _self = this;
-    if(this.started) return;
+    if(this.started) throw(new Error('任务正在进行中!'));
     this.started = true;
     this.facilityInspGroups.forEach((group)=>{
       group.mileages.forEach(mileage=>{
