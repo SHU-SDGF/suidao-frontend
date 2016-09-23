@@ -1,7 +1,7 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding="UTF-8" standalone="yes"?>
 <widget id="com.suidaoapp.xunjian" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>SuidaoApp</name>
-    <description>An Ionic Framework and Cordova project.</description>
+    <name>隧道运维</name>
+    <description>上海隧道股份运维系统</description>
     <author email="ljz135790@george.com">George Lin</author>
     <content src="index.html" />
     <access origin="*" />

@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {ViewController, Events, LoadingController, AlertController} from 'ionic-angular';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {ViewController, Events, LoadingController, AlertController, Platform} from 'ionic-angular';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
 import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
 import {FacilityInspDetail} from '../../../models/FacilityInspDetail';
@@ -11,6 +11,7 @@ import {MediaContent} from '../../../models/MediaContent';
 import {SyncUploadService, InspSmrGroup} from './sync_upload.service';
 import { LocalNotifications } from 'ionic-native';
 
+declare const $;
 
 @Component({
   selector: 'mainyou-page',
@@ -18,6 +19,7 @@ import { LocalNotifications } from 'ionic-native';
   pipes: [DatePipe, OptionPipe, KeysPipe]
 })
 export class SyncUploadPage implements OnInit {
+  @ViewChild('header') _header: ElementRef;
 
   private loader = null;
   private facilityInspGroups: InspSmrGroup[] = [];
@@ -38,11 +40,18 @@ export class SyncUploadPage implements OnInit {
     private loadingController: LoadingController,
     private lookupService: LookupService,
     private _alertCtrl: AlertController,
-    private _syncUploadService: SyncUploadService
+    private _syncUploadService: SyncUploadService,
+    private platform: Platform
   ){}
 
   ngOnInit() {
-    let _self = this;
+    if(this.platform.is('ios')){
+      $(this._header.nativeElement).css({
+        'paddingTop': '20px',
+        'background-color': '#202737'
+      });
+    }
+    
     this.lookupService.getMenomers().then((monomers)=>{
       this.monomers = monomers;
     });
@@ -51,7 +60,7 @@ export class SyncUploadPage implements OnInit {
     });
     
     this._syncUploadService.getFacilityInspGroups().then((groups)=>{
-      _self.facilityInspGroups = groups;
+      this.facilityInspGroups = groups;
     });
   }
 

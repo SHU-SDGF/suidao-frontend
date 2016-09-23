@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {ViewController, Events} from 'ionic-angular';
+import {Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import {ViewController, Events, Platform} from 'ionic-angular';
 import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
 import {FacilityInspDetail} from '../../../models/FacilityInspDetail';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
@@ -29,7 +29,7 @@ export interface InspMileage{
   pipes: [DatePipe, OptionPipe, KeysPipe]
 })
 export class SyncDownloadPage implements OnInit {
-
+  @ViewChild('header') _header: ElementRef;
   private loader = null;
   private facilityInspGroups: InspSmrGroup[] = [];
   private downloadedFacilityData = [];
@@ -49,10 +49,19 @@ export class SyncDownloadPage implements OnInit {
     private lookupService: LookupService,
     private facilityInspService: FacilityInspService,
     private _mediaService: MediaService,
-    private events: Events
+    private events: Events,
+    private platform: Platform
   ){}
 
   ngOnInit() {
+    
+    if(this.platform.is('ios')){
+      $(this._header.nativeElement).css({
+        'paddingTop': '20px',
+        'background-color': '#202737'
+      });
+    }
+
     Promise.all(
       [this.lookupService.getMenomers(), 
       this.lookupService.getModelNames()]).then((res: Array<any>)=>{

@@ -118,36 +118,8 @@ export class MyApp implements OnInit{
     confirm.present();
   }
 
-  syncUpload() {
-    // this.generateFacilityInspRecordList().then((result) => {
-    //   this.facilityInspService.uploadFacilityRecords(result).subscribe((res1) => {
-    //     this.facilityInspService.deleteAllFacilityInsps().then((res2) => {
-    //        //删除完毕
-    //     })
-    //   }, (error) => {
-    //     console.log(error);
-    //   });
-    // });
+  private syncUpload() {
     this._modalCtrl.create(SyncUploadPage).present();
-    /*
-    this.loader = this.loadingController.create({
-      content: "数据同步中。。。",
-    });
-    this.loader.present();
-
-    this.generateFacilityInspRecordList()
-      .then(this.uploadFacilityRecords.bind(this))
-      .then(this.deleteAllFacilityInsps.bind(this))
-      .then(this.downloadFacilityRecords.bind(this))
-      .then(this.saveFacilityRecordsToLocalDB.bind(this))
-      .catch(function(error){
-        let alert = this.alertController.create({
-          title: '错误',
-          subTitle: '同步数据出现错误，请重新同步数据',
-          buttons: ['确认']
-        });
-      }.bind(this));
-      */
   }
 
   private syncDownload(){
@@ -265,5 +237,6 @@ for(let p in _providers ){
 
 ionicBootstrap(MyApp, providersAr, {
   mode : 'ios',
-  backButtonText: "返回"
+  backButtonText: "返回",
+  statusbarPadding: true
 });
