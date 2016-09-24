@@ -185,7 +185,7 @@ export class GroundPage implements OnInit, OnDestroy {
       that.mapOptionEmitter.emit(that.opts);
     }, (error) => {
       if(!error.ok){
-        this._event.publish(this._userService.LOGOUT_EVENT);
+        // this._event.publish(this._userService.LOGOUT_EVENT);
       }
     });
   }

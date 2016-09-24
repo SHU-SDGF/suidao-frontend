@@ -26,7 +26,7 @@ export class SyncDownloadPage implements OnInit {
     name: '未开始'
   },{
     id: '3',
-    name: '上传失败'
+    name: '下载失败'
   }];
 
   constructor(
@@ -71,7 +71,8 @@ export class SyncDownloadPage implements OnInit {
           switch(status){
             case 'data_started':
               loader = this._loadingCtrl.create({
-                content: '正在下载数据'
+                content: '正在下载数据',
+                showBackdrop: true
               });
               loader.present();
               break;

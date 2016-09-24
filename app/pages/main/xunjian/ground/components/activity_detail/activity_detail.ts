@@ -131,7 +131,10 @@ export class ActivityDetailPage implements OnInit{
         activityObj.audio = audioUrlList.join(';');
 
         this.submitForm(activityObj).subscribe((result) => {
-          this.viewCtrl.dismiss(result);
+          loading.onDidDismiss(()=>{
+            this.viewCtrl.dismiss(result);
+          });
+          loading.dismiss();
         }, (error) => {
           loading.dismiss();
           let alert = this._alertCtrl.create({

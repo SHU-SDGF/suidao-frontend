@@ -101,7 +101,7 @@ export class SyncDownloadService{
       .then(_self.deleteAllFacilityInsps.bind(_self))
       .then(_self.saveFacilityRecordsToLocalDB.bind(_self))
       .then(()=>{
-        Promise.all([
+        return Promise.all([
             _self.facilityInspService.getAllFacilityInspDetails(), 
             _self.facilityInspService.getAllFacilityInspSummaries()])
         .then((result: Array<any>) => {
@@ -156,6 +156,8 @@ export class SyncDownloadService{
           });
           resolve(_self.facilityInspGroups);
         });
+      }).catch(()=>{
+        reject();
       });
     });
   }
