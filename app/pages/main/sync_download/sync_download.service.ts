@@ -34,6 +34,8 @@ export class SyncDownloadService{
   private facilityInspSummaryList = [];
   private facilityInspDetailList = [];
 
+  private updatedInspDetailList = [];
+
 
   constructor(
     private facilityInspService: FacilityInspService,
@@ -70,6 +72,7 @@ export class SyncDownloadService{
     var promise = new Promise((resolve, reject) => {
       this.facilityInspService.deleteAllFacilityInsps().then((result) => {
         console.log('delete successfully!');
+        console.log(this.updatedInspDetailList);
         resolve();
       })
     });
@@ -187,6 +190,16 @@ export class SyncDownloadService{
                     localUri: media.localUri
                   });
 
+                   _self.updatedInspDetailList.push(detail);
+                  // let inspDetailsIndex = this.findInspDetailsIndex(detail["_id"]);
+                  // console.log("find something");
+                  // console.log(inspDetailsIndex);
+                  // if(inspDetailsIndex === 0) {
+                  //   _self.updatedInspDetailList.push(detail);
+                  // } else {
+                  //   _self.updatedInspDetailList[inspDetailsIndex]["photos"].concat(media);
+                  // }
+
                   _self.facilityInspService.updateFacilityInspDetail(detail).then((result) => {
                     console.log('success');
                     console.log(result);
@@ -225,6 +238,22 @@ export class SyncDownloadService{
           });
         });
       });
+    }
+
+    function findInspDetailsIndex(id) {
+      let Inspindex = 0;
+
+      if(_self.updatedInspDetailList.length === 0) {
+        return Inspindex;
+      } else {
+        for(let index in _self.updatedInspDetailList) {
+          if(_self.updatedInspDetailList[index]["_id"] === id) {
+            Inspindex = parseInt(index);
+          }
+        }
+
+        return Inspindex;
+      }
     }
 
     function findDisease(media: MediaContent, mileage: InspMileage): FacilityInspDetail{

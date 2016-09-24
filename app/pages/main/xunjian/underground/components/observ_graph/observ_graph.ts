@@ -5,7 +5,7 @@ import {MenuTip, ActionMenuControl} from '../../../../../../shared/components/me
 import {ObservSavePage} from '../observ_save/observ_save';
 import {LookupService} from '../../../../../../providers/lookup_service';
 import {DiseaseInfoPage} from '../disease_info/disease_info';
-
+import {UserService} from '../../../../../../providers';
 
 @Component({
   templateUrl: './build/pages/main/xunjian/underground/components/observ_graph/observ_graph.html',
@@ -69,6 +69,7 @@ export class ObservGraphPage implements OnInit{
   private diseaseDetailRecords: any;
   private diseaseTypeList: any;
   private createDiseaseInfo: any;
+  private loginId: any;
 
   constructor(
     private _navCtrl: NavController,
@@ -77,6 +78,7 @@ export class ObservGraphPage implements OnInit{
     private _alertCtrl: AlertController,
     private _modalCtrl: ModalController,
     private _lookupService: LookupService,
+    private _userService: UserService,
     private _params: NavParams
   ){ }
 
@@ -89,6 +91,10 @@ export class ObservGraphPage implements OnInit{
       for(let index in this.diseaseTypeList) {
         this.actionMenuItems[index]["diseaseType"] = this.diseaseTypeList[index];
       }
+    });
+
+    this._userService.getUserInfo().then((userInfo) => {
+      this.loginId = userInfo.loginId;
     });
     
     this._mapOptions = {
@@ -288,6 +294,6 @@ export class ObservGraphPage implements OnInit{
        }
     }
 
-    return this.diseaseInfo.date + ("00" + this.diseaseInfo.count).slice(-3);
+    return this.diseaseInfo.date + this.loginId + ("00" + this.diseaseInfo.count).slice(-3);
   }
 }
