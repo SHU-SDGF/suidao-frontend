@@ -193,7 +193,7 @@ export class SyncDownloadService{
                 }
                 if(mileageDone(mileage)){
                   group.mileages.splice(group.mileages.indexOf(mileage), 1);
-                  if(group.mileages.length){
+                  if(!group.mileages.length){
                     _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
                   }
                 }
