@@ -191,11 +191,14 @@ export class SyncDownloadService{
                     console.log(error);
                   }); 
                 }
-                if(mileageDone(mileage)){
-                  group.mileages.splice(group.mileages.indexOf(mileage), 1);
-                  if(!group.mileages.length){
-                    _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
+                if(_self.taskOnProcess.successFiles.length == _self.taskOnProcess.files.length){
+                  if(mileageDone(mileage)){
+                    group.mileages.splice(group.mileages.indexOf(mileage), 1);
+                    if(!group.mileages.length){
+                      _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
+                    }
                   }
+                  resolve();
                 }
               }, (err)=>{
                 mileage.status = '3';
