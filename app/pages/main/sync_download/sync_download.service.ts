@@ -54,7 +54,11 @@ export class SyncDownloadService{
       })
       .then(this.downloadMedias.bind(this))
       .then(()=>{
-        s.next('media_ready');
+        if(this.facilityInspGroups.length){
+          s.error('media_error');
+        }else{
+          s.next('media_ready');
+        }
       }, ()=>{
         s.error('media_error');
       });

@@ -5,6 +5,7 @@ import {FacilityInspDetail} from '../../../models/FacilityInspDetail';
 import {MediaContent} from '../../../models/MediaContent';
 import {AppUtils} from '../../../shared/utils';
 import {MediaService, UploadTask, UploadTaskProgress} from '../../../providers/media_service';
+import {Observable, Subscriber} from 'rxjs';
 import * as  _ from 'lodash';
 
 export interface InspSmrGroup{
@@ -37,80 +38,92 @@ export class SyncUploadService{
     return this.reloadData();
   }
 
-  public uploadMedias(){
+  public uploadMedias(): Observable<any>{
     let _self = this;
     if(this.started) throw(new Error('任务正在进行中!'));
     this.started = true;
-    this.facilityInspGroups.forEach((group)=>{
-      group.mileages.forEach(mileage=>{
-        this.tasks.push(function(){
-          return new Promise((resolve, reject)=>{
-            _self.taskOnProcess = _self._mediaService.uploadFiles(mileage.medias.filter(media=>!media.fileUri));
-            /**
-             * file observer
-             */
-            _self.taskOnProcess.start().subscribe((media)=>{
 
-              if(media){
-                let diseaseDetail = findDisease(media, mileage);
-                // 保存到local
-                if(diseaseDetail){
-                  let photo = diseaseDetail.photos.map((p)=>p.fileUri).join(';');
-                  diseaseDetail.photo = photo;
-                  let detail = diseaseDetail.serialize();
-                  _self.facilityInspService.updateFacilityInspDetail(detail);
-                }else{
-                  throw(new Error('未发现病害！数据内包含错误格式数据！'));
+    return new Observable((s: Subscriber<any>)=>{
+      this.facilityInspGroups.forEach((group)=>{
+        group.mileages.forEach(mileage=>{
+          this.tasks.push(function(){
+            return new Promise((resolve, reject)=>{
+              _self.taskOnProcess = _self._mediaService.uploadFiles(mileage.medias.filter(media=>!media.fileUri));
+              /**
+               * file observer
+               */
+              _self.taskOnProcess.start().subscribe((media)=>{
+
+                if(media){
+                  let diseaseDetail = findDisease(media, mileage);
+                  // 保存到local
+                  if(diseaseDetail){
+                    let photo = diseaseDetail.photos.map((p)=>p.fileUri).join(';');
+                    diseaseDetail.photo = photo;
+                    let detail = diseaseDetail.serialize();
+                    _self.facilityInspService.updateFacilityInspDetail(detail);
+                  }else{
+                    throw(new Error('未发现病害！数据内包含错误格式数据！'));
+                  }
                 }
-              }
 
-              if(_self.taskOnProcess.successFiles.length == _self.taskOnProcess.files.length){
-                // 若已完成全部，则上传到服务器
-                if(mileageDone(mileage)){
-                  _self.facilityInspService
-                    .uploadFacilityRecords(_self.generateFacilityInspRecordList(mileage))
-                    .subscribe(()=>{
-                      mileage.diseaseSmrList.forEach(diseaseSmr=>{
-                        diseaseSmr.synFlg = 0;
-                        _self.facilityInspService.updateFacilityInsp(diseaseSmr);
-                        diseaseSmr.details.forEach(detail=>{
-                          detail.synFlg = 0;
-                          let _detail = detail.serialize();
-                          _self.facilityInspService.updateFacilityInspDetail(_detail);
-                        });
-                      })
-                      group.mileages.splice(group.mileages.indexOf(mileage), 1);
-                      if(!group.mileages.length){
-                        _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
-                      }
-                      resolve();
-                      _self.started = false;
-                    }, (err)=>{
-                      mileage.status = '3';
-                      console.log(err);
-                      resolve(err);
-                    });
-                }else{
-                  reject(new Error('上传未完成，但是进程停止了！'));
+                if(_self.taskOnProcess.successFiles.length == _self.taskOnProcess.files.length){
+                  // 若已完成全部，则上传到服务器
+                  if(mileageDone(mileage)){
+                    _self.facilityInspService
+                      .uploadFacilityRecords(_self.generateFacilityInspRecordList(mileage))
+                      .subscribe(()=>{
+                        mileage.diseaseSmrList.forEach(diseaseSmr=>{
+                          diseaseSmr.synFlg = 0;
+                          _self.facilityInspService.updateFacilityInsp(diseaseSmr);
+                          diseaseSmr.details.forEach(detail=>{
+                            detail.synFlg = 0;
+                            let _detail = detail.serialize();
+                            _self.facilityInspService.updateFacilityInspDetail(_detail);
+                          });
+                        })
+                        group.mileages.splice(group.mileages.indexOf(mileage), 1);
+                        if(!group.mileages.length){
+                          _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
+                        }
+                        resolve();
+                        _self.started = false;
+                      }, (err)=>{
+                        mileage.status = '3';
+                        console.log(err);
+                        resolve(err);
+                      });
+                  }else{
+                    reject(new Error('上传未完成，但是进程停止了！'));
+                  }
                 }
-              }
-              
-            }, (error)=>{
-              mileage.status = '3';
-            });
+                
+              }, (error)=>{
+                mileage.status = '3';
+              });
 
-            /**
-             * progress observer
-             */
-            _self.taskOnProcess.$progress.subscribe((progress: UploadTaskProgress)=>{
-              mileage.status = <any> `${ AppUtils.formatBytes( progress.loaded || 0, 1)}/${AppUtils.formatBytes( progress.total || 1, 1)} (${progress.fileIndex}/${progress.totalFiles})`;
+              /**
+               * progress observer
+               */
+              _self.taskOnProcess.$progress.subscribe((progress: UploadTaskProgress)=>{
+                mileage.status = <any> `${ AppUtils.formatBytes( progress.loaded || 0, 1)}/${AppUtils.formatBytes( progress.total || 1, 1)} (${progress.fileIndex}/${progress.totalFiles})`;
+              });
             });
           });
         });
       });
-    });
 
-    return AppUtils.chain(this.tasks, true);
+      AppUtils.chain(this.tasks, true).then(()=>{
+        if(this.facilityInspGroups.length){
+          s.error('media-error');
+        }else{
+          s.next('media-ready');
+        }
+      }).catch(()=>{
+        s.error('media-error');
+      });
+    });
+    
 
     function mileageDone(mileage: InspMileage):boolean{
       return !mileage.diseaseSmrList.find((diseaseSmr)=>{

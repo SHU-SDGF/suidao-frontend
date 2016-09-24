@@ -71,35 +71,38 @@ export class SyncUploadPage implements OnInit {
 
   syncUpload() {
     console.log('upload start');
-    this._syncUploadService.uploadMedias().then(()=>{
-      this._alertCtrl.create({
-        title: '同步上传已完成',
-        buttons: [
-          {
-            text: '确定',
-            role: 'cancel'
-          }
-        ]
-      }).present();
+    try{
+      this._syncUploadService.uploadMedias().subscribe(()=>{
+        this._alertCtrl.create({
+          title: '同步上传已完成',
+          buttons: [
+            {
+              text: '确定',
+              role: 'cancel'
+            }
+          ]
+        }).present();
 
-      LocalNotifications.schedule([{
-        id: ~~(Math.random()*100000),
-        text: '同步上传已完成！'
-      }]);
+        LocalNotifications.schedule([{
+          id: ~~(Math.random()*100000),
+          text: '同步上传已完成！'
+        }]);
 
-    }, (err)=>{
-      this._alertCtrl.create({
-        title: '错误',
-        message: '同步过程中发生错误！请重新尝试！',
-        buttons: [
-          {
-            text: '确定',
-            role: 'cancel'
-          }
-        ]
-      }).present();
-      console.log(err);
-    })
+      }, (err)=>{
+        this._alertCtrl.create({
+          title: '错误',
+          message: '同步过程中发生错误！请重新尝试！',
+          buttons: [
+            {
+              text: '确定',
+              role: 'cancel'
+            }
+          ]
+        }).present();
+        console.log(err);
+      })
+    }catch(err){
+
+    }
   }
-
 }

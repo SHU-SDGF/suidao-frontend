@@ -136,6 +136,7 @@ export class ObservSavePage implements OnInit{
            this._viewCtrl.dismiss(this.diseaseDetailObj);
         });
       },(error) => {
+        console.log(error);
       });
     } else {
     }
