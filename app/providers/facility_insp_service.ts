@@ -124,6 +124,11 @@ export class FacilityInspService {
 		return promise;
 	}
 
+	//批量生成地下巡检历史记录
+	batchCreateFacilityInspDetails(facilityInspDetailsList) {
+		return this.facilityInspDetailDB.batchCreateFacilityInspDetails(facilityInspDetailsList);
+	}
+
 	getLatestFacilityInspDetail(diseaseNo) {
 		return this.facilityInspDetailDB.getFacilityInspDetailByDiseaseNo(diseaseNo);
 	}

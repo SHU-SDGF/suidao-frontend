@@ -59,6 +59,16 @@ export class SyncDownloadService{
         if(this.facilityInspGroups.length){
           s.error('media_error');
         }else{
+          console.log("finished");
+          console.log(this.updatedInspDetailList);
+
+          this.facilityInspService.batchCreateFacilityInspDetails(this.updatedInspDetailList).then((result) => {
+            console.log('finished!');
+            console.log(result);
+          }, (error) => {
+            console.log(error);
+            console.log('failed !');
+          })
           s.next('media_ready');
         }
       }, ()=>{
@@ -190,7 +200,7 @@ export class SyncDownloadService{
                     localUri: media.localUri
                   });
 
-                   _self.updatedInspDetailList.push(detail);
+                  _self.updatedInspDetailList.push(detail);
                   // let inspDetailsIndex = this.findInspDetailsIndex(detail["_id"]);
                   // console.log("find something");
                   // console.log(inspDetailsIndex);
@@ -200,14 +210,14 @@ export class SyncDownloadService{
                   //   _self.updatedInspDetailList[inspDetailsIndex]["photos"].concat(media);
                   // }
 
-                  _self.facilityInspService.updateFacilityInspDetail(detail).then((result) => {
-                    console.log('success');
-                    console.log(result);
-                  },(error) => {
-                    console.log('failed');
-                    console.log(error);
-                  }); 
-                }
+                  // _self.facilityInspService.updateFacilityInspDetail(detail).then((result) => {
+                  //   console.log('success');
+                  //   console.log(result);
+                  // },(error) => {
+                  //   console.log('failed');
+                  //   console.log(error);
+                  // }); 
+                }  
                 if(_self.taskOnProcess.successFiles.length == _self.taskOnProcess.files.length){
                   if(mileageDone(mileage)){
                     group.mileages.splice(group.mileages.indexOf(mileage), 1);
