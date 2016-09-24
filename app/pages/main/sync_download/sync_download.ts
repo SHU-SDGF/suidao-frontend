@@ -82,15 +82,25 @@ export class SyncDownloadPage implements OnInit {
               break;
             case 'media_ready':
               if(this.facilityInspGroups.length){
-                let alert = this._alertCtrl.create({
-                  title: '数据同步完成，但是发生错误！',
-                  buttons: ['确认']
-                }).present();
+                if(loader){
+                  loader.dismiss();
+                }
+                setTimeout(() => {
+                  let alert = this._alertCtrl.create({
+                    title: '数据同步完成，但是发生错误！',
+                    buttons: ['确认']
+                  }).present();
+                }, 1000);
               }else{
-                let alert = this._alertCtrl.create({
-                  title: '数据同步完成！',
-                  buttons: ['确认']
-                }).present();
+                if(loader){
+                  loader.dismiss();
+                }
+                setTimeout(()=>{
+                  let alert = this._alertCtrl.create({
+                    title: '数据同步完成！',
+                    buttons: ['确认']
+                  }).present();
+                }, 1000);
               }
           }
         }, (err)=>{

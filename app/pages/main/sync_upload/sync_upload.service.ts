@@ -41,6 +41,7 @@ export class SyncUploadService{
   public uploadMedias(): Observable<any>{
     let _self = this;
     if(this.started) throw(new Error('任务正在进行中!'));
+    this.tasks = [];
     this.started = true;
 
     return new Observable((s: Subscriber<any>)=>{
@@ -87,7 +88,6 @@ export class SyncUploadService{
                           _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
                         }
                         resolve();
-                        _self.started = false;
                       }, (err)=>{
                         mileage.status = '3';
                         console.log(err);
@@ -114,6 +114,7 @@ export class SyncUploadService{
       });
 
       AppUtils.chain(this.tasks, true).then(()=>{
+        _self.started = false;
         if(this.facilityInspGroups.length){
           s.error('media-error');
         }else{
