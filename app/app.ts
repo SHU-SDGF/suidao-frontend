@@ -125,108 +125,6 @@ export class MyApp implements OnInit{
   private syncDownload(){
     this._modalCtrl.create(SyncDownloadPage).present();
   }
-
-  syncDelete() {
-    this.facilityInspService.deleteAllFacilityInsps().then((result) => {
-    }, (error) => {
-    })
-  }
-
-  private saveFacilityRecordsToLocalDB(result) {
-    console.log('starting save to local db');
-    console.log(result);
-    this.facilityInspService.saveFacilityRecordsToLocalDB(result).then((result) => {
-      //成功！！
-      $('.loading-cmp').hide();
-
-      //发布事件
-      this.events.publish('optionChange');
-      // let alert = this.alertController.create({
-      //   subTitle: '数据同步成功！',
-      //   buttons: ['确认']
-      // });
-      // alert.present();
-    },(error) => {
-      console.log(error);
-    })
-  }
-
-  private downloadFacilityRecords() {
-    var promise = new Promise((resolve, reject) => {
-      this.facilityInspService.downloadFacilityRecords().subscribe((result) => {
-        console.log('downloading successfully!');
-        console.log(result);
-        resolve(result);
-      },(error) => {
-        console.log('download failed');
-        console.log(error);
-        reject(error);
-      });
-    });
-
-    return promise;
-  }
-
-  private deleteAllFacilityInsps() {
-    var promise = new Promise((resolve, reject) => {
-      this.facilityInspService.deleteAllFacilityInsps().then((result) => {
-        console.log('delete successfully!');
-        console.log(result);
-        resolve();
-      })
-    });
-    return promise;
-  }
-
-  private uploadFacilityRecords(facilityInspRecordList) {
-    var promise = new Promise((resolve, reject) => {
-      if(facilityInspRecordList.length != 0) {
-        this.facilityInspService.uploadFacilityRecords(facilityInspRecordList).subscribe((result) => {
-          console.log('uploading successfully!');
-          console.log(result);
-          resolve(result);
-        },(error) => {
-          console.log('uploading failed');
-          console.log(error);
-          reject(error);
-        });
-      } else {
-        resolve({'ok': true});
-      }
-    });
-    return promise;
-  }
-
-  private generateFacilityInspRecordList() {
-    return new Promise((resolve, reject) => {
-      let facilityInspList = [];
-      let facilityInspDetailsList = [];
-      let facilityInspRecordList = [];
-      this.facilityInspService.getAllFacilityInspSummaries().then((result) => {
-        facilityInspList = result;
-        console.log(result);
-        //同步api
-        this.facilityInspService.getAllFacilityInspDetails().then((res) => {
-          facilityInspDetailsList = res;
-          for(let index in facilityInspList){
-            let facilityInspObj = {
-              "facilityInspSum": facilityInspList[index],
-              "facilityInspDetailList": []
-            };
-
-            let diseaseNo = facilityInspList[index]["diseaseNo"];
-            for(let index2 in facilityInspDetailsList) {
-              if(diseaseNo == facilityInspDetailsList[index2]["diseaseNo"]) {
-                facilityInspObj["facilityInspDetailList"].push(facilityInspDetailsList[index2]);
-              }
-            }
-            facilityInspRecordList.push(facilityInspObj);
-          }
-          resolve(facilityInspRecordList);
-        });
-      });
-    });
-  }
 }
 
 // load providers
@@ -238,5 +136,4 @@ for(let p in _providers ){
 ionicBootstrap(MyApp, providersAr, {
   mode : 'ios',
   backButtonText: "返回",
-  statusbarPadding: true
 });

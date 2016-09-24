@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
-import {Events, AlertController, LoadingController} from 'ionic-angular';
+import {Events} from 'ionic-angular';
 import { FacilityInspService } from '../../../providers/facility_insp_service';
 import {FacilityInspSummary} from '../../../models/FacilityInspSummary';
 import {FacilityInspDetail} from '../../../models/FacilityInspDetail';
 import {MediaContent} from '../../../models/MediaContent';
 import {AppUtils} from '../../../shared/utils';
 import {MediaService, DownloadTask, UploadTaskProgress} from '../../../providers/media_service';
+import {Observable, Subscriber} from 'rxjs';
 import * as  _ from 'lodash';
 
 export interface InspSmrGroup{
@@ -37,33 +38,28 @@ export class SyncDownloadService{
   constructor(
     private facilityInspService: FacilityInspService,
     private _mediaService: MediaService,
-    private events: Events,
-    private _alertCtrl: AlertController,
-    private _loadingCtrl: LoadingController
+    private events: Events
   ){}
 
-  public syncDownload(): Promise<any> {
+  public syncDownload(): Observable<any> {
     let _self = this;
     if(this.started) throw(new Error('任务正在进行中'));
 
-    let loader = this._loadingCtrl.create({
-      content: '正在下载数据'
-    });
-    loader.present();
-    return this.reloadData().catch(()=>{
-        loader.onDidDismiss(()=>{
-          _self._alertCtrl.create({
-            title: '错误',
-            subTitle: '同步过程中发生错误！请重新尝试！',
-            buttons: ['确认']
-          }).present();
-        });
-        loader.dismiss();
+    return new Observable((s: Subscriber<any>)=>{
+      s.next('data_started');
+      this.reloadData().catch(()=>{
+        s.error('data_error');
       }).then(()=>{
-        loader.dismiss();
-        return Promise.resolve();
+        s.next('data_ready');
       })
-      .then(this.downloadMedias);
+      .then(this.downloadMedias.bind(this))
+      .then(()=>{
+        s.next('media_ready');
+      }, ()=>{
+        s.error('media_error');
+      });
+    });
+   
   }
 
   private deleteAllFacilityInsps() {
@@ -82,11 +78,11 @@ export class SyncDownloadService{
 
   private reloadData(): Promise<InspSmrGroup[]> {
     let _self = this;
+    this.facilityInspGroups.splice(0, this.facilityInspGroups.length);
     return new Promise((resolve, reject)=>{
       _self.downloadFacilityRecords()
       .then(_self.deleteAllFacilityInsps.bind(_self))
       .then(_self.saveFacilityRecordsToLocalDB.bind(_self))
-      .then()
       .then(()=>{
         Promise.all([
             _self.facilityInspService.getAllFacilityInspDetails(), 
@@ -126,7 +122,15 @@ export class SyncDownloadService{
               mileages[mileage].forEach((disease)=>{
                 disease.details.forEach((detail)=>{
                   let detailPhoto = detail.photo.split(';');
-                  insp.medias = insp.medias.concat(detailPhoto);
+                  detail.photos = detailPhoto.map(uri=>MediaContent.deserialize({
+                     mediaType: 'img',
+                    fileUri: uri,
+                    size: 0,
+                    preview: uri,
+                    cached: false,
+                    localUri: ''
+                  }));
+                  insp.medias = insp.medias.concat(detail.photos);
                 });
               });
             });
@@ -157,87 +161,78 @@ export class SyncDownloadService{
   private downloadMedias() {
 
     let _self = this;
-  	if(this.started) return;
-    this.started = true;
 
     this.facilityInspGroups.forEach((group) => {
       group.mileages.forEach((mileage) => {
         if(mileage.medias.length > 0) {
-          let mediaContentList = [];
-          for(let index in mileage.medias) {
-            mediaContentList.push(
-              MediaContent.deserialize({
-                mediaType: 'img',
-                fileUri: mileage.medias[index],
-                size: 0,
-                preview: '',
-                cached: false,
-                localUri: ''
-              })
-            )
-          }
-          mileage.medias = mediaContentList;
-          mileage.medias.map((media) => {
-            MediaContent.deserialize({
-              mediaType: 'img',
-              fileUri: media,
-              size: 0,
-              preview: '',
-              cached: false,
-              localUri: ''
-            });
-          });
           _self.tasks.push(function() {
             return new Promise((resolve, reject) => {
               _self.taskOnProcess = _self._mediaService.downloadFiles(mileage.medias);
+              _self.taskOnProcess.$progress.subscribe((progress: UploadTaskProgress)=>{
+                mileage.status = <any> `${ AppUtils.formatBytes( progress.loaded || 0, 1)}/${AppUtils.formatBytes( progress.total || 1, 1)} (${progress.fileIndex}/${progress.totalFiles})`;
+              });
 
               _self.taskOnProcess.start().subscribe((media) => {
-                let matchedInspDetail = null;
+                
                 if(media) {
                   //存起来
-                  media.preview = media.localUri;
-                  for(let index in mileage.diseaseSmrList) {
-                    for(let index2 in mileage.diseaseSmrList[index]["details"]) {
-                      let photoArray = mileage.diseaseSmrList[index]["details"][index2]["photo"].split(';');
-                      let match = false;
-                      for(let index3 in photoArray) {
-                        if(photoArray[index3] == media.fileUri) {
-                          match = true;
-                        }
-                      }
-                      if(match) {
-                      // if(mileage.diseaseSmrList[index]["details"][index2]["photo"] == media.fileUri) {
-                        console.log('find-one');
-                        if(mileage.diseaseSmrList[index]["details"][index2]["photos"]) {
-                          mileage.diseaseSmrList[index]["details"][index2]["photos"].push(media);
-                        } else {
-                          mileage.diseaseSmrList[index]["details"][index2]["photos"] = [];
-                          mileage.diseaseSmrList[index]["details"][index2]["photos"].push(media);
-                        }
-                        matchedInspDetail = mileage.diseaseSmrList[index]["details"][index2];
-                      }
-                    }
-                  }
+                  let detail = findDisease(media, mileage);
+                  let photo = detail.photos.find(photo=>photo.fileUri == media.fileUri);
+                  Object.assign(photo, {
+                    preview: media.localUri,
+                    localUri: media.localUri
+                  });
 
-                  if(matchedInspDetail) {
-                    console.log('update to db');
-                    console.log(matchedInspDetail);
-                    _self.facilityInspService.updateFacilityInspDetail(matchedInspDetail).then((result) => {
-                      console.log('success');
-                      console.log(result);
-                    },(error) => {
-                      console.log('failed');
-                      console.log(error);
-                    })  
+                  _self.facilityInspService.updateFacilityInspDetail(detail).then((result) => {
+                    console.log('success');
+                    console.log(result);
+                  },(error) => {
+                    console.log('failed');
+                    console.log(error);
+                  }); 
+                }
+                if(mileageDone(mileage)){
+                  group.mileages.splice(group.mileages.indexOf(mileage), 1);
+                  if(group.mileages.length){
+                    _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
                   }
                 }
-              })
+              }, (err)=>{
+                mileage.status = '3';
+                reject(err);
+                console.log(err);
+              });
             })
           })
         }        
       });
-      AppUtils.chain(_self.tasks, true);
     });
+    return AppUtils.chain(_self.tasks, true);
+
+    function mileageDone(mileage: InspMileage):boolean{
+      return !mileage.diseaseSmrList.find((diseaseSmr)=>{
+        return !!diseaseSmr.details.find((detail)=>{
+          if(!detail.photos) return false;
+          return !!detail.photos.find(meida=>{
+            return !meida.localUri;
+          });
+        });
+      });
+    }
+
+    function findDisease(media: MediaContent, mileage: InspMileage): FacilityInspDetail{
+      let result = null;
+      mileage.diseaseSmrList.find((diseaseSmr)=>{
+        let d = diseaseSmr.details.find((detail)=>{
+          return !!detail.photos.find((photo)=>{
+            return photo.fileUri == media.fileUri;
+          });
+        });
+        d && (result = d);
+        return !!d;
+      });
+      return result;
+    }
   }
 
   private downloadFacilityRecords() {

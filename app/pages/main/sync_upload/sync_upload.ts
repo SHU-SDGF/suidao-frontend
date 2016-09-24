@@ -22,6 +22,9 @@ export class SyncUploadPage implements OnInit {
   @ViewChild('header') _header: ElementRef;
 
   private facilityInspGroups: InspSmrGroup[] = [];
+  private models = [];
+  private monomers = [];
+
   private statusList = [{
     id: '1',
     name: '未开始'
@@ -48,6 +51,14 @@ export class SyncUploadPage implements OnInit {
         'background-color': '#202737'
       });
     }
+
+    this.lookupService.getMenomers().then((monomers)=>{
+      this.monomers = monomers;
+    });
+    this.lookupService.getModelNames().then((models)=>{
+      this.models = models;
+    });
+
     
     this._syncUploadService.getFacilityInspGroups().then((groups)=>{
       this.facilityInspGroups = groups;
