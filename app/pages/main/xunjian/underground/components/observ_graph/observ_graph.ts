@@ -273,7 +273,9 @@ export class ObservGraphPage implements OnInit{
   }
 
   private generateDiseaseNo() {
-    let today = new Date().toISOString().slice(0, 10).split('-').join('');
+    let dateObj = this.getLocalTime();
+    let today = dateObj.today;
+    let formatToday =  dateObj.formatToday;
     
     if(this.createDiseaseInfo){
       if(this.createDiseaseInfo["date"] == today) {
@@ -294,6 +296,17 @@ export class ObservGraphPage implements OnInit{
        }
     }
 
-    return this.diseaseInfo.date + this.loginId + ("00" + this.diseaseInfo.count).slice(-3);
+    return formatToday + ("00" + this.diseaseInfo.count).slice(-3);
+  }
+
+  private getLocalTime() {
+    var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() > 8 ? (date.getMonth() + 1) : '0' + ((date.getMonth()) + 1);
+    var day = date.getDate();
+    return {
+      formatToday: year + '' + month  + '' + day + date.getHours() + date.getMinutes() + date.getSeconds(),
+      today: year + '' + month + '' + day
+    }
   }
 }
