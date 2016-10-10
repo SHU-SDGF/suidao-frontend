@@ -3,6 +3,14 @@
 @import './components/disease_info/disease_info';
 
 underground-page{
-  .content-body{
+  ion-card-content{
+    position: relative;
+
+    .disease-icon{
+      position: absolute;
+      z-index: 1;
+      width: 30px;
+      height: 30px;
+    }
   }
 }

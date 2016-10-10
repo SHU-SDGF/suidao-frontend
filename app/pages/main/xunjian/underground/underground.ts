@@ -6,8 +6,16 @@ import {Camera} from 'ionic-native';
 import {ObservInfoPage} from './components/observ_info/observ_info';
 import {QRCodeService} from '../../../../providers/qrcode_service';
 import {FacilityInspService} from '../../../../providers/facility_insp_service';
+import {LookupService} from '../../../../providers/lookup_service';
+import {DomSanitizationService} from '@angular/platform-browser';
+
 import * as  _ from 'lodash';
 declare const cordova;
+
+interface ImageSize{
+  width: number,
+  height: number
+}
 
 @Component({
   selector: 'underground-page',
@@ -16,6 +24,9 @@ declare const cordova;
 export class UndergroundPage implements OnInit, OnDestroy {
   private facilityInspList: any = [];
   private shadowFacilityInspList: any = [];
+  private scale: number;
+  private imgHeight: number;
+  private diseaseTypes = this._lookupService.getDiseaseTypesInfo();
 
   constructor(
     private _events: Events,
@@ -23,7 +34,9 @@ export class UndergroundPage implements OnInit, OnDestroy {
     private _modalCtrl: ModalController,
     private _codeService: QRCodeService,
     private _facilityInspService: FacilityInspService,
-    private _navCtrl: NavController
+    private _navCtrl: NavController,
+    private _lookupService: LookupService,
+    private _sanitizer: DomSanitizationService
   ){}
 
   ngOnInit(){
@@ -31,10 +44,15 @@ export class UndergroundPage implements OnInit, OnDestroy {
     this._events.subscribe('groundDataChange', ()=>{
       this.reloadData();
     });
+    
   }
 
   ngAfterViewInit() {
-    this.reloadData();
+    this.getImgScale().then((scale)=>{
+      this.scale = scale;
+      this.reloadData();
+    });
+    
     this._events.subscribe('optionChange', this.reloadData.bind(this));
 
     this._events.subscribe('searchInspAct', ((searchArg) => {
@@ -55,13 +73,6 @@ export class UndergroundPage implements OnInit, OnDestroy {
       localStorage.setItem('scannedInfo', JSON.stringify({"mileage": facilityInspInfo["mileage"], "facilityId": facilityInspInfo.facilityInsp[0]["facilityId"]}));
     }
     this._navCtrl.push(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
-    /*
-    let modal = this._modalCtrl.create(ObservInfoPage, {'facilityInspInfo': facilityInspInfo});
-    modal.present();
-    modal.onDidDismiss((value) => {
-      this.reloadData();
-    });
-    */
   }
 
   scanCode(){
@@ -129,20 +140,62 @@ export class UndergroundPage implements OnInit, OnDestroy {
   private filterFacilityInsp(searchArg) {
   };
 
+  private getImgScale(){
+    return new Promise<number>((resolve, reject)=>{
+      var image = new Image();
+      image.src = 'build/imgs/underground.png';
+      image.onload = () => {
+        let size: ImageSize = getImageSize(image);
+        let imgWidth = ($(window).width() - 56);
+        let scale = size.width / imgWidth;
+        this.imgHeight = size.height / scale;
+        /*
+        let actualSize: ImageSize ={
+          width: $(window).width() - 56,
+          height: scale * size.height
+        };
+        */
+
+        resolve(scale);
+      };
+
+      function getImageSize(image) {
+        return{
+          width: image.width,
+          height: image.height
+        };
+      }
+    });
+  }
+
   private reloadData() {
     let that = this;
     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
     this.facilityInspList = [];
     this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
+      result.docs.forEach((doc)=>{
+        Object.assign(doc, {
+          iconLeft: doc.longitude / this.scale,
+          iconTop: this.imgHeight - doc.latitude / this.scale-15,
+          icon: this.getIconByDiseaseType(doc.diseaseTypeId)
+        });
+      });
       var filteredResult =  _.groupBy(result.docs, 'mileage');
-      for(var index in filteredResult) {
+      for(let index in filteredResult) {
         that.facilityInspList.push({mileage: index, facilityInsp: filteredResult[index]})
       }
 
       that.shadowFacilityInspList = _.cloneDeep(that.facilityInspList);
+      console.log(this.facilityInspList);
+      console.log(this.scale);
     }, (error) => {
 
     });
+  }
+
+  private getIconByDiseaseType(diseaseType) {
+    var diseaseTypeIndex = diseaseType[1] - 1;
+    return this.diseaseTypes[diseaseTypeIndex]["icon"];
   }
 }
 

@@ -217,6 +217,35 @@ export class LookupService {
 			return JSON.parse(data);
 		})
 	};
+
+	getDiseaseTypesInfo(){
+		return [
+			{
+				"icon": 'build/imgs/liefeng.png',
+				"name": "裂缝"
+			},
+			{
+				"icon": 'build/imgs/shenlou.png',
+				"name": "渗漏"
+			},
+			{
+				"icon": 'build/imgs/sunhuai.png',
+				"name": "缺损"
+			},
+			{
+				"icon": 'build/imgs/cuotai.png',
+				"name": "错台"
+			},
+			{
+				"icon": 'build/imgs/xichu.png',
+				"name": "张开"
+			},
+			{
+				"icon": 'build/imgs/jiefeng.png',
+				"name": "腐蚀"
+			}
+		];
+	}
 }
 
 
