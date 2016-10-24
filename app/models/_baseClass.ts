@@ -1,4 +1,4 @@
-import {MapUtils, JsonProperty} from '../providers/JsonMapper';
+import {JsonProperty} from '../providers/JsonMapper';
 
 export abstract class _baseClass{
   createUser: string //作成者
