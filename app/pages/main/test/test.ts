@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 
 declare const navigator;
 declare const tracking;
+declare const MediaStreamTrack;
+declare const stats;
 
 @Component({
     template: `
@@ -20,7 +22,8 @@ declare const tracking;
             <div class="select">
                 <label for="videoSource">Video source: </label><select id="videoSource"></select>
             </div>
-            <video muted="" autoplay=""></video>
+            <video muted="" autoplay="" id="video" style="display: none;"></video>
+            <canvas id="canvas"></canvas>
         </ion-content>
     `
 })
@@ -30,26 +33,28 @@ export class TestPage implements OnInit {
         var videoElement = document.querySelector('video');
         var audioSelect = document.querySelector('select#audioSource');
         var videoSelect = document.querySelector('select#videoSource');
+        var cameras = [];
 
         navigator.getUserMedia = navigator.getUserMedia ||
         navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
         function gotSources(sourceInfos) {
-        for (var i = 0; i !== sourceInfos.length; ++i) {
-            var sourceInfo = sourceInfos[i];
-            var option = document.createElement('option');
-            option.value = sourceInfo.id;
-            if (sourceInfo.kind === 'audio') {
-            option.text = sourceInfo.label || 'microphone ' +
-                (audioSelect['length'] + 1);
-            audioSelect.appendChild(option);
-            } else if (sourceInfo.kind === 'video') {
-            option.text = sourceInfo.label || 'camera ' + (videoSelect['length'] + 1);
-            videoSelect.appendChild(option);
-            } else {
-            console.log('Some other kind of source: ', sourceInfo);
+            for (var i = 0; i !== sourceInfos.length; ++i) {
+                var sourceInfo = sourceInfos[i];
+                var option = document.createElement('option');
+                option.value = sourceInfo.id;
+                if (sourceInfo.kind === 'audio') {
+                    option.text = sourceInfo.label || 'microphone ' +
+                        (audioSelect['length'] + 1);
+                    audioSelect.appendChild(option);
+                } else if (sourceInfo.kind === 'video') {
+                    option.text = sourceInfo.label || 'camera ' + (videoSelect['length'] + 1);
+                    cameras.push(option.value);
+                    videoSelect.appendChild(option);
+                } else {
+                    console.log('Some other kind of source: ', sourceInfo);
+                }
             }
-        }
         }
 
         if (typeof MediaStreamTrack === 'undefined' ||
@@ -61,8 +66,8 @@ export class TestPage implements OnInit {
 
         function successCallback(stream) {
             window['stream'] = stream; // make stream available to console
-            videoElement.src = window.URL.createObjectURL(stream);
-            videoElement.play();
+            videoElement['src'] = window.URL.createObjectURL(stream);
+            videoElement['play']();
         }
 
         function errorCallback(error) {
@@ -70,31 +75,32 @@ export class TestPage implements OnInit {
         }
 
         function start() {
-        if (window['stream']) {
-            videoElement.src = null;
-            window['stream'].stop();
-        }
-        var audioSource = audioSelect['value'];
-        var videoSource = videoSelect['value'];
-        var constraints = {
-            audio: {
-            optional: [{
-                sourceId: audioSource
-            }]
-            },
-            video: {
-            optional: [{
-                sourceId: videoSource
-            }]
+            if (window['stream']) {
+                videoElement['src'] = null;
+                window['stream'].stop();
             }
-        };
-        navigator.getUserMedia(constraints, successCallback, errorCallback);
+            var audioSource = audioSelect['value'];
+            var videoSource = videoSelect['value'];
+            var constraints = {
+                audio: {
+                optional: [{
+                    sourceId: audioSource
+                }]
+                },
+                video: {
+                    optional: [{
+                        sourceId: cameras[1]
+                    }]
+                }
+            };
+            navigator.getUserMedia(constraints, successCallback, errorCallback);
         }
 
         audioSelect['onchange'] = start;
         videoSelect['onchange'] = start;
 
-        start();
+        // start();
+        this.track();
     }
 
     track() {
@@ -124,6 +130,6 @@ export class TestPage implements OnInit {
             context.fillRect(corners[i], corners[i + 1], 2, 2);
         }
         });
-        tracking.track('#video', tracker, { camera: true });
+        tracking.track('#video', tracker);
     }
 }
