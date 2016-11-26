@@ -3,12 +3,9 @@ import {Component, OnInit} from '@angular/core';
 declare const navigator;
 declare const tracking;
 declare const MediaStreamTrack;
-declare const stats;
 
 @Component({
     template: `
-        <script src="https://trackingjs.com/bower/tracking.js/build/tracking-min.js"></script>
-        <script src="https://trackingjs.com/bower/tracking.js/examples/assets/stats.min.js"></script>
 
         <ion-header no-shadow #header>
             <ion-title center [hidden]="!onGround">
@@ -16,18 +13,23 @@ declare const stats;
             </ion-title>
         </ion-header>
         <ion-content>
-            <div class="select">
-                <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+            <div style="position: absolute; top: 0px; width: 100%; height:30px;">
+                <div class="select">
+                    <label for="audioSource">Audio source: </label><select id="audioSource"></select>
+                </div>
+                <div class="select">
+                    <label for="videoSource">Video source: </label><select id="videoSource"></select>
+                </div>
             </div>
-            <div class="select">
-                <label for="videoSource">Video source: </label><select id="videoSource"></select>
-            </div>
-            <video muted="" autoplay="" id="video" style="display: none;"></video>
-            <canvas id="canvas"></canvas>
+            <video muted="" autoplay="" id="video" style="position:absolute; top: -2000px;"></video>
+            <canvas id="canvas" [attr.width]="windowWidth" [attr.height]="windowHeight"></canvas>
         </ion-content>
     `
 })
 export class TestPage implements OnInit {
+
+    windowHeight = 350;
+    windowWidth = 350;
 
     ngOnInit() {
         var videoElement = document.querySelector('video');
@@ -94,6 +96,10 @@ export class TestPage implements OnInit {
                 }
             };
             navigator.getUserMedia(constraints, successCallback, errorCallback);
+            setTimeout(()=> {
+                this.windowWidth = document.querySelector('#video')['offsetWidth'];
+                this.windowHeight = document.querySelector('#video')['offsetHeight'];
+            }, 2000);
         }
 
         audioSelect['onchange'] = start;
@@ -113,22 +119,20 @@ export class TestPage implements OnInit {
         tracking.Fast.THRESHOLD = 2;
         FastTracker.prototype.threshold = tracking.Fast.THRESHOLD;
         FastTracker.prototype.track = function(pixels, width, height) {
-        stats.begin();
         var gray = tracking.Image.grayscale(pixels, width, height);
         var corners = tracking.Fast.findCorners(gray, width, height);
-        stats.end();
         this.emit('track', {
             data: corners
         });
         };
         var tracker = new FastTracker();
         tracker.on('track', function(event) {
-        context.clearRect(0, 0, canvas['width'], canvas['height']);
-        var corners = event.data;
-        for (var i = 0; i < corners.length; i += 2) {
-            context.fillStyle = '#f00';
-            context.fillRect(corners[i], corners[i + 1], 2, 2);
-        }
+            context.clearRect(0, 0, canvas['width'], canvas['height']);
+            var corners = event.data;
+            for (var i = 0; i < corners.length; i += 2) {
+                context.fillStyle = '#000';
+                context.fillRect(corners[i], corners[i + 1], 2, 2);
+            }
         });
         tracking.track('#video', tracker);
     }
