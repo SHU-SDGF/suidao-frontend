@@ -203,22 +203,6 @@ export class SyncDownloadService{
                   });
 
                   _self.updatedInspDetailList.push(detail);
-                  // let inspDetailsIndex = this.findInspDetailsIndex(detail["_id"]);
-                  // console.log("find something");
-                  // console.log(inspDetailsIndex);
-                  // if(inspDetailsIndex === 0) {
-                  //   _self.updatedInspDetailList.push(detail);
-                  // } else {
-                  //   _self.updatedInspDetailList[inspDetailsIndex]["photos"].concat(media);
-                  // }
-
-                  // _self.facilityInspService.updateFacilityInspDetail(detail).then((result) => {
-                  //   console.log('success');
-                  //   console.log(result);
-                  // },(error) => {
-                  //   console.log('failed');
-                  //   console.log(error);
-                  // }); 
                 }  
                 if(_self.taskOnProcess.successFiles.length == _self.taskOnProcess.files.length){
                   if(mileageDone(mileage)){

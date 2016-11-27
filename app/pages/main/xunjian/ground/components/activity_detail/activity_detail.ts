@@ -112,7 +112,7 @@ export class ActivityDetailPage implements OnInit{
     });
 
     publisher.subscribe((media) => {
-      if (media.fileUri) {
+      if (media && media.fileUri) {
         switch (media.mediaType) {
           case 'img':
             imgUrlList.push(media.fileUri);
@@ -136,18 +136,12 @@ export class ActivityDetailPage implements OnInit{
           });
           loading.dismiss();
         }, (error) => {
-          loading.dismiss();
-          let alert = this._alertCtrl.create({
-            title: '出错啦！',
-            message: '创建活动未能成功！请重新尝试！',
-            buttons: [
-              {
-                text: '确定',
-                role: 'cancel'
-              }
-            ]
+          this._zone.run(()=>{
+            loadingOptions.content = '创建活动未能成功！请重新尝试！'
           });
-          alert.present();
+          setTimeout(()=>{
+            loading.dismiss();
+          }, 2000);
         });
       }
     }, (error)=>{
