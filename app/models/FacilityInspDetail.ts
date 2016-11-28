@@ -37,7 +37,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.depth = null;
 		this.detailTypeId = null;
 		this.diseaseDate = null;
-		this.diseaseDescription = null;
+		this.diseaseDescription = ' ';
 		this.diseaseNo = null;
 		this.diseaseTypeId = null;
 		this.dislocation = null;

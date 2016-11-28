@@ -69,7 +69,7 @@ export class ObservSavePage implements OnInit{
           latitude: this.point.latitude,
           diseaseNo: this.params.data.diseaseNo,
           diseaseDate: new Date().getTime(),
-          diseaseDescription: '',
+          diseaseDescription: ' ',
           displayDiseaseDate: new Date().toISOString().slice(0, 10),
           facilityType: "1",
           photo: '',
