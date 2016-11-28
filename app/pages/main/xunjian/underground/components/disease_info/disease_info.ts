@@ -119,6 +119,7 @@ export class DiseaseInfoPage implements OnInit{
     this.diseaseDetailObj.updateDate = new Date().getTime();
     this.diseaseDetailObj.updateUser = this.udpateUser;
     this.diseaseDetailObj.photos = this.photos;
+    this.diseaseDetailObj.diseaseDescription = this.diseaseDetailObj.diseaseDescription || ' ';
     this.photos = [];
     if(this.diseaseDetailObj.synFlg == 0) {
       this.diseaseDetailObj.synFlg = 2;
@@ -135,7 +136,6 @@ export class DiseaseInfoPage implements OnInit{
           this._facilityInspService.getLatestFacilityInspDetail(this.diseaseDetailObj.diseaseNo).then((result) => {
             if(result["docs"].length > 0) {
               let latestFacilityInspDetails = result["docs"][result["docs"].length - 1];
-              console.log("***************1");
               console.log(latestFacilityInspDetails["photos"]);
               this.latestPhotos = latestFacilityInspDetails["photos"];
             }
