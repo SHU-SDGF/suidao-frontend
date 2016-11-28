@@ -72,7 +72,7 @@ export class ObservSavePage implements OnInit{
           diseaseDescription: '',
           displayDiseaseDate: new Date().toISOString().slice(0, 10),
           facilityType: "1",
-          photo: [],
+          photo: '',
           photos: []
         };
 
