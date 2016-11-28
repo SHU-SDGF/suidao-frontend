@@ -46,7 +46,7 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.length = null;
 		this.synFlg = null;
 		this.recorder = null;
-		this.photo = null;
+		this.photo = '';
 		this.photos = null;
 		this.monomerId = null;
 		this.facilityId = null;
