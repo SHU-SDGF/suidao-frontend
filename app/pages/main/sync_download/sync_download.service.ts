@@ -138,7 +138,7 @@ export class SyncDownloadService{
 
               mileages[mileage].forEach((disease)=>{
                 disease.details.forEach((detail)=>{
-                  let detailPhoto = detail.photo.split(';');
+                  let detailPhoto = detail.photo? detail.photo.split(';'): [];
                   detail.photos = detailPhoto.map(uri=>MediaContent.deserialize({
                      mediaType: 'img',
                     fileUri: uri,
@@ -152,7 +152,12 @@ export class SyncDownloadService{
               });
             });
 
-            _self.facilityInspGroups.push(inspGroup);
+            inspGroup.mileages = inspGroup.mileages.filter((m) => {
+              return !!m.medias.length;
+            });
+            if(inspGroup.mileages.length){
+              _self.facilityInspGroups.push(inspGroup);
+            }
           });
           resolve(_self.facilityInspGroups);
         });
