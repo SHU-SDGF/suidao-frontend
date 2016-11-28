@@ -168,17 +168,17 @@ export class ObservGraphPage implements OnInit{
   }
 
   showCreateModal(marker: MarkerOptions){
-    let diesaseNo = '';
+    let diseaseNo = '';
     if(marker.diseaseNo && marker.diseaseNo != '') {
-      diesaseNo = marker.diseaseNo;
+      diseaseNo = marker.diseaseNo;
     } else {
-      diesaseNo = this.generateDiseaseNo();
+      diseaseNo = this.generateDiseaseNo();
     }
 
     let modal = this._modalCtrl.create(ObservSavePage, {
       point: marker, 
       diseaseType: this._selectedDiseaseType, 
-      diseaseNo: diesaseNo, 
+      diseaseNo: diseaseNo, 
       isNewRecord: this.isnewRecord, 
       diseaseInfo: this.diseaseInfo, 
       mileage: this._mileage
@@ -277,10 +277,12 @@ export class ObservGraphPage implements OnInit{
   private getLocalTime() {
     var date = new Date();
     var year = date.getFullYear();
-    var month = date.getMonth() > 8 ? (date.getMonth() + 1) : '0' + ((date.getMonth()) + 1);
+    var month = date.getMonth() + 1;
     var day = date.getDate();
     return {
-      formatToday: year + '' + month  + '' + day + date.getHours() + date.getMinutes() + date.getSeconds(),
+      formatToday: year + [month, day, date.getHours(), date.getMinutes()].map((t) => {
+        return ('00' + t).slice(-2);
+      }).join('') ,
       today: year + '' + month + '' + day
     }
   }
