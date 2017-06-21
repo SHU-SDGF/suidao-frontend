@@ -1,0 +1,59 @@
+@import '../theme/core.scss';
+
+#user-menu{
+  .menu-inner{
+    .scroll-content{
+      padding-top: 5rem;
+      color: #fff;
+      background: url("../assets/imgs/bg.png") no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+  .user-badge{
+    position: relative;
+    color: #fff;
+    padding: 1.1rem;
+
+    .portrait{
+      width: 5rem;
+      height: 5rem;
+      border-radius: 100%;
+    }
+    .username{
+      position: absolute;
+      left: 7.5rem;
+      top: 2rem;
+    }
+    .role{
+      position: absolute;
+      left: 7.5rem;
+      top: 4rem;
+      font-size: 0.8rem;
+    }
+  }
+  button{
+    color: #fff;
+    display: block;
+    ion-icon{
+      padding-left: 0.7em;
+      margin-right: 5px;
+    }
+  }
+  button.logout-button{
+    position: absolute;
+    bottom: 10px;
+    left: 1.1rem;
+    padding: 0px;
+  }
+}
+
+button.picker-button {
+  span.button-inner {
+    color: black;
+  }
+}
+// span.button-inner {
+//   color: black !important;
+// }
+

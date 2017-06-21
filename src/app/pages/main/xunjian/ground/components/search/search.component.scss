@@ -1,0 +1,80 @@
+search-component{
+  .toolbar-content{
+    margin-right: 10px;
+    margin-left: 10px;
+    & > ion-item{
+      padding-left: 5px;
+      min-height: 2.6rem;
+    }
+  }
+  .search-container{
+    margin: 5px 0px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 5px;
+    .item-inner{
+      border-bottom: none !important;
+      ion-label{
+        margin: 0px;
+      }
+    }
+    .dropdown-addon{
+      margin: 0px;
+      font-size: 1.6rem;
+      color: color($colors, light);
+      margin-right: 10px;
+      padding: 5px;
+      background: rgba(0,0,0,0.2);
+      border-radius:5px;
+      min-height: 1.6rem;
+    }
+    ion-searchbar{
+      background: transparent;
+      border: none;
+      padding: 0px;
+      min-height: 2rem;
+      .searchbar-ios-cancel{
+        display: none !important;
+      }
+      .searchbar-search-icon{
+        background-image: none;
+        width: auto;
+        height: auto;
+        left: 0px;
+
+        &:before{
+          font-size: 2.5rem;
+          margin-top: -0.2rem;
+          content: "\f375";
+          display: inline-block;
+          font-family: "Ionicons";
+          speak: none;
+          font-style: normal;
+          font-weight: normal;
+          font-variant: normal;
+          text-transform: none;
+          text-rendering: auto;
+          line-height: 1;
+          -webkit-font-smoothing: antialiased;
+          color: color($colors, light);
+        }
+      }
+      .searchbar-input-container{
+        .searchbar-search-icon{
+          margin-left: 0px !important;
+        }
+        input.searchbar-input{
+          box-shadow: none;
+          background-color: transparent;
+          margin-left: 20px;
+          padding-left: 10px !important;
+          font-size: 1.6rem;
+          color: color($colors, light);
+
+          &::-webkit-input-placeholder {
+            color: color($colors, light);
+          }
+        }
+      }
+    }
+  }
+}

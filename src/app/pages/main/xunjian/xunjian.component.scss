@@ -1,0 +1,60 @@
+
+.underground-title{
+  ion-icon{
+    font-size: 1.6rem;
+  }
+}
+.insp-activity-searchbar {
+  .searchbar-input {
+    background-color: white;
+  }
+  .searchbar-ios-cancel{
+    color: color($colors, light);
+  }
+
+  // background-color: white;
+}
+.sub-header{
+  width: 100%;
+  left: 0px;
+  background-color: color($colors, deep-blue);
+  .toolbar-content{
+    display: flex;
+    button.icon-holder{
+      color: color($colors, light);
+      margin-left: 5px;
+      margin-right: 10px;
+      width: 4rem;
+      text-align: center;
+      padding: 0px;
+      .button-inner{
+        display: block;
+      }
+      ion-icon{
+        padding: 0px;
+        font-size: 2.7rem;
+      }
+      p{
+        font-size: 1rem;
+        margin-top: 3px;
+        color: color($colors, light);
+      }
+    }
+    .searchbar-input-container{
+      background-color: color($colors, light);
+      height: 2.8rem;
+      line-height: 2.8rem;
+      border-radius: 5px;
+      margin-right: 10px;
+      input{
+        text-align: center !important;
+        margin: 0px auto;
+        display: block;
+        &::-webkit-input-placeholder{
+          text-align: center;
+          color: color($colors, dark);
+        }
+      }
+    }
+  }
+}

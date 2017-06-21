@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title center>创建环境活动</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="activity_detail">
+  <form [formGroup]="activityForm" (ngSubmit)="createActivity(activityForm.value)">
+
+    <h5 class="assertive-field field-label">活动名称</h5>
+    <ion-item>
+      <ion-input fixed type="text" [formControl]="activityForm.controls['actName']"></ion-input>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">活动类别</h5>
+    <ion-item>  
+      <ion-select [formControl]="activityForm.controls['actType']" okText="确认" cancelText="取消">
+        <ion-option *ngFor="let actType of actTypes" [value]="actType.id">{{actType.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <h5 class="field-label">巡检日期</h5>
+    <ion-item>  
+      <p>{{activityForm.controls['inspDate'].value |  DatePipe}}</p>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">起始日期</h5>
+    <ion-item>  
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [formControl]="activityForm.controls['startDate']"></ion-datetime>
+    </ion-item>
+
+    <h5 class="assertive-field field-label">结束日期</h5>
+    <ion-item>  
+      <ion-datetime displayFormat="YYYY.MM.DD" min="2013" max="2030-10-31" [formControl]="activityForm.controls['endDate']"></ion-datetime>
+    </ion-item>
+
+    <h5 class="field-label">活动状态</h5>
+    <status-picker 
+      [formControl]="activityForm.controls['actStatus']"
+      [options]="actStatusList"
+      [textField]="'name'"
+      [valueField]="'id'"
+      [disabled]="true">
+    </status-picker>
+
+    <h5 class="field-label">记录人</h5>
+    <ion-item>  
+      <ion-input type="text" [formControl]="activityForm.controls['recorder']" disabled="true"></ion-input>
+    </ion-item>
+
+    <h5 class="field-label">描述</h5>
+    <ion-item>
+      <ion-textarea rows="6" [formControl]="activityForm.controls['description']"></ion-textarea>
+    </ion-item>
+
+    <h5 class="field-label">
+      多媒体 
+      <button ion-button icon-only clear CaptureMedia (onCaptured)="captureMedia($event)" type="button">
+        <ion-icon name="ios-camera"></ion-icon>
+      </button>
+    </h5>
+    <ion-list>
+      <ion-item class="img-gallery">
+        <ion-scroll scrollX="true">
+          <div class="img-item" *ngFor="let media of medias">
+            <button ion-button icon-only clear type="button" class="img-layer">
+              <img src="{{media.preview}}" mediaViewer [mediaContent]="media" (press)="mediaLongClick(media)"/>
+            </button>
+          </div>
+        </ion-scroll>
+      </ion-item>
+    </ion-list>
+
+    <div padding>
+      <button ion-button block [disabled]="!activityForm.valid">创建</button>
+    </div>
+  </form>
+</ion-content>

@@ -1,0 +1,13 @@
+<div class="content-body">
+  <ion-card *ngFor = "let el of facilityInspList; let idx=index">
+    <ion-card-header>
+      环号： {{el["mileage"]}}
+    </ion-card-header>
+    <ion-card-content>
+      <button clear>
+        <img class="sd-pic" (click)="showObservInfo(el)" src="assets/imgs/underground.png"/>
+      </button>
+      <img *ngFor="let disease of el.facilityInsp" [src]="disease.icon" [style.left]="disease.iconLeft+ 'px'" [style.top]="disease.iconTop + 'px'" class="disease-icon" />
+    </ion-card-content>
+  </ion-card>
+</div>

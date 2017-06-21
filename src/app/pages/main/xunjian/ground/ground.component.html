@@ -1,0 +1,12 @@
+<div class="searchbar-container">
+  <button ion-button full (click)="searchActivity()"><ion-icon name="search"></ion-icon>
+搜索巡检活动</button>
+</div>
+<suidao-map 
+  ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" 
+  (onMapLongClick)="mapLongClick($event)" 
+  [options]="opts" 
+  [changeOptions]="mapOptionEmitter"
+  (onMarkerClicked)="clickMarker($event)"
+  (onMapLoaded)="mapLoaded()"
+></suidao-map>

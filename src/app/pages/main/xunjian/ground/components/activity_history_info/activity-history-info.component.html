@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-title>环境巡检记录</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="activity_history_detail">
+  <h5 class="field-label">活动名称</h5>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="activityName" disabled="true"></ion-input>
+  </ion-item>
+
+  <h5 class="field-label">活动类别</h5>
+  <ion-item>
+    <p>{{activityDetailObj.actType | OptionPipe:actTypes}}</p>
+  </ion-item>
+
+  <h5 class="field-label">巡检日期</h5>
+  <ion-item>
+    <p>{{activityDetailObj.inspDate | DatePipe}}</p>
+  </ion-item>
+
+  <h5 class="field-label">活动状态</h5>
+  <status-picker 
+    [(ngModel)]="activityDetailObj.actStatus"
+    [options]="actStatusList"
+    [textField]="'name'"
+    [valueField]="'id'"
+    [disabled]="true">
+  </status-picker>
+
+  <h5 class="field-label">记录人</h5>
+  <ion-item>
+    <ion-input type="text" [(ngModel)]="activityDetailObj.recorder" disabled="true"></ion-input>
+  </ion-item>
+
+  <h5 class="field-label">描述</h5>
+  <ion-item>
+    <ion-textarea rows="6" [(ngModel)]="activityDetailObj.description" disabled="true"></ion-textarea>
+  </ion-item>
+
+  <h5 class="field-label" *ngIf="medias.length">多媒体</h5>
+  <ion-list>
+    <ion-item class="img-gallery" *ngIf="medias.length">
+      <ion-scroll scrollX="true">
+        <div class="img-item" *ngFor="let media of medias">
+          <button ion-button clear type="button" class="img-layer">
+            <img src="{{media.preview}}" mediaViewer [mediaContent]="media"/>
+          </button>
+        </div>
+      </ion-scroll>
+    </ion-item>
+  </ion-list>
+  
+</ion-content>
