@@ -79,7 +79,7 @@ export class MenuTip implements OnInit{
       menuControl.rotation = getIconRotation(i, this.actionMenuItems.length);
       menuControl.$ele = $menuTipItem;
 
-      $menuTipItem.click(function (e: Event) {
+      $menuTipItem.click((e) => {
         menuControl.action.apply(menuControl.action, _self);
         e.stopPropagation();
       });

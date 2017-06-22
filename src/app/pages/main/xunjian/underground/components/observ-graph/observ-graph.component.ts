@@ -24,7 +24,7 @@ export class ObservGraphComponent implements OnInit{
   private _selectedDiseaseType = null;
   private _toast: Toast = null;
   private changeOptions = new EventEmitter();
-  private _mapOptions: MapOptions;
+  private _mapOptions: any;
   private _unsavedMarker: MarkerOptions;
   private isnewRecord = true;
   private diseaseInfo: {

@@ -70,7 +70,6 @@ export class MyApp implements OnInit{
   }
 
   ngOnInit() {
-    console.log(cordova.plugins);
     this.userService.hasLoggedIn().then((flag) => {
       if (flag) {
         this.userService.getUserInfo().then((userInfo) => {

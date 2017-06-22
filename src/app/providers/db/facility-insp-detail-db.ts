@@ -3,8 +3,7 @@ import { Events } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { FacilityInspDetail } from '../../../models/FacilityInspDetail';
 
-var PouchDB = require('pouchdb');
-PouchDB.plugin(require('pouchdb-find'));
+import * as PouchDB from 'pouchdb';
 window["PouchDB"] = PouchDB;  
 
 @Injectable()
@@ -16,7 +15,7 @@ export class FacilityInspDetailDB {
   }
 
   _initDB() {
-  	this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default' });
+  	this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default' } as any);
   };
 
   addNewFacilityInspDetail(FacilityInspDetailObject: FacilityInspDetail) {
@@ -46,7 +45,7 @@ export class FacilityInspDetailDB {
   //根据病害号获取历史活动巡检
   getFacilityInspDetailByDiseaseNo(diseaseNo: any) {
     let that = this;
-     this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default'});
+     this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default'} as any);
      return new Promise((resolve, reject) =>{
        this._db.createIndex({
          index: {fields: ['diseaseNo']}
@@ -66,7 +65,7 @@ export class FacilityInspDetailDB {
 
   //获取巡检活动明细列表
   getAllFacilityInspDetails(): Promise<FacilityInspDetail[]> {
-    this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default' });
+    this._db = new PouchDB('facilityInspDetails', { adapter: 'websql', location: 'default' } as any);
   	return this._db.allDocs({include_docs: true})
 			.then(docs => {
         this._facilityInspDetails = docs.rows.map(row => {

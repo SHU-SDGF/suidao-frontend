@@ -3,8 +3,7 @@ import { Events } from 'ionic-angular';
 import { Http } from '@angular/http';
 import { FacilityInspSummary } from '../../../models/FacilityInspSummary';
 
-var PouchDB = require('pouchdb');
-PouchDB.plugin(require('pouchdb-find'));
+import * as PouchDB from 'pouchdb';
 window["PouchDB"] = PouchDB; 
 
 @Injectable()
@@ -16,13 +15,13 @@ export class FacilityInspSummaryDB {
   }
 
   _initDB() {
-  	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
+  	this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' } as any);
     console.log("*****************");
     console.log(this._db.adapter);
   }
 
   getFacilityInspsByAttrs(monomerId, modelId): any {
-    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
+    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' } as any);
     return new Promise((resolve, reject) => {
       this._db.createIndex({
         index: { fields: ['monomer'] }
@@ -42,7 +41,7 @@ export class FacilityInspSummaryDB {
   }
 
   getFacilityInspDetailsListByAttrs(monomerId, modelId, mileage): any{
-    this._db = new PouchDB('facitlityInspSummaries', {adapter: 'websql', location: 'default'});
+    this._db = new PouchDB('facitlityInspSummaries', {adapter: 'websql', location: 'default'} as any);
     return new Promise((resolve, reject) => {
       this._db.createIndex({
         index: {fields: ['monomer, modelName, mileage']}
@@ -94,7 +93,7 @@ export class FacilityInspSummaryDB {
   }
 
   getAllFacilityInspSummaries(): Promise<Array<FacilityInspSummary>> {
-    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' });
+    this._db = new PouchDB('facitlityInspSummaries', { adapter: 'websql', location: 'default' } as any);
     this._facilityInspSummary = [];
   	return this._db.allDocs({include_docs: true})
 			.then(docs => {

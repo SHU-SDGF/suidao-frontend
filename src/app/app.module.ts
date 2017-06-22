@@ -1,3 +1,4 @@
+import { HttpModule } from '@angular/http';
 import { MainModule } from './pages/main/main.module';
 import { LoginModule } from './pages/login/login.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +23,8 @@ import { APP_SERVICES } from './providers/index';
     FormsModule,
     ReactiveFormsModule,
     LoginModule,
-    MainModule
+    MainModule,
+    HttpModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
