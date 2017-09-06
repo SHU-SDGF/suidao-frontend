@@ -1,5 +1,5 @@
-import { MenuController } from 'ionic-angular/umd';
-import { ToggleMenu } from '../../../shared/components/toggle-menu/toggle-menu.component';
+// import { MenuController } from 'ionic-angular/umd';
+// import { ToggleMenu } from '../../../shared/components/toggle-menu/toggle-menu.component';
 import { Component, AfterViewInit } from '@angular/core';
 
 interface Autodest{

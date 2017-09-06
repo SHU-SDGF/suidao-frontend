@@ -125,37 +125,36 @@ export class ActivityInfoComponent implements OnInit{
     }
   }
 
-  getHistory(pageIndex?){
-    return new Promise <{actList: Array<EnvironmentActivity> , last: boolean}>((resolve, reject)=>{
+  public async getHistory(pageIndex?) {
+    try {
       this.currentPageIndex++;
       
       // 获取活动历史列表
-      this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo, pageIndex).subscribe((result) => {
-        let actList = result.environmentActivityList;
-        this.environmentActivityList.forEach(act=>{
-          let index = actList.findIndex(a=>a.id == act.id)
-          index > -1 && actList.splice(index, 1);
-        })
-        this.environmentActivityList = this.environmentActivityList.concat(actList);
+      let result = await this._environmentActivityService.searchEnvironmentActivitiesByActNo(this.activityDetailObj.actNo, pageIndex)
+      let actList = result.environmentActivityList;
+      this.environmentActivityList.forEach(act => {
+        let index = actList.findIndex(a => a.id == act.id)
+        index > -1 && actList.splice(index, 1);
+      })
+      this.environmentActivityList = this.environmentActivityList.concat(actList);
         
-        resolve({actList: actList , last: result.last});
-      }, (error) => {
-        let alert =this._alertController.create({
-          title: '获取历史列表失败，请连续管理员！',
-          buttons: [
-            {
-              text: '确定',
-              role: 'cancel'
-            }
-          ]
-        });
-        alert.present();
-        alert.onDidDismiss(()=>{
-          this.dismiss();
-        });
-        reject(error);
+      return { actList: actList, last: result.last };
+    } catch (error) {
+      let alert = this._alertController.create({
+        title: '获取历史列表失败，请连续管理员！',
+        buttons: [
+          {
+            text: '确定',
+            role: 'cancel'
+          }
+        ]
       });
-    });
+      alert.present();
+      alert.onDidDismiss(() => {
+        this.dismiss();
+      });
+      throw (error);
+    }
   }
 
   dismiss() {

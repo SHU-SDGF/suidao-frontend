@@ -91,7 +91,8 @@ export class UndergroundComponent implements OnInit, OnDestroy {
     //   console.log(status);
     //   document.getElementsByTagName('html')[0].style.opacity = '0';
     // });
-    if(window['cordova']){
+    if (window['cordova']) {
+      debugger;
       cordova.plugins.barcodeScanner.scan((result) => {
         try{
           result.text && this.showInfo(result.text);
@@ -180,29 +181,25 @@ export class UndergroundComponent implements OnInit, OnDestroy {
     });
   }
 
-  private reloadData() {
-    let that = this;
+  private async reloadData() {
     let tunnelOption = JSON.parse(localStorage.getItem('tunnelOption'));
     this.facilityInspList = [];
-    this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption).then((result) => {
-      result.docs.forEach((doc)=>{
-        Object.assign(doc, {
-          iconLeft: doc.longitude / this.scale,
-          iconTop: this.imgHeight - doc.latitude / this.scale-15,
-          icon: this.getIconByDiseaseType(doc.diseaseTypeId)
-        });
+    let details = await this._facilityInspService.getFacilityInspDetailsByAttrs(tunnelOption);
+    details.forEach((detail) => {
+      Object.assign(detail, {
+        iconLeft: detail.longitude / this.scale,
+        iconTop: this.imgHeight - detail.latitude / this.scale - 15,
+        icon: this.getIconByDiseaseType(detail.diseaseTypeId)
       });
-      var filteredResult =  _.groupBy(result.docs, 'mileage');
-      for(let index in filteredResult) {
-        that.facilityInspList.push({mileage: index, facilityInsp: filteredResult[index]})
-      }
-
-      that.shadowFacilityInspList = _.cloneDeep(that.facilityInspList);
-      console.log(this.facilityInspList);
-      console.log(this.scale);
-    }, (error) => {
-
     });
+    var filteredResult = _.groupBy(details, 'mileage');
+    for (let index in filteredResult) {
+      this.facilityInspList.push({ mileage: index, facilityInsp: filteredResult[index] })
+    }
+
+    this.shadowFacilityInspList = _.cloneDeep(this.facilityInspList);
+    console.log(this.facilityInspList);
+    console.log(this.scale);
   }
 
   private getIconByDiseaseType(diseaseType) {

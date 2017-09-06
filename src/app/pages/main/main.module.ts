@@ -9,11 +9,12 @@ import { IonicModule } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { NgModule } from '@angular/core';
+import { ConstructComponent } from '../constructing/constructing.component';
 
 @NgModule({
   declarations: [
     MainComponent, ManyouComponent, SyncDownloadComponent, SyncUploadComponent,
-    TestPage, 
+    TestPage, ConstructComponent,
   ],
   imports: [
     // vendor
@@ -26,7 +27,7 @@ import { NgModule } from '@angular/core';
   entryComponents: [
     MainComponent, ManyouComponent,
     SyncDownloadComponent, SyncUploadComponent,
-    TestPage
+    TestPage, ConstructComponent,
   ],
   exports: [MainComponent],
   providers: []

@@ -4,6 +4,7 @@ import { LookupService } from '../../../../../../providers/lookup-service';
 import { FacilityInspService } from '../../../../../../providers/facility-insp-service';
 import { FacilityInspSummary } from '../../../../../../../models/FacilityInspSummary';
 import {Component, OnInit, OnDestroy } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import {
   NavController, ViewController,
   Events, ModalController, NavParams
@@ -47,6 +48,11 @@ export class ObservInfoComponent implements OnInit, OnDestroy{
   public huanhao = '';
   public diseaseList: FacilityInspSummary[] = [];
 
+  public isIOS() {
+    const { platform } = this;
+    return platform.is('ios');
+  }
+
   constructor(
     private _navCtrl: NavController,
     private _viewCtrl: ViewController,
@@ -54,12 +60,13 @@ export class ObservInfoComponent implements OnInit, OnDestroy{
     private _facilityInspService: FacilityInspService,
     private _lookupService: LookupService,
     private _event: Events,
-    private _params: NavParams){
-  }
+    private _params: NavParams,
+    private platform: Platform,
+  ) { }
 
-  ngOnInit(){  
+  async ngOnInit(){  
     this.huanhao = this._params.data.facilityInspInfo["mileage"];
-    this._updateFacilityInspList();
+    await this._updateFacilityInspList();
     this.diseaseList = this._params.data.facilityInspInfo["facilityInsp"];
     console.log('in modal class');
   }
@@ -103,26 +110,17 @@ export class ObservInfoComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(){
-    this._event.publish('groundDataChange');
+    
   }
 
-  private _updateFacilityInspList() {
-    this._lookupService.getTunnelOption().then((result) => {
-      var attrOption = result;
-      attrOption["mileage"] = this.huanhao;
-      this._facilityInspService.getFacilityInspDetailsListByAttrs(attrOption).then((result)=> {
-        this.diseaseList = result.docs;
-      }, (error) => {
-      });
-    })
+  private async _updateFacilityInspList() {
+    let attrOption = await this._lookupService.getTunnelOption();
+    attrOption.mileage = this.huanhao;
+    this.diseaseList = await this._facilityInspService.getFacilityInspDetailsListByAttrs(attrOption);
   }
 
   public getInfoByDiseaseType(diseaseType) {
     var diseaseTypeIndex = diseaseType[1] - 1;
     return this.diseaseTypes[diseaseTypeIndex];
-  }
-
-  public convertDate(date) {
-    return new Date(date).toISOString().slice(0,10);
   }
 }

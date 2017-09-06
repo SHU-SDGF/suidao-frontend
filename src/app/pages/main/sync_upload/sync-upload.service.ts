@@ -61,8 +61,7 @@ export class SyncUploadService{
                   if(diseaseDetail){
                     let photo = diseaseDetail.photos.map((p)=>p.fileUri).join(';');
                     diseaseDetail.photo = photo;
-                    let detail = diseaseDetail.serialize();
-                    _self.facilityInspService.updateFacilityInspDetail(detail);
+                    _self.facilityInspService.updateFacilityInspDetail(diseaseDetail);
                   }else{
                     throw(new Error('未发现病害！数据内包含错误格式数据！'));
                   }
@@ -74,15 +73,14 @@ export class SyncUploadService{
                     _self.facilityInspService
                       .uploadFacilityRecords(_self.generateFacilityInspRecordList(mileage))
                       .subscribe(()=>{
-                        mileage.diseaseSmrList.forEach(diseaseSmr=>{
+                        mileage.diseaseSmrList.forEach((diseaseSmr) => {
                           diseaseSmr.synFlg = 0;
-                          _self.facilityInspService.updateFacilityInsp(diseaseSmr);
-                          diseaseSmr.details.forEach(detail=>{
+                          _self.facilityInspService.updateFacilityInspSummary(diseaseSmr);
+                          diseaseSmr.details.forEach(detail => {
                             detail.synFlg = 0;
-                            let _detail = detail.serialize();
-                            _self.facilityInspService.updateFacilityInspDetail(_detail);
+                            _self.facilityInspService.updateFacilityInspDetail(detail);
                           });
-                        })
+                        });
                         group.mileages.splice(group.mileages.indexOf(mileage), 1);
                         if(!group.mileages.length){
                           _self.facilityInspGroups.splice(_self.facilityInspGroups.indexOf(group), 1);
@@ -158,8 +156,8 @@ export class SyncUploadService{
     facilityInspList.forEach(inspSmr=>{
       facilityInspDetailsList = facilityInspDetailsList.concat(inspSmr.details);
       let facilityInspObj = {
-        "facilityInspSum": inspSmr.serialize(),
-        "facilityInspDetailList": inspSmr.details.map(detail=>detail.serialize())
+        "facilityInspSum": inspSmr,
+        "facilityInspDetailList": inspSmr.details,
       };
 
       facilityInspRecordList.push(facilityInspObj);

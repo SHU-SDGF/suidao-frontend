@@ -14,22 +14,25 @@ export class EnvironmentActivityService {
 
 
 	//添加活动环境活动
-	addNewEnvironmentActivitySummary(activitySummaryObj: {environmentActitivitySummary: EnvironmentActivitySummary, environmentActivity: EnvironmentActivity}) {
+	public addNewEnvironmentActivitySummary(activitySummaryObj: {environmentActitivitySummary: EnvironmentActivitySummary, environmentActivity: EnvironmentActivity}) {
 		return this.httpService.post({
-			environmentActitivitySummary: activitySummaryObj.environmentActitivitySummary.serialize(), 
-			environmentActivity: activitySummaryObj.environmentActivity.serialize()
-		}, 'environment-activities-summary/create');
+			environmentActitivitySummary: activitySummaryObj.environmentActitivitySummary, 
+			environmentActivity: activitySummaryObj.environmentActivity
+		}, 'environment-activities-summary/create').toPromise();
 	}
 
 	//显示活动列表
-	getEnvironmentActivitiesSummaryList() {
+	public getEnvironmentActivitiesSummaryList() {
 		return this.httpService.get({}, 'environment-activities-summary/list').map((acts: Array<any>)=>{
-			return acts.map(EnvironmentActivitySummary.deserialize);
-		});
+			return acts.map((act) => {
+				act.longitude = act.longtitude;
+				return new EnvironmentActivitySummary(act);
+			});
+		}).toPromise();
 	}
 
 	//根据ACT_NO来寻找活动历史记录
-	searchEnvironmentActivitiesByActNo(actNo: string, pageable?: number) {
+	public searchEnvironmentActivitiesByActNo(actNo: string, pageable?: number) {
 		let params = {};
 		if(pageable){
 			params['page'] = pageable;
@@ -38,19 +41,16 @@ export class EnvironmentActivityService {
 			.map((result: {content: Array<any>, first: boolean, last: boolean})=>{
 				return {
 					environmentActivityList: result.content.map((obj)=>{
-						return EnvironmentActivity.deserialize(obj);
+						return new EnvironmentActivity(obj);
 					}),
 					last: result.last,
 					first: result.first
 				};
-			});
-	}
-	//添加新的环境历史活动
-	addNewEnvironmentActivity(activityObj: any) {
-		return this.httpService.post(activityObj, 'environment-activities/create');
+			}).toPromise();
 	}
 
-	//更新已有环境活动
-	updateNewEnvionrmentActivity(paramsObj: any) {
+	//添加新的环境历史活动
+	public addNewEnvironmentActivity(activityObj: EnvironmentActivity) {
+		return this.httpService.post(activityObj, 'environment-activities/create').toPromise();
 	}
 }

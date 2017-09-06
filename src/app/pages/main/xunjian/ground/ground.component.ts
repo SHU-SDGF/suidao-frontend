@@ -129,16 +129,15 @@ export class GroundComponent implements OnInit, OnDestroy {
     this._searchPoped = true;
   }
 
-  ngOnInit() {
-    let that = this;
+  public async ngOnInit() {
 
     setTimeout(() => {
-      that._mapLoader = that._loadingCtrl.create({
+      this._mapLoader = this._loadingCtrl.create({
         content: '地图加载中...',
         dismissOnPageChange: true,
         duration: 3000
       });
-      that._mapLoader.present();
+      this._mapLoader.present();
     });
     
 
@@ -163,10 +162,11 @@ export class GroundComponent implements OnInit, OnDestroy {
       }
     };
     
-    this.environmentActivityService.getEnvironmentActivitiesSummaryList().subscribe((acts: Array<EnvironmentActivitySummary>) => {
+    try {
+      let acts = await this.environmentActivityService.getEnvironmentActivitiesSummaryList();
       let markers = [];
       this.environmentActivityList = acts;
-      markers = this.environmentActivityList.map(activity=>{
+      markers = this.environmentActivityList.map(activity => {
         Object.assign(activity, {
           width: 30,
           height: 30,
@@ -178,13 +178,11 @@ export class GroundComponent implements OnInit, OnDestroy {
         return activity;
       });
 
-      that.opts.markers = that.opts.markers.concat(markers);
-      that.mapOptionEmitter.emit(that.opts);
-    }, (error) => {
-      if(!error.ok){
-        this._event.publish(this._userService.LOGOUT_EVENT);
-      }
-    });
+      this.opts.markers = this.opts.markers.concat(markers);
+      this.mapOptionEmitter.emit(this.opts);
+    } catch (error) {
+      this._event.publish(this._userService.LOGOUT_EVENT);
+    }
   }
 
   private showToast() {

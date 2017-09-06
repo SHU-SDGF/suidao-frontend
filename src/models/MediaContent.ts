@@ -1,16 +1,14 @@
-import { Serializable } from '../app/providers/JsonMapper';
-import {_baseClass} from './_baseClass';
 
 export interface IMediaContent{
   mediaType: 'img' | 'video' | 'audio';
-  fileUri: string,
-  size?: number,
-  preview?: string
+  fileUri: string;
+  size?: number;
+  preview?: string;
+  cached?: boolean;
+  localUri?: string;
 }
 
-
-@Serializable()
-export class MediaContent extends _baseClass implements IMediaContent{
+export class MediaContent implements IMediaContent{
   mediaType: 'img' | 'video' | 'audio' = null;
   fileUri: string = '';
   size: number = 0;
@@ -18,10 +16,7 @@ export class MediaContent extends _baseClass implements IMediaContent{
   cached: boolean = false;
   localUri: string = '';
 
-  constructor(obj){
-    super();
-    this.assign(obj);
+  constructor(obj) {
+    Object.assign(this, obj);
   }
-
-  static deserialize: (obj)=> MediaContent;
 }

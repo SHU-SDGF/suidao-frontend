@@ -107,7 +107,7 @@ export class ActivityDetailComponent implements OnInit{
       loadingOptions.content = getLoadingText(progress);
     });
 
-    publisher.subscribe((media) => {
+    publisher.subscribe(async (media) => {
       if (media && media.fileUri) {
         switch (media.mediaType) {
           case 'img':
@@ -126,19 +126,20 @@ export class ActivityDetailComponent implements OnInit{
         activityObj.video = videoUrlList.join(';');
         activityObj.audio = audioUrlList.join(';');
 
-        this.submitForm(activityObj).subscribe((result) => {
+        try {
+          let result = await this.submitForm(activityObj);
           loading.onDidDismiss(()=>{
             this.viewCtrl.dismiss(result);
           });
           loading.dismiss();
-        }, (error) => {
+        } catch (error) {
           this._zone.run(()=>{
             loadingOptions.content = '创建活动未能成功！请重新尝试！'
           });
           setTimeout(()=>{
             loading.dismiss();
           }, 2000);
-        });
+        }
       }
     }, (error)=>{
       console.log(error);

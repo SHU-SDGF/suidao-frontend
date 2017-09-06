@@ -1,36 +1,83 @@
-import { Serializable } from '../app/providers/JsonMapper';
-import { MediaContent } from './MediaContent';
-import { _baseClass } from './_baseClass';
+import { 
+  Entity,
+	Column,
+	PrimaryColumn,
+} from 'bas-typeorm';
 
-@Serializable()
-export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
-	_id: string //pouchdb 主键id,时间戳
-	area: any //面积，
-	createdDate: any
-	createUser: any
-	depth: any
-	detailTypeId: any //病害小类
-	diseaseNo: any
-	diseaseDate: any //病害日期
-	diseaseDescription: string //病害描述
-	diseaseTypeId: any //病害类型
-	dislocation: any //错台量
-	monomerId: any
-	facilityId: any
-	id:any
-	photo: string
-	photos: MediaContent[]
-	jointopen: any //张开量
-	length: any //长度
-	synFlg: any //是否新建
-	recorder: string //记录人
-	width: any //宽度
-	_rev: any
+import { IMediaContent } from './MediaContent';
+
+@Entity('facilityDetail')
+export class FacilityInspDetail { // 结构巡检明细表
+	
+	@Column()
+	public area: number; //面积，
+	
+	@Column()
+	public createDate: number;
+	
+	@Column()
+	public createUser: string;
+	
+	@Column()
+	public depth: number;
+	
+	@Column()
+	public detailTypeId: string; //病害小类
+	
+	@Column()
+	public diseaseNo: string;
+	
+	@Column()
+	public diseaseDate: number; //病害日期
+	
+	@Column()
+	public diseaseDescription: string; //病害描述
+	
+	@Column()
+	public diseaseTypeId: string; //病害类型
+	
+	@Column()
+	public dislocation: number; //错台量
+	
+	@Column()
+	public monomerId: number;
+	
+	@Column()
+	public facilityId: any;
+	
+	@PrimaryColumn()
+	public id: any;
+	
+	@Column()
+	public photo: string;
+	
+	@Column()
+	public jointopen: number; //张开量
+	
+	@Column()
+	public length: number; //长度
+	
+	@Column()
+	public synFlg: any; //是否新建
+	
+	@Column()
+	public recorder: string; //记录人
+	
+	@Column()
+	public width: any; //宽度
+
+	@Column()
+	public updateDate: number;
+
+	@Column()
+	public updateUser: string;
+	
+	@Column({
+		type: 'json'
+	})
+	public photos: IMediaContent[];
 
 	constructor(obj = null) {
-		super()
-
-		this._id = null;
 		this.area = null;
 		this.createDate = null;
 		this.createUser = null;
@@ -52,10 +99,10 @@ export class FacilityInspDetail extends _baseClass { // 结构巡检明细表
 		this.facilityId = null;
 		this.width = null;
 
-		this._rev = null;
+		if (!obj) {
+			return;
+		}
 
-		this.assign(obj);
+		Object.assign(this, obj);
 	}
-
-	static deserialize: (obj)=> FacilityInspDetail;
 }

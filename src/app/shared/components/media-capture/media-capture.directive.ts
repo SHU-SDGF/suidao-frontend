@@ -1,3 +1,4 @@
+import { CaptureAudioOptions } from 'ionic-native/dist/esm';
 import { FileService } from '../../../providers/file-service';
 import { MediaCapture, ActionSheet, MediaFile } from 'ionic-native';
 import {Directive, Output, Input, EventEmitter, HostListener} from '@angular/core';
@@ -66,16 +67,19 @@ export class CaptureMedia{
     });
   }
 
-  captureAudio(){
-    MediaCapture.captureAudio().then((medieFiles: Array<MediaFile>)=>{
-      this._fileService.copyFile(medieFiles[0].fullPath).then((path)=>{
-        let media = new MediaContent({
-          localUri: path,
-          mediaType: 'audio',
-          preview: 'assets/imgs/audio.png'
-        });
-        this.onCaptured.emit(media);
-      });
+  async captureAudio() {
+    const audioOpt: CaptureAudioOptions = {
+      duration: 120
+    };
+
+    let medieFiles = await MediaCapture.captureAudio(audioOpt);
+    if (!(medieFiles instanceof Array)) return;
+    let path = await this._fileService.copyFile(medieFiles[0].fullPath);
+    let media = new MediaContent({
+      localUri: path,
+      mediaType: 'audio',
+      preview: 'assets/imgs/audio.png'
     });
+    this.onCaptured.emit(media);
   }
 }

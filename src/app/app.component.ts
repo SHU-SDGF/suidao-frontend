@@ -1,3 +1,4 @@
+import { AlertOptions } from 'ionic-angular/es2015';
 import { LoginComponent } from './pages/login/login.component';
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Platform, ModalController, Nav, MenuController, AlertController, LoadingController, Events } from 'ionic-angular';
@@ -27,8 +28,8 @@ export class MyApp implements OnInit{
   /**
    * app init */
   constructor(
-    private platform: Platform,
     public menu: MenuController,
+    private platform: Platform,
     private userService: UserService,
     private lookupService: LookupService,
     private alertController: AlertController,
@@ -37,36 +38,7 @@ export class MyApp implements OnInit{
     private _modalCtrl: ModalController,
     private events: Events
   ) {
-
-    platform.ready().then(() => {
-      BackgroundMode.setDefaults({
-        title: '隧道运维系统',
-        text: '程序正在后台运行',
-        silent: false
-      });
-      BackgroundMode.enable();
-      platform.registerBackButtonAction(()=>{
-        if(!this.nav.canGoBack()){
-          return;
-        }
-        this.nav.pop();
-      });
-      lookupService.initDB();
-      StatusBar.styleDefault();
-      Splashscreen.hide();
-      let _self = this;
-      this.menu.enable(true, 'user-menu');
-      
-      userService.hasLoggedIn().then((loggedIn: boolean) => {
-        
-        if (loggedIn) {
-          _self.nav.setRoot(MainComponent);
-        } else {
-          _self.nav.setRoot(LoginComponent);
-        }
-      });
-    });
-
+    this._init();
   }
 
   ngOnInit() {
@@ -93,10 +65,39 @@ export class MyApp implements OnInit{
 
   }
 
+  private async _init() {
+    const { platform, lookupService, userService } = this;
+    await platform.ready();
+    BackgroundMode.setDefaults({
+      title: '隧道运维系统',
+      text: '程序正在后台运行',
+      silent: false
+    });
+    BackgroundMode.enable();
+    platform.registerBackButtonAction(() => {
+      if (!this.nav.canGoBack()) {
+        return;
+      }
+      this.nav.pop();
+    });
+    lookupService.initDB();
+    StatusBar.styleDefault();
+    Splashscreen.hide();
+    let _self = this;
+    this.menu.enable(true, 'user-menu');
+      
+    const loggedIn = await userService.hasLoggedIn();
+    if (loggedIn) {
+      _self.nav.setRoot(MainComponent);
+    } else {
+      _self.nav.setRoot(LoginComponent);
+    }
+  }
+
   /**
    * user logout */
   logout() {
-    let confirm = this.alertController.create({
+    const alertOpt: AlertOptions = {
       title: '确认要登出吗？',
       message: '用户登出后本地数据将会被清空！',
       buttons: [
@@ -107,13 +108,14 @@ export class MyApp implements OnInit{
           text: '同意',
           handler: () => {
             this.userService.logout();
-            this.menu.close().then(()=>{
+            this.menu.close().then(() => {
               this.nav.setRoot(LoginComponent);
             });
           }
         }
       ]
-    });
+    };
+    let confirm = this.alertController.create(alertOpt);
 
     confirm.present();
   }

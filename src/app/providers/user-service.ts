@@ -96,7 +96,7 @@ export class UserService {
    */
   public getUserInfo(): Promise<User> {
     let userInfo = localStorage.getItem(this.storageKeys.USER_INFO);
-    return Promise.resolve(User.deserialize(JSON.parse(userInfo)));
+    return Promise.resolve(new User(JSON.parse(userInfo)));
   }
   
   /**
@@ -131,7 +131,7 @@ export class UserService {
   public getUserByID(id: string){
     return this.httpService
       .get({loginId: id}, '/user/searchByLoginId').map((response)=>{
-        return User.deserialize(response);
+        return new User(response);
       });
   }
 }

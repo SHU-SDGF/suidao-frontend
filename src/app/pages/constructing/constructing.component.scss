@@ -1,0 +1,15 @@
+.constructing-page{
+  .inner-content {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    .ctr-ele {
+      text-align: center;
+    }
+  }
+}

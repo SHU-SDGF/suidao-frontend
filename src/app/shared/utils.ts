@@ -1,7 +1,7 @@
-import { Pipe } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { AppMeta } from '../providers/app-meta';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IOption } from '../providers/lookup-service';
+import { IOption, LookupService } from '../providers/lookup-service';
 
 @Pipe({
     name: 'keys'
@@ -64,6 +64,26 @@ export class TimePipe{
         return convertTime(time);
     }
 }
+
+@Pipe({
+    name: 'DiseaseNamePipe',
+    pure: false,
+})
+export class DiseaseNnamePipe implements PipeTransform {
+    private asyncResult = null;
+    constructor(
+        private _lookupService: LookupService,
+    ) { }
+
+    public transform(diseaseTypeId, args?) {
+        if (!this.asyncResult) {
+            this._lookupService.getNameBy(diseaseTypeId, 'disease_types').then((result) => {
+                this.asyncResult = result;
+            });
+        }
+        return this.asyncResult;
+    }
+} 
 
 function convertTime(time: number){
     time /= 1000;

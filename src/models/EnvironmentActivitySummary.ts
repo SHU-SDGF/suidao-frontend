@@ -1,26 +1,51 @@
-import { JsonProperty, Serializable } from '../app/providers/JsonMapper';
-import {_baseClass} from './_baseClass';
+import { 
+  Entity,
+  Column,
+  PrimaryColumn,
+} from 'bas-typeorm';
 
-@Serializable()
-export class EnvironmentActivitySummary extends _baseClass{
-  id: number
-  actNo: string //活动编码
-	actName: string //活动名称
-	startDate: any //起始日期
-	endDate: any //结束日期
-  description: string //活动描述
+@Entity('activitySummary')
+export class EnvironmentActivitySummary {
+  
+  @PrimaryColumn()
+  public id: number;
+  
+  @Column()
+  public actNo: string; //活动编码
+	
+  @Column()
+  public actName: string; //活动名称
+	
+  @Column()
+  public startDate: number; //起始日期
+	
+  @Column()
+  public endDate: number; //结束日期
+  
+  @Column()
+  public description: string; //活动描述
 
-  @JsonProperty('longtitude')
-	longitude: number //经度
-	latitude: number //纬度
-	inspDate: any //巡检日期
-	recorder: string
-	actStatus: any
-  actType: any
+  // @JsonProperty('longtitude')
+	
+  @Column()
+  public longitude: number; //经度
+	
+  @Column()
+  public latitude: number; //纬度
+	
+  @Column()
+  public inspDate: number; //巡检日期
+	
+  @Column()
+  public recorder: string;
+	
+  @Column()
+  public actStatus: any;
+  
+  @Column()
+  public actType: any;
 
-  constructor(obj = null) {
-    super();
-    
+  constructor(obj?) {
     this.id = null;
     this.actNo = null;
     this.actName = null;
@@ -33,8 +58,8 @@ export class EnvironmentActivitySummary extends _baseClass{
     this.recorder = null;
     this.actStatus = null;
     this.actType = null;
-
-    this.assign(obj);
+    if (!obj) { return;}
+    Object.assign(this, obj);
   }
 
   static deserialize: (obj)=> EnvironmentActivitySummary;

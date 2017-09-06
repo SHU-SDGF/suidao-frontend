@@ -12,6 +12,7 @@ import {
 } from 'ionic-angular';
 import { IMediaContent } from '../../../../../../../models/MediaContent';
 import { DiseaseHistoryInfoComponent } from '../disease-history-info/disease-history-info.component';
+import { Events } from 'ionic-angular';
 
 @Component({
   templateUrl: './disease-info.component.html',
@@ -22,15 +23,34 @@ export class DiseaseInfoComponent implements OnInit{
   selectedPage: string = 'detail';
   activityDetailObj: any;
 
-  private diseaseDetailObj: any;
+  public diseaseFormObj: {
+    diseaseNo?: string;
+    mileage?: string;
+    modelId?: string;
+    diseaseDate?: number;
+    displayModelName?: string;
+    displayDiseaseDate?: string;
+    displayDiseaseType?: string;
+    detailTypeId?: number;
+    diseaseDescription?: string;
+    diseaseType?: number;
+    area?: number;
+    depth?: number;
+    length?: number;
+    width?: number;
+    jointopen?: number;
+    dislocation?: number;
+    needRepair?: boolean;
+    diseaseTypeId?: string;
+  };
+
   private detailTypeList: any;
   private isEditing = false;
   private udpateUser = '';
-  private diseaseHistoryList: FacilityInspDetail;
+  private diseaseHistoryList: FacilityInspDetail[];
   private userList = [];
   private photos: Array<IMediaContent> = [];
   private latestPhotos: Array<IMediaContent> = [];
-
 
   constructor(
     private viewCtrl: ViewController,
@@ -41,109 +61,73 @@ export class DiseaseInfoComponent implements OnInit{
     private _environmentActivityService: EnvironmentActivityService,
     private params: NavParams,
     private loadingCtrl: LoadingController,
-    private _facilityInspService: FacilityInspService
+    private _facilityInspService: FacilityInspService,
+    private _event: Events
   ) { }
 
-  ngOnInit() {
-    this.diseaseDetailObj = this.params.get('disease');
-    this.diseaseDetailObj.mileage = this.params.get('mileage');
-    this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types').then((result) => {
-      this.diseaseDetailObj["displayDiseaseType"] = result;
-    });
-
-    this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId).then((result) => {
-      this.detailTypeList = result;
-    });
-
-    this._lookupService.getNameBy(this.diseaseDetailObj.modelId, 'model_names').then((result) => {
-      this.diseaseDetailObj["displayModelName"] = result;
-    });
-
-    this._userService.getUserInfo().then((userInfo) => {
-      this.udpateUser = userInfo["loginId"];
-    });
-
-    this._lookupService.getUserList().then((result) => {
-      this.userList = result;
-    });
-
-    // this.diseaseDetailObj["displayDiseaseType"] =  this._lookupService.getNameBy(this.diseaseDetailObj.diseaseTypeId, 'disease_types');
-    // this.detailTypeList = this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseDetailObj.diseaseTypeId);
-    // this.diseaseDetailObj["displayModelName"] = this._lookupService.getNameBy(this.diseaseDetailObj.modelId, 'model_names');
-    this.diseaseDetailObj["displayDiseaseDate"] = new Date(this.diseaseDetailObj.diseaseDate).toISOString().slice(0,10);
-
-    // this._userService.getUsername().then((result) => {
-    //   this.udpateUser = result;
-    // });
-
-    //获取最近更新的历史巡检记录
-    this._facilityInspService.getLatestFacilityInspDetail(this.diseaseDetailObj.diseaseNo).then((result) => {
-      if(result["docs"].length > 0) {
-        let latestFacilityInspDetails = result["docs"][result["docs"].length - 1];
-        console.log("***************2");
-        console.log(latestFacilityInspDetails);
-        console.log("xxxxxxxxxx");
-        console.log(latestFacilityInspDetails["photos"]);
-        this.latestPhotos = latestFacilityInspDetails["photos"];
-      }
-    });
-
-    this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
-      this.diseaseHistoryList = result["docs"];
-    }, (error) => {
-    });
+  public async ngOnInit() {
+    try {
+      this.diseaseFormObj = {};
+      Object.assign(this.diseaseFormObj, this.params.get('disease'));
+      this.diseaseFormObj.mileage = this.params.get('mileage');
+      this.diseaseFormObj.displayDiseaseType = await this._lookupService.getNameBy(this.diseaseFormObj.diseaseTypeId, 'disease_types');
+      this.diseaseFormObj.displayDiseaseDate = new Date(this.diseaseFormObj.diseaseDate).toISOString().slice(0, 10);
+      this.diseaseFormObj.displayModelName = await this._lookupService.getNameBy(this.diseaseFormObj.modelId, 'model_names');
+    
+      this.udpateUser = (await this._userService.getUserInfo()).loginId;
+      this.userList = await this._lookupService.getUserList();
+      this.detailTypeList = await this._lookupService.getDetailTypesByDiseaseTypes(this.diseaseFormObj.diseaseTypeId)
+    
+      //获取最近更新的历史巡检记录
+      let record = await this._facilityInspService.getLatestFacilityInspDetail(this.diseaseFormObj.diseaseNo);
+      this.latestPhotos = record ? record.photos : [];
+      this.diseaseHistoryList = await this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseFormObj.diseaseNo);
+      console.log(this.diseaseHistoryList);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
-  dismiss() {
+  public dismiss() {
     this.viewCtrl.dismiss();
   }
 
-  edit() {
+  public edit() {
     this.isEditing = true;
   }
 
-  update() {
+  public async update() {
     this.isEditing = false;
-    this.diseaseDetailObj.updateDate = new Date().getTime();
-    this.diseaseDetailObj.updateUser = this.udpateUser;
-    this.diseaseDetailObj.photos = this.photos;
-    this.diseaseDetailObj.diseaseDescription = this.diseaseDetailObj.diseaseDescription || ' ';
+    let detail = new FacilityInspDetail(this.diseaseFormObj);
+    let summary = await this._facilityInspService.findFacilityInspByDiseaseNo(this.diseaseFormObj.diseaseNo);
+    detail.updateDate = new Date().getTime();
+    detail.updateUser = this.udpateUser;
+    detail.photos = this.photos;
+    summary.diseaseDescription = this.diseaseFormObj.diseaseDescription || ' ';
     this.photos = [];
-    if(this.diseaseDetailObj.synFlg == 0) {
-      this.diseaseDetailObj.synFlg = 2;
+    if(summary.synFlg == 0) {
+      summary.synFlg = 2;
     }
-    this._facilityInspService.updateFacilityInsp(this.diseaseDetailObj).then((result) => {
-      this.diseaseDetailObj["_rev"] = result["rev"];
-      this.diseaseDetailObj.synFlg = 1;
+    try {
+      await this._facilityInspService.updateFacilityInspSummary(summary);
+      detail.synFlg = 1;
       //新增一条记录
-      this._facilityInspService.addNewFacilityInspDetail(this.diseaseDetailObj, this.udpateUser).then((result) => {
-        //更新历史记录
-        this._facilityInspService.getFacilityInspDetailByDiseaseNo(this.diseaseDetailObj.diseaseNo).then((result) => {
-          this.diseaseHistoryList = result["docs"];
-          //获取最近更新的历史巡检记录
-          this._facilityInspService.getLatestFacilityInspDetail(this.diseaseDetailObj.diseaseNo).then((result) => {
-            if(result["docs"].length > 0) {
-              let latestFacilityInspDetails = result["docs"][result["docs"].length - 1];
-              console.log(latestFacilityInspDetails["photos"]);
-              this.latestPhotos = latestFacilityInspDetails["photos"];
-            }
-            let alert = this._alertController.create({
-              message: '更新活动成功！',
-              buttons: ['OK']
-            });
-            alert.present();
-          });
-        }, (error) => {
-          this.showErrorInfoModal();
-        });
-      }, (error) => {
-        this.showErrorInfoModal();
+      await this._facilityInspService.addNewFacilityInspDetail(detail, this.udpateUser);
+      //更新历史记录
+      this.diseaseHistoryList = await this._facilityInspService.getFacilityInspDetailByDiseaseNo(detail.diseaseNo);
+      //获取最近更新的历史巡检记录
+      let record = await this._facilityInspService.getLatestFacilityInspDetail(detail.diseaseNo);
+      this.latestPhotos = record ? record.photos : [];
+      let alert = this._alertController.create({
+        message: '更新活动成功！',
+        buttons: ['OK']
       });
-    }, (error) => {
+      alert.present();
+      this._event.publish('groundDataChange');
+    } catch (e) {
       this.showErrorInfoModal();
-    });
+    }
   }
-
 
   private showErrorInfoModal() {
     let alert = this._alertController.create({
@@ -156,12 +140,8 @@ export class DiseaseInfoComponent implements OnInit{
   /**
    * 获取多媒体文件
    */
-  captureMedia(photo: IMediaContent){
+  public captureMedia(photo: IMediaContent){
     this.photos.unshift(photo);
-  }
-  
-  public convertDate(date) {
-    return new Date(date).toISOString().slice(0,10);
   }
 
   public convertRecorder(userId) {
@@ -174,8 +154,8 @@ export class DiseaseInfoComponent implements OnInit{
     return userName;
   }
 
-  showHistory(index) {
-    let modal = this._modelCtrl.create(DiseaseHistoryInfoComponent, {'diseaseDetailRecord': this.diseaseHistoryList[index]});
+  public showHistory(detail: FacilityInspDetail) {
+    let modal = this._modelCtrl.create(DiseaseHistoryInfoComponent, {'diseaseDetailRecord': detail});
     modal.present();
   }
 }

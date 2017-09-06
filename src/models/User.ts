@@ -1,8 +1,5 @@
-import { Serializable } from '../app/providers/JsonMapper';
-import { _baseClass } from './_baseClass';
 
-@Serializable()
-export class User extends _baseClass { // 结构巡检明细表
+export class User { // 结构巡检明细表
 	_id: string //pouchdb 主键id,其实就是diseaseNo
 	loginId: string;
   userName: string;
@@ -13,7 +10,6 @@ export class User extends _baseClass { // 结构巡检明细表
   address: string;
 
 	constructor(obj = null) {
-		super()
 		this._id = null;
 		this.loginId = null;
     this.userName = null;
@@ -22,9 +18,8 @@ export class User extends _baseClass { // 结构巡检明细表
     this.telNo = null;
     this.mobile = null;
     this.address = null;
-
-		this.assign(obj);
+    if (obj) {
+      Object.assign(this, obj);
+    }
 	}
-
-	static deserialize: (obj)=> User;
 }

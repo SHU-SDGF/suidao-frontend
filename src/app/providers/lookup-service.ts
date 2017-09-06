@@ -1,6 +1,5 @@
 import { HttpService } from './http-service';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 import {AppMeta} from './app-meta';
 
@@ -24,12 +23,10 @@ const USER_LIST = "user_list";
 export class LookupService {
 
 	constructor(
-		private http: Http,
 		private httpService: HttpService
 	) { }
 
-
-	initDB() {
+	public initDB() {
 		// 单体枚举表
 
 		// 位置描述枚举表
@@ -69,23 +66,23 @@ export class LookupService {
 		localStorage.setItem(AUTHORITY_DATA, JSON.stringify(authority_data));
 	}
 
-	getWholeLookupTable() {
+	public getWholeLookupTable() {
 		this.httpService.get({}, 'enum/whole-enum-type/list').subscribe((result) => {
 			//设施小类枚举表
 			let facilityTypesObj = result["facilityTypeList"].map((obj) => {
-				return { id: obj.id, name: obj.facilityType}
+				return { id: obj.id, name: obj.facilityType }
 			});
 			//病害类型枚举表
 			let diseaseTypesObj = result["diseaseTypeList"].map((obj) => {
-				return { id: obj.id, name: obj.diseaseTypeName};
+				return { id: obj.id, name: obj.diseaseTypeName };
 			});
 
 			let modelNamesObj = result["modelList"].map((obj) => {
-				return { id: obj.id, name: obj.modelName}
+				return { id: obj.id, name: obj.modelName }
 			});
 
-			let monomersObj = result["monomer"].slice(0,2).map((obj) => {
-				return { id: obj.id, name: obj.name}
+			let monomersObj = result["monomer"].slice(0, 2).map((obj) => {
+				return { id: obj.id, name: obj.name }
 			});
 
 			let userList = result["userList"].map((obj) => {
@@ -105,7 +102,7 @@ export class LookupService {
 
 			//用户列表
 			localStorage.setItem(USER_LIST, JSON.stringify(userList));
-		})
+		});
 	}
 
 	//根据病害大类找小类
@@ -155,7 +152,7 @@ export class LookupService {
 	}	
 
 	//查询活动状态枚举表
-	getActionStatus(): Promise<Array<IActionStatus>> {
+	public getActionStatus(): Promise<Array<IActionStatus>> {
 		let data = localStorage.getItem(ACTION_STATUS_DATA)
 		let statusList = JSON.parse(data);
 		let result = statusList.map((obj, i) => {
@@ -167,13 +164,13 @@ export class LookupService {
 	}
 
 	//查询角色枚举表
-	getAuthorityData(): Promise<Array<any>>{
+	public getAuthorityData(): Promise<Array<any>>{
 		let data = localStorage.getItem(AUTHORITY_DATA)
 		return Promise.resolve(JSON.parse(data));
 	}
 
 	//根据key查询value
-	getNameBy(key, lookupTable):  Promise<String>{
+	public getNameBy(key, lookupTable):  Promise<string>{
 		let data = localStorage.getItem(lookupTable)
 		var lookupTableData = JSON.parse(data);
 		var value = '';
@@ -190,7 +187,7 @@ export class LookupService {
 		return Promise.resolve(JSON.parse(data));
 	}
 
-	getTunnelOption(): Promise<Array<any>> {
+	getTunnelOption(): Promise<any> {
 		let data = localStorage.getItem("tunnelOption")
 		return Promise.resolve(JSON.parse(data));
 	}

@@ -26,86 +26,86 @@
     <ion-list>
       <h5 class="assertive-field field-label">病害编号</h5>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="diseaseDetailObj.diseaseNo" disabled="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="diseaseFormObj.diseaseNo" disabled="true"></ion-input>
       </ion-item>
 
       <h5 class="assertive-field field-label">里程</h5>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="diseaseDetailObj.mileage" disabled="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="diseaseFormObj.mileage" disabled="true"></ion-input>
       </ion-item>
 
       <h5 class="assertive-field field-label">隧道内方位</h5>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayModelName" disabled="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="diseaseFormObj.displayModelName" disabled="true"></ion-input>
       </ion-item>
 
       <h5 class="assertive-field field-label">日期</h5>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayDiseaseDate" disabled="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="diseaseFormObj.displayDiseaseDate" disabled="true"></ion-input>
       </ion-item>
 
       <h5 class="assertive-field field-label">病害大类</h5>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="diseaseDetailObj.displayDiseaseType" disabled="true"></ion-input>
+        <ion-input type="text" [(ngModel)]="diseaseFormObj.displayDiseaseType" disabled="true"></ion-input>
       </ion-item>
 
       <h5 class="assertive-field field-label">病害小类</h5>
       <ion-item>
-        <ion-select [(ngModel)]="diseaseDetailObj.detailTypeId" okText="确认" cancelText="取消" disabled={{!isEditing}}>
+        <ion-select [(ngModel)]="diseaseFormObj.detailTypeId" okText="确认" cancelText="取消" disabled={{!isEditing}}>
           <ion-option *ngFor="let detailType of detailTypeList" [value]="detailType.id">{{detailType.name}}</ion-option>
         </ion-select>
       </ion-item>
 
       <h5 class="assertive-field field-label">病害描述</h5>
       <ion-item>
-        <ion-textarea rows="6" [(ngModel)]="diseaseDetailObj.diseaseDescription" disabled={{!isEditing}}></ion-textarea>
+        <ion-textarea rows="6" [(ngModel)]="diseaseFormObj.diseaseDescription" disabled={{!isEditing}}></ion-textarea>
       </ion-item>
 
-      <div *ngIf="diseaseDetailObj.diseaseType == 'D2' || diseaseDetailObj.diseaseType == 'D3' || diseaseDetailObj.diseaseType == 'D4'">
+      <div *ngIf="diseaseFormObj.diseaseType == 'D2' || diseaseFormObj.diseaseType == 'D3' || diseaseFormObj.diseaseType == 'D4'">
         <h5 class="assertive-field field-label">面积</h5>
         <ion-item>
-          <ion-input type="text" [(ngModel)]="diseaseDetailObj.area" disabled={{!isEditing}}></ion-input>
+          <ion-input type="text" [(ngModel)]="diseaseFormObj.area" disabled={{!isEditing}}></ion-input>
         </ion-item>
       </div>
 
-      <div *ngIf="diseaseDetailObj.diseaseType == 'D1' || diseaseDetailObj.diseaseType == 'D2'">
+      <div *ngIf="diseaseFormObj.diseaseType == 'D1' || diseaseFormObj.diseaseType == 'D2'">
         <h5 class="assertive-field field-label">深度</h5>
         <ion-item>
-          <ion-input type="text" [(ngModel)]="diseaseDetailObj.depth" disabled={{!isEditing}}></ion-input>
+          <ion-input type="text" [(ngModel)]="diseaseFormObj.depth" disabled={{!isEditing}}></ion-input>
         </ion-item>
       </div>
 
-      <div *ngIf="diseaseDetailObj.diseaseType == 'D1'">
+      <div *ngIf="diseaseFormObj.diseaseType == 'D1'">
         <h5 class="assertive-field field-label">长度</h5>
         <ion-item>
-          <ion-input type="text" [(ngModel)]="diseaseDetailObj.length" disabled={{!isEditing}}></ion-input>
+          <ion-input type="text" [(ngModel)]="diseaseFormObj.length" disabled={{!isEditing}}></ion-input>
         </ion-item>
       </div>
 
-      <div *ngIf="diseaseDetailObj.diseaseType == 'D1'">
+      <div *ngIf="diseaseFormObj.diseaseType == 'D1'">
         <h5 class="assertive-field field-label">宽度</h5>
         <ion-item>
-          <ion-input type="text" [(ngModel)]="diseaseDetailObj.width" disabled={{!isEditing}}></ion-input>
+          <ion-input type="text" [(ngModel)]="diseaseFormObj.width" disabled={{!isEditing}}></ion-input>
         </ion-item>
       </div>
 
-      <div *ngIf="diseaseDetailObj.diseaseType == 'D5'">
+      <div *ngIf="diseaseFormObj.diseaseType == 'D5'">
         <h5 class="assertive-field field-label">张开量</h5>
         <ion-item>
-          <ion-input type="text" [(ngModel)]="diseaseDetailObj.jointopen" disabled={{!isEditing}}></ion-input>
+          <ion-input type="text" [(ngModel)]="diseaseFormObj.jointopen" disabled={{!isEditing}}></ion-input>
         </ion-item>
       </div>
 
-      <div *ngIf="diseaseDetailObj.diseaseType == 'D7'">
+      <div *ngIf="diseaseFormObj.diseaseType == 'D7'">
         <h5 class="assertive-field field-label">错开量</h5>
         <ion-item>
-          <ion-input type="text" [(ngModel)]="diseaseDetailObj.dislocation" disabled={{!isEditing}}></ion-input>
+          <ion-input type="text" [(ngModel)]="diseaseFormObj.dislocation" disabled={{!isEditing}}></ion-input>
         </ion-item>
       </div>
 
       <h5 class="assertive-field field-label">是否申请维修</h5>
       <ion-item>
-        <ion-select [(ngModel)]="diseaseDetailObj.needRepair" disabled={{!isEditing}}>
+        <ion-select [(ngModel)]="diseaseFormObj.needRepair" disabled={{!isEditing}}>
           <ion-option value="true">是</ion-option>
           <ion-option value="false">否</ion-option>
         </ion-select>
@@ -154,14 +154,14 @@
     <ion-list>
       <ion-item-group>
         <div>
-          <button clear ion-item (click)="showHistory(idx)" class="act-card" *ngFor = "let el of diseaseHistoryList; let idx=index">
+          <button clear ion-item (click)="showHistory(disease)" class="act-card" *ngFor="let disease of diseaseHistoryList">
             <ion-icon item-left name="ios-pin-outline"></ion-icon>
             <div item-inner class="act-detail">
-              <h3>{{convertRecorder(diseaseHistoryList[idx].recorder)}}</h3>
+              <h3>{{convertRecorder(disease.recorder)}}</h3>
               <p>
-                <!-- {{displayDiseaseType(diseaseHistoryList[idx])}} -->
+                {{disease.diseaseTypeId | DiseaseNamePipe}}
                 &mdash;
-                {{convertDate(diseaseHistoryList[idx].createDate)}}
+                {{disease.createDate | DatePipe}}
               </p>
             </div>
           </button>

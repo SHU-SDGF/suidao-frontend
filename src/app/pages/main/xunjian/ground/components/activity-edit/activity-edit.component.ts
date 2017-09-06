@@ -11,6 +11,7 @@ import { MediaService, UploadTaskProgress } from '../../../../../../providers/me
 import { MediaContent } from '../../../../../../../models/MediaContent';
 import { EnvironmentActivityService } from '../../../../../../providers/environment-activity-service';
 import { UserService } from '../../../../../../providers/user-service';
+import { EnvironmentActivity } from '../../../../../../../models/EnvironmentActivity';
 
 @Component({
   templateUrl: './activity-edit.component.html',
@@ -78,7 +79,7 @@ export class ActivityEditComponent implements OnInit{
     this.viewCtrl.dismiss();
   }
 
-  save(formData) {
+  public save(formData) {
     let imgUrlList = [],
       videoUrlList = [],
       audioUrlList = [];
@@ -97,7 +98,7 @@ export class ActivityEditComponent implements OnInit{
       loadingOptions.content = getLoadingText(progress);
     });
 
-    publisher.subscribe((media) => {
+    publisher.subscribe(async (media) => {
       if (media && media.fileUri) {
         switch (media.mediaType) {
           case 'img':
@@ -116,14 +117,17 @@ export class ActivityEditComponent implements OnInit{
         formData.video = videoUrlList.join(';');
         formData.audio = audioUrlList.join(';');
 
-        this._environmentActivityService.addNewEnvironmentActivity(formData).subscribe((result) => {
-          result['description'] = this.activityForm.controls['description'].value;
-          loading.onDidDismiss(()=>{
-            this.viewCtrl.dismiss(result);
+        let act = new EnvironmentActivity(formData);
+
+        try {
+          await this._environmentActivityService.addNewEnvironmentActivity(act);
+          act.description = this.activityForm.controls['description'].value;
+          loading.onDidDismiss(() => {
+            this.viewCtrl.dismiss(act);
           });
           loading.dismiss();
-        }, (error) => {
-          loading.onDidDismiss(()=>{
+        } catch (error) {
+          loading.onDidDismiss(() => {
             let alert = this._alertController.create({
               title: '出错啦！',
               message: '创建活动未能成功！请重新尝试！',
@@ -137,11 +141,11 @@ export class ActivityEditComponent implements OnInit{
             alert.present();
           });
           loading.dismiss();
-        });
-      } 
-    }, (err)=>{
+        }
+      }
+    }, (err) => {
       console.log(err);
-      loading.onDidDismiss(()=>{
+      loading.onDidDismiss(() => {
         let alert = this._alertController.create({
           title: '上传文件失败！',
           buttons: [

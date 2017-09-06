@@ -39,7 +39,7 @@
             <p>
               {{getInfoByDiseaseType(disease.diseaseTypeId).name}}
               &mdash;
-              {{convertDate(disease.diseaseDate)}}
+              {{disease.diseaseDate | DatePipe}}
             </p>
           </div>
         </button>
@@ -47,7 +47,7 @@
     </ion-list>
     <div padding>
       <button ion-button block (click)="viewGraph()">创建</button>
-      <button ion-button block color="dark" (click)="openCamera()">AR相机</button>
+      <button *ngIf="isIOS" ion-button block color="dark" (click)="openCamera()">AR相机</button>
     </div>
   </div>
 

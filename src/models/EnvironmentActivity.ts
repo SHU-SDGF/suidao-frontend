@@ -1,24 +1,50 @@
-import { Serializable } from '../app/providers/JsonMapper';
-import { _baseClass } from './_baseClass';
+import { 
+  Entity,
+  Column,
+  PrimaryColumn,
+} from 'bas-typeorm';
 
-@Serializable()
-export class EnvironmentActivity extends _baseClass{
-  id: number
-  actName: string //活动名称
-  actNo: string //活动编码
-	inspDate: any //巡检日期
-	endDate: any //更新日时
-	actStatus: any //活动状态 
-	actType: any //活动类型
-	description: string // 描述
+@Entity('activty')
+export class EnvironmentActivity {
+  	
+  @PrimaryColumn()
+  public id: number
+  	
+  @Column()
+  public actName: string //活动名称
+  	
+  @Column()
+  public actNo: string //活动编码
+		
+  @Column()
+  public inspDate: any //巡检日期
+		
+  @Column()
+  public endDate: any //更新日时
+		
+  @Column()
+  public actStatus: any //活动状态 
+		
+  @Column()
+  public actType: any //活动类型
+		
+  @Column()
+  public description: string // 描述
 	
-	photo: string // 图片
-	audio: string // 音频
-	video: string // 视频
-  recorder: string //记录人
+		
+  @Column()
+  public photo: string // 图片
+		
+  @Column()
+  public audio: string // 音频
+		
+  @Column()
+  public video: string // 视频
+  	
+  @Column()
+  public recorder: string //记录人
 
-  constructor(obj = null) {
-    super();
+  constructor(obj?) {
     
     this.id = null;
     this.actName = null;
@@ -31,11 +57,11 @@ export class EnvironmentActivity extends _baseClass{
     this.photo = null;
     this.audio = null;
     this.video = null;
-    this.recorder = null; 
+    this.recorder = null;
 
-    this.assign(obj);
+    if (!obj) { return; }
+
+    Object.assign(this, obj);
   }
 
-  static deserialize: (obj)=> EnvironmentActivity;
-  
 }
