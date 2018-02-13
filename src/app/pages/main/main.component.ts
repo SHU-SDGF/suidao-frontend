@@ -1,9 +1,10 @@
-import { ConstructComponent } from '../constructing/constructing.component';
+import { AnalysisComponent } from './analysis/analysis.component';
 import { ManyouComponent } from './manyou/manyou.component';
 import { UserService } from '../../providers/user-service';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Events } from 'ionic-angular';
 import { XunjianComponent } from './xunjian/xunjian.component';
+import { WeixiuComponent } from './weixiu/weixiu.component';
 
 @Component({
   templateUrl: './main.component.html',
@@ -11,7 +12,7 @@ import { XunjianComponent } from './xunjian/xunjian.component';
 })
 export class MainComponent{
   private username: string = '';
-  public rootPages = [XunjianComponent, ManyouComponent, ConstructComponent, ConstructComponent];
+  public rootPages = [XunjianComponent, ManyouComponent, WeixiuComponent, AnalysisComponent];
   @ViewChild(Nav) nav: Nav;
 
   constructor(private userService: UserService, private event: Events){

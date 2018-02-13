@@ -1,5 +1,7 @@
-import { Input, Output, EventEmitter, ElementRef, OnInit, Component, OnChanges, NgZone } from '@angular/core';
+import { Subscription } from 'rxjs/Rx';
+import { Component, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { BaiduMap, MapOptions } from 'angular2-baidu-map';
+import { Geolocation } from '@ionic-native/geolocation';
 import * as $ from 'jquery';
 
 declare const BMap: any;
@@ -12,7 +14,7 @@ declare const BMap: any;
       </div>
   `
 })
-export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
+export class SuidaoMap extends BaiduMap implements OnInit, OnChanges, OnDestroy {
   @Input() ak: string;
   @Input() options: MapOptions;
   @Input() changeOptions: EventEmitter<MapOptions>;
@@ -28,76 +30,91 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
   private _previousPoint: {x: number, y: number};
   private _previousLabels = [];
   private _longClickEnabled: boolean = false;
+  private subscriptions: Subscription[] = [];
   public offlineOpts = {
     retryInterval: 3000,
     txt: ''
   };
 
-  constructor(private _el: ElementRef, private zoom: NgZone) {
+  constructor(
+    private _el: ElementRef,
+    private zoom: NgZone,
+    private geolocation: Geolocation
+  ) {
     super(_el);
   }
 
   ngOnInit() {
     super.ngOnInit();
-    let _self = this;
     this.onOptionsChange.bind(this);
 
-    _self.onMapLoaded.subscribe(event => {
+    let subscription: Subscription;
+    subscription = this.geolocation.watchPosition()
+      .filter((p) => p.coords !== undefined) //Filter Out Errors
+      .subscribe(position => {
+        console.log(position.coords.longitude + ' ' + position.coords.latitude);
+      });
+    
+    this.subscriptions.push(subscription);
+
+    subscription = this.onMapLoaded.subscribe(event => {
 
       // bind click event    
-      window['map'] = _self.map;
-      _self.map.addEventListener('click', ($event: MapEvent) => {
-        _self.zoom.run(() => {
-          _self.onMapClick.emit($event);
+      window['map'] = this.map;
+      this.map.addEventListener('click', ($event: MapEvent) => {
+        this.zoom.run(() => {
+          this.onMapClick.emit($event);
         });
       });
       // bind longpress event
-      _self.map.addEventListener('longpress', ($event: MapEvent) => {
+      this.map.addEventListener('longpress', ($event: MapEvent) => {
         if (!this._longClickEnabled) return;
-        _self.zoom.run(() => {
-           _self.onMapLongClick.emit($event);
+        this.zoom.run(() => {
+           this.onMapLongClick.emit($event);
         });
       });
       // bind double click event
-      _self.map.addEventListener('dblclick', ($event: MapEvent) => {
-        _self.zoom.run(() => {
-          _self.onDblClick.emit($event);
+      this.map.addEventListener('dblclick', ($event: MapEvent) => {
+        this.zoom.run(() => {
+          this.onDblClick.emit($event);
         });
       });
       // bind touch start
-      _self.map.addEventListener('touchstart', ($event: MapEvent) => {
+      this.map.addEventListener('touchstart', ($event: MapEvent) => {
         this._enableLongClick();
-        _self.zoom.run(() => {
-          _self._previousPoint = $event.pixel;
-          _self.onTouchStart.emit($event);
+        this.zoom.run(() => {
+          this._previousPoint = $event.pixel;
+          this.onTouchStart.emit($event);
         });
       });
       // bind touch end
-      _self.map.addEventListener('touchend', ($event: MapEvent) => {
-        _self.zoom.run(() => {
-          _self.onTouchEnd.emit($event);
+      this.map.addEventListener('touchend', ($event: MapEvent) => {
+        this.zoom.run(() => {
+          this.onTouchEnd.emit($event);
         });  
       });
       // bind touch move
-      _self.map.addEventListener('touchmove', ($event: MapEvent) => {
-        _self.zoom.run(() => {
-          let dist = Math.pow($event.pixel.x - _self._previousPoint.x, 2)
-            + Math.pow($event.pixel.y - _self._previousPoint.y, 2);
+      this.map.addEventListener('touchmove', ($event: MapEvent) => {
+        this.zoom.run(() => {
+          let dist = Math.pow($event.pixel.x - this._previousPoint.x, 2)
+            + Math.pow($event.pixel.y - this._previousPoint.y, 2);
           dist = Math.sqrt(dist);
           if (dist > 10) {
             this._preventLongClick();
           }
-          _self.onTouchMove.emit($event);
+          this.onTouchMove.emit($event);
         });
       });
 
       setTimeout(() => { $('.BMap_geolocationIcon').click(); });
 
       // bind options change
-      if (_self.changeOptions) {
-        _self.changeOptions.subscribe(this.onOptionsChange.bind(this));
+      if (this.changeOptions) {
+        this.changeOptions.subscribe(this.onOptionsChange.bind(this));
       }
     });
+
+    this.subscriptions.push(subscription);
   }
 
   private _preventLongClick(){
@@ -273,12 +290,19 @@ export class SuidaoMap extends BaiduMap implements OnInit, OnChanges {
     }
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(s => s.unsubscribe());
+  }
+
   ngOnChanges() {}
 
   // draw map
   _draw() {
     let self = this;
     setTimeout(() => {
+      this.options.geolocationCtrl = {
+        enableAutoLocation: true,
+      };
       BaiduMap.prototype._draw.bind(self).apply(self);
       self.onOptionsChange(self.options);
     }, 1000);

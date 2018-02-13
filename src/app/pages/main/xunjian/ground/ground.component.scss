@@ -73,3 +73,57 @@ suidao-map{
     }
   }
 }
+
+.pin {
+  position: absolute; 
+  left: 0px;
+  right: 0px; 
+  top: 0px; 
+  bottom: 0px;
+  width: 30px;
+  height: 30px;
+  margin: auto;
+  display: none;
+
+  .create-insp {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 10px;
+    text-align: center;
+    width: 100px;
+    font-size: 1rem;
+    position: absolute;
+    top: -45px;
+    left: -35px;
+    right: 0px;
+    margin: auto;
+    button {
+      padding: 0px;
+      background: transparent;
+    }
+    &::before {
+      content: " ";
+      width: 0px;
+      position: absolute;
+      left: 0px;
+      right: 0px;
+      margin: auto;
+      border-left: solid transparent 9px;
+      border-right: solid transparent 9px;
+      border-top: solid #fff 8px;
+      border-bottom: none;
+      top: 100%;
+    }
+  }
+
+
+  &.active {
+    display: block;
+  }
+
+  .marker {
+    background-image: url("http://api0.map.bdimg.com/images/blank.gif");
+    img {
+    }
+  }
+}

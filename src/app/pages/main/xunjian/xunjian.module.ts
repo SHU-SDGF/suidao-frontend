@@ -10,6 +10,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { NgModule } from '@angular/core';
 
 import { XunjianComponent }   from './xunjian.component';
+import { HuanhaoSearchComponent } from './underground/components/huanhao-search/huanhao-search.component';
 
 @NgModule({
   imports: [
@@ -21,9 +22,9 @@ import { XunjianComponent }   from './xunjian.component';
     SharedModule, GroundModule, UndergroundModule
   ],
   exports: [XunjianComponent],
-  declarations: [XunjianComponent],
+  declarations: [XunjianComponent, HuanhaoSearchComponent],
   entryComponents: [
-    XunjianComponent
+    XunjianComponent, HuanhaoSearchComponent,
   ],
   providers: [SyncDownloadService, SyncUploadService],
 })

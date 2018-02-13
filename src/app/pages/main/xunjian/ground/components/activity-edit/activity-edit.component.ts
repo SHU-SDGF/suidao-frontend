@@ -172,8 +172,8 @@ export class ActivityEditComponent implements OnInit{
     /**
    * 获取多媒体文件
    */
-  captureMedia(media: MediaContent){
-    this.medias.unshift(media);
+  captureMedia(medias: MediaContent[]){
+    medias.forEach(media => this.medias.unshift(media));
   }
 
   mediaLongClick(media: MediaContent){

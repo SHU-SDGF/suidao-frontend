@@ -4,8 +4,8 @@
       环号： {{el["mileage"]}}
     </ion-card-header>
     <ion-card-content>
-      <button clear>
-        <img class="sd-pic" (click)="showObservInfo(el)" src="assets/imgs/underground.png"/>
+      <button clear (click)="showObservInfo(el)">
+        <img class="sd-pic" src="assets/imgs/jiemian.jpg"/>
       </button>
       <img *ngFor="let disease of el.facilityInsp" [src]="disease.icon" [style.left]="disease.iconLeft+ 'px'" [style.top]="disease.iconTop + 'px'" class="disease-icon" />
     </ion-card-content>

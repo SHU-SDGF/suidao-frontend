@@ -1,3 +1,4 @@
+import { ImagePicker } from '@ionic-native/image-picker';
 import { CaptureMedia } from './components/media-capture/media-capture.directive';
 import { ImageEditor } from './components/image-editor/image-editor.directive';
 import { IonicModule } from 'ionic-angular';
@@ -15,6 +16,7 @@ import { MediaViewer } from './components/media-viewer/media-viewer.directive';
 import { PictureViewerComponent } from './components/media-viewer/picture-viewer.component';
 import { VideoPlayerComponent } from './components/media-viewer/video-player.component';
 import { Media } from '@ionic-native/media';
+import { Geolocation } from '@ionic-native/geolocation';
 
 let SHARED_FEATURE_COMPONENTS = [
   DatePipe, TimePipe, SuidaoMap, OptionPipe,
@@ -39,7 +41,7 @@ let SHARED_FEATURE_COMPONENTS = [
   ],
   exports: [...SHARED_FEATURE_COMPONENTS],
   declarations: [...SHARED_FEATURE_COMPONENTS],
-  providers: [Media],
+  providers: [Media, ImagePicker, Geolocation],
   entryComponents: [
     PictureViewerComponent,
     SelectPopoverList,

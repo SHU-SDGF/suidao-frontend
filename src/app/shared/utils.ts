@@ -42,18 +42,19 @@ export class StatusPipe{
     name: 'DatePipe'
 })
 export class DatePipe {
-    transform(datetime, args?) {
-        return convertDate(datetime);
+    transform(datetime, showTime = false) {
+        return convertDate(datetime, showTime);
     }
 }
 
-let convertDate = function (datetime, args?) {
+let convertDate = function (datetime, showTime:boolean = false) {
     let date = new Date(datetime);
-    return [
-        date.getFullYear(),
-        StringUtils.leftPad((date.getMonth() + 1), 2, '0'),
-        StringUtils.leftPad((date.getDate() + 1), 2, '0')
-    ].join('-');
+    let year = date.getFullYear(),
+        month = StringUtils.leftPad((date.getMonth() + 1), 2, '0'),
+        day = StringUtils.leftPad(date.getDate(), 2, '0'),
+        hour = StringUtils.leftPad(date.getHours(), 2, '0'),
+        min = StringUtils.leftPad(date.getMinutes(), 2, '0');
+    return showTime ? `${year}-${month}-${day} ${hour}:${min}` : `${year}-${month}-${day}`;
 };
 
 @Pipe({

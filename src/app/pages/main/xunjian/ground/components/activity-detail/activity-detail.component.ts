@@ -28,7 +28,8 @@ export class ActivityDetailComponent implements OnInit{
 
   private actTypes: Array<IOption>;
 
-  constructor(public viewCtrl: ViewController,
+  constructor(
+    public viewCtrl: ViewController,
     private _lookupService: LookupService,
     private _actService: EnvironmentActivityService,
     private _alertCtrl: AlertController,
@@ -202,8 +203,8 @@ export class ActivityDetailComponent implements OnInit{
   /**
    * 获取多媒体文件
    */
-  captureMedia(media: MediaContent){
-    this.medias.unshift(media);
+  captureMedia(medias: MediaContent[]) {
+    medias.forEach(media => this.medias.unshift(media));
   }
 
   /**

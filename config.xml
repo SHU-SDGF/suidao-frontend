@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.neehaw.tunnel-app" version="1.10.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>tunnel-app</name>
     <description>隧道结构巡查应用。</description>
     <author email="ljz135790@gmail.com" href="http://fancywhale.cn">Fancy Whale</author>
@@ -76,6 +76,8 @@
         <splash height="1024" src="resources/ios/splash/Default-Portrait~ipad.png" width="768" />
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
+        <icon height="1024" src="resources/ios/icon/icon-1024.png" width="1024" />
+        <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
     <plugin name="cordova-plugin-whitelist" spec="1.3.1" />
     <plugin name="cordova-plugin-console" spec="1.0.5" />
@@ -84,25 +86,30 @@
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
     <plugin name="cordova-plugin-statusbar" spec="~2.2.1" />
     <plugin name="ionic-plugin-keyboard" spec="~2.2.1" />
-    <plugin name="cordova-plugin-image-picker" spec="~1.1.1" />
     <plugin name="cordova-plugin-datepicker" spec="~0.9.3" />
     <plugin name="cordova-plugin-media-capture" spec="~1.4.1" />
     <plugin name="cordova-plugin-file" spec="~4.3.1" />
     <plugin name="cordova-plugin-actionsheet" spec="~2.3.3" />
     <plugin name="cordova-plugin-videoplayer" spec="~0.1.4" />
-    <plugin name="cordova-plugin-geolocation" spec="~2.4.1" />
     <plugin name="cordova-plugin-file-transfer" spec="~1.6.1" />
     <plugin name="cordova-plugin-background-mode" spec="~0.7.0" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="~0.8.4" />
     <plugin name="cordova-plugin-app-event" spec="~1.2.0" />
-    <engine name="ios" spec="~4.2.1" />
-    <engine name="android" spec="~5.2.2" />
     <plugin name="cordova-plugin-app-name" spec="~1.0.4">
         <variable name="APP_NAME" value="结构巡查" />
     </plugin>
     <plugin name="phonegap-plugin-barcodescanner" spec="~6.0.8">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value=" " />
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="使用摄像头" />
     </plugin>
     <plugin name="com-sarriaroman-photoviewer" spec="~1.1.10" />
     <plugin name="cordova-plugin-media" spec="~2.4.1" />
+    <plugin name="cordova-plugin-geolocation" spec="~2.4.3">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="定位当前位置" />
+    </plugin>
+    <allow-navigation href="http://192.168.100.107:8100" />
+    <plugin name="com.synconset.imagepicker" spec="~2.1.8">
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="选择照片" />
+    </plugin>
+    <engine name="ios" spec="~4.2.1" />
+    <engine name="android" spec="~5.2.2" />
 </widget>

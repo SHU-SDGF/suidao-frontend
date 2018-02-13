@@ -19,12 +19,12 @@ import { NgModule } from '@angular/core';
   declarations: [
     UndergroundComponent,
     DiseaseInfoComponent, DiseaseHistoryInfoComponent, ObservInfoComponent, ObservSaveComponent,
-    ObservGraphComponent
+    ObservGraphComponent,
   ],
   entryComponents: [
     UndergroundComponent,
     DiseaseInfoComponent, DiseaseHistoryInfoComponent, ObservInfoComponent, ObservSaveComponent,
-    ObservGraphComponent
+    ObservGraphComponent,
   ],
   providers: [],
 })

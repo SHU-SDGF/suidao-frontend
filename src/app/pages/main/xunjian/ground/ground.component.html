@@ -4,9 +4,17 @@
 </div>
 <suidao-map 
   ak="zgxxc54yRqlHYbh41UQSen3caLggkHys" 
-  (onMapLongClick)="mapLongClick($event)" 
   [options]="opts" 
   [changeOptions]="mapOptionEmitter"
   (onMarkerClicked)="clickMarker($event)"
   (onMapLoaded)="mapLoaded()"
 ></suidao-map>
+
+<div class="pin" [class.active]="isEditing">
+  <button class="create-insp" (click)="createInsp()">
+    <span>从这里创建巡检</span>
+  </button>
+  <span class="marker">
+    <img src="assets/imgs/map-marker.png" />
+  </span>
+</div>

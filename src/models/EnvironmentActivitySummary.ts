@@ -62,5 +62,4 @@ export class EnvironmentActivitySummary {
     Object.assign(this, obj);
   }
 
-  static deserialize: (obj)=> EnvironmentActivitySummary;
 }

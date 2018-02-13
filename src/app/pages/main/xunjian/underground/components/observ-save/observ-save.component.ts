@@ -105,8 +105,8 @@ export class ObservSaveComponent implements OnInit{
   /**
    * 获取多媒体文件
    */
-  public captureMedia(photo: MediaContent){
-    this.photos.unshift(photo);
+  public captureMedia(photos: MediaContent[]){
+    photos.forEach(photo => this.photos.unshift(photo));
   }
 
   public async createDisease(){

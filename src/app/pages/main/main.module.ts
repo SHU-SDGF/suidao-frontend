@@ -1,3 +1,4 @@
+import { AnalysisComponent } from './analysis/analysis.component';
 import { XunjianModule } from './xunjian/xunjian.module';
 import { TestPage } from './test/test';
 import { SyncUploadComponent } from './sync_upload/sync-upload.component';
@@ -10,11 +11,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { ConstructComponent } from '../constructing/constructing.component';
+import { WeixiuComponent } from './weixiu/weixiu.component';
 
 @NgModule({
   declarations: [
     MainComponent, ManyouComponent, SyncDownloadComponent, SyncUploadComponent,
-    TestPage, ConstructComponent,
+    TestPage, ConstructComponent, AnalysisComponent, WeixiuComponent
   ],
   imports: [
     // vendor
@@ -27,7 +29,7 @@ import { ConstructComponent } from '../constructing/constructing.component';
   entryComponents: [
     MainComponent, ManyouComponent,
     SyncDownloadComponent, SyncUploadComponent,
-    TestPage, ConstructComponent,
+    TestPage, ConstructComponent, AnalysisComponent, WeixiuComponent
   ],
   exports: [MainComponent],
   providers: []

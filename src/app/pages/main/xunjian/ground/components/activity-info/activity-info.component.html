@@ -52,7 +52,7 @@
     </status-picker>
     <h5 class="field-label">巡检时间</h5>
     <ion-item>
-      <p>{{activityDetailObj.inspDate | DatePipe}}</p>
+      <p>{{activityDetailObj.inspDate | DatePipe: true }}</p>
     </ion-item>
 
     <h5 class="field-label">开始时间</h5>
@@ -101,7 +101,7 @@
               <p>
                 {{el.actStatus | OptionPipe:actStatusList}}
                 &mdash;
-                {{el.inspDate | DatePipe}}
+                {{el.inspDate | DatePipe: true}}
               </p>
             </div>
           </button>

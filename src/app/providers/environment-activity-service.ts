@@ -16,7 +16,7 @@ export class EnvironmentActivityService {
 	//添加活动环境活动
 	public addNewEnvironmentActivitySummary(activitySummaryObj: {environmentActitivitySummary: EnvironmentActivitySummary, environmentActivity: EnvironmentActivity}) {
 		return this.httpService.post({
-			environmentActitivitySummary: activitySummaryObj.environmentActitivitySummary, 
+			environmentActitivitySummary: Object.assign({}, activitySummaryObj.environmentActitivitySummary, {longtitude: activitySummaryObj.environmentActitivitySummary.longitude}) , 
 			environmentActivity: activitySummaryObj.environmentActivity
 		}, 'environment-activities-summary/create').toPromise();
 	}

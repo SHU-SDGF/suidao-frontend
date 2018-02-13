@@ -1,0 +1,15 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        取消
+      </button>
+    </ion-buttons>
+    <ion-searchbar class="insp-activity-searchbar"  [showCancelButton]="true" [(ngModel)]="searchArg" placeholder="输入评估段号进行查询" (ionInput)="onInput(searchArg)" cancelButtonText="取消"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item (click)="done(huanhao)" *ngFor="let huanhao of selectedHuanhao">{{huanhao.mileage}}</ion-item>
+  </ion-list>
+</ion-content>

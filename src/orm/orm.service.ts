@@ -1,3 +1,4 @@
+import { FacilityInfo } from '../models/FacilityInfo';
 import { Injectable } from '@angular/core';
 import { EnvironmentActivity } from '../models/EnvironmentActivity';
 import { EnvironmentActivitySummary } from '../models/EnvironmentActivitySummary';
@@ -23,6 +24,7 @@ const options: ConnectionOptions = {
     EnvironmentActivitySummary,
     FacilityInspDetail,
     FacilityInspSummary,
+    FacilityInfo,
   ],
   autoSchemaSync: true
 };
@@ -45,6 +47,10 @@ export class TunnelORM {
 
   public get facilityInspSummaryRepo() {
     return this.connection.getRepository(FacilityInspSummary);
+  }
+
+  public get facilityInfoRepo() {
+    return this.connection.getRepository(FacilityInfo);
   }
 
   public async init() {

@@ -1,3 +1,4 @@
+import { FacilityInfo } from '../../models/FacilityInfo';
 import { FacilityInspDetail } from '../../models/FacilityInspDetail';
 import { HttpService } from './http-service';
 import { Injectable } from '@angular/core';
@@ -78,6 +79,10 @@ export class FacilityInspService {
 	//下载地下巡检
 	public downloadFacilityRecords() {
 		return this.httpService.get({}, 'facility-insp/download').toPromise();
+	}
+
+	public downloadFacilityList(): Promise<FacilityInfo[]> {
+		return this.httpService.get({}, 'enum/facility/list').toPromise();
 	}
 
 	//将下载的数据保存到本地

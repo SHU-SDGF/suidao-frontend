@@ -15,6 +15,10 @@ export class FacilityInspSummaryORM {
     private _orm: TunnelORM,
   ) { }
 
+  public getAllFacilityInsps() {
+    return this._repo.find();
+  }
+
   public getFacilityInspsByAttrs(monomerId, modelId) {
     return this._repo.find({ monomerId, modelId });
   }

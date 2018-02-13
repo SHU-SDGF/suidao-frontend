@@ -76,7 +76,7 @@ export class ObservGraphComponent implements OnInit{
     });
     
     this._mapOptions = {
-      imageUrl: 'assets/imgs/underground.png',
+      imageUrl: 'assets/imgs/jiemian.jpg',
       markers:[]
     };
 

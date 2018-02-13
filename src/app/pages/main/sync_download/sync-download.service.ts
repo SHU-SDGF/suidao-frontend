@@ -8,6 +8,7 @@ import {MediaService, DownloadTask, UploadTaskProgress} from '../../../providers
 import * as  _ from 'lodash';
 import { MediaContent } from '../../../../models/MediaContent';
 import { FacilityInspSummary } from '../../../../models/FacilityInspSummary';
+import { FacilityInfoORM } from '../../../../orm/providers/facility-info-orm.service';
 
 export interface InspSmrGroup{
   monomerId: number;
@@ -35,6 +36,7 @@ export class SyncDownloadService {
 
   constructor(
     private facilityInspService: FacilityInspService,
+    private facilityInfoORM: FacilityInfoORM,
     private _mediaService: MediaService,
     private events: Events
   ) { }
@@ -43,9 +45,11 @@ export class SyncDownloadService {
     if (this.started) throw (new Error('任务正在进行中'));
     
     let subject = new Subject();
-    (async () => {
+    setTimeout(async () => {
       subject.next('data_started');
       try {
+        let facilityList = await this.facilityInspService.downloadFacilityList();
+        await this.facilityInfoORM.batchCreateFacilityInfo(facilityList);
         await this.reloadData();
         subject.next('data_ready');
         await this.downloadMedias();
@@ -61,7 +65,7 @@ export class SyncDownloadService {
       } catch (e) {
         subject.error(e);
       }
-    })();
+    });
     return subject;
   }
 

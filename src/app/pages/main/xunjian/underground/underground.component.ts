@@ -10,6 +10,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import * as  _ from 'lodash';
 import * as $ from 'jquery';
+import { FacilityInfoORM } from '../../../../../orm/providers/facility-info-orm.service';
+import { ActionSheet } from 'ionic-native';
 declare const cordova;
 declare const QRScanner;
 
@@ -38,7 +40,8 @@ export class UndergroundComponent implements OnInit, OnDestroy {
     private _facilityInspService: FacilityInspService,
     private _navCtrl: NavController,
     private _lookupService: LookupService,
-    private _sanitizer: DomSanitizer
+    private _sanitizer: DomSanitizer,
+    private _facilityInfoOrm: FacilityInfoORM,
   ){}
 
   ngOnInit(){
@@ -49,12 +52,7 @@ export class UndergroundComponent implements OnInit, OnDestroy {
     
   }
 
-  ngAfterViewInit() {
-    this.getImgScale().then((scale)=>{
-      this.scale = scale;
-      this.reloadData();
-    });
-    
+  async ngAfterViewInit() {
     this._events.subscribe('optionChange', this.reloadData.bind(this));
 
     this._events.subscribe('searchInspAct', ((searchArg) => {
@@ -63,7 +61,10 @@ export class UndergroundComponent implements OnInit, OnDestroy {
       this.facilityInspList = _.filter(this.facilityInspList, ((result) => {
         return result["mileage"].includes(searchArg)
       }));
-    }))
+    }));
+
+    this.scale = await this.getImgScale();
+    this.reloadData();
   }
 
   ngOnDestroy(){
@@ -78,19 +79,6 @@ export class UndergroundComponent implements OnInit, OnDestroy {
   }
 
   scanCode() {
-    
-    // QRScanner.scan(function(err, status){
-    //   err && console.error(err);
-    //   console.log(status);
-    //   document.getElementsByTagName('html')[0].style.opacity = '1';
-    //   QRScanner.hide();
-    //   QRScanner.destroy();
-    // });
-    
-    // QRScanner.show(function(status){
-    //   console.log(status);
-    //   document.getElementsByTagName('html')[0].style.opacity = '0';
-    // });
     if (window['cordova']) {
       debugger;
       cordova.plugins.barcodeScanner.scan((result) => {
@@ -110,7 +98,7 @@ export class UndergroundComponent implements OnInit, OnDestroy {
     }else{
       let info = `
         里程：EK11+702\r\n
-        编码：HMNL104SZCQHK117000_A00\r\n
+        编码：HMNL104SZCQHK127880_I00\r\n
         埋深：-11.62m\r\n
         管片类型：出洞环\r\n
         封顶块位置：3\r\n
@@ -130,45 +118,71 @@ export class UndergroundComponent implements OnInit, OnDestroy {
     
   }
 
-  private showInfo(info){
-    let scannedIndex = -1;
-    let result = this._codeService.parse(info);
-    console.log(result);
+  private async showInfo(info) {
+    try {
+      let result = this._codeService.parse(info);
 
-    scannedIndex = (<Array<any>>this.facilityInspList).findIndex((insp=>insp.mileage == result["mileage"]));
-    let facilityInspInfo = {};
-
-    if(scannedIndex == -1) {
-      facilityInspInfo = {
-        mileage: result["mileage"],
-        facilityId: result["NO"],
-        facilityInsp: null
+      console.log(result);
+      let facilityInspInfo = {};
+      let inspNo: string = result['NO'];
+  
+      console.log(await this._facilityInfoOrm.getInspect(inspNo));
+      if (!inspNo) throw new Error('二维码错误');
+      const r = new RegExp(/[0-9]*_/);
+      let numPart = parseInt(r.exec(inspNo)[0].slice(0, -1));
+      let optionIDs = [inspNo.replace(r, (numPart - 20) + '_'), inspNo, inspNo.replace(r, (numPart + 20) + '_')];
+  
+      let options = await this._facilityInfoOrm.getInspectByIDs(optionIDs);
+  
+      if (!options || !options.length) {
+        this._alertCtrl.create({
+          title: '错误',
+          message: '未发现扫码的环号'
+        });
+        return;
       }
-    } else {
-      facilityInspInfo = this.facilityInspList[scannedIndex];
+  
+      ActionSheet.show({
+        title: '选择环号',
+        buttonLabels: options.map(o => o.facilityName),
+        addCancelButtonWithLabel: '取消',
+      }).then((buttonIndex: number) => {
+        let selectedOption = options[buttonIndex - 1];
+        let scannedIndex = -1;
+          
+        scannedIndex = (<Array<any>>this.facilityInspList).findIndex((insp => insp.mileage == selectedOption.facilityName));
+  
+        if (scannedIndex == -1) {
+          facilityInspInfo = {
+            mileage: selectedOption.facilityName,
+            facilityId: inspNo,
+            facilityInsp: null
+          }
+        } else {
+          facilityInspInfo = this.facilityInspList[scannedIndex];
+        }
+        
+        this.showObservInfo(facilityInspInfo);
+        localStorage.setItem('scannedInfo', JSON.stringify({ mileage: selectedOption.facilityName, facilityId: selectedOption.id }));
+      });
+    } catch (e){
+      this._alertCtrl.create({
+        title: '发生错误',
+        message: e.toString()
+      });
     }
     
-    this.showObservInfo(facilityInspInfo);
-    
-    localStorage.setItem('scannedInfo', JSON.stringify({"mileage": result["mileage"], "facilityId": result["NO"]}));
   }
 
   private getImgScale(){
     return new Promise<number>((resolve, reject)=>{
       var image = new Image();
-      image.src = 'assets/imgs/underground.png';
+      image.src = 'assets/imgs/jiemian.jpg';
       image.onload = () => {
         let size: ImageSize = getImageSize(image);
         let imgWidth = ($(window).width() - 56);
         let scale = size.width / imgWidth;
         this.imgHeight = size.height / scale;
-        /*
-        let actualSize: ImageSize ={
-          width: $(window).width() - 56,
-          height: scale * size.height
-        };
-        */
-
         resolve(scale);
       };
 
@@ -192,9 +206,10 @@ export class UndergroundComponent implements OnInit, OnDestroy {
         icon: this.getIconByDiseaseType(detail.diseaseTypeId)
       });
     });
-    var filteredResult = _.groupBy(details, 'mileage');
+    let filteredResult = _.groupBy(details, 'mileage');
     for (let index in filteredResult) {
-      this.facilityInspList.push({ mileage: index, facilityInsp: filteredResult[index] })
+      let t = { mileage: index, facilityInsp: filteredResult[index] };
+      this.facilityInspList.push(t);
     }
 
     this.shadowFacilityInspList = _.cloneDeep(this.facilityInspList);

@@ -8,6 +8,7 @@ import {
 import { LookupService, IActionStatus } from '../../../../../../providers/lookup-service';
 import {ActivityInfoComponent} from '../../components/activity-info/activity-info.component';
 import * as _ from 'lodash';
+import { EnvironmentActivity } from '../../../../../../../models/EnvironmentActivity';
 
 @Component({
   selector: 'search-component',
@@ -19,8 +20,8 @@ export class SearchComponent implements OnInit {
   private actStatusList: Array<IActionStatus> = [];
 
   private searchArg: string = ''; // 搜索参数
-  private searchedResults: Array<any>; // 搜索结果列表
-  private shadowSearchedResults: Array<any>;
+  private searchedResults: Array<EnvironmentActivity>; // 搜索结果列表
+  private shadowSearchedResults: Array<EnvironmentActivity>;
   private itemList = [
     { name: '环境巡检', value: 1 },
     { name: '周围环境', value: 1 }
@@ -37,12 +38,9 @@ export class SearchComponent implements OnInit {
       _self.actStatusList = actStatusList;
     });
 
-    this.searchedResults = this.params.get('environmentActivityList');
+    this.searchedResults = this.params.get('environmentActivityList')
+      .sort((r1, r2) => r1.inspDate > r2.inspDate ? -1 : 1);
     this.shadowSearchedResults = _.cloneDeep(this.searchedResults);
-  }
-
-  ngOnDestroy() {
-    
   }
 
   typeChange(item: {name: string, value: number}) {
@@ -55,15 +53,13 @@ export class SearchComponent implements OnInit {
 
   searchBarOnInput($event) {
     this.searchedResults = _.cloneDeep(this.shadowSearchedResults);
-    this.searchedResults = _.filter(this.searchedResults, ((result) => {
-      return result.actName.includes(this.searchArg)
-    }));
+    this.searchedResults = this.searchedResults
+      .filter(result => result.actName.includes(this.searchArg))
+      .sort((r1, r2) => r1.inspDate > r2.inspDate ? -1 : 1);
   }
 
   showHistory(activityDetailObj) {
     let modal = this._modalCtrl.create(ActivityInfoComponent, {'activityDetail': activityDetailObj });
-    modal.present(modal);
-    modal.onDidDismiss(() => {
-    });
+    modal.present();
   }
 }

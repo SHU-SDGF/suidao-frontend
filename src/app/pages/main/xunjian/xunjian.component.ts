@@ -9,6 +9,7 @@ import { MenuController, Events, ModalController, PopoverController } from 'ioni
 import { ToggleMenu } from '../../../shared/components/toggle-menu/toggle-menu.component';
 
 import * as $ from 'jquery';
+import { HuanhaoSearchComponent } from './underground/components/huanhao-search/huanhao-search.component';
 
 @Component({
   templateUrl: './xunjian.component.html',
@@ -87,5 +88,15 @@ export class XunjianComponent extends ToggleMenu{
 
   public scanCode(){
     this._underGroundComponent.scanCode();
+  }
+
+  public async searchClickHanlder() {
+    let modal = this._modalCtrl.create(HuanhaoSearchComponent);
+    modal.present();
+
+    modal.onDidDismiss((result) => {
+      if (!result) return;
+      this._underGroundComponent.showObservInfo(result);
+    });
   }
 }

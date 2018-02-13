@@ -12,7 +12,7 @@ import { ActivityInfoComponent } from './components/activity-info/activity-info.
 import { XunjianComponent } from '../xunjian.component';
 import { SearchComponent } from './components/search/search.component';
 import { EnvironmentActivitySummary } from '../../../../../models/EnvironmentActivitySummary';
-import { SuidaoMap, MapOptions, MarkerOptions, MapEvent } from '../../../../shared/components/suidao-map/suidao-map.component';
+import { SuidaoMap, MapOptions, MarkerOptions, MapPoint } from '../../../../shared/components/suidao-map/suidao-map.component';
 import { EnvironmentActivityService } from '../../../../providers/environment-activity-service';
 import { UserService } from '../../../../providers/user-service';
 import { ControlAnchor } from 'angular2-baidu-map';
@@ -28,7 +28,6 @@ export class GroundComponent implements OnInit, OnDestroy {
   private opts: MapOptions;
   private mapOptionEmitter: EventEmitter<MapOptions> = new EventEmitter<MapOptions>();
   private _unsavedMarker: MarkerOptions = null;
-  private _toast: any;
   private _searchPoped: boolean = false;
   private environmentActivityList: Array<EnvironmentActivitySummary>;
   private _pageEntered = false;
@@ -77,12 +76,6 @@ export class GroundComponent implements OnInit, OnDestroy {
       if (this._unsavedMarker) {
         this._suidaoMap.removeMarker(this._unsavedMarker);
         this._unsavedMarker = null;
-      }
-      
-      if (this.isEditing) {
-        this.showToast();
-      } else {
-        this.hideToast();
       }
     });
   }
@@ -152,7 +145,9 @@ export class GroundComponent implements OnInit, OnDestroy {
       zoom: 17,
       markers: [],
       geolocationCtrl: {
-        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT
+        anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_LEFT,
+        showAddressBar: true,
+        enableAutoLocation: true,
       },
       scaleCtrl: {
         anchor: ControlAnchor.BMAP_ANCHOR_BOTTOM_RIGHT
@@ -165,7 +160,7 @@ export class GroundComponent implements OnInit, OnDestroy {
     try {
       let acts = await this.environmentActivityService.getEnvironmentActivitiesSummaryList();
       let markers = [];
-      this.environmentActivityList = acts;
+      this.environmentActivityList = acts.filter(a => a.actStatus != 1);
       markers = this.environmentActivityList.map(activity => {
         Object.assign(activity, {
           width: 30,
@@ -181,22 +176,8 @@ export class GroundComponent implements OnInit, OnDestroy {
       this.opts.markers = this.opts.markers.concat(markers);
       this.mapOptionEmitter.emit(this.opts);
     } catch (error) {
-      this._event.publish(this._userService.LOGOUT_EVENT);
+      // this._event.publish(this._userService.LOGOUT_EVENT);
     }
-  }
-
-  private showToast() {
-    this._toast = this._toastController.create({
-      message: '长按地图位置添加新的环境活动。',
-      position: 'top',
-      dismissOnPageChange: true
-    });
-    this._toast.present();
-  }
-
-  private hideToast() {
-    if (!this._toast) return;
-    return this._toast.dismiss();
   }
 
   /**
@@ -206,47 +187,79 @@ export class GroundComponent implements OnInit, OnDestroy {
     this.pageLeave();
   }
 
-  public mapLongClick($event: MapEvent) {
-    //this.opts.markers.push();
-    if (!this.isEditing) return;
-    if (this._unsavedMarker) {
-      this._suidaoMap.removeMarker(this._unsavedMarker);
-    }
+  public createInsp() {
+    console.log(this._suidaoMap.map);
+    let { lng, lat } = this._suidaoMap.map.getCenter();
     this._unsavedMarker = this._suidaoMap.addMarker({
-      longitude: $event.point.lng,
-      latitude: $event.point.lat,
+      longitude: lng,
+      latitude: lat,
       title: '新建标签',
       icon: 'assets/imgs/map-marker.png',
       width: 30,
       height: 30
     });
-    //this._suidaoMap.changeCenter($event.point);
-    
-    this.hideToast().then(() => {
-      let alert = this._alertCtrl.create({
-        title: '添加环境活动',
-        message: '你确认要在此处添加环境活动吗?',
-        cssClass: 'alert-bottom',
-        buttons: [
-          {
-            text: '取消',
-            role: 'cancel',
-            handler: () => {
-              this.removeUnsavedMarker();
-              this.showToast();
-            }
-          },
-          {
-            text: '确认',
-            handler: () => {
-              this.openCreateModal($event);
-            }
+    this.toggleEditing();
+
+    let alert = this._alertCtrl.create({
+      title: '添加环境活动',
+      message: '你确认要在此处添加环境活动吗?',
+      cssClass: 'alert-bottom',
+      buttons: [
+        {
+          text: '取消',
+          role: 'cancel',
+          handler: () => {
+            this.removeUnsavedMarker();
           }
-        ]
-      });
-      alert.present();
+        },
+        {
+          text: '确认',
+          handler: () => {
+            this.openCreateModal({ lng, lat });
+          }
+        }
+      ]
     });
+    alert.present();
   }
+
+  // public mapLongClick($event: MapEvent) {
+  //   if (!this.isEditing) return;
+  //   if (this._unsavedMarker) {
+  //     this._suidaoMap.removeMarker(this._unsavedMarker);
+  //   }
+  //   this._unsavedMarker = this._suidaoMap.addMarker({
+  //     longitude: $event.point.lng,
+  //     latitude: $event.point.lat,
+  //     title: '新建标签',
+  //     icon: 'assets/imgs/map-marker.png',
+  //     width: 30,
+  //     height: 30
+  //   });
+  //   //this._suidaoMap.changeCenter($event.point);
+
+  //   let alert = this._alertCtrl.create({
+  //     title: '添加环境活动',
+  //     message: '你确认要在此处添加环境活动吗?',
+  //     cssClass: 'alert-bottom',
+  //     buttons: [
+  //       {
+  //         text: '取消',
+  //         role: 'cancel',
+  //         handler: () => {
+  //           this.removeUnsavedMarker();
+  //         }
+  //       },
+  //       {
+  //         text: '确认',
+  //         handler: () => {
+  //           this.openCreateModal($event);
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
   private getIcon(status){
     let types = {1: 'initial', 2: 'ongoing', 3: 'finished'};
@@ -254,9 +267,9 @@ export class GroundComponent implements OnInit, OnDestroy {
     return `assets/imgs/marker-${type}.png`;
   }
 
-  private openCreateModal($event: MapEvent){
+  private openCreateModal(point: MapPoint){
 
-    let modal = this._modalCtrl.create(ActivityDetailComponent, {point: $event.point});
+    let modal = this._modalCtrl.create(ActivityDetailComponent, {point: point});
     modal.present();
     modal.onDidDismiss((activity) => {
       this.removeUnsavedMarker();
@@ -264,7 +277,9 @@ export class GroundComponent implements OnInit, OnDestroy {
         this.toggleEditing();
         return;
       };
-      this.environmentActivityList.unshift(EnvironmentActivitySummary.deserialize(activity["environmentActitivitySummary"]));
+      let summary = new EnvironmentActivitySummary(activity["environmentActitivitySummary"]);
+      summary.longitude = summary['longtitude'];
+      this.environmentActivityList.unshift(summary);
       this.toggleEditing();
       
       // refresh markers
@@ -293,6 +308,9 @@ export class GroundComponent implements OnInit, OnDestroy {
         lat: this.environmentActivityList[0].latitude,
         lng: this.environmentActivityList[0].longitude
       });
+      if (this.isEditing) {
+        this.toggleEditing();
+      }
     });
   };
 
@@ -309,7 +327,7 @@ export class GroundComponent implements OnInit, OnDestroy {
   public clickMarker($event: { obj: MarkerOptions, marker: any }) {
     let _self = this;
     let modal = this._modalCtrl.create(ActivityInfoComponent, {'activityDetail': $event.obj});
-    modal.present(modal);
+    modal.present();
     modal.onDidDismiss((result) => {
       if(result) {
         let act = _self.environmentActivityList.find(act=> act['actNo'] == result["actNo"]);

@@ -3,7 +3,12 @@ underground{
   padding-top: 70px;
   ion-card-content{
     position: relative;
-
+    button {
+      width: 100%;
+      img {
+        width: 100%;
+      }
+    }
     .disease-icon{
       position: absolute;
       z-index: 1;

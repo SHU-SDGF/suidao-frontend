@@ -68,6 +68,9 @@ export class ObservInfoComponent implements OnInit, OnDestroy{
     this.huanhao = this._params.data.facilityInspInfo["mileage"];
     await this._updateFacilityInspList();
     this.diseaseList = this._params.data.facilityInspInfo["facilityInsp"];
+    if (this.diseaseList) {
+      this.diseaseList = this.diseaseList.sort((d1, d2) => d1.createDate > d2.createDate ? -1 : 1);
+    }
     console.log('in modal class');
   }
 

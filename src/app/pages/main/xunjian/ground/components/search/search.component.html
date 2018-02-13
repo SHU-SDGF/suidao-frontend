@@ -25,7 +25,7 @@
             <p>
               {{result.actStatus | OptionPipe:actStatusList}}
               &mdash;
-              {{result.inspDate | DatePipe}}
+              {{result.inspDate | DatePipe: true}}
             </p>
           </div>
         </button>

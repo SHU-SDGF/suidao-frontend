@@ -140,8 +140,8 @@ export class DiseaseInfoComponent implements OnInit{
   /**
    * 获取多媒体文件
    */
-  public captureMedia(photo: IMediaContent){
-    this.photos.unshift(photo);
+  public captureMedia(photos: IMediaContent[]){
+    photos.forEach(photo => this.photos.unshift(photo));
   }
 
   public convertRecorder(userId) {
